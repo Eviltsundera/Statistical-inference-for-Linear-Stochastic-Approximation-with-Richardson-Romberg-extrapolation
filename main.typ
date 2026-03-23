@@ -28,6 +28,12 @@
 
 #v(2em)
 
+= Introduction <sec:introduction>
+
+#include "src/introduction.typ"
+
+#pagebreak()
+
 = Constant Asymptotic <appendix:constants>
 
 #include "src/constant_asymp.typ"
