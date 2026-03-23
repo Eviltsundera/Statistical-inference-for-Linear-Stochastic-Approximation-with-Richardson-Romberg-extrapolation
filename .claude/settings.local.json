@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/Users/eviltsundera/.cargo/bin/typst compile:*)",
+      "Bash(/c/Users/eviltsundera/.cargo/bin/typst query:*)",
+      "Bash(ls main_*.svg)"
+    ]
+  }
+}

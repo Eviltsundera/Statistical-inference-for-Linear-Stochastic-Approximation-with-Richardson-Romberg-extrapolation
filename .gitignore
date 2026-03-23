@@ -1,0 +1,10 @@
+# Typst output
+*.pdf
+
+# Temporary files
+tmp/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
