@@ -1,6 +1,3 @@
-# Typst output
-*.pdf
-
 # Temporary files
 tmp/
 
