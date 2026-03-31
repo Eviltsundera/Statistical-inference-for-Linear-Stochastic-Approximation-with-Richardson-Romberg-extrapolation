@@ -155,12 +155,22 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
 
-    pr_gamma = 0.75
-    pr_c0 = 0.1
-    pr_k0 = max(100, int(np.log(T) ** (1 / pr_gamma)))
+    # Samsonov PR parameters.
+    # gamma=2/3 as in paper experiments (Section G, Appendix).
+    # c0 and k0 chosen so that initial stepsize alpha_0 = c0/(k0^gamma) ~ 0.2,
+    # comparable to the diminishing 0.2/sqrt(k) baseline.
+    # Reference notebook: c0=200, k0=20000, gamma=0.65 → alpha_0≈0.32 (for TD, d=2).
+    # For our generic LSA (d=5): c0=1.0, k0=10 → alpha_0=1/(10^{2/3})≈0.22.
+    pr_gamma = 2 / 3
+    pr_c0 = 1.0
+    pr_k0 = 10
 
-    b_n = max(int(T ** 0.75), 10)
-    b_n = min(b_n, T // 2)
+    # OBM block size: b_n ~ T^{0.6}.
+    # Paper Table 2: b_n=250 for T=20480, b_n=1200 for T=204800, b_n=3600 for T=1024000
+    # — consistent with T^{0.6} scaling.
+    # Previous T^{0.75} was too large, causing OBM to oversmooth → underestimate variance.
+    b_n = max(int(T ** 0.6), 10)
+    b_n = min(b_n, T // 4)
 
     if n_workers is None:
         n_workers = min(mp.cpu_count(), n_problems)
