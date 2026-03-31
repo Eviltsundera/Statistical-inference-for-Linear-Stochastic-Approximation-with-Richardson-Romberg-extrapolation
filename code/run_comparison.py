@@ -19,6 +19,8 @@ Usage:
 
 import argparse
 import time
+import multiprocessing as mp
+
 import numpy as np
 import pandas as pd
 
@@ -107,61 +109,95 @@ METHOD_LABELS = {
 METHODS_ORDER = list(METHOD_LABELS.keys())
 
 
-def run_experiment(n_problems, n_traj, T, n_states, d, seed=42):
-    """Run the full comparison experiment."""
+def _solve_problem_worker(args):
+    """Multiprocessing worker: solve one LSA problem with all 7 methods.
+
+    Accepts a single tuple so it works with pool.imap_unordered.
+    """
+    (prob_seed, n_traj, T, n_states, d,
+     K, burn_in, pr_c0, pr_k0, pr_gamma, b_n) = args
+
+    rng = np.random.default_rng(prob_seed)
+    P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
+
+    traj_rng = np.random.default_rng(rng.integers(0, 2**31))
+    trajs = simulate_chains_batch(P, pi, T, n_traj, traj_rng)
+
+    boot_rng = np.random.default_rng(rng.integers(0, 2**31))
+    results = run_all_methods(
+        A_arr, b_arr, trajs, K, burn_in, theta_star, T,
+        pr_c0, pr_k0, pr_gamma, b_n, boot_rng
+    )
+
+    # Collapse per-trajectory arrays to per-problem scalars
+    summary = {}
+    for m in METHODS_ORDER:
+        summary[m] = {
+            metric: float(np.nanmean(results[m][metric]))
+            for metric in ('l2', 'width', 'cov')
+        }
+    return summary
+
+
+def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
+                   n_workers=None):
+    """Run the full comparison experiment with multiprocessing."""
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
 
-    # Samsonov PR parameters: c0, k0, gamma
-    # Use gamma=3/4 for optimal Berry-Esseen rate.
-    # c0 must be small enough; k0 large enough for stability.
     pr_gamma = 0.75
     pr_c0 = 0.1
     pr_k0 = max(100, int(np.log(T) ** (1 / pr_gamma)))
 
-    # OBM block size: b_n ~ T^{3/4} (Corollary 2 of Samsonov et al.)
     b_n = max(int(T ** 0.75), 10)
-    b_n = min(b_n, T // 2)  # safety
+    b_n = min(b_n, T // 2)
+
+    if n_workers is None:
+        n_workers = min(mp.cpu_count(), n_problems)
 
     print(f"Experiment config: {n_problems} problems x {n_traj} traj, T={T}, "
-          f"d={d}, |X|={n_states}")
+          f"d={d}, |X|={n_states}, workers={n_workers}")
     print(f"  Huo: K={K}, burn_in={burn_in}")
     print(f"  Samsonov PR: c0={pr_c0}, k0={pr_k0}, gamma={pr_gamma}, b_n={b_n}")
-    print()
+    print(flush=True)
 
-    # Accumulators: per-problem averages
+    rng_master = np.random.default_rng(seed)
+    seeds = [int(rng_master.integers(0, 2**31)) for _ in range(n_problems)]
+
+    task_args = [
+        (s, n_traj, T, n_states, d, K, burn_in, pr_c0, pr_k0, pr_gamma, b_n)
+        for s in seeds
+    ]
+
     all_results = {m: {'l2': [], 'width': [], 'cov': []}
                    for m in METHODS_ORDER}
 
-    rng_master = np.random.default_rng(seed)
+    t_start = time.time()
+    completed = 0
 
-    for prob_idx in range(n_problems):
-        t0 = time.time()
-        prob_seed = rng_master.integers(0, 2**31)
-        rng = np.random.default_rng(prob_seed)
+    with mp.Pool(n_workers) as pool:
+        for summary in pool.imap_unordered(_solve_problem_worker, task_args):
+            completed += 1
+            for m in METHODS_ORDER:
+                for metric in ('l2', 'width', 'cov'):
+                    all_results[m][metric].append(summary[m][metric])
 
-        P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
+            if completed % max(1, n_problems // 20) == 0 or completed == 1:
+                elapsed = time.time() - t_start
+                eta = elapsed / completed * (n_problems - completed)
+                rr_cov = summary['RR']['cov'] * 100
+                print(f"  [{completed}/{n_problems}] "
+                      f"last RR cov={rr_cov:.0f}% | "
+                      f"{elapsed:.0f}s elapsed, ~{eta:.0f}s left",
+                      flush=True)
 
-        traj_rng = np.random.default_rng(rng.integers(0, 2**31))
-        trajs = simulate_chains_batch(P, pi, T, n_traj, traj_rng)
+    t_total = time.time() - t_start
 
-        boot_rng = np.random.default_rng(rng.integers(0, 2**31))
-        results = run_all_methods(
-            A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-            pr_c0, pr_k0, pr_gamma, b_n, boot_rng
-        )
-
-        for m in METHODS_ORDER:
-            for metric in ('l2', 'width', 'cov'):
-                all_results[m][metric].append(float(np.nanmean(results[m][metric])))
-
-        elapsed = time.time() - t0
-        if (prob_idx + 1) % max(1, n_problems // 10) == 0 or prob_idx == 0:
-            print(f"  Problem {prob_idx + 1}/{n_problems} done in {elapsed:.1f}s")
-
-    # Build summary table: mean over problems
-    print("\n" + "=" * 80)
-    print("RESULTS: Mean over problems (coverage in %, L2 and CI width x 1e-3)")
+    # --- Print results ---
+    print(f"\n{'=' * 80}")
+    print(f"RESULTS ({n_problems} problems, T={T}, {n_traj} traj) "
+          f"in {t_total:.0f}s ({t_total/60:.1f}min)")
+    print("Mean over problems (coverage in %, L2 and CI width x 1e-3)")
     print("=" * 80)
     header = f"{'Method':<25} {'L2 x1e-3':>10} {'Width x1e-3':>12} {'Cov %':>8}"
     print(header)
@@ -178,30 +214,29 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42):
             'l2_mean': l2_mean, 'width_mean': w_mean, 'cov_mean': cov_mean
         })
 
-    # Percentile table for coverage and bias
-    print("\n" + "=" * 80)
+    pcts = [10, 25, 50, 75, 90]
+    pct_header = f"{'Method':<25}" + "".join(f"{'p'+str(p):>8}" for p in pcts)
+
+    print(f"\n{'=' * 80}")
     print("COVERAGE PERCENTILES (%) across problems")
     print("=" * 80)
-    pcts = [10, 25, 50, 75, 90]
-    header = f"{'Method':<25}" + "".join(f"{'p'+str(p):>8}" for p in pcts)
-    print(header)
+    print(pct_header)
     print("-" * (25 + 8 * len(pcts)))
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['cov']) * 100
         ps = np.percentile(vals, pcts)
         print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.1f}" for v in ps))
 
-    print("\n" + "=" * 80)
+    print(f"\n{'=' * 80}")
     print("BIAS (L2 x 1e-3) PERCENTILES across problems")
     print("=" * 80)
-    print(header)
+    print(pct_header)
     print("-" * (25 + 8 * len(pcts)))
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['l2']) * 1e3
         ps = np.percentile(vals, pcts)
         print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.2f}" for v in ps))
 
-    # Save CSV
     df = pd.DataFrame(rows)
     df.to_csv('results_comparison.csv', index=False)
     print(f"\nResults saved to results_comparison.csv")
@@ -222,10 +257,12 @@ def main():
     parser.add_argument('--d', type=int, default=5,
                         help='Dimension (default: 5)')
     parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--n-workers', type=int, default=None,
+                        help='Parallel workers (default: cpu_count)')
     args = parser.parse_args()
 
     run_experiment(args.n_problems, args.n_traj, args.T,
-                   args.n_states, args.d, args.seed)
+                   args.n_states, args.d, args.seed, args.n_workers)
 
 
 if __name__ == '__main__':

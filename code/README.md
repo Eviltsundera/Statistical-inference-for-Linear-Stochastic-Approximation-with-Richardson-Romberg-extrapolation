@@ -26,7 +26,7 @@ Default run: 10 problems, 50 trajectories, T=10000 (quick smoke test).
 ### Full-scale experiment
 
 ```bash
-uv run python run_comparison.py --n-problems 100 --n-traj 100 --T 100000
+uv run python run_comparison.py --n-problems 100 --n-traj 100 --T 100000 --n-workers 32
 ```
 
 ### All options
@@ -38,6 +38,9 @@ uv run python run_comparison.py --n-problems 100 --n-traj 100 --T 100000
 --n-states     Markov chain states (default: 10)
 --d            Dimension of theta (default: 5)
 --seed         Random seed (default: 42)
+--n-workers    Parallel workers (default: all CPUs). Each worker solves
+               one LSA problem independently. Memory ~400MB per worker
+               at T=100000, n_traj=100, d=5.
 ```
 
 ## Metrics
