@@ -252,6 +252,32 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in=100):
     return all_thetas, theta_bar
 
 
+def batch_means_from_full(all_thetas, K, n0=0):
+    """Compute non-overlapping batch means from full iterate array.
+
+    Args:
+        all_thetas: (n_traj, T_post, d) post-burn-in iterates.
+        K: Number of batches.
+        n0: Intra-batch discard.
+
+    Returns:
+        batch_means: (n_traj, K, d).
+        n: Batch size.
+    """
+    n_traj, T_post, d = all_thetas.shape
+    n = T_post // K
+    effective = n - n0
+
+    batch_means = np.zeros((n_traj, K, d))
+    for k in range(K):
+        start = k * n + n0
+        end = (k + 1) * n
+        if end <= T_post:
+            batch_means[:, k, :] = np.nanmean(all_thetas[:, start:end, :], axis=1)
+
+    return _clamp_batch_means(batch_means), n
+
+
 def run_rr_full(A_arr, b_arr, trajs, alphas, burn_in=100):
     """Run RR extrapolation, return all RR-combined post-burn-in iterates.
 
@@ -261,6 +287,7 @@ def run_rr_full(A_arr, b_arr, trajs, alphas, burn_in=100):
     Returns:
         rr_all_thetas: (n_traj, T - burn_in, d) RR-extrapolated iterates.
         rr_theta_bar: (n_traj, d) average of RR iterates.
+        per_alpha: list of (n_traj, T - burn_in, d) per-stepsize iterates.
     """
     h = rr_coefficients(alphas)
 
@@ -272,4 +299,4 @@ def run_rr_full(A_arr, b_arr, trajs, alphas, burn_in=100):
     # Combine: theta_tilde_t = sum_m h_m * theta_t^{(alpha_m)}
     rr_all_thetas = sum(h[m] * per_alpha[m] for m in range(len(alphas)))
     rr_theta_bar = np.nanmean(rr_all_thetas, axis=1)
-    return rr_all_thetas, rr_theta_bar
+    return rr_all_thetas, rr_theta_bar, per_alpha

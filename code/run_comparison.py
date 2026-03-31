@@ -28,7 +28,8 @@ from lsa_inference.markov_chain import generate_transition_matrix, simulate_chai
 from lsa_inference.lsa_problem import generate_A, generate_b, compute_theta_star
 from lsa_inference.lsa_engine import (
     prepare_arrays, run_lsa_const, run_lsa_diminishing,
-    run_lsa_polyak_ruppert, run_rr, run_rr_full,
+    run_lsa_polyak_ruppert, run_rr_full, batch_means_from_full,
+    rr_coefficients,
 )
 from lsa_inference.inference import batch_mean_ci, obm_ci, msb_ci
 
@@ -44,30 +45,48 @@ def generate_problem(n_states, d, rng):
 
 
 def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-                    pr_c0, pr_k0, pr_gamma, b_n, rng):
-    """Run all 7 methods on the same trajectories and return metrics.
+                    pr_c0, pr_k0, pr_gamma, b_n, rng, n_bootstrap=500):
+    """Run all 9 methods on the same trajectories and return metrics.
+
+    Constant-step LSA with alpha=0.2 and alpha=0.02 is run ONCE via
+    run_rr_full, which stores all iterates.  From the same iterates we
+    derive batch-mean CI (methods 1-3) and OBM/MSB CI (methods 8-9).
 
     Returns:
         dict {method_name: {'l2': ndarray, 'width': ndarray, 'cov': ndarray}}
     """
     results = {}
 
-    # --- Huo et al. 2023 methods ---
+    # --- Single run of constant-step LSA for both alphas ---
+    # run_rr_full stores all post-burn-in iterates for each alpha,
+    # then combines them via RR coefficients.
+    rr_all_thetas, rr_theta_bar, per_alpha = run_rr_full(
+        A_arr, b_arr, trajs, [0.2, 0.02], burn_in
+    )
+    # per_alpha[0] = all_thetas for alpha=0.2, shape (n_traj, T-burn_in, d)
+    # per_alpha[1] = all_thetas for alpha=0.02
+
+    # --- Huo et al. 2023: methods 1-3 (batch-mean CI from same iterates) ---
 
     # 1. Constant alpha=0.2
-    bm, n = run_lsa_const(A_arr, b_arr, trajs, 0.2, K, burn_in)
+    bm, n = batch_means_from_full(per_alpha[0], K)
     l2, w, c = batch_mean_ci(bm, n, theta_star)
     results['const_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 2. Constant alpha=0.02
-    bm, n = run_lsa_const(A_arr, b_arr, trajs, 0.02, K, burn_in)
+    bm, n = batch_means_from_full(per_alpha[1], K)
     l2, w, c = batch_mean_ci(bm, n, theta_star)
     results['const_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 3. RR extrapolation
-    rr_bm, n = run_rr(A_arr, b_arr, trajs, [0.2, 0.02], K, burn_in)
+    # 3. RR batch-mean: combine batch means with RR coefficients
+    h = rr_coefficients([0.2, 0.02])
+    bm_0, n = batch_means_from_full(per_alpha[0], K)
+    bm_1, _ = batch_means_from_full(per_alpha[1], K)
+    rr_bm = h[0] * bm_0 + h[1] * bm_1
     l2, w, c = batch_mean_ci(rr_bm, n, theta_star)
     results['RR'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # --- Huo et al. 2023: methods 4-5 (diminishing stepsize) ---
 
     # 4. Diminishing 0.2/sqrt(k)
     bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, 0.2, 0.5, K)
@@ -79,34 +98,31 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     l2, w, c = batch_mean_ci(bm, n_eff, theta_star)
     results['dim_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # --- Samsonov et al. 2025 methods ---
+    # --- Samsonov et al. 2025: methods 6-7 (PR + OBM/MSB) ---
 
-    # 6 & 7. Polyak-Ruppert with OBM and MSB
     all_thetas, theta_bar = run_lsa_polyak_ruppert(
         A_arr, b_arr, trajs, pr_c0, pr_k0, pr_gamma
     )
 
-    # 6. OBM CI
+    # 6. PR + OBM CI
     l2, w, c = obm_ci(all_thetas, theta_bar, b_n, theta_star)
     results['PR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 7. MSB bootstrap CI
-    l2, w, c = msb_ci(all_thetas, theta_bar, b_n, theta_star, rng=rng)
+    # 7. PR + MSB bootstrap CI
+    l2, w, c = msb_ci(all_thetas, theta_bar, b_n, theta_star,
+                       n_bootstrap=n_bootstrap, rng=rng)
     results['PR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # --- Combined: RR + OBM/MSB ---
-
-    # 8 & 9. RR-extrapolated iterates with OBM and MSB CI
-    rr_all_thetas, rr_theta_bar = run_rr_full(
-        A_arr, b_arr, trajs, [0.2, 0.02], burn_in
-    )
+    # --- Combined: methods 8-9 (RR + OBM/MSB) ---
+    # Uses rr_all_thetas from the same run as methods 1-3.
 
     # 8. RR + OBM CI
     l2, w, c = obm_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star)
     results['RR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 9. RR + MSB bootstrap CI
-    l2, w, c = msb_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star, rng=rng)
+    l2, w, c = msb_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star,
+                       n_bootstrap=n_bootstrap, rng=rng)
     results['RR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
     return results
@@ -138,7 +154,7 @@ def _solve_problem_worker(args):
     Returns (summary, divergence_info).
     """
     (prob_seed, n_traj, T, n_states, d,
-     K, burn_in, pr_c0, pr_k0, pr_gamma, b_n) = args
+     K, burn_in, pr_c0, pr_k0, pr_gamma, b_n, n_bootstrap) = args
 
     rng = np.random.default_rng(prob_seed)
     P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
@@ -149,7 +165,7 @@ def _solve_problem_worker(args):
     boot_rng = np.random.default_rng(rng.integers(0, 2**31))
     results = run_all_methods(
         A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-        pr_c0, pr_k0, pr_gamma, b_n, boot_rng
+        pr_c0, pr_k0, pr_gamma, b_n, boot_rng, n_bootstrap
     )
 
     summary = {}
@@ -167,7 +183,7 @@ def _solve_problem_worker(args):
 
 
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
-                   n_workers=None):
+                   n_workers=None, n_bootstrap=500):
     """Run the full comparison experiment with multiprocessing."""
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
@@ -195,14 +211,16 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     print(f"Experiment config: {n_problems} problems x {n_traj} traj, T={T}, "
           f"d={d}, |X|={n_states}, workers={n_workers}")
     print(f"  Huo: K={K}, burn_in={burn_in}")
-    print(f"  Samsonov PR: c0={pr_c0}, k0={pr_k0}, gamma={pr_gamma}, b_n={b_n}")
+    print(f"  Samsonov PR: c0={pr_c0}, k0={pr_k0}, gamma={pr_gamma}, "
+          f"b_n={b_n}, n_bootstrap={n_bootstrap}")
     print(flush=True)
 
     rng_master = np.random.default_rng(seed)
     seeds = [int(rng_master.integers(0, 2**31)) for _ in range(n_problems)]
 
     task_args = [
-        (s, n_traj, T, n_states, d, K, burn_in, pr_c0, pr_k0, pr_gamma, b_n)
+        (s, n_traj, T, n_states, d, K, burn_in, pr_c0, pr_k0, pr_gamma, b_n,
+         n_bootstrap)
         for s in seeds
     ]
 
@@ -324,10 +342,13 @@ def main():
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--n-workers', type=int, default=None,
                         help='Parallel workers (default: cpu_count)')
+    parser.add_argument('--n-bootstrap', type=int, default=500,
+                        help='MSB bootstrap replications (default: 500)')
     args = parser.parse_args()
 
     run_experiment(args.n_problems, args.n_traj, args.T,
-                   args.n_states, args.d, args.seed, args.n_workers)
+                   args.n_states, args.d, args.seed, args.n_workers,
+                   args.n_bootstrap)
 
 
 if __name__ == '__main__':
