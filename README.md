@@ -33,4 +33,7 @@ src/
   defs.typ               — shared definitions (theorem environments)
   constant_asymp.typ     — constant asymptotic analysis
   new_lemma.typ          — new lemma and martingale decomposition
+papers/                  — reference papers
+summaries/               — paper summaries
+code/                    — numerical experiments (see code/README.md)
 ```
