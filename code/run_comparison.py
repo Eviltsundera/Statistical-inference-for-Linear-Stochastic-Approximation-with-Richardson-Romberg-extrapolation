@@ -28,7 +28,7 @@ from lsa_inference.markov_chain import generate_transition_matrix, simulate_chai
 from lsa_inference.lsa_problem import generate_A, generate_b, compute_theta_star
 from lsa_inference.lsa_engine import (
     prepare_arrays, run_lsa_const, run_lsa_diminishing,
-    run_lsa_polyak_ruppert, run_rr,
+    run_lsa_polyak_ruppert, run_rr, run_rr_full,
 )
 from lsa_inference.inference import batch_mean_ci, obm_ci, msb_ci
 
@@ -94,6 +94,21 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     l2, w, c = msb_ci(all_thetas, theta_bar, b_n, theta_star, rng=rng)
     results['PR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
+    # --- Combined: RR + OBM/MSB ---
+
+    # 8 & 9. RR-extrapolated iterates with OBM and MSB CI
+    rr_all_thetas, rr_theta_bar = run_rr_full(
+        A_arr, b_arr, trajs, [0.2, 0.02], burn_in
+    )
+
+    # 8. RR + OBM CI
+    l2, w, c = obm_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star)
+    results['RR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 9. RR + MSB bootstrap CI
+    l2, w, c = msb_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star, rng=rng)
+    results['RR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
+
     return results
 
 
@@ -105,6 +120,8 @@ METHOD_LABELS = {
     'dim_0.02':   '0.02/sqrt(k) (dim)',
     'PR_OBM':     'PR + OBM CI',
     'PR_MSB':     'PR + MSB bootstrap',
+    'RR_OBM':     'RR + OBM CI',
+    'RR_MSB':     'RR + MSB bootstrap',
 }
 METHODS_ORDER = list(METHOD_LABELS.keys())
 

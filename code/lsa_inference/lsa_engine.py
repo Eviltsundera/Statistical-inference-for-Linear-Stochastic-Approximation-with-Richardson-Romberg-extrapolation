@@ -213,3 +213,63 @@ def run_rr(A_arr, b_arr, trajs, alphas, K, burn_in=100, n0=0):
 
     rr_batch_means = sum(h[m] * all_bm[m] for m in range(len(alphas)))
     return rr_batch_means, n
+
+
+# ---------------------------------------------------------------------------
+# Constant-stepsize LSA storing all iterates (for RR + OBM/MSB)
+# ---------------------------------------------------------------------------
+
+def run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in=100):
+    """Run constant-stepsize LSA, return all post-burn-in iterates + average.
+
+    Like run_lsa_const, but stores every iterate after burn-in for use with
+    OBM/MSB inference. Same Markov chain trajectory as batch-mean methods.
+
+    Returns:
+        all_thetas: (n_traj, T - burn_in, d) iterates after burn-in.
+        theta_bar: (n_traj, d) average over post-burn-in iterates.
+    """
+    n_traj, T = trajs.shape
+    d = b_arr.shape[1]
+    T_post = T - burn_in
+
+    all_thetas = np.empty((n_traj, T_post, d))
+    thetas = np.zeros((n_traj, d))
+
+    for t in range(T):
+        x_t = trajs[:, t]
+        A_t = A_arr[x_t]
+        b_t = b_arr[x_t]
+        thetas += alpha * (np.einsum('nij,nj->ni', A_t, thetas) + b_t)
+
+        if t % 100 == 99:
+            _clamp_diverged(thetas)
+
+        if t >= burn_in:
+            all_thetas[:, t - burn_in, :] = thetas
+
+    theta_bar = np.nanmean(all_thetas, axis=1)
+    return all_thetas, theta_bar
+
+
+def run_rr_full(A_arr, b_arr, trajs, alphas, burn_in=100):
+    """Run RR extrapolation, return all RR-combined post-burn-in iterates.
+
+    For each stepsize alpha_m, runs constant-step LSA storing all iterates.
+    Combines at each timestep: theta_tilde_t = sum_m h_m * theta_t^{(alpha_m)}.
+
+    Returns:
+        rr_all_thetas: (n_traj, T - burn_in, d) RR-extrapolated iterates.
+        rr_theta_bar: (n_traj, d) average of RR iterates.
+    """
+    h = rr_coefficients(alphas)
+
+    per_alpha = []
+    for alpha in alphas:
+        all_th, _ = run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in)
+        per_alpha.append(all_th)
+
+    # Combine: theta_tilde_t = sum_m h_m * theta_t^{(alpha_m)}
+    rr_all_thetas = sum(h[m] * per_alpha[m] for m in range(len(alphas)))
+    rr_theta_bar = np.nanmean(rr_all_thetas, axis=1)
+    return rr_all_thetas, rr_theta_bar
