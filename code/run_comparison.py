@@ -109,10 +109,16 @@ METHOD_LABELS = {
 METHODS_ORDER = list(METHOD_LABELS.keys())
 
 
+def _count_diverged(arr):
+    """Count trajectories where any metric is NaN."""
+    return int(np.sum(np.isnan(arr)))
+
+
 def _solve_problem_worker(args):
     """Multiprocessing worker: solve one LSA problem with all 7 methods.
 
     Accepts a single tuple so it works with pool.imap_unordered.
+    Returns (summary, divergence_info).
     """
     (prob_seed, n_traj, T, n_states, d,
      K, burn_in, pr_c0, pr_k0, pr_gamma, b_n) = args
@@ -129,14 +135,18 @@ def _solve_problem_worker(args):
         pr_c0, pr_k0, pr_gamma, b_n, boot_rng
     )
 
-    # Collapse per-trajectory arrays to per-problem scalars
     summary = {}
+    diverged = {}
     for m in METHODS_ORDER:
+        n_div = _count_diverged(results[m]['l2'])
+        n_ok = n_traj - n_div
+        diverged[m] = n_div
         summary[m] = {
-            metric: float(np.nanmean(results[m][metric]))
-            for metric in ('l2', 'width', 'cov')
+            'l2':    float(np.nanmean(results[m]['l2'])) if n_ok > 0 else np.nan,
+            'width': float(np.nanmean(results[m]['width'])) if n_ok > 0 else np.nan,
+            'cov':   float(np.nanmean(results[m]['cov'])) if n_ok > 0 else 0.0,
         }
-    return summary
+    return summary, diverged
 
 
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
@@ -171,47 +181,75 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
 
     all_results = {m: {'l2': [], 'width': [], 'cov': []}
                    for m in METHODS_ORDER}
+    all_diverged = {m: [] for m in METHODS_ORDER}
 
     t_start = time.time()
     completed = 0
 
     with mp.Pool(n_workers) as pool:
-        for summary in pool.imap_unordered(_solve_problem_worker, task_args):
+        for summary, diverged in pool.imap_unordered(_solve_problem_worker, task_args):
             completed += 1
             for m in METHODS_ORDER:
                 for metric in ('l2', 'width', 'cov'):
                     all_results[m][metric].append(summary[m][metric])
+                all_diverged[m].append(diverged[m])
 
             if completed % max(1, n_problems // 20) == 0 or completed == 1:
                 elapsed = time.time() - t_start
                 eta = elapsed / completed * (n_problems - completed)
                 rr_cov = summary['RR']['cov'] * 100
+                rr_div = diverged['RR']
                 print(f"  [{completed}/{n_problems}] "
-                      f"last RR cov={rr_cov:.0f}% | "
+                      f"last RR cov={rr_cov:.0f}% div={rr_div}/{n_traj} | "
                       f"{elapsed:.0f}s elapsed, ~{eta:.0f}s left",
                       flush=True)
 
     t_total = time.time() - t_start
 
-    # --- Print results ---
+    # --- Divergence summary ---
+    print(f"\n{'=' * 80}")
+    print(f"DIVERGENCE REPORT ({n_problems} problems x {n_traj} traj)")
+    print("=" * 80)
+    div_header = (f"{'Method':<25} {'Total div':>10} {'Problems w/div':>15} "
+                  f"{'Max div/prob':>14} {'Mean div/prob':>14}")
+    print(div_header)
+    print("-" * 80)
+    for m in METHODS_ORDER:
+        divs = np.array(all_diverged[m])
+        total = int(np.sum(divs))
+        n_probs_div = int(np.sum(divs > 0))
+        max_div = int(np.max(divs)) if len(divs) > 0 else 0
+        mean_div = float(np.mean(divs))
+        print(f"{METHOD_LABELS[m]:<25} {total:>10} {n_probs_div:>15} "
+              f"{max_div:>14} {mean_div:>14.1f}")
+
+    # --- Main results (use nanmedian for robustness) ---
     print(f"\n{'=' * 80}")
     print(f"RESULTS ({n_problems} problems, T={T}, {n_traj} traj) "
           f"in {t_total:.0f}s ({t_total/60:.1f}min)")
-    print("Mean over problems (coverage in %, L2 and CI width x 1e-3)")
+    print("Median over problems (coverage in %, L2 and CI width x 1e-3)")
     print("=" * 80)
-    header = f"{'Method':<25} {'L2 x1e-3':>10} {'Width x1e-3':>12} {'Cov %':>8}"
+    header = (f"{'Method':<25} {'L2 x1e-3':>10} {'Width x1e-3':>12} "
+              f"{'Cov %':>8} {'Mean Cov %':>10}")
     print(header)
-    print("-" * 58)
+    print("-" * 68)
 
     rows = []
     for m in METHODS_ORDER:
-        l2_mean = np.mean(all_results[m]['l2']) * 1e3
-        w_mean = np.mean(all_results[m]['width']) * 1e3
-        cov_mean = np.mean(all_results[m]['cov']) * 100
-        print(f"{METHOD_LABELS[m]:<25} {l2_mean:>10.2f} {w_mean:>12.2f} {cov_mean:>8.1f}")
+        l2_arr = np.array(all_results[m]['l2'])
+        w_arr = np.array(all_results[m]['width'])
+        cov_arr = np.array(all_results[m]['cov'])
+        l2_med = float(np.nanmedian(l2_arr)) * 1e3
+        w_med = float(np.nanmedian(w_arr)) * 1e3
+        cov_med = float(np.nanmedian(cov_arr)) * 100
+        cov_mean = float(np.nanmean(cov_arr)) * 100
+        print(f"{METHOD_LABELS[m]:<25} {l2_med:>10.2f} {w_med:>12.2f} "
+              f"{cov_med:>8.1f} {cov_mean:>10.1f}")
         rows.append({
             'method': m, 'label': METHOD_LABELS[m],
-            'l2_mean': l2_mean, 'width_mean': w_mean, 'cov_mean': cov_mean
+            'l2_median': l2_med, 'width_median': w_med,
+            'cov_median': cov_med, 'cov_mean': cov_mean,
+            'diverged_total': int(np.sum(all_diverged[m])),
         })
 
     pcts = [10, 25, 50, 75, 90]
@@ -224,7 +262,7 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     print("-" * (25 + 8 * len(pcts)))
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['cov']) * 100
-        ps = np.percentile(vals, pcts)
+        ps = np.nanpercentile(vals, pcts)
         print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.1f}" for v in ps))
 
     print(f"\n{'=' * 80}")
@@ -234,7 +272,7 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     print("-" * (25 + 8 * len(pcts)))
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['l2']) * 1e3
-        ps = np.percentile(vals, pcts)
+        ps = np.nanpercentile(vals, pcts)
         print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.2f}" for v in ps))
 
     df = pd.DataFrame(rows)

@@ -11,10 +11,31 @@ Shapes:
 
 import numpy as np
 
+# Threshold for detecting divergence.  Values above this are replaced with NaN.
+_DIVERG_THRESH = 1e6
+
 
 def prepare_arrays(A_list, b_list):
     """Stack A_list and b_list into contiguous numpy arrays."""
     return np.array(A_list), np.array(b_list)
+
+
+def _clamp_diverged(thetas):
+    """Replace diverged trajectories (inf/nan/large) with NaN in-place."""
+    bad = ~np.isfinite(thetas) | (np.abs(thetas) > _DIVERG_THRESH)
+    if np.any(bad):
+        # Mark entire trajectory (all coords) as NaN if any coord diverged
+        bad_rows = np.any(bad, axis=1)
+        thetas[bad_rows] = np.nan
+
+
+def _clamp_batch_means(batch_means):
+    """Replace non-finite or large batch means with NaN."""
+    batch_means = np.where(
+        np.isfinite(batch_means) & (np.abs(batch_means) < _DIVERG_THRESH),
+        batch_means, np.nan
+    )
+    return batch_means
 
 
 # ---------------------------------------------------------------------------
@@ -45,6 +66,10 @@ def run_lsa_const(A_arr, b_arr, trajs, alpha, K, burn_in=100, n0=0):
         b_t = b_arr[x_t]
         thetas += alpha * (np.einsum('nij,nj->ni', A_t, thetas) + b_t)
 
+        # Early divergence detection every 100 steps
+        if t % 100 == 99:
+            _clamp_diverged(thetas)
+
         if t < burn_in:
             continue
         if current_batch >= K:
@@ -60,12 +85,7 @@ def run_lsa_const(A_arr, b_arr, trajs, alpha, K, burn_in=100, n0=0):
 
     effective = n - n0
     batch_means = batch_sums / effective if effective > 0 else batch_sums
-
-    batch_means = np.where(
-        np.isfinite(batch_means) & (np.abs(batch_means) < 1e10),
-        batch_means, np.nan
-    )
-    return batch_means, n
+    return _clamp_batch_means(batch_means), n
 
 
 # ---------------------------------------------------------------------------
@@ -105,6 +125,9 @@ def run_lsa_diminishing(A_arr, b_arr, trajs, alpha0, alpha_exp=0.5, K=50):
         step = alpha0 / (t + 1) ** alpha_exp
         thetas += step * (np.einsum('nij,nj->ni', A_t, thetas) + b_t)
 
+        if t % 100 == 99:
+            _clamp_diverged(thetas)
+
         k = batch_for_t[t]
         if k >= 0:
             batch_sums[:, k, :] += thetas
@@ -116,13 +139,8 @@ def run_lsa_diminishing(A_arr, b_arr, trajs, alpha0, alpha_exp=0.5, K=50):
             batch_means[:, k, :] = batch_sums[:, k, :] / batch_counts[k]
             total_used += batch_counts[k]
 
-    batch_means = np.where(
-        np.isfinite(batch_means) & (np.abs(batch_means) < 1e10),
-        batch_means, np.nan
-    )
-
     n_eff = total_used // K if K > 0 else T
-    return batch_means, n_eff
+    return _clamp_batch_means(batch_means), n_eff
 
 
 # ---------------------------------------------------------------------------
@@ -152,8 +170,8 @@ def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75):
         alpha_t = c0 / (t + k0) ** gamma
         thetas += alpha_t * (np.einsum('nij,nj->ni', A_t, thetas) + b_t)
 
-        bad = ~np.isfinite(thetas) | (np.abs(thetas) > 1e10)
-        thetas[bad] = np.nan
+        if t % 100 == 99:
+            _clamp_diverged(thetas)
 
         all_thetas[:, t, :] = thetas
 
