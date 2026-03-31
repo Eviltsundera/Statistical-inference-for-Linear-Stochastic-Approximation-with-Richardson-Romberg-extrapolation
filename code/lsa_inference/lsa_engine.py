@@ -148,19 +148,22 @@ def run_lsa_diminishing(A_arr, b_arr, trajs, alpha0, alpha_exp=0.5, K=50):
 # Returns all iterates for OBM/bootstrap use.
 # ---------------------------------------------------------------------------
 
-def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75):
-    """Run diminishing-stepsize LSA, return all iterates + PR average.
+def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75,
+                           coord=0):
+    """Run diminishing-stepsize LSA, return coord projection + PR average.
 
-    Step sizes: alpha_k = c0 / (k + k0)^gamma
+    Stores only theta[coord] at each step (memory: n_traj * T * 8 bytes)
+    instead of full theta (n_traj * T * d * 8 bytes).
 
     Returns:
-        all_thetas: (n_traj, T, d) all iterates.
-        theta_bar: (n_traj, d) Polyak-Ruppert average.
+        proj: (n_traj, T) projection of iterates onto coordinate `coord`.
+        theta_bar: (n_traj, d) Polyak-Ruppert average (all coordinates).
     """
     n_traj, T = trajs.shape
     d = b_arr.shape[1]
 
-    all_thetas = np.empty((n_traj, T, d))
+    proj = np.empty((n_traj, T))
+    theta_sum = np.zeros((n_traj, d))
     thetas = np.zeros((n_traj, d))
 
     for t in range(T):
@@ -173,10 +176,14 @@ def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75):
         if t % 100 == 99:
             _clamp_diverged(thetas)
 
-        all_thetas[:, t, :] = thetas
+        proj[:, t] = thetas[:, coord]
+        theta_sum += thetas
 
-    theta_bar = np.nanmean(all_thetas, axis=1)
-    return all_thetas, theta_bar
+    theta_bar = theta_sum / T
+    # Fix NaN trajectories
+    has_nan = np.any(np.isnan(proj), axis=1)
+    theta_bar[has_nan] = np.nan
+    return proj, theta_bar
 
 
 # ---------------------------------------------------------------------------
@@ -219,22 +226,31 @@ def run_rr(A_arr, b_arr, trajs, alphas, K, burn_in=100, n0=0):
 # Constant-stepsize LSA storing all iterates (for RR + OBM/MSB)
 # ---------------------------------------------------------------------------
 
-def run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in=100):
-    """Run constant-stepsize LSA, return all post-burn-in iterates + average.
+def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
+                       n0=0, coord=0):
+    """Run constant-stepsize LSA, return coord projection + batch means.
 
-    Like run_lsa_const, but stores every iterate after burn-in for use with
-    OBM/MSB inference. Same Markov chain trajectory as batch-mean methods.
+    Stores only theta[coord] for OBM/MSB (memory: n_traj * T_post * 8)
+    and accumulates batch means on-the-fly for batch-mean CI.
 
     Returns:
-        all_thetas: (n_traj, T - burn_in, d) iterates after burn-in.
-        theta_bar: (n_traj, d) average over post-burn-in iterates.
+        proj: (n_traj, T_post) projection onto `coord` after burn-in.
+        theta_bar: (n_traj, d) average (all coords, for L2 error).
+        batch_means: (n_traj, K, d) non-overlapping batch means.
+        n: Batch size.
     """
     n_traj, T = trajs.shape
     d = b_arr.shape[1]
     T_post = T - burn_in
+    n = T_post // K
 
-    all_thetas = np.empty((n_traj, T_post, d))
+    proj = np.empty((n_traj, T_post))
+    theta_sum = np.zeros((n_traj, d))
+    batch_sums = np.zeros((n_traj, K, d))
     thetas = np.zeros((n_traj, d))
+
+    current_batch = 0
+    batch_count = 0
 
     for t in range(T):
         x_t = trajs[:, t]
@@ -245,58 +261,65 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in=100):
         if t % 100 == 99:
             _clamp_diverged(thetas)
 
-        if t >= burn_in:
-            all_thetas[:, t - burn_in, :] = thetas
+        if t < burn_in:
+            continue
 
-    theta_bar = np.nanmean(all_thetas, axis=1)
-    return all_thetas, theta_bar
+        t_post = t - burn_in
+        proj[:, t_post] = thetas[:, coord]
+        theta_sum += thetas
 
+        # Accumulate batch means
+        if current_batch < K:
+            if batch_count >= n0:
+                batch_sums[:, current_batch, :] += thetas
+            batch_count += 1
+            if batch_count == n:
+                current_batch += 1
+                batch_count = 0
 
-def batch_means_from_full(all_thetas, K, n0=0):
-    """Compute non-overlapping batch means from full iterate array.
+    theta_bar = theta_sum / max(T_post, 1)
+    has_nan = np.any(np.isnan(proj), axis=1)
+    theta_bar[has_nan] = np.nan
 
-    Args:
-        all_thetas: (n_traj, T_post, d) post-burn-in iterates.
-        K: Number of batches.
-        n0: Intra-batch discard.
-
-    Returns:
-        batch_means: (n_traj, K, d).
-        n: Batch size.
-    """
-    n_traj, T_post, d = all_thetas.shape
-    n = T_post // K
     effective = n - n0
+    batch_means = batch_sums / effective if effective > 0 else batch_sums
 
-    batch_means = np.zeros((n_traj, K, d))
-    for k in range(K):
-        start = k * n + n0
-        end = (k + 1) * n
-        if end <= T_post:
-            batch_means[:, k, :] = np.nanmean(all_thetas[:, start:end, :], axis=1)
-
-    return _clamp_batch_means(batch_means), n
+    return proj, theta_bar, _clamp_batch_means(batch_means), n
 
 
-def run_rr_full(A_arr, b_arr, trajs, alphas, burn_in=100):
-    """Run RR extrapolation, return all RR-combined post-burn-in iterates.
+def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, coord=0):
+    """Run RR extrapolation, return coord projections + batch means.
 
-    For each stepsize alpha_m, runs constant-step LSA storing all iterates.
-    Combines at each timestep: theta_tilde_t = sum_m h_m * theta_t^{(alpha_m)}.
+    Runs constant-step LSA for each alpha, stores coord projection + batch
+    means.  Combines projections and batch means with RR coefficients.
 
     Returns:
-        rr_all_thetas: (n_traj, T - burn_in, d) RR-extrapolated iterates.
-        rr_theta_bar: (n_traj, d) average of RR iterates.
-        per_alpha: list of (n_traj, T - burn_in, d) per-stepsize iterates.
+        rr_proj: (n_traj, T_post) RR-combined coord projection.
+        rr_theta_bar: (n_traj, d) RR-combined average.
+        rr_batch_means: (n_traj, K, d) RR-combined batch means.
+        per_alpha_proj: list of (n_traj, T_post) per-stepsize projections.
+        per_alpha_bm: list of (n_traj, K, d) per-stepsize batch means.
+        n: Batch size.
     """
     h = rr_coefficients(alphas)
 
-    per_alpha = []
+    per_alpha_proj = []
+    per_alpha_bm = []
+    per_alpha_bar = []
+    n = None
     for alpha in alphas:
-        all_th, _ = run_lsa_const_full(A_arr, b_arr, trajs, alpha, burn_in)
-        per_alpha.append(all_th)
+        proj, theta_bar, bm, n_m = run_lsa_const_full(
+            A_arr, b_arr, trajs, alpha, K, burn_in, coord=coord
+        )
+        per_alpha_proj.append(proj)
+        per_alpha_bm.append(bm)
+        per_alpha_bar.append(theta_bar)
+        if n is None:
+            n = n_m
 
-    # Combine: theta_tilde_t = sum_m h_m * theta_t^{(alpha_m)}
-    rr_all_thetas = sum(h[m] * per_alpha[m] for m in range(len(alphas)))
-    rr_theta_bar = np.nanmean(rr_all_thetas, axis=1)
-    return rr_all_thetas, rr_theta_bar, per_alpha
+    rr_proj = sum(h[m] * per_alpha_proj[m] for m in range(len(alphas)))
+    rr_theta_bar = sum(h[m] * per_alpha_bar[m] for m in range(len(alphas)))
+    rr_batch_means = sum(h[m] * per_alpha_bm[m] for m in range(len(alphas)))
+
+    return (rr_proj, rr_theta_bar, rr_batch_means,
+            per_alpha_proj, per_alpha_bm, n)

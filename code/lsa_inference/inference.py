@@ -56,76 +56,61 @@ def batch_mean_ci(batch_means, n, theta_star, n0=0, q=0.05, coord=0):
 
 # ---------------------------------------------------------------------------
 # 2. Overlapping Batch Mean (OBM) inference  (Samsonov et al. 2025)
+#
+# These functions accept a 1-D projection `proj` of shape (n_traj, T)
+# instead of the full (n_traj, T, d) iterate array.  This reduces memory
+# by a factor of d.
 # ---------------------------------------------------------------------------
 
-def obm_variance(all_thetas, theta_bar, b_n, u):
-    """Compute OBM variance estimator for projection direction u.
-
-    sigma_hat^2(u) = b_n / (n - b_n + 1) * sum_t ((theta_{b_n,t} - theta_bar)^T u)^2
-
-    where theta_{b_n,t} = (1/b_n) sum_{l=t}^{t+b_n-1} theta_l
+def _block_avgs_from_proj(proj, b_n):
+    """Compute overlapping block averages from scalar projection.
 
     Args:
-        all_thetas: (n_traj, T, d) all iterates.
-        theta_bar: (n_traj, d) Polyak-Ruppert average.
-        b_n: Block size (lag parameter).
-        u: (d,) unit projection vector.
+        proj: (n_traj, T) scalar projection theta_t[coord].
+        b_n: Block size.
 
     Returns:
-        sigma_hat_sq: (n_traj,) OBM variance estimates.
+        block_avgs: (n_traj, T - b_n + 1) overlapping block averages.
     """
-    n_traj, T, d = all_thetas.shape
+    n_traj, T = proj.shape
     n_blocks = T - b_n + 1
-
-    # Compute cumulative sums for efficient block averages
-    # cumsum shape: (n_traj, T+1, d)
-    proj = np.einsum('ntd,d->nt', all_thetas, u)  # (n_traj, T)
-    cumsum_proj = np.concatenate([np.zeros((n_traj, 1)), np.cumsum(proj, axis=1)], axis=1)
-
-    # Block averages: theta_{b_n,t}^T u = (cumsum[t+b_n] - cumsum[t]) / b_n
-    block_avgs = (cumsum_proj[:, b_n:] - cumsum_proj[:, :n_blocks]) / b_n  # (n_traj, n_blocks)
-
-    # theta_bar^T u
-    bar_proj = np.einsum('nd,d->n', theta_bar, u)  # (n_traj,)
-
-    diffs = block_avgs - bar_proj[:, None]  # (n_traj, n_blocks)
-    sigma_hat_sq = (b_n / n_blocks) * np.nansum(diffs ** 2, axis=1)
-
-    return sigma_hat_sq
+    cumsum = np.concatenate(
+        [np.zeros((n_traj, 1)), np.nancumsum(proj, axis=1)], axis=1
+    )
+    return (cumsum[:, b_n:] - cumsum[:, :n_blocks]) / b_n
 
 
-def obm_ci(all_thetas, theta_bar, b_n, theta_star, q=0.05, coord=0):
+def obm_ci(proj, theta_bar, b_n, theta_star, q=0.05, coord=0):
     """Construct CI using OBM variance estimator (Samsonov et al. 2025).
 
-    Uses the standard normal quantile (plug-in approach).
-
     Args:
-        all_thetas: (n_traj, T, d) all iterates.
-        theta_bar: (n_traj, d) Polyak-Ruppert average.
+        proj: (n_traj, T) projection of iterates onto coordinate `coord`.
+        theta_bar: (n_traj, d) average (all coordinates, for L2 error).
         b_n: Block size.
         theta_star: (d,) true solution.
         q: CI error level.
-        coord: Coordinate for CI/coverage.
+        coord: Coordinate index (must match the coord used for proj).
 
     Returns:
-        l2_errors: (n_traj,)
-        ci_widths: (n_traj,)
-        coverages: (n_traj,) binary.
+        l2_errors, ci_widths, coverages: each (n_traj,).
     """
-    n_traj, T, d = all_thetas.shape
+    n_traj, T = proj.shape
     z = stats.norm.ppf(1 - q / 2)
 
     l2_errors = np.linalg.norm(theta_bar - theta_star, axis=1)
 
-    u = np.zeros(d)
-    u[coord] = 1.0
+    block_avgs = _block_avgs_from_proj(proj, b_n)
+    n_blocks = block_avgs.shape[1]
 
-    sigma_hat_sq = obm_variance(all_thetas, theta_bar, b_n, u)
+    bar_coord = theta_bar[:, coord]
+    diffs = block_avgs - bar_coord[:, None]
+    sigma_hat_sq = (b_n / n_blocks) * np.nansum(diffs ** 2, axis=1)
+
     se = np.sqrt(sigma_hat_sq / T)
     ci_widths = 2 * z * se
 
-    lo = theta_bar[:, coord] - z * se
-    hi = theta_bar[:, coord] + z * se
+    lo = bar_coord - z * se
+    hi = bar_coord + z * se
     coverages = ((lo <= theta_star[coord]) & (theta_star[coord] <= hi)).astype(float)
 
     has_nan = np.any(np.isnan(theta_bar), axis=1)
@@ -136,43 +121,35 @@ def obm_ci(all_thetas, theta_bar, b_n, theta_star, q=0.05, coord=0):
     return l2_errors, ci_widths, coverages
 
 
-def msb_ci(all_thetas, theta_bar, b_n, theta_star, n_bootstrap=500,
+def msb_ci(proj, theta_bar, b_n, theta_star, n_bootstrap=500,
            q=0.05, coord=0, rng=None):
     """Construct CI using Multiplier Subsample Bootstrap (Samsonov et al. 2025).
 
-    For each trajectory, draw n_bootstrap sets of multiplier weights
-    w_t ~ N(0,1), compute bootstrap statistic, and use bootstrap quantiles.
-
     Args:
-        all_thetas: (n_traj, T, d) all iterates.
-        theta_bar: (n_traj, d) Polyak-Ruppert average.
+        proj: (n_traj, T) projection of iterates onto coordinate `coord`.
+        theta_bar: (n_traj, d) average (all coordinates, for L2 error).
         b_n: Block size.
         theta_star: (d,) true solution.
         n_bootstrap: Number of bootstrap replications.
         q: CI error level.
-        coord: Coordinate for CI/coverage.
+        coord: Coordinate index (must match the coord used for proj).
         rng: numpy random Generator.
 
     Returns:
-        l2_errors: (n_traj,)
-        ci_widths: (n_traj,)
-        coverages: (n_traj,) binary.
+        l2_errors, ci_widths, coverages: each (n_traj,).
     """
     if rng is None:
         rng = np.random.default_rng()
 
-    n_traj, T, d = all_thetas.shape
-    n_blocks = T - b_n + 1
+    n_traj, T = proj.shape
 
     l2_errors = np.linalg.norm(theta_bar - theta_star, axis=1)
 
-    # Precompute overlapping block averages for the coordinate of interest
-    proj = all_thetas[:, :, coord]  # (n_traj, T)
-    cumsum_proj = np.concatenate([np.zeros((n_traj, 1)), np.cumsum(proj, axis=1)], axis=1)
-    block_avgs = (cumsum_proj[:, b_n:] - cumsum_proj[:, :n_blocks]) / b_n  # (n_traj, n_blocks)
+    block_avgs = _block_avgs_from_proj(proj, b_n)
+    n_blocks = block_avgs.shape[1]
 
-    bar_coord = theta_bar[:, coord]  # (n_traj,)
-    centered = block_avgs - bar_coord[:, None]  # (n_traj, n_blocks)
+    bar_coord = theta_bar[:, coord]
+    centered = block_avgs - bar_coord[:, None]
 
     z_lo = q / 2
     z_hi = 1 - q / 2
@@ -180,23 +157,17 @@ def msb_ci(all_thetas, theta_bar, b_n, theta_star, n_bootstrap=500,
     ci_widths = np.full(n_traj, np.nan)
     coverages = np.zeros(n_traj)
 
-    # Bootstrap: for each trajectory, generate multiplier weights and compute quantiles
     for i in range(n_traj):
-        if np.any(np.isnan(theta_bar[i])):
+        if np.isnan(bar_coord[i]):
             continue
 
-        c_i = centered[i]  # (n_blocks,)
-        # Draw multiplier weights: (n_bootstrap, n_blocks)
+        c_i = centered[i]
         weights = rng.standard_normal((n_bootstrap, n_blocks))
-        # Bootstrap statistic (eq.12 of Samsonov 2025):
-        #   theta_{n,b_n}(u) = sqrt(b_n) / sqrt(n - b_n + 1) * sum_t w_t * centered_t
         boot_stats = np.sqrt(b_n) / np.sqrt(n_blocks) * (weights * c_i[None, :]).sum(axis=1)
 
-        # Quantiles of the bootstrap distribution
         q_lo = np.percentile(boot_stats, z_lo * 100)
         q_hi = np.percentile(boot_stats, z_hi * 100)
 
-        # CI: theta_bar +/- bootstrap quantiles / sqrt(T)
         ci_lo = bar_coord[i] - q_hi / np.sqrt(T)
         ci_hi = bar_coord[i] - q_lo / np.sqrt(T)
 

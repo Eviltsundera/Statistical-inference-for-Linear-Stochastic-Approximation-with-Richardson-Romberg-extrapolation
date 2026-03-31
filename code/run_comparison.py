@@ -27,9 +27,8 @@ import pandas as pd
 from lsa_inference.markov_chain import generate_transition_matrix, simulate_chains_batch
 from lsa_inference.lsa_problem import generate_A, generate_b, compute_theta_star
 from lsa_inference.lsa_engine import (
-    prepare_arrays, run_lsa_const, run_lsa_diminishing,
-    run_lsa_polyak_ruppert, run_rr_full, batch_means_from_full,
-    rr_coefficients,
+    prepare_arrays, run_lsa_diminishing,
+    run_lsa_polyak_ruppert, run_rr_full,
 )
 from lsa_inference.inference import batch_mean_ci, obm_ci, msb_ci
 
@@ -49,8 +48,8 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     """Run all 9 methods on the same trajectories and return metrics.
 
     Constant-step LSA with alpha=0.2 and alpha=0.02 is run ONCE via
-    run_rr_full, which stores all iterates.  From the same iterates we
-    derive batch-mean CI (methods 1-3) and OBM/MSB CI (methods 8-9).
+    run_rr_full.  Only the coord=0 projection is stored (not all d dims),
+    reducing memory by a factor of d.
 
     Returns:
         dict {method_name: {'l2': ndarray, 'width': ndarray, 'cov': ndarray}}
@@ -58,31 +57,23 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     results = {}
 
     # --- Single run of constant-step LSA for both alphas ---
-    # run_rr_full stores all post-burn-in iterates for each alpha,
-    # then combines them via RR coefficients.
-    rr_all_thetas, rr_theta_bar, per_alpha = run_rr_full(
-        A_arr, b_arr, trajs, [0.2, 0.02], burn_in
+    # Returns coord projections (n_traj, T_post) and batch means (n_traj, K, d).
+    (rr_proj, rr_theta_bar, rr_bm,
+     per_alpha_proj, per_alpha_bm, n) = run_rr_full(
+        A_arr, b_arr, trajs, [0.2, 0.02], K, burn_in
     )
-    # per_alpha[0] = all_thetas for alpha=0.2, shape (n_traj, T-burn_in, d)
-    # per_alpha[1] = all_thetas for alpha=0.02
 
-    # --- Huo et al. 2023: methods 1-3 (batch-mean CI from same iterates) ---
+    # --- Huo et al. 2023: methods 1-3 (batch-mean CI) ---
 
     # 1. Constant alpha=0.2
-    bm, n = batch_means_from_full(per_alpha[0], K)
-    l2, w, c = batch_mean_ci(bm, n, theta_star)
+    l2, w, c = batch_mean_ci(per_alpha_bm[0], n, theta_star)
     results['const_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 2. Constant alpha=0.02
-    bm, n = batch_means_from_full(per_alpha[1], K)
-    l2, w, c = batch_mean_ci(bm, n, theta_star)
+    l2, w, c = batch_mean_ci(per_alpha_bm[1], n, theta_star)
     results['const_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 3. RR batch-mean: combine batch means with RR coefficients
-    h = rr_coefficients([0.2, 0.02])
-    bm_0, n = batch_means_from_full(per_alpha[0], K)
-    bm_1, _ = batch_means_from_full(per_alpha[1], K)
-    rr_bm = h[0] * bm_0 + h[1] * bm_1
+    # 3. RR batch-mean
     l2, w, c = batch_mean_ci(rr_bm, n, theta_star)
     results['RR'] = {'l2': l2, 'width': w, 'cov': c}
 
@@ -100,29 +91,28 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
 
     # --- Samsonov et al. 2025: methods 6-7 (PR + OBM/MSB) ---
 
-    all_thetas, theta_bar = run_lsa_polyak_ruppert(
+    pr_proj, pr_theta_bar = run_lsa_polyak_ruppert(
         A_arr, b_arr, trajs, pr_c0, pr_k0, pr_gamma
     )
 
     # 6. PR + OBM CI
-    l2, w, c = obm_ci(all_thetas, theta_bar, b_n, theta_star)
+    l2, w, c = obm_ci(pr_proj, pr_theta_bar, b_n, theta_star)
     results['PR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 7. PR + MSB bootstrap CI
-    l2, w, c = msb_ci(all_thetas, theta_bar, b_n, theta_star,
-                       n_bootstrap=n_bootstrap, rng=rng)
+    l2, w, c = msb_ci(pr_proj, pr_theta_bar, b_n, theta_star,
+                      n_bootstrap=n_bootstrap, rng=rng)
     results['PR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
     # --- Combined: methods 8-9 (RR + OBM/MSB) ---
-    # Uses rr_all_thetas from the same run as methods 1-3.
 
     # 8. RR + OBM CI
-    l2, w, c = obm_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star)
+    l2, w, c = obm_ci(rr_proj, rr_theta_bar, b_n, theta_star)
     results['RR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 9. RR + MSB bootstrap CI
-    l2, w, c = msb_ci(rr_all_thetas, rr_theta_bar, b_n, theta_star,
-                       n_bootstrap=n_bootstrap, rng=rng)
+    l2, w, c = msb_ci(rr_proj, rr_theta_bar, b_n, theta_star,
+                      n_bootstrap=n_bootstrap, rng=rng)
     results['RR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
     return results
@@ -147,10 +137,16 @@ def _count_diverged(arr):
     return int(np.sum(np.isnan(arr)))
 
 
-def _solve_problem_worker(args):
-    """Multiprocessing worker: solve one LSA problem with all 7 methods.
+# Maximum trajectories per chunk.  Controls peak memory:
+# ~8 bytes * chunk_size * T per projection array, x3 arrays for RR = peak.
+# chunk=100, T=10^6 → 100*10^6*8*3 ≈ 2.4 GB per worker.
+_CHUNK_SIZE = 100
 
-    Accepts a single tuple so it works with pool.imap_unordered.
+
+def _solve_problem_worker(args):
+    """Multiprocessing worker: solve one LSA problem with all 9 methods.
+
+    Processes trajectories in chunks of _CHUNK_SIZE to bound memory.
     Returns (summary, divergence_info).
     """
     (prob_seed, n_traj, T, n_states, d,
@@ -160,24 +156,44 @@ def _solve_problem_worker(args):
     P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
 
     traj_rng = np.random.default_rng(rng.integers(0, 2**31))
-    trajs = simulate_chains_batch(P, pi, T, n_traj, traj_rng)
-
     boot_rng = np.random.default_rng(rng.integers(0, 2**31))
-    results = run_all_methods(
-        A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-        pr_c0, pr_k0, pr_gamma, b_n, boot_rng, n_bootstrap
-    )
 
+    # Accumulate per-trajectory metrics across chunks
+    all_metrics = {m: {'l2': [], 'width': [], 'cov': []}
+                   for m in METHODS_ORDER}
+
+    for chunk_start in range(0, n_traj, _CHUNK_SIZE):
+        chunk_end = min(chunk_start + _CHUNK_SIZE, n_traj)
+        chunk_n = chunk_end - chunk_start
+
+        trajs = simulate_chains_batch(P, pi, T, chunk_n, traj_rng)
+
+        results = run_all_methods(
+            A_arr, b_arr, trajs, K, burn_in, theta_star, T,
+            pr_c0, pr_k0, pr_gamma, b_n, boot_rng, n_bootstrap
+        )
+
+        for m in METHODS_ORDER:
+            for metric in ('l2', 'width', 'cov'):
+                all_metrics[m][metric].append(results[m][metric])
+
+        # Free memory before next chunk
+        del trajs, results
+
+    # Concatenate chunks and summarize
     summary = {}
     diverged = {}
     for m in METHODS_ORDER:
-        n_div = _count_diverged(results[m]['l2'])
+        l2 = np.concatenate(all_metrics[m]['l2'])
+        width = np.concatenate(all_metrics[m]['width'])
+        cov = np.concatenate(all_metrics[m]['cov'])
+        n_div = _count_diverged(l2)
         n_ok = n_traj - n_div
         diverged[m] = n_div
         summary[m] = {
-            'l2':    float(np.nanmean(results[m]['l2'])) if n_ok > 0 else np.nan,
-            'width': float(np.nanmean(results[m]['width'])) if n_ok > 0 else np.nan,
-            'cov':   float(np.nanmean(results[m]['cov'])) if n_ok > 0 else 0.0,
+            'l2':    float(np.nanmean(l2)) if n_ok > 0 else np.nan,
+            'width': float(np.nanmean(width)) if n_ok > 0 else np.nan,
+            'cov':   float(np.nanmean(cov)) if n_ok > 0 else 0.0,
         }
     return summary, diverged
 
