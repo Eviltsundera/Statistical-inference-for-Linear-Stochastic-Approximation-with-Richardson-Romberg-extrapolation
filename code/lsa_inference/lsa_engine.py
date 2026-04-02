@@ -149,18 +149,21 @@ def run_lsa_diminishing(A_arr, b_arr, trajs, alpha0, alpha_exp=0.5, K=50):
 # ---------------------------------------------------------------------------
 
 def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75,
-                           coord=0):
-    """Run diminishing-stepsize LSA, return coord projection + PR average.
+                           direction=None):
+    """Run diminishing-stepsize LSA, return projection along direction + PR average.
 
-    Stores only theta[coord] at each step (memory: n_traj * T * 8 bytes)
-    instead of full theta (n_traj * T * d * 8 bytes).
+    Args:
+        direction: (d,) unit vector for projection. If None, defaults to e_0.
 
     Returns:
-        proj: (n_traj, T) projection of iterates onto coordinate `coord`.
+        proj: (n_traj, T) projection of iterates onto `direction`.
         theta_bar: (n_traj, d) Polyak-Ruppert average (all coordinates).
     """
     n_traj, T = trajs.shape
     d = b_arr.shape[1]
+
+    if direction is None:
+        direction = np.eye(d)[0]
 
     proj = np.empty((n_traj, T))
     theta_sum = np.zeros((n_traj, d))
@@ -176,7 +179,7 @@ def run_lsa_polyak_ruppert(A_arr, b_arr, trajs, c0, k0, gamma=0.75,
         if t % 100 == 99:
             _clamp_diverged(thetas)
 
-        proj[:, t] = thetas[:, coord]
+        proj[:, t] = thetas @ direction
         theta_sum += thetas
 
     theta_bar = theta_sum / T
@@ -227,14 +230,14 @@ def run_rr(A_arr, b_arr, trajs, alphas, K, burn_in=100, n0=0):
 # ---------------------------------------------------------------------------
 
 def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
-                       n0=0, coord=0):
-    """Run constant-stepsize LSA, return coord projection + batch means.
+                       n0=0, direction=None):
+    """Run constant-stepsize LSA, return projection along direction + batch means.
 
-    Stores only theta[coord] for OBM/MSB (memory: n_traj * T_post * 8)
-    and accumulates batch means on-the-fly for batch-mean CI.
+    Args:
+        direction: (d,) unit vector for projection. If None, defaults to e_0.
 
     Returns:
-        proj: (n_traj, T_post) projection onto `coord` after burn-in.
+        proj: (n_traj, T_post) projection onto `direction` after burn-in.
         theta_bar: (n_traj, d) average (all coords, for L2 error).
         batch_means: (n_traj, K, d) non-overlapping batch means.
         n: Batch size.
@@ -243,6 +246,9 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
     d = b_arr.shape[1]
     T_post = T - burn_in
     n = T_post // K
+
+    if direction is None:
+        direction = np.eye(d)[0]
 
     proj = np.empty((n_traj, T_post))
     theta_sum = np.zeros((n_traj, d))
@@ -265,7 +271,7 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
             continue
 
         t_post = t - burn_in
-        proj[:, t_post] = thetas[:, coord]
+        proj[:, t_post] = thetas @ direction
         theta_sum += thetas
 
         # Accumulate batch means
@@ -287,14 +293,14 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
     return proj, theta_bar, _clamp_batch_means(batch_means), n
 
 
-def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, coord=0):
-    """Run RR extrapolation, return coord projections + batch means.
+def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, direction=None):
+    """Run RR extrapolation, return projections along direction + batch means.
 
-    Runs constant-step LSA for each alpha, stores coord projection + batch
-    means.  Combines projections and batch means with RR coefficients.
+    Args:
+        direction: (d,) unit vector for projection. If None, defaults to e_0.
 
     Returns:
-        rr_proj: (n_traj, T_post) RR-combined coord projection.
+        rr_proj: (n_traj, T_post) RR-combined projection.
         rr_theta_bar: (n_traj, d) RR-combined average.
         rr_batch_means: (n_traj, K, d) RR-combined batch means.
         per_alpha_proj: list of (n_traj, T_post) per-stepsize projections.
@@ -309,7 +315,7 @@ def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, coord=0):
     n = None
     for alpha in alphas:
         proj, theta_bar, bm, n_m = run_lsa_const_full(
-            A_arr, b_arr, trajs, alpha, K, burn_in, coord=coord
+            A_arr, b_arr, trajs, alpha, K, burn_in, direction=direction
         )
         per_alpha_proj.append(proj)
         per_alpha_bm.append(bm)
@@ -322,4 +328,4 @@ def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, coord=0):
     rr_batch_means = sum(h[m] * per_alpha_bm[m] for m in range(len(alphas)))
 
     return (rr_proj, rr_theta_bar, rr_batch_means,
-            per_alpha_proj, per_alpha_bm, n)
+            per_alpha_proj, per_alpha_bm, per_alpha_bar, n)

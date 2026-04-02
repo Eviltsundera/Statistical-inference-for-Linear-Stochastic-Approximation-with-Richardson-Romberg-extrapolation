@@ -30,7 +30,7 @@ from lsa_inference.lsa_engine import (
     prepare_arrays, run_lsa_diminishing,
     run_lsa_polyak_ruppert, run_rr_full,
 )
-from lsa_inference.inference import batch_mean_ci, obm_ci, msb_ci
+from lsa_inference.inference import batch_mean_ci, obm_ci, obm_rr_ci, msb_ci
 
 
 def generate_problem(n_states, d, rng):
@@ -44,12 +44,12 @@ def generate_problem(n_states, d, rng):
 
 
 def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-                    pr_c0, pr_k0, pr_gamma, b_n, rng, n_bootstrap=500):
+                    pr_c0, pr_k0, pr_gamma, b_n, rng, direction,
+                    n_bootstrap=500):
     """Run all 9 methods on the same trajectories and return metrics.
 
-    Constant-step LSA with alpha=0.2 and alpha=0.02 is run ONCE via
-    run_rr_full.  Only the coord=0 projection is stored (not all d dims),
-    reducing memory by a factor of d.
+    Args:
+        direction: (d,) unit vector for CI projection.
 
     Returns:
         dict {method_name: {'l2': ndarray, 'width': ndarray, 'cov': ndarray}}
@@ -57,77 +57,122 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     results = {}
 
     # --- Single run of constant-step LSA for both alphas ---
-    # Returns coord projections (n_traj, T_post) and batch means (n_traj, K, d).
     (rr_proj, rr_theta_bar, rr_bm,
-     per_alpha_proj, per_alpha_bm, n) = run_rr_full(
-        A_arr, b_arr, trajs, [0.2, 0.02], K, burn_in
+     per_alpha_proj, per_alpha_bm, per_alpha_bar, n) = run_rr_full(
+        A_arr, b_arr, trajs, [0.2, 0.02], K, burn_in, direction=direction
     )
 
     # --- Huo et al. 2023: methods 1-3 (batch-mean CI) ---
 
-    # 1. Constant alpha=0.2
-    l2, w, c = batch_mean_ci(per_alpha_bm[0], n, theta_star)
+    # 1. Constant alpha=0.2 + batch-mean
+    l2, w, c = batch_mean_ci(per_alpha_bm[0], n, theta_star, direction=direction)
     results['const_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 2. Constant alpha=0.02
-    l2, w, c = batch_mean_ci(per_alpha_bm[1], n, theta_star)
+    # 2. Constant alpha=0.02 + batch-mean
+    l2, w, c = batch_mean_ci(per_alpha_bm[1], n, theta_star, direction=direction)
     results['const_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 3. RR batch-mean
-    l2, w, c = batch_mean_ci(rr_bm, n, theta_star)
+    # 3. RR + batch-mean
+    l2, w, c = batch_mean_ci(rr_bm, n, theta_star, direction=direction)
     results['RR'] = {'l2': l2, 'width': w, 'cov': c}
 
     # --- Huo et al. 2023: methods 4-5 (diminishing stepsize) ---
 
     # 4. Diminishing 0.2/sqrt(k)
     bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, 0.2, 0.5, K)
-    l2, w, c = batch_mean_ci(bm, n_eff, theta_star)
+    l2, w, c = batch_mean_ci(bm, n_eff, theta_star, direction=direction)
     results['dim_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 5. Diminishing 0.02/sqrt(k)
     bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, 0.02, 0.5, K)
-    l2, w, c = batch_mean_ci(bm, n_eff, theta_star)
+    l2, w, c = batch_mean_ci(bm, n_eff, theta_star, direction=direction)
     results['dim_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
     # --- Samsonov et al. 2025: methods 6-7 (PR + OBM/MSB) ---
 
     pr_proj, pr_theta_bar = run_lsa_polyak_ruppert(
-        A_arr, b_arr, trajs, pr_c0, pr_k0, pr_gamma
+        A_arr, b_arr, trajs, pr_c0, pr_k0, pr_gamma, direction=direction
     )
 
     # 6. PR + OBM CI
-    l2, w, c = obm_ci(pr_proj, pr_theta_bar, b_n, theta_star)
+    l2, w, c = obm_ci(pr_proj, pr_theta_bar, b_n, theta_star, direction=direction)
     results['PR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 7. PR + MSB bootstrap CI
     l2, w, c = msb_ci(pr_proj, pr_theta_bar, b_n, theta_star,
-                      n_bootstrap=n_bootstrap, rng=rng)
+                      n_bootstrap=n_bootstrap, direction=direction, rng=rng)
     results['PR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
 
     # --- Combined: methods 8-9 (RR + OBM/MSB) ---
 
     # 8. RR + OBM CI
-    l2, w, c = obm_ci(rr_proj, rr_theta_bar, b_n, theta_star)
+    l2, w, c = obm_ci(rr_proj, rr_theta_bar, b_n, theta_star, direction=direction)
     results['RR_OBM'] = {'l2': l2, 'width': w, 'cov': c}
 
     # 9. RR + MSB bootstrap CI
     l2, w, c = msb_ci(rr_proj, rr_theta_bar, b_n, theta_star,
-                      n_bootstrap=n_bootstrap, rng=rng)
+                      n_bootstrap=n_bootstrap, direction=direction, rng=rng)
     results['RR_MSB'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # --- NEW: methods 10-13 (constant step + OBM/MSB) ---
+
+    # 10. Constant alpha=0.2 + OBM
+    l2, w, c = obm_ci(per_alpha_proj[0], per_alpha_bar[0], b_n, theta_star,
+                       direction=direction)
+    results['const_0.2_OBM'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 11. Constant alpha=0.2 + MSB
+    l2, w, c = msb_ci(per_alpha_proj[0], per_alpha_bar[0], b_n, theta_star,
+                       n_bootstrap=n_bootstrap, direction=direction, rng=rng)
+    results['const_0.2_MSB'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 12. Constant alpha=0.02 + OBM
+    l2, w, c = obm_ci(per_alpha_proj[1], per_alpha_bar[1], b_n, theta_star,
+                       direction=direction)
+    results['const_0.02_OBM'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 13. Constant alpha=0.02 + MSB
+    l2, w, c = msb_ci(per_alpha_proj[1], per_alpha_bar[1], b_n, theta_star,
+                       n_bootstrap=n_bootstrap, direction=direction, rng=rng)
+    results['const_0.02_MSB'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # --- NEW: methods 14-16 (OBM-RR: RR by block size for variance) ---
+
+    # 14. Constant alpha=0.02 + OBM-RR
+    l2, w, c = obm_rr_ci(per_alpha_proj[1], per_alpha_bar[1], b_n, theta_star,
+                          direction=direction)
+    results['const_0.02_OBM_RR'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 15. PR + OBM-RR
+    l2, w, c = obm_rr_ci(pr_proj, pr_theta_bar, b_n, theta_star,
+                          direction=direction)
+    results['PR_OBM_RR'] = {'l2': l2, 'width': w, 'cov': c}
+
+    # 16. RR + OBM-RR
+    l2, w, c = obm_rr_ci(rr_proj, rr_theta_bar, b_n, theta_star,
+                          direction=direction)
+    results['RR_OBM_RR'] = {'l2': l2, 'width': w, 'cov': c}
 
     return results
 
 
 METHOD_LABELS = {
-    'const_0.2':  'alpha=0.2 (const)',
-    'const_0.02': 'alpha=0.02 (const)',
-    'RR':         'RR (0.2+0.02)',
-    'dim_0.2':    '0.2/sqrt(k) (dim)',
-    'dim_0.02':   '0.02/sqrt(k) (dim)',
-    'PR_OBM':     'PR + OBM CI',
-    'PR_MSB':     'PR + MSB bootstrap',
-    'RR_OBM':     'RR + OBM CI',
-    'RR_MSB':     'RR + MSB bootstrap',
+    'const_0.2':          'alpha=0.2 (const)',
+    'const_0.02':         'alpha=0.02 (const)',
+    'RR':                 'RR (0.2+0.02)',
+    'dim_0.2':            '0.2/sqrt(k) (dim)',
+    'dim_0.02':           '0.02/sqrt(k) (dim)',
+    'PR_OBM':             'PR + OBM',
+    'PR_MSB':             'PR + MSB',
+    'RR_OBM':             'RR + OBM',
+    'RR_MSB':             'RR + MSB',
+    'const_0.2_OBM':      'a=0.2 + OBM',
+    'const_0.2_MSB':      'a=0.2 + MSB',
+    'const_0.02_OBM':     'a=0.02 + OBM',
+    'const_0.02_MSB':     'a=0.02 + MSB',
+    'const_0.02_OBM_RR':  'a=0.02 + OBM-RR',
+    'PR_OBM_RR':          'PR + OBM-RR',
+    'RR_OBM_RR':          'RR + OBM-RR',
 }
 METHODS_ORDER = list(METHOD_LABELS.keys())
 
@@ -150,10 +195,19 @@ def _solve_problem_worker(args):
     Returns (summary, divergence_info).
     """
     (prob_seed, n_traj, T, n_states, d,
-     K, burn_in, pr_c0, pr_k0, pr_gamma, b_n, n_bootstrap) = args
+     K, burn_in, pr_c0, pr_k0, pr_gamma, b_n, n_bootstrap,
+     direction_coord) = args
 
     rng = np.random.default_rng(prob_seed)
     P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
+
+    # Generate projection direction: random unit vector or e_k
+    if direction_coord is None:
+        # Random unit direction (one per problem)
+        u = rng.standard_normal(d)
+        direction = u / np.linalg.norm(u)
+    else:
+        direction = np.eye(d)[direction_coord]
 
     traj_rng = np.random.default_rng(rng.integers(0, 2**31))
     boot_rng = np.random.default_rng(rng.integers(0, 2**31))
@@ -170,7 +224,7 @@ def _solve_problem_worker(args):
 
         results = run_all_methods(
             A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-            pr_c0, pr_k0, pr_gamma, b_n, boot_rng, n_bootstrap
+            pr_c0, pr_k0, pr_gamma, b_n, boot_rng, direction, n_bootstrap
         )
 
         for m in METHODS_ORDER:
@@ -199,8 +253,13 @@ def _solve_problem_worker(args):
 
 
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
-                   n_workers=None, n_bootstrap=500):
-    """Run the full comparison experiment with multiprocessing."""
+                   n_workers=None, n_bootstrap=500, direction_coord=None):
+    """Run the full comparison experiment with multiprocessing.
+
+    Args:
+        direction_coord: If None, each problem uses a random unit direction.
+            If an int k, uses the basis vector e_k for all problems.
+    """
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
 
@@ -224,11 +283,13 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     if n_workers is None:
         n_workers = min(mp.cpu_count(), n_problems)
 
+    dir_desc = f"e_{direction_coord}" if direction_coord is not None else "random"
     print(f"Experiment config: {n_problems} problems x {n_traj} traj, T={T}, "
           f"d={d}, |X|={n_states}, workers={n_workers}")
     print(f"  Huo: K={K}, burn_in={burn_in}")
     print(f"  Samsonov PR: c0={pr_c0}, k0={pr_k0}, gamma={pr_gamma}, "
           f"b_n={b_n}, n_bootstrap={n_bootstrap}")
+    print(f"  Direction: {dir_desc}")
     print(flush=True)
 
     rng_master = np.random.default_rng(seed)
@@ -236,7 +297,7 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
 
     task_args = [
         (s, n_traj, T, n_states, d, K, burn_in, pr_c0, pr_k0, pr_gamma, b_n,
-         n_bootstrap)
+         n_bootstrap, direction_coord)
         for s in seeds
     ]
 
@@ -360,11 +421,14 @@ def main():
                         help='Parallel workers (default: cpu_count)')
     parser.add_argument('--n-bootstrap', type=int, default=500,
                         help='MSB bootstrap replications (default: 500)')
+    parser.add_argument('--direction-coord', type=int, default=None,
+                        help='Coordinate index k for e_k direction. '
+                             'If omitted, uses a random unit direction per problem.')
     args = parser.parse_args()
 
     run_experiment(args.n_problems, args.n_traj, args.T,
                    args.n_states, args.d, args.seed, args.n_workers,
-                   args.n_bootstrap)
+                   args.n_bootstrap, args.direction_coord)
 
 
 if __name__ == '__main__':
