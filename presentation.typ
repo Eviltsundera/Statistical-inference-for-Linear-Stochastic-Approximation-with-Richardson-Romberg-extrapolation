@@ -38,7 +38,7 @@
     Supervisor: Ilya Levin
   ]
   #v(0.5em)
-  #text(size: 13pt, fill: rgb("#888"))[2025]
+  #text(size: 13pt, fill: rgb("#888"))[2026]
 ]
 #v(2fr)
 #footer()
