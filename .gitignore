@@ -1,6 +1,9 @@
 # Temporary files
 tmp/
 
+# Python
+__pycache__/
+
 # OS files
 Thumbs.db
 Desktop.ini
