@@ -1,0 +1,35 @@
+wing: statistical_inference_for_linear_stochastic_approximation_with_richardson_romberg_extrapolation
+rooms:
+- name: summaries
+  description: Files from summaries/
+  keywords:
+  - summaries
+  - summaries
+- name: src
+  description: Files from src/
+  keywords:
+  - src
+  - src
+- name: research
+  description: Files from papers/
+  keywords:
+  - research
+  - papers
+- name: code
+  description: Files from code/
+  keywords:
+  - code
+  - code
+- name: tmp
+  description: Files from tmp/
+  keywords:
+  - tmp
+  - tmp
+- name: documentation
+  description: Files from docs/
+  keywords:
+  - documentation
+  - docs
+- name: general
+  description: Files that don't fit other rooms
+  keywords: []
