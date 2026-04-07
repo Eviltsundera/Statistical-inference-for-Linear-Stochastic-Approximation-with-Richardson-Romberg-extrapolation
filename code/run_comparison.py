@@ -25,7 +25,12 @@ import numpy as np
 import pandas as pd
 
 from lsa_inference.markov_chain import generate_transition_matrix, simulate_chains_batch
-from lsa_inference.lsa_problem import generate_A, generate_b, compute_theta_star
+from lsa_inference.lsa_problem import (
+    compute_theta_star,
+    generate_A,
+    generate_b,
+    problem_diagnostics,
+)
 from lsa_inference.lsa_engine import (
     prepare_arrays, run_lsa_diminishing,
     run_lsa_polyak_ruppert, run_rr_full,
@@ -40,7 +45,8 @@ def generate_problem(n_states, d, rng):
     b_list = generate_b(n_states, d, rng)
     theta_star = compute_theta_star(A_list, b_list, pi)
     A_arr, b_arr = prepare_arrays(A_list, b_list)
-    return P, pi, A_bar, theta_star, A_arr, b_arr
+    diagnostics = problem_diagnostics(A_list, alpha_warn=0.2)
+    return P, pi, A_bar, theta_star, A_arr, b_arr, diagnostics
 
 
 def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
@@ -192,14 +198,16 @@ def _solve_problem_worker(args):
     """Multiprocessing worker: solve one LSA problem with all 9 methods.
 
     Processes trajectories in chunks of _CHUNK_SIZE to bound memory.
-    Returns (summary, divergence_info).
+    Returns (summary, divergence_info, problem_diagnostics).
     """
     (prob_seed, n_traj, T, n_states, d,
      K, burn_in, pr_c0, pr_k0, pr_gamma, b_n, n_bootstrap,
      direction_coord) = args
 
     rng = np.random.default_rng(prob_seed)
-    P, pi, A_bar, theta_star, A_arr, b_arr = generate_problem(n_states, d, rng)
+    P, pi, A_bar, theta_star, A_arr, b_arr, diagnostics = generate_problem(
+        n_states, d, rng
+    )
 
     # Generate projection direction: random unit vector or e_k
     if direction_coord is None:
@@ -249,7 +257,7 @@ def _solve_problem_worker(args):
             'width': float(np.nanmean(width)) if n_ok > 0 else np.nan,
             'cov':   float(np.nanmean(cov)) if n_ok > 0 else 0.0,
         }
-    return summary, diverged
+    return summary, diverged, diagnostics
 
 
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
@@ -304,17 +312,21 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     all_results = {m: {'l2': [], 'width': [], 'cov': []}
                    for m in METHODS_ORDER}
     all_diverged = {m: [] for m in METHODS_ORDER}
+    all_problem_diags = []
 
     t_start = time.time()
     completed = 0
 
     with mp.Pool(n_workers) as pool:
-        for summary, diverged in pool.imap_unordered(_solve_problem_worker, task_args):
+        for summary, diverged, diagnostics in pool.imap_unordered(
+            _solve_problem_worker, task_args
+        ):
             completed += 1
             for m in METHODS_ORDER:
                 for metric in ('l2', 'width', 'cov'):
                     all_results[m][metric].append(summary[m][metric])
                 all_diverged[m].append(diverged[m])
+            all_problem_diags.append(diagnostics)
 
             if completed % max(1, n_problems // 20) == 0 or completed == 1:
                 elapsed = time.time() - t_start
@@ -344,6 +356,25 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
         mean_div = float(np.mean(divs))
         print(f"{METHOD_LABELS[m]:<25} {total:>10} {n_probs_div:>15} "
               f"{max_div:>14} {mean_div:>14.1f}")
+
+    if all_problem_diags:
+        alpha_warn = all_problem_diags[0]['alpha_warn']
+        max_norms = np.array([d['max_a_norm'] for d in all_problem_diags], dtype=float)
+        max_rhos = np.array([d['max_rho'] for d in all_problem_diags], dtype=float)
+        n_warn_unstable = int(sum(d['warn_unstable'] for d in all_problem_diags))
+        n_warn_assumption = int(sum(d['warn_assumption'] for d in all_problem_diags))
+
+        print(f"\n{'=' * 80}")
+        print("PROBLEM GENERATION DIAGNOSTICS")
+        print("=" * 80)
+        print(f"median max ||A(x)||_2         : {np.median(max_norms):.3f}")
+        print(f"max max ||A(x)||_2            : {np.max(max_norms):.3f}")
+        print(f"median max rho(I+{alpha_warn:.2f}A): {np.median(max_rhos):.3f}")
+        print(f"max max rho(I+{alpha_warn:.2f}A)   : {np.max(max_rhos):.3f}")
+        if n_warn_unstable > 0 or n_warn_assumption > 0:
+            print("WARNING: some generated problems look numerically stiff.")
+            print(f"  rho(I+{alpha_warn:.2f}A) >= 1 in {n_warn_unstable}/{n_problems} problems")
+            print(f"  ||A(x)||_2 > 1 in {n_warn_assumption}/{n_problems} problems")
 
     # --- Main results (use nanmedian for robustness) ---
     print(f"\n{'=' * 80}")
