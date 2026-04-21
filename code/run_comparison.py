@@ -271,15 +271,13 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
 
-    # Samsonov PR parameters.
-    # gamma=2/3 as in paper experiments (Section G, Appendix).
-    # c0 and k0 chosen so that initial stepsize alpha_0 = c0/(k0^gamma) ~ 0.2,
-    # comparable to the diminishing 0.2/sqrt(k) baseline.
-    # Reference notebook: c0=200, k0=20000, gamma=0.65 → alpha_0≈0.32 (for TD, d=2).
-    # For our generic LSA (d=5): c0=1.0, k0=10 → alpha_0=1/(10^{2/3})≈0.22.
-    pr_gamma = 2 / 3
-    pr_c0 = 1.0
-    pr_k0 = 10
+    # Samsonov PR parameters — matching the original paper's notebook:
+    # c0=200, k0=20000, gamma=0.65 → alpha_0 = 200/20000^0.65 ≈ 0.32.
+    # Large k0 ensures step sizes vary slowly, keeping iterates approximately
+    # stationary on the OBM block scale (critical for OBM consistency).
+    pr_gamma = 0.65
+    pr_c0 = 200.0
+    pr_k0 = 20000
 
     # OBM block size: b_n ~ T^{0.6}.
     # Paper Table 2: b_n=250 for T=20480, b_n=1200 for T=204800, b_n=3600 for T=1024000
