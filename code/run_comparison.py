@@ -38,10 +38,13 @@ from lsa_inference.lsa_engine import (
 from lsa_inference.inference import batch_mean_ci, obm_ci, obm_rr_ci, msb_ci
 
 
-def generate_problem(n_states, d, rng):
+def generate_problem(n_states, d, rng, eig_min=0.25, eig_max=0.60,
+                     noise_target=0.35):
     """Generate a complete LSA problem instance."""
     P, pi = generate_transition_matrix(n_states, rng)
-    A_list, A_bar = generate_A(n_states, d, pi, rng)
+    A_list, A_bar = generate_A(n_states, d, pi, rng,
+                               eig_min=eig_min, eig_max=eig_max,
+                               noise_target=noise_target)
     b_list = generate_b(n_states, d, rng)
     theta_star = compute_theta_star(A_list, b_list, pi)
     A_arr, b_arr = prepare_arrays(A_list, b_list)
@@ -51,30 +54,33 @@ def generate_problem(n_states, d, rng):
 
 def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
                     pr_c0, pr_k0, pr_gamma, b_n, rng, direction,
-                    n_bootstrap=500):
-    """Run all 9 methods on the same trajectories and return metrics.
+                    n_bootstrap=500, rr_alphas=(0.2, 0.02)):
+    """Run all 16 methods on the same trajectories and return metrics.
 
     Args:
         direction: (d,) unit vector for CI projection.
+        rr_alphas: (alpha1, alpha2) pair of step sizes for the constant-step
+            methods and RR extrapolation.
 
     Returns:
         dict {method_name: {'l2': ndarray, 'width': ndarray, 'cov': ndarray}}
     """
     results = {}
+    a1, a2 = rr_alphas
 
     # --- Single run of constant-step LSA for both alphas ---
     (rr_proj, rr_theta_bar, rr_bm,
      per_alpha_proj, per_alpha_bm, per_alpha_bar, n) = run_rr_full(
-        A_arr, b_arr, trajs, [0.2, 0.02], K, burn_in, direction=direction
+        A_arr, b_arr, trajs, [a1, a2], K, burn_in, direction=direction
     )
 
     # --- Huo et al. 2023: methods 1-3 (batch-mean CI) ---
 
-    # 1. Constant alpha=0.2 + batch-mean
+    # 1. Constant alpha=a1 + batch-mean
     l2, w, c = batch_mean_ci(per_alpha_bm[0], n, theta_star, direction=direction)
     results['const_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 2. Constant alpha=0.02 + batch-mean
+    # 2. Constant alpha=a2 + batch-mean
     l2, w, c = batch_mean_ci(per_alpha_bm[1], n, theta_star, direction=direction)
     results['const_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
@@ -84,13 +90,13 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
 
     # --- Huo et al. 2023: methods 4-5 (diminishing stepsize) ---
 
-    # 4. Diminishing 0.2/sqrt(k)
-    bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, 0.2, 0.5, K)
+    # 4. Diminishing a1/sqrt(k)
+    bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, a1, 0.5, K)
     l2, w, c = batch_mean_ci(bm, n_eff, theta_star, direction=direction)
     results['dim_0.2'] = {'l2': l2, 'width': w, 'cov': c}
 
-    # 5. Diminishing 0.02/sqrt(k)
-    bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, 0.02, 0.5, K)
+    # 5. Diminishing a2/sqrt(k)
+    bm, n_eff = run_lsa_diminishing(A_arr, b_arr, trajs, a2, 0.5, K)
     l2, w, c = batch_mean_ci(bm, n_eff, theta_star, direction=direction)
     results['dim_0.02'] = {'l2': l2, 'width': w, 'cov': c}
 
@@ -202,11 +208,12 @@ def _solve_problem_worker(args):
     """
     (prob_seed, n_traj, T, n_states, d,
      K, burn_in, pr_c0, pr_k0, pr_gamma, b_n, n_bootstrap,
-     direction_coord) = args
+     direction_coord, eig_min, eig_max, noise_target, rr_alphas) = args
 
     rng = np.random.default_rng(prob_seed)
     P, pi, A_bar, theta_star, A_arr, b_arr, diagnostics = generate_problem(
-        n_states, d, rng
+        n_states, d, rng, eig_min=eig_min, eig_max=eig_max,
+        noise_target=noise_target,
     )
 
     # Generate projection direction: random unit vector or e_k
@@ -232,7 +239,8 @@ def _solve_problem_worker(args):
 
         results = run_all_methods(
             A_arr, b_arr, trajs, K, burn_in, theta_star, T,
-            pr_c0, pr_k0, pr_gamma, b_n, boot_rng, direction, n_bootstrap
+            pr_c0, pr_k0, pr_gamma, b_n, boot_rng, direction, n_bootstrap,
+            rr_alphas=rr_alphas,
         )
 
         for m in METHODS_ORDER:
@@ -261,12 +269,17 @@ def _solve_problem_worker(args):
 
 
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
-                   n_workers=None, n_bootstrap=500, direction_coord=None):
+                   n_workers=None, n_bootstrap=500, direction_coord=None,
+                   eig_min=0.25, eig_max=0.60, noise_target=0.35,
+                   rr_alphas=(0.2, 0.02)):
     """Run the full comparison experiment with multiprocessing.
 
     Args:
         direction_coord: If None, each problem uses a random unit direction.
             If an int k, uses the basis vector e_k for all problems.
+        eig_min, eig_max: eigenvalue range for -A_bar.
+        noise_target: spectral norm target for state-dependent perturbations.
+        rr_alphas: (alpha1, alpha2) — step sizes for constant-step / RR methods.
     """
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
@@ -292,9 +305,10 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     dir_desc = f"e_{direction_coord}" if direction_coord is not None else "random"
     print(f"Experiment config: {n_problems} problems x {n_traj} traj, T={T}, "
           f"d={d}, |X|={n_states}, workers={n_workers}")
-    print(f"  Huo: K={K}, burn_in={burn_in}")
+    print(f"  Huo: K={K}, burn_in={burn_in}, rr_alphas={rr_alphas}")
     print(f"  Samsonov PR: c0={pr_c0}, k0={pr_k0}, gamma={pr_gamma}, "
           f"b_n={b_n}, n_bootstrap={n_bootstrap}")
+    print(f"  Problem gen: eig=[{eig_min},{eig_max}], noise={noise_target}")
     print(f"  Direction: {dir_desc}")
     print(flush=True)
 
@@ -303,7 +317,8 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
 
     task_args = [
         (s, n_traj, T, n_states, d, K, burn_in, pr_c0, pr_k0, pr_gamma, b_n,
-         n_bootstrap, direction_coord)
+         n_bootstrap, direction_coord, eig_min, eig_max, noise_target,
+         rr_alphas)
         for s in seeds
     ]
 
@@ -453,11 +468,25 @@ def main():
     parser.add_argument('--direction-coord', type=int, default=None,
                         help='Coordinate index k for e_k direction. '
                              'If omitted, uses a random unit direction per problem.')
+    parser.add_argument('--eig-min', type=float, default=0.25,
+                        help='Min eigenvalue of -A_bar (default: 0.25). '
+                             'Smaller → worse conditioning → larger bias.')
+    parser.add_argument('--eig-max', type=float, default=0.60,
+                        help='Max eigenvalue of -A_bar (default: 0.60).')
+    parser.add_argument('--noise-target', type=float, default=0.35,
+                        help='Target spectral norm of state perturbation '
+                             '(default: 0.35). Larger → more noise.')
+    parser.add_argument('--rr-alphas', type=float, nargs=2,
+                        default=[0.2, 0.02], metavar=('A1', 'A2'),
+                        help='Step sizes for RR pair (default: 0.2 0.02).')
     args = parser.parse_args()
 
     run_experiment(args.n_problems, args.n_traj, args.T,
                    args.n_states, args.d, args.seed, args.n_workers,
-                   args.n_bootstrap, args.direction_coord)
+                   args.n_bootstrap, args.direction_coord,
+                   eig_min=args.eig_min, eig_max=args.eig_max,
+                   noise_target=args.noise_target,
+                   rr_alphas=tuple(args.rr_alphas))
 
 
 if __name__ == '__main__':

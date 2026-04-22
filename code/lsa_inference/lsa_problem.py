@@ -13,26 +13,33 @@ def _spectral_norms(mats):
     return np.array([np.linalg.norm(mat, ord=2) for mat in mats], dtype=float)
 
 
-def _generate_hurwitz_mean(d, rng):
+def _generate_hurwitz_mean(d, rng, eig_min, eig_max):
     """Generate a well-conditioned Hurwitz mean matrix.
 
-    The mean matrix is symmetric negative definite with eigenvalues bounded
-    away from zero. This keeps the LSA dynamics stable while remaining within
-    the bounded/Hurwitz assumptions used in the theory.
+    The mean matrix is symmetric negative definite with eigenvalues in
+    [eig_min, eig_max]. Smaller eig_min → worse conditioning → larger
+    bias constant.
     """
     q, _ = np.linalg.qr(rng.standard_normal((d, d)))
-    eigvals = rng.uniform(_A_BAR_EIG_MIN, _A_BAR_EIG_MAX, size=d)
+    eigvals = rng.uniform(eig_min, eig_max, size=d)
     return -(q @ np.diag(eigvals) @ q.T)
 
 
-def generate_A(n_states, d, pi, rng):
+def generate_A(n_states, d, pi, rng,
+               eig_min=_A_BAR_EIG_MIN, eig_max=_A_BAR_EIG_MAX,
+               noise_target=_NOISE_NORM_TARGET, a_norm_cap=_A_NORM_CAP):
     """Generate state-dependent matrices A(x) with Hurwitz mean.
+
+    Args:
+        eig_min, eig_max: range for eigenvalues of -A_bar.
+        noise_target: target spectral norm of the state-dependent perturbation.
+        a_norm_cap: hard cap on ||A(z)||.
 
     Returns:
         A_list: list of (d, d) matrices, one per state.
         A_bar: (d, d) mean matrix E_pi[A(x)].
     """
-    A_bar = _generate_hurwitz_mean(d, rng)
+    A_bar = _generate_hurwitz_mean(d, rng, eig_min, eig_max)
 
     # Generate perturbations for all states and center them under pi.
     # This avoids concentrating the whole correction in a single outlier state.
@@ -42,11 +49,11 @@ def generate_A(n_states, d, pi, rng):
 
     max_noise_norm = float(np.max(_spectral_norms(centered_noise)))
     a_bar_norm = float(np.linalg.norm(A_bar, ord=2))
-    noise_budget = max(_A_NORM_CAP - a_bar_norm, 0.0)
+    noise_budget = max(a_norm_cap - a_bar_norm, 0.0)
 
     if max_noise_norm > 0 and noise_budget > 0:
         noise_scale = min(
-            _NOISE_NORM_TARGET / max_noise_norm,
+            noise_target / max_noise_norm,
             noise_budget / max_noise_norm,
         )
         centered_noise *= noise_scale
