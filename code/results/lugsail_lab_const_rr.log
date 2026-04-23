@@ -1,0 +1,34 @@
+Config: 80 problems x 500 traj, d=5, n_states=10, workers=80
+  iterates: ['const', 'RR']
+  lam_list: [2.0, 3.0]
+  PR: c0=200.0, k0=20000.0, gamma=0.65
+  rr_alphas: [0.2, 0.02]  (const uses min)
+  problem: eig in [0.1,0.6], noise_target=0.35
+
+T=100000: b_n=[10, 31, 100, 316, 999, 3162, 10000]
+  [1/80] 162s
+  [8/80] 163s
+  [16/80] 164s
+  [24/80] 165s
+  [32/80] 166s
+  [40/80] 193s
+  [48/80] 195s
+  [56/80] 196s
+  [64/80] 197s
+  [72/80] 198s
+  [80/80] 200s
+
+=== Best-MSE block size per (T, iterate, estimator, lam) ===
+
+ T=100000  iterate=RR_iterate
+              OBM  b*=  3162   rel_bias=-0.104  var=2.574e+00  mse=3.918e+00
+    OBM_RR(lam=2)  b*=   999   rel_bias=-0.038  var=3.084e+00  mse=3.291e+00
+    OBM_RR(lam=3)  b*=   316   rel_bias=-0.107  var=9.497e-01  mse=3.881e+00
+
+ T=100000  iterate=const_0.02
+              OBM  b*=  3162   rel_bias=-0.103  var=2.576e+00  mse=3.898e+00
+    OBM_RR(lam=2)  b*=   999   rel_bias=-0.037  var=3.088e+00  mse=3.291e+00
+    OBM_RR(lam=3)  b*=   316   rel_bias=-0.106  var=9.533e-01  mse=3.830e+00
+
+Saved raw to     results/lugsail_lab_const_rr.csv
+Saved aggregated results/lugsail_lab_const_rr_agg.csv

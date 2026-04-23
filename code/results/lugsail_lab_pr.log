@@ -1,0 +1,66 @@
+Config: 80 problems x 500 traj, d=5, n_states=10, workers=80
+  iterates: ['PR']
+  lam_list: [2.0, 3.0, 4.0]
+  PR: c0=200.0, k0=20000.0, gamma=0.65
+  rr_alphas: [0.2, 0.02]  (const uses min)
+  problem: eig in [0.1,0.6], noise_target=0.35
+
+T=20000: b_n=[7, 19, 52, 141, 380, 1024, 2759, 4000]
+  [1/80] 23s
+  [8/80] 24s
+  [16/80] 24s
+  [24/80] 24s
+  [32/80] 25s
+  [40/80] 25s
+  [48/80] 25s
+  [56/80] 25s
+  [64/80] 25s
+  [72/80] 25s
+  [80/80] 26s
+T=50000: b_n=[8, 25, 75, 223, 659, 1946, 5743, 10000]
+  [1/80] 53s
+  [8/80] 55s
+  [16/80] 56s
+  [24/80] 57s
+  [32/80] 57s
+  [40/80] 64s
+  [48/80] 65s
+  [56/80] 66s
+  [64/80] 66s
+  [72/80] 67s
+  [80/80] 68s
+T=100000: b_n=[10, 31, 100, 316, 999, 3162, 10000, 20000]
+  [1/80] 102s
+  [8/80] 105s
+  [16/80] 106s
+  [24/80] 107s
+  [32/80] 127s
+  [40/80] 132s
+  [48/80] 134s
+  [56/80] 134s
+  [64/80] 135s
+  [72/80] 136s
+  [80/80] 137s
+
+=== Best-MSE block size per (T, iterate, estimator, lam) ===
+
+ T=20000  iterate=PR
+              OBM  b*=   380   rel_bias=-0.050  var=1.622e+00  mse=1.994e+00
+    OBM_RR(lam=2)  b*=    52   rel_bias=-0.017  var=7.317e-01  mse=1.149e+00
+    OBM_RR(lam=3)  b*=    52   rel_bias=-0.011  var=1.011e+00  mse=1.163e+00
+    OBM_RR(lam=4)  b*=    52   rel_bias=-0.007  var=1.272e+00  mse=1.347e+00
+
+ T=50000  iterate=PR
+              OBM  b*=   223   rel_bias=-0.085  var=2.398e-01  mse=7.617e-01
+    OBM_RR(lam=2)  b*=    75   rel_bias=-0.003  var=3.064e-01  mse=3.363e-01
+    OBM_RR(lam=3)  b*=    75   rel_bias=+0.001  var=4.057e-01  mse=4.180e-01
+    OBM_RR(lam=4)  b*=    75   rel_bias=+0.002  var=4.959e-01  mse=5.050e-01
+
+ T=100000  iterate=PR
+              OBM  b*=   999   rel_bias=-0.025  var=6.407e-01  mse=7.204e-01
+    OBM_RR(lam=2)  b*=   100   rel_bias=-0.007  var=2.229e-01  mse=3.432e-01
+    OBM_RR(lam=3)  b*=   100   rel_bias=-0.003  var=2.994e-01  mse=3.353e-01
+    OBM_RR(lam=4)  b*=   100   rel_bias=-0.003  var=3.713e-01  mse=3.862e-01
+
+Saved raw to     results/lugsail_lab_pr.csv
+Saved aggregated results/lugsail_lab_pr_agg.csv
