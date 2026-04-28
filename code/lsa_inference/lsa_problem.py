@@ -85,6 +85,35 @@ def compute_theta_star(A_list, b_list, pi):
     return np.linalg.solve(A_bar, -b_bar)
 
 
+def compute_asymptotic_variance(A_list, b_list, P, pi, theta_star, direction):
+    """Long-run variance along `direction` for PR-averaged LSA with Markov noise.
+
+    Returns sigma^2_inf(u) = u^T Sigma_inf u, where
+        Sigma_inf  = A_bar^{-1} Gamma_eps A_bar^{-T},
+        Gamma_eps  = E^T (D Z + Z^T D - D) E,
+        Z          = (I - P + 1 pi^T)^{-1}        (fundamental matrix),
+        D          = diag(pi),
+        E          rows = eps(x) = A(x) theta* + b(x).
+
+    Centering of `eps` under `pi` follows from A_bar theta* + b_bar = 0.
+    """
+    n_states = len(A_list)
+    A_bar = sum(pi[x] * A_list[x] for x in range(n_states))
+
+    eps = np.stack(
+        [A_list[x] @ theta_star + b_list[x] for x in range(n_states)]
+    )
+    Pi = np.outer(np.ones(n_states), pi)
+    Z = np.linalg.inv(np.eye(n_states) - P + Pi)
+    D = np.diag(pi)
+    M = D @ Z + Z.T @ D - D
+    Gamma = eps.T @ M @ eps
+
+    A_inv = np.linalg.inv(A_bar)
+    Sigma = A_inv @ Gamma @ A_inv.T
+    return float(direction @ Sigma @ direction)
+
+
 def problem_diagnostics(A_list, alpha_warn=0.2):
     """Summarize per-problem boundedness and one-step stability diagnostics."""
     d = A_list[0].shape[0]

@@ -44,30 +44,13 @@ import pandas as pd
 from lsa_inference.markov_chain import (
     generate_transition_matrix, simulate_chains_batch,
 )
-from lsa_inference.lsa_problem import generate_A, generate_b, compute_theta_star
+from lsa_inference.lsa_problem import (
+    generate_A, generate_b, compute_theta_star, compute_asymptotic_variance,
+)
 from lsa_inference.lsa_engine import (
     prepare_arrays, run_lsa_polyak_ruppert, run_rr_full,
 )
 from lsa_inference.inference import _obm_variance_from_proj
-
-
-def compute_asymptotic_variance(A_list, b_list, P, pi, theta_star, direction):
-    """Analytic sigma^2_inf = u^T A_bar^{-1} Gamma_eps A_bar^{-T} u for LSA+PR."""
-    n_states = len(A_list)
-    d = theta_star.shape[0]
-
-    A_bar = sum(pi[x] * A_list[x] for x in range(n_states))
-    eps = np.stack([A_list[x] @ theta_star + b_list[x] for x in range(n_states)])
-
-    Pi = np.outer(np.ones(n_states), pi)
-    Z = np.linalg.inv(np.eye(n_states) - P + Pi)
-    D = np.diag(pi)
-    M = D @ Z + Z.T @ D - D
-    Gamma = eps.T @ M @ eps
-
-    A_inv = np.linalg.inv(A_bar)
-    Sigma = A_inv @ Gamma @ A_inv.T
-    return float(direction @ Sigma @ direction)
 
 
 def _collect_bn_needed(bn_list, lam_list):
@@ -84,9 +67,17 @@ def _bias_var_for_source(proj, theta_bar, direction, bn_list, lam_list,
     """Compute bias/variance of OBM and OBM-RR estimators across b, lam."""
     bar_proj = theta_bar @ direction
 
+    # Trajectories that diverged: theta_bar has NaN. _obm_variance_from_proj
+    # would return finite garbage for them via nancumsum, so mask explicitly.
+    diverged = np.any(np.isnan(theta_bar), axis=1)
+
     # Per-b OBM estimates, one value per trajectory
     all_b = [b for b in _collect_bn_needed(bn_list, lam_list) if 0 < b < T]
-    sigma_obm = {b: _obm_variance_from_proj(proj, bar_proj, b) for b in all_b}
+    sigma_obm = {}
+    for b in all_b:
+        s = _obm_variance_from_proj(proj, bar_proj, b)
+        s[diverged] = np.nan
+        sigma_obm[b] = s
 
     rows = []
     for b in bn_list:
