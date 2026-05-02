@@ -75,6 +75,9 @@ Current active proof threads:
   slug.
 - Each file should be readable as a standalone note: include the question or
   task, the answer, notation reminders, and any unresolved gaps.
+- Format formulas in conversation Markdown for preview rendering: use inline
+  LaTeX as `$...$` and display LaTeX as `$$...$$`; do not put mathematical
+  formulas in code blocks unless the literal source syntax is being discussed.
 - Keep the chat reply short: point to the created or updated Markdown file and
   summarize only the main conclusion.
 - If the user asks a follow-up on the same topic, update the existing
