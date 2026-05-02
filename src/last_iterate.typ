@@ -260,3 +260,102 @@ The first term (from $U_M$) is the leading contribution for small $alpha$; the s
   bias of $T_n^((1, alpha))$ is a separate issue and is controlled through the
   stationary expansion of $bb(E)J_n^((1, alpha))$ in Levin et al. (2025).
 ]
+
+== Application to the PR-averaged RR Misadjustment
+
+The PR-averaged Richardson--Romberg expansion produces, after Step (S8) of the
+Samsonov scheme applied separately at step sizes $alpha$ and $2 alpha$, a
+"misadjustment" remainder
+$
+D_1^("mis, RR")
+  = frac(1, sqrt(n)) sum_(k=n_0)^(n-1)
+    (2 J_k^((1, alpha)) - J_k^((1, 2 alpha))),
+$
+whose centered part must be controlled to feed into a Berry--Esseen statement
+for $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$. The bias is not
+the obstruction: by Levin et al. (2025, Proposition 2),
+$ bb(E)_pi[J_infinity^((1, alpha))] = alpha Delta + O(alpha^2), $
+so the linear term $alpha Delta$ cancels in the RR-combination and the
+stationary bias of $D_1^("mis, RR")$ is $O(alpha^2)$. What remains is the
+centered fluctuation.
+
+The lemma applied at $alpha$ and at $2 alpha$ gives, separately,
+$ ||T_n^((1, alpha)) - bb(E) T_n^((1, alpha))||_(L_p) <= C alpha thin Phi(p, alpha), quad
+||T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha))||_(L_p) <= C alpha thin Phi(p, alpha), $
+where $Phi(p, alpha) = p^(3 slash 2) t_"mix"^(1 slash 2) / a + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(alpha / a)$ collects the constants. Combining the two by the triangle inequality and accounting for the index-shift identification $J_k^((1, alpha)) = T_k^((1, alpha))$ up to a single $B$-factor, we get
+$
+||(2 J_k^((1, alpha)) - J_k^((1, 2 alpha))) - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))||_(L_p)
+  <= C alpha thin Phi(p, alpha),
+$
+uniformly in $k$. PR-averaging through $sqrt(n) / (n - n_0)$ and absorbing the constant therefore yields
+$
+||D_1^("mis, RR")||_(L_p) = O(sqrt(n) thin alpha).
+$
+At the optimal scale $alpha asymp n^(-1 slash 2)$ this is $O(1)$, and as a
+remainder in a Berry--Esseen statement of order $n^(-1 slash 4)$ it is
+*useless*: the misadjustment must be at least $o(1)$ to be subleading.
+
+== Conclusion: The Triangle Inequality Loses the RR Cancellation
+
+Two structural reasons explain why the single-$alpha$ centered bound proved
+above does not, by itself, deliver a usable RR-misadjustment estimate.
+
+_The triangle inequality is blind to coupling._ Each $J_k^((1, alpha))$ is
+genuinely $O(alpha)$ in $L_p$, and the same is true at step $2 alpha$. Their
+RR-difference is therefore at most $O(alpha)$ when bounded termwise. The
+cancellation that Richardson--Romberg actually provides --- one extra factor
+of $alpha$ on the difference of two processes coupled through the same noise
+realization ${Z_k}$ --- is invisible to a $|2 X - Y| <= 2 |X| + |Y|$ split.
+
+_The cancellation lives in the kernel._ Reading the RR-difference as a single
+weighted sum,
+$
+T_n^((1, alpha)) - T_n^((1, 2 alpha))
+  = - sum_(k=1)^(n-1) cal(H)_(k+1)^("RR") thin epsilon.alt(Z_k),
+$
+with
+$
+cal(H)_(k+1)^("RR")
+  = sum_(l=1)^(n-k) lr((
+      2 alpha B_alpha^(n-k-l+1) tilde(A)(Z_(k+l)) B_alpha^(l-1)
+      - 2 alpha B_(2 alpha)^(n-k-l+1) tilde(A)(Z_(k+l)) B_(2 alpha)^(l-1)
+    )),
+$
+the elementary identity $X^m - Y^m = (X - Y) sum_(i=1)^m X^(i-1) Y^(m-i)$ with
+$X = B_alpha$, $Y = B_(2 alpha)$, $X - Y = alpha overline(A)$ extracts an
+additional factor of $alpha$ uniformly in the kernel --- the very same
+mechanism that gave the $sqrt(alpha)$ gain for the zeroth-order RR-difference
+$tilde(J)_n^((0, alpha))$ in the previous chapter. Repeating the conditional/
+stationary centering argument of the present section with $cal(H)^("RR")$ in
+place of $H^((w))$ would consequently gain one factor of $alpha$ globally,
+lifting the misadjustment estimate to
+$ ||D_1^("mis, RR")||_(L_p) = O(sqrt(n) thin alpha^2), $
+i.e. $O(n^(-1 slash 2))$ at $alpha asymp n^(-1 slash 2)$ --- strictly below
+the martingale Berry--Esseen scale $n^(-1 slash 4)$.
+
+_Why we stop here._ For a first Berry--Esseen statement of rate
+$n^(-1 slash 4)$, the RR-kernel refinement is not actually needed: the same
+final rate already follows from the centered bound on the unweighted
+statistic $sum tilde(A)(Z_(t+1)) J_t^((0, alpha))$ in Levin et al. (2025,
+Proposition 3 / Corollary 6), combined with the depth-two perturbation
+expansion $H^((1)) = J^((2)) + H^((2))$ and the high-order moment bounds on
+$J^((2))$, $H^((2))$ (Levin et al., 2025, Propositions 8--9). Inserted into
+the RR-decomposition of equation (26) of that paper, these tools give a
+remainder of order $n^(-1 slash 4)$, which matches the leading martingale
+Berry--Esseen contribution.
+
+The lemma proved in this section is therefore a clean *intermediate object*:
+it isolates the shifted last-iteration statistic $S_n$, decomposes its
+centered part into an additive functional $U_R$ and a future-centered
+bilinear part $U_M$, and exposes the conditional-centering split that any
+finer RR-analysis must respect. It does not on its own improve the leading
+order of the Berry--Esseen bound. A genuine improvement --- pushing the
+misadjustment strictly below $n^(-1 slash 4)$ --- would require lifting the
+shifted-kernel argument from a single $alpha$ to the RR-difference
+$nabla_alpha S_n$, with the kernel $cal(H)^("RR")$ above. Because the
+additional $alpha$-factor is purely deterministic (it lives entirely in
+$B_alpha^m - B_(2 alpha)^m$), the conditional-centering, weighted Burkholder
+and Markov-Rosenthal pieces of the proof carry over verbatim. We record this
+RR-kernel version as the principal open thread of the present analysis
+rather than expand on it here. // ПРОВЕРИТЬ ЕЩЕ РАЗ — стоит ли уточнять
+// формулировку открытого вопроса.

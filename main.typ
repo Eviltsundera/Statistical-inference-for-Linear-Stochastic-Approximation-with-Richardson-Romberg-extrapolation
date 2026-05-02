@@ -34,12 +34,18 @@
 
 #pagebreak()
 
-= Perturbation Expansion <sec:perturbation>
+= Zeroth-Order Richardson--Romberg Difference <sec:zeroth_order_rr>
 
-#include "src/constant_asymp.typ"
+#include "src/zeroth_order_rr.typ"
 
 #pagebreak()
 
 = Last Iterate Analysis <sec:last_iterate>
 
-#include "src/new_lemma.typ"
+#include "src/last_iterate.typ"
+
+#pagebreak()
+
+= Richardson--Romberg PR Weight Bounds <sec:pr_weights>
+
+#include "src/pr_weights.typ"

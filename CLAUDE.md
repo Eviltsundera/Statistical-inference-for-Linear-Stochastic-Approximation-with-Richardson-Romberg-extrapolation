@@ -11,7 +11,7 @@ Papers, summaries, research notes, and experiment reports sit in their own top-l
 
 ## Typst thesis
 
-Entry point: `main.typ` (includes `src/introduction.typ`, `src/constant_asymp.typ`, `src/new_lemma.typ`). Shared theorem/lemma environments live in `src/defs.typ`.
+Entry point: `main.typ` (includes `src/introduction.typ`, `src/zeroth_order_rr.typ`, `src/last_iterate.typ`, `src/pr_weights.typ`). Shared theorem/lemma environments live in `src/defs.typ`.
 
 Build:
 
