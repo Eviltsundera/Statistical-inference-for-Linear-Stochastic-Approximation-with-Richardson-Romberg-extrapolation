@@ -70,6 +70,7 @@ CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.
 - `papers/` — source PDFs of every paper the thesis builds on (Huo 2023, Samsonov 2025, Levin 2025, Vats & Flegal 2022, Flegal & Jones 2010, Ng & Perron 1996, Liu/Vats/Flegal 2022, Singh/Shukla/Vats 2025).
 - `summaries/` — one markdown summary per paper, plus `RR_for_OBM_variance_estimator.md` (derivation of the OBM-RR construction).
 - `research/` — longer-form research notes (currently `obm_rr_markov_lsa_report.md`).
+- `conversations/` — standalone Markdown notes answering math/theory questions. Use Markdown-preview-friendly LaTeX: inline formulas as `$...$`, display formulas as `$$...$$`, and avoid code blocks for formulas unless showing literal source syntax.
 - `reports/` — dated experiment reports (`YYYY-MM-DD_<name>.md`) summarizing finished runs. Not gitignored — these are the canonical record of what has been tried.
 - `code/docs/` — reproduction specs for Huo 2023 and Samsonov 2025 + a Russian-language `code_explanation.md`.
 - `tmp/` — scratch / reference notebooks (gitignored). `tmp/MarkovLSAConstantStepSize/` is an older clone of the Huo-style experiments kept as a reference.
@@ -78,5 +79,6 @@ CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.
 
 - `uv` for Python env (don't use pip/conda directly in `code/`).
 - Reports in `reports/` are dated ISO (`YYYY-MM-DD_<slug>.md`) and link back to the script and raw CSVs that produced them.
+- Math notes in `conversations/` should render cleanly in Markdown preview: use `$...$` and `$$...$$` for formulas.
 - Code comments and docstrings mix English and Russian — keep the language the surrounding text uses.
 - Don't commit `tmp/`, `__pycache__/`, or generated `main.pdf` changes unless the user asks.

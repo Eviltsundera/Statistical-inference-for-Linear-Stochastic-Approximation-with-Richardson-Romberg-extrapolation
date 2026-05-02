@@ -2,7 +2,7 @@
 #set document(
   title: "Statistical Inference for Linear Stochastic Approximation with Richardson-Romberg Extrapolation",
 )
-#set page(paper: "us-letter", margin: (x: 1in, y: 1in))
+#set page(paper: "us-letter", margin: (x: 1in, y: 1in), numbering: "1")
 #set text(font: "New Computer Modern", size: 10pt, lang: "en")
 #set heading(numbering: "1.")
 #set par(justify: true, first-line-indent: 1em)
@@ -34,12 +34,12 @@
 
 #pagebreak()
 
-= Constant Asymptotic <appendix:constants>
+= Perturbation Expansion <sec:perturbation>
 
 #include "src/constant_asymp.typ"
 
 #pagebreak()
 
-= New Lemma <appendix:new_lemma>
+= Last Iterate Analysis <sec:last_iterate>
 
 #include "src/new_lemma.typ"

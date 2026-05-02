@@ -15,5 +15,9 @@ Each note should be readable without the chat transcript. Include:
 - the main derivation or explanation;
 - open gaps, checks, or next steps.
 
+Use Markdown-preview-friendly LaTeX math: inline formulas as `$...$` and
+display formulas as `$$...$$`. Do not put formulas in `text` code blocks when
+they are meant to render in preview.
+
 If a follow-up continues the same mathematical thread, update the existing note
 instead of creating a near-duplicate file.
