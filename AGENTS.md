@@ -22,10 +22,15 @@ Polyak-Ruppert averaging, and Richardson-Romberg (RR) extrapolation.
 - `src/defs.typ` defines theorem-like environments.
 - `src/introduction.typ` states the LSA setting, assumptions, RR motivation,
   and target CLT/Berry-Esseen goals.
-- `src/constant_asymp.typ` contains current constant-stepsize/RR decompositions
-  and bounds for the leading `J^(0)` terms.
-- `src/new_lemma.typ` contains active scratch proof work on `J^(1, alpha)` and
-  weighted Markov-sum bounds.
+- `src/zeroth_order_rr.typ` contains current constant-stepsize/RR
+  decompositions and bounds for the leading `J^(0)` terms.
+- `src/last_iterate.typ` contains the centered bound for the shifted first-
+  order perturbation (last-iteration analysis), its application to the PR-
+  averaged RR misadjustment, and a discussion of why the single-`alpha`
+  bound is insufficient.
+- `src/pr_weights.typ` contains the Richardson--Romberg PR weight bounds
+  (pointwise comparison with `Abar^(-1)` and total-variation of successive
+  differences); this is the active proof thread.
 - `summaries/` contains paper summaries and should be consulted before opening
   PDFs.
 - `research/` contains longer research notes.

@@ -31,8 +31,10 @@ typst watch main.typ
 main.typ                 — main document (entry point)
 src/
   defs.typ               — shared definitions (theorem environments)
-  constant_asymp.typ     — constant asymptotic analysis
-  new_lemma.typ          — new lemma and martingale decomposition
+  introduction.typ       — LSA setting, assumptions, RR motivation, goals
+  zeroth_order_rr.typ    — zeroth-order RR difference $\tilde J^{(0,\alpha)}$
+  last_iterate.typ       — first-order/last-iteration centered bound
+  pr_weights.typ         — Richardson--Romberg PR weight bounds
 papers/                  — reference papers
 summaries/               — paper summaries
 code/                    — numerical experiments (see code/README.md)

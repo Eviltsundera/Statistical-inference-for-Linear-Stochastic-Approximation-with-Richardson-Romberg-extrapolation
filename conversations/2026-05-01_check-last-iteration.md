@@ -2,7 +2,7 @@
 
 ## Task
 
-Проверить и аккуратно переписать фрагмент из `src/new_lemma.typ`, где
+Проверить и аккуратно переписать фрагмент из `src/last_iterate.typ`, где
 анализируется последний взвешенный член, связанный с $J_n^{(1,\alpha)}$.
 
 ## What Was Fixed
@@ -33,7 +33,7 @@ $$
   C t_{\mathrm{mix}}.
 $$
 
-Фрагмент в `src/new_lemma.typ` теперь переписан в виде lemma + proof + remark.
+Фрагмент в `src/last_iterate.typ` теперь переписан в виде lemma + proof + remark.
 
 ## Deterministic-Product Expansion
 
