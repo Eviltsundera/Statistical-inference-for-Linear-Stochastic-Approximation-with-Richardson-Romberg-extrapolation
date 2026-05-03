@@ -133,7 +133,5 @@ Current active proof threads:
 
 - The worktree may contain user or Claude Code changes. Never revert files you
   did not modify unless the user explicitly asks.
-- Generated PDFs and experiment CSVs should not be changed or committed unless
-  requested.
 - When adding math to the thesis, keep changes small and reviewable: one lemma,
   decomposition, or proof correction at a time.
