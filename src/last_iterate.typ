@@ -53,17 +53,29 @@ $
 The sign in the second line is positive because
 $J_(j-1)^((0, alpha))$ already contains the minus sign.
 
-The last display is for $J_n^((1, alpha))$ itself. In the last-iteration
-estimate below we use one additional left factor $B$:
+The last display is for $J_n^((1, alpha))$ itself. The last-iteration
+estimate below operates on a *shifted* version, obtained by inserting one
+additional left factor $B$ into the recursion:
 $
 S_n
   = sum_(t=0)^(n-1)
       B^(n-t) tilde(A)(Z_(t+1)) J_t^((0, alpha)).
 $
+Reindexing $j = t + 1$ rewrites $S_n$ in the same form as $J_n^((1, alpha))$
+but with one extra power of $B$:
+$
+S_n
+  = sum_(j=1)^n B^(n-j+1) tilde(A)(Z_j) J_(j-1)^((0, alpha))
+  = - frac(1, alpha) thin B thin J_n^((1, alpha)).
+$
 Thus the corresponding shifted first-order contribution is
 $
-T_n^((1, alpha)) = - alpha S_n.
+T_n^((1, alpha)) = - alpha S_n = B thin J_n^((1, alpha)),
 $
+i.e. $T_n^((1, alpha))$ is exactly $J_n^((1, alpha))$ pre-multiplied by one
+additional $B$. In particular, any $L_p$ bound on $S_n$ (or $T_n^((1, alpha))$)
+implies the same bound on $J_n^((1, alpha))$ up to the contraction factor
+$||B||_Q <= 1$.
 
 #lemma[
   Assume the Markov chain is started from stationarity, that is, the law of
@@ -102,8 +114,7 @@ The kernel $H_(k+1)^((w))$ acts on the past noise $epsilon.alt(Z_k)$ through fut
 
 Define
 $
-mu_k^((w))
-  = bb(E)_pi[H_(k+1)^((w)) epsilon.alt(Z_k)].
+mu_k^((w)) = bb(E)_pi lr([H_(k+1)^((w)) epsilon.alt(Z_k)]).
 $
 Then
 $
@@ -126,6 +137,24 @@ quad
 v_k^((w, epsilon))(z)
   = v_k^((w))(z) epsilon.alt(z).
 $
+Here $sans(Q)$ denotes the one-step Markov transition kernel of $(Z_k)_(k>=1)$,
+acting on bounded matrix-valued functions by integration against the
+conditional law:
+$
+(sans(Q) tilde(A))(z)
+  = integral tilde(A)(u) thin sans(Q)(z, thin d u)
+  = bb(E) lr([tilde(A)(Z_(k+1)) | Z_k = z]),
+$
+and $sans(Q)^l$ is its $l$-fold iterate, the $l$-step kernel
+$sans(Q)^l (z, thin d u) = bb(P)(Z_(k+l) in d u | Z_k = z)$, so that
+$
+(sans(Q)^l tilde(A))(z)
+  = integral tilde(A)(u) thin sans(Q)^l (z, thin d u)
+  = bb(E) lr([tilde(A)(Z_(k+l)) | Z_k = z]).
+$
+In particular $(sans(Q)^l tilde(A))(z) -> pi(tilde(A)) = 0$ at the geometric
+rate dictated by UGE, which is the only fact about $sans(Q)^l$ used below.
+
 Under stationarity,
 $mu_k^((w)) = pi(v_k^((w, epsilon)))$. Therefore
 $
@@ -150,7 +179,7 @@ This decomposition splits the centered statistic into two structurally different
 _Step 1: bound on $U_R$._ Because $pi(tilde(A)) = 0$, applying $sans(Q)^l$ followed by integration against $pi$ replaces $tilde(A)$ by its $l$-step propagation away from stationarity. UGE then gives the geometric Dobrushin bound
 $
 ||(sans(Q)^l tilde(A))(z)||
-  = lr(|| integral tilde(A)(u) {sans(Q)^l(z, d u) - pi(d u)} ||)
+  = lr(|| integral tilde(A)(u) {sans(Q)^l (z, thin d u) - pi(d u)} ||)
   <= 2 C_A Delta(sans(Q)^l)
   <= 2 C_A (1 slash 4)^(floor(l slash t_"mix")).
 $

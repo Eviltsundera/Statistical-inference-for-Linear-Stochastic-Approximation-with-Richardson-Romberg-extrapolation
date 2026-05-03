@@ -143,3 +143,92 @@ where the last step uses $1 - sqrt(1 - alpha a) >= alpha a / 2$ for $alpha a <= 
   $sum || cal(Q)_l^("RR") - overline(A)^(-1) ||^2 = O(1 / (alpha a))$, which yields
   the finite-horizon comparison error $O(1 / (n alpha a))$.
 ]
+
+== Variance Comparison
+
+After the Poisson decomposition the leading martingale $W^("RR")$ has predictable
+quadratic variation that converges to
+$
+Sigma_n^("RR") := frac(1, n) sum_(l = 1)^(n - 1)
+  cal(Q)_l^("RR") thin Sigma_(epsilon.alt)^(("M")) thin (cal(Q)_l^("RR"))^top,
+quad
+sigma_n^(2, "RR")(u) := u^top Sigma_n^("RR") u,
+$
+with $Sigma_(epsilon.alt)^(("M"))$ the long-run noise covariance of the Markov chain,
+$Sigma_(epsilon.alt)^(("M")) = bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_0)^top]
+  + 2 sum_(j >= 1) bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_j)^top]$.
+The asymptotic covariance is
+$
+Sigma_infinity = overline(A)^(-1) Sigma_(epsilon.alt)^(("M")) overline(A)^(-top),
+quad
+sigma^2(u) = u^top Sigma_infinity u.
+$
+The bounds of the previous section give a quantitative comparison between
+$Sigma_n^("RR")$ and $Sigma_infinity$.
+
+#lemma[
+  Let $alpha, 2 alpha in (0, alpha_infinity]$, set $Sigma := Sigma_(epsilon.alt)^(("M"))$,
+  and assume $|| Sigma || < infinity$. Then
+  $
+  || Sigma_n^("RR") - Sigma_infinity ||
+    <= frac(C_3, n thin alpha a),
+  $
+  with $C_3 = 12 thin C_Q thin || overline(A)^(-1) || thin || Sigma || + 9 thin C_Q^2 thin || Sigma ||$.
+  Consequently, for every $u in RR^d$,
+  $
+  | sigma_n^(2, "RR")(u) - sigma^2(u) |
+    <= frac(C_3 thin || u ||^2, n thin alpha a).
+  $
+  At the working scale $alpha = c thin n^(- 1 slash 2)$ this is $O(n^(- 1 slash 2))$.
+]
+
+_Proof._ Write $Delta_l := cal(Q)_l^("RR") - overline(A)^(-1)$ and expand
+$
+cal(Q)_l^("RR") thin Sigma thin (cal(Q)_l^("RR"))^top - Sigma_infinity
+  = underbrace(
+      Delta_l thin Sigma thin overline(A)^(-top)
+      + overline(A)^(-1) thin Sigma thin Delta_l^top,
+      R_(1, l)
+    )
+  + underbrace(Delta_l thin Sigma thin Delta_l^top, R_(2, l)).
+$
+Submultiplicativity of the operator norm yields the pointwise bounds
+$
+|| R_(1, l) || <= 2 thin || overline(A)^(-1) || thin || Sigma || thin || Delta_l ||,
+quad
+|| R_(2, l) || <= || Sigma || thin || Delta_l ||^2.
+$
+Summing the linear part with the bound from part (i) of the previous lemma and the
+geometric series $sum_(k >= 1) (1 - alpha a)^(k slash 2) <= 1 / (1 - sqrt(1 - alpha a)) <= 2 / (alpha a)$
+(valid for $alpha a <= 1 slash 2$),
+$
+sum_(l = 1)^(n - 1) || Delta_l ||
+  <= 3 C_Q sum_(k = 1)^(n - 1) (1 - alpha a)^(k slash 2)
+  <= frac(6 C_Q, alpha a).
+$
+The quadratic part is bounded directly by the previous corollary,
+$
+sum_(l = 1)^(n - 1) || Delta_l ||^2 <= frac(9 C_Q^2, alpha a).
+$
+Combining,
+$
+|| Sigma_n^("RR") - Sigma_infinity ||
+  &<= frac(1, n) sum_(l = 1)^(n - 1) (|| R_(1, l) || + || R_(2, l) ||) \
+  &<= frac(1, n) (2 thin || overline(A)^(-1) || thin || Sigma || dot frac(6 C_Q, alpha a)
+                + || Sigma || dot frac(9 C_Q^2, alpha a))
+  = frac(C_3, n thin alpha a),
+$
+which proves the operator-norm bound. The scalar bound on
+$| sigma_n^(2, "RR")(u) - sigma^2(u) | = | u^top (Sigma_n^("RR") - Sigma_infinity) u |$
+follows from the Cauchy--Schwarz inequality. $square$
+
+#remark[
+  The constant $C_3$ is independent of $alpha$ and $n$; only $a$ enters through the
+  Lyapunov contraction. The bound is tight in the geometric scale: the dominant
+  contribution comes from the near-boundary region $l approx n$, where
+  $|| Delta_l ||$ is bounded below by a positive constant (see the boundary identity
+  $cal(Q)_(n - 1)^("RR") = 0$). The same calculation for the single-step PR weights
+  yields $|| Sigma_n^("PR") - Sigma_infinity || <= C / (n alpha a)$, so
+  Richardson--Romberg does not improve the variance comparison rate, but it also does
+  not degrade it: the leading-order variance is preserved.
+]

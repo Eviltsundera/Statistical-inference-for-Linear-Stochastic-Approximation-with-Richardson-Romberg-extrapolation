@@ -145,11 +145,15 @@ To convert the sub-Gaussian tail into a moment bound, we use the following stand
   $ bb(E)[||X||^p] <= 2 thin p^(p slash 2) thin sigma^p. $
 ]
 
-Applying the lemma with $sigma^2 = u_n^2 <= hat(C)_A^2 alpha$ and $p = 2$ gives
+Applying the lemma with $sigma^2 = u_n^2 <= hat(C)_A^2 alpha$ and an arbitrary $p >= 2$ gives
 $
-bb(E)^(1 slash 2)[||tilde(J)_n^((0, alpha))||^2]
-<= 2 sqrt(alpha) thin hat(C)_A,
-quad "i.e." quad
-frac(1, sqrt(alpha)) thin bb(E)^(1 slash 2)[||tilde(J)_n^((0, alpha))||^2] <= 2 hat(C)_A.
+bb(E)^(1 slash p) [||tilde(J)_n^((0, alpha))||^p]
+<= 2^(1 slash p) sqrt(p) thin hat(C)_A thin sqrt(alpha)
+<= 2 sqrt(p) thin hat(C)_A thin sqrt(alpha),
 $
-The zeroth-order RR difference is therefore $O(sqrt(alpha))$ in $L^2$, uniformly in $n$ — an order-$sqrt(alpha)$ gain over a single LSA trajectory, which is $O(1)$ in $L^2$ in the stationary regime.
+or equivalently
+$
+frac(1, sqrt(alpha)) thin bb(E)^(1 slash p) [||tilde(J)_n^((0, alpha))||^p]
+<= 2 sqrt(p) thin hat(C)_A.
+$
+The zeroth-order RR difference is therefore $O(sqrt(alpha))$ in $L^p$ for every $p >= 2$, uniformly in $n$ — an order-$sqrt(alpha)$ gain over a single LSA trajectory, which is $O(1)$ in $L^p$ in the stationary regime. The $p = 2$ statement used in the rest of the analysis is a special case.
