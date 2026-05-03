@@ -38,7 +38,7 @@ which reduces the bias from $O(alpha)$ to $O(alpha^M)$.
 
 == Problem statement and goals
 
-The high-order moment bounds for the RR iterate $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show that the leading error term scales as $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, matching the minimax optimal rate.
+The high-order moment bounds for the RR iterate $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show that the leading error term scales as $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined in Section 1.4 below, matching the minimax optimal rate.
 Berry--Esseen type bounds and bootstrap inference procedures for the _standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation) under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines, and Naumov (2025).
 
 However, the _distributional approximation_ --- specifically, the central limit theorem and Berry--Esseen bounds --- for the _averaged Richardson--Romberg iterates_ $overline(theta)_n^((alpha, "RR"))$ remains an open problem.
@@ -71,8 +71,8 @@ Let ${Z_k}_(k in bb(N))$ be a Markov chain on a complete separable metric space 
 
 #assumption("Hurwitz condition and boundedness")[
   The matrix $-overline(A)$ is Hurwitz, i.e., all eigenvalues of $overline(A)$ have strictly positive real parts. Moreover,
-  $ C_A := sup_(z in sans(Z)) ||A(z)|| or sup_(z in sans(Z)) ||tilde(A)(z)|| < infinity, $
-  where $tilde(A)(z) = A(z) - overline(A)$.
+  $ C_A := max( sup_(z in sans(Z)) ||A(z)|| , sup_(z in sans(Z)) ||tilde(A)(z)|| ) < infinity, $
+  where $tilde(A)(z) := A(z) - overline(A)$.
 ]
 
 #assumption("Noise regularity")[

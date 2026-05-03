@@ -1,21 +1,130 @@
 #import "defs.typ": *
 
-== Setup and Closed-Form Identities
+== PR-Averaged Error Decomposition and the RR Weight
 
-The Polyak--Ruppert version of the LSA expansion replaces the trajectory $theta_k - theta^*$ by its time average and rewrites the leading martingale contribution as a single sum
+The starting point for all subsequent estimates is the *explicit*
+representation of $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$
+as a noise-weighted sum with a deterministic kernel. This subsection
+derives that representation step by step.
+
+*Depth-one expansion.* Unfolding the error recursion of Chapter 1
+gives, for every $k >= 1$,
 $
-W = -frac(1, sqrt(n)) sum_(l = 1)^(n - 1) Q_l^((alpha)) thin epsilon.alt(Z_l),
+theta_k^((alpha)) - theta^*
+  = -alpha sum_(l = 1)^k Gamma_(l + 1 : k)^((alpha)) epsilon.alt(Z_l)
+    + Gamma_(1 : k)^((alpha)) (theta_0 - theta^*),
 quad
+Gamma_(l + 1 : k)^((alpha))
+  := product_(j = l + 1)^k (I - alpha A(Z_j)).
+$
+Replacing each random product $Gamma_(l + 1 : k)^((alpha))$ by its
+deterministic counterpart $B_alpha^(k - l) := (I - alpha overline(A))^(k - l)$
+and absorbing the difference into a higher-order remainder yields the
+*depth-one decomposition* (Samsonov et al., 2025, Proposition 9):
+$
+theta_k^((alpha)) - theta^*
+  = -alpha sum_(l = 1)^k B_alpha^(k - l) epsilon.alt(Z_l)
+    + B_alpha^k (theta_0 - theta^*)
+    + R_k^((alpha)),
+$ <eq:depth-one>
+where $R_k^((alpha)) := J_k^((1, alpha)) + H_k^((1, alpha))$ collects all
+contributions of order $alpha^(3 slash 2)$ or higher in $L_p$. The first
+sum is the *depth-zero* term and is the only piece that carries the
+limiting Gaussian.
+
+*PR averaging produces $Q_l^((alpha))$.* Recall the PR average
+$overline(theta)_n^((alpha)) = (n - n_0)^(-1) sum_(k = n_0)^(n - 1) theta_k^((alpha))$.
+For notational clarity we set $n_0 = 0$ from this point on (the burn-in
+adds only an exponentially small transient). Subtracting $theta^*$,
+substituting the depth-one decomposition above, and *exchanging the
+order of summation* in the depth-zero piece,
+$
+sum_(k = 0)^(n - 1) sum_(l = 1)^k B_alpha^(k - l) epsilon.alt(Z_l)
+  = sum_(l = 1)^(n - 1)
+      lr((sum_(k = l)^(n - 1) B_alpha^(k - l)))
+      epsilon.alt(Z_l),
+$
+isolates each noise sample $epsilon.alt(Z_l)$ together with the deterministic
+*PR weight*
+$
 Q_l^((alpha))
-  = alpha sum_(k = l)^(n - 1) (I - alpha overline(A))^(n - k - 1),
+  := alpha sum_(k = l)^(n - 1) B_alpha^(k - l)
+   = alpha sum_(j = 0)^(n - l - 1) B_alpha^j.
+$ <eq:Q-definition>
+Operationally, $Q_l^((alpha))$ collects the cumulative contribution of
+$epsilon.alt(Z_l)$ to all averaged iterates $theta_l, theta_(l + 1), dots,
+theta_(n - 1)$. Multiplying the resulting identity by $sqrt(n)$ gives the
+PR-averaged decomposition
 $
-so that $Q_l^((alpha))$ collects the deterministic-product weight with which the noise $epsilon.alt(Z_l)$ enters the PR average. (For constant step this is the specialization of the time-dependent kernel
-introduced in Samsonov et al. (2025).) Coupling two trajectories with steps $alpha$ and $2 alpha$
-through the same noise realization $\{Z_k\}$ and forming the Richardson--Romberg combination,
+sqrt(n) thin (overline(theta)_n^((alpha)) - theta^*) = W^((alpha)) + D^((alpha)),
 $
-cal(Q)_l^("RR") := 2 Q_l^((alpha)) - Q_l^((2 alpha)),
+where the *leading martingale-like sum* is
 $
-we obtain the leading martingale weight for $sqrt(n)(bar(theta)_n^(("RR", alpha)) - theta^*)$. The Berry--Esseen analysis of the RR-averaged iterate hinges on two contraction estimates for $cal(Q)_l^("RR")$: comparison with the asymptotic weight $overline(A)^(-1)$, and a bound on the total variation of the successive differences $cal(Q)_(l+1)^("RR") - cal(Q)_l^("RR")$. The latter controls the Abel-summation term in the Poisson-equation remainder.
+W^((alpha)) := -frac(1, sqrt(n)) sum_(l = 1)^(n - 1) Q_l^((alpha)) thin epsilon.alt(Z_l),
+$ <eq:W-alpha>
+and the remainder $D^((alpha))$ packs the deterministic transient $D_(op("tr"))^((alpha))$
+and the higher-order stochastic part $D_R^((alpha))$:
+$
+D^((alpha)) := D_(op("tr"))^((alpha)) + D_R^((alpha)),
+quad
+D_(op("tr"))^((alpha))
+  := frac(1, sqrt(n)) sum_(k = 0)^(n - 1) B_alpha^k (theta_0 - theta^*),
+quad
+D_R^((alpha))
+  := frac(1, sqrt(n)) sum_(k = 0)^(n - 1) R_k^((alpha)).
+$
+The first sum is a deterministic geometric tail and becomes exponentially
+small after a logarithmic burn-in $n_0 asymp log(n) slash (alpha a)$
+(Lyapunov contraction $|| B_alpha^(n_0) ||_Q <= e^(-1)$). The second is
+the source of the leading non-Gaussian correction in the Berry--Esseen
+rate; its RR-combination $2 D_R^((alpha)) - D_R^((2 alpha))$ is exactly
+the *misadjustment* $D_1^("mis, RR")$ controlled in Chapters 2 and 3.
+
+*RR combination produces $cal(Q)_l^("RR")$.* The Richardson--Romberg
+iterate $overline(theta)_n^(("RR", alpha)) := 2 overline(theta)_n^((alpha)) - overline(theta)_n^((2 alpha))$
+inherits the PR decomposition *by linearity*: applying the previous
+display at step sizes $alpha$ and $2 alpha$ separately and combining,
+$
+sqrt(n) thin (overline(theta)_n^(("RR", alpha)) - theta^*)
+  = W^("RR") + D^("RR"),
+$
+$
+W^("RR") := 2 W^((alpha)) - W^((2 alpha))
+        = -frac(1, sqrt(n)) sum_(l = 1)^(n - 1) cal(Q)_l^("RR") thin epsilon.alt(Z_l),
+$ <eq:W-RR>
+where the *RR weight* is
+$
+cal(Q)_l^("RR") := 2 Q_l^((alpha)) - Q_l^((2 alpha)).
+$ <eq:Q-RR-definition>
+Crucially, both PR averages share the *same* noise realization
+${Z_k}$, so the bracket $cal(Q)_l^("RR")$ is a single deterministic
+matrix kernel: all the stochastic content of $W^("RR")$ now lives in
+$epsilon.alt(Z_l)$ alone.
+
+*Why $cal(Q)_l^("RR")$ is the right object.* Two questions about
+$W^("RR")$ drive the rest of the chapter, and both answer themselves
+in terms of $cal(Q)_l^("RR")$:
+
++ *Variance comparison.* The CLT identifies the limiting covariance of
+  $W^("RR")$ as $Sigma_infinity = overline(A)^(-1) Sigma_epsilon.alt^(("M")) overline(A)^(-top)$
+  (the Markov-chain CLT covariance), which is exactly what one obtains
+  if every $cal(Q)_l^("RR")$ is replaced by the asymptotic weight
+  $overline(A)^(-1)$. The finite-$n$ deviation is therefore controlled by
+  $sum_l ||cal(Q)_l^("RR") - overline(A)^(-1)||^2$ — see Section 4.5.
+
++ *Poisson-equation / Abel-summation remainder.* The standard
+  Berry--Esseen route for Markov-chain noise solves the Poisson equation
+  $hat(epsilon.alt) - sans(Q) hat(epsilon.alt) = epsilon.alt$, replaces
+  $epsilon.alt(Z_l)$ by $hat(epsilon.alt)(Z_l) - hat(epsilon.alt)(Z_(l + 1))$
+  (up to a martingale increment), and Abel-sums against the weight
+  sequence $cal(Q)_l^("RR")$. The resulting remainder has norm bounded
+  by the *total variation* $sum_l ||cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")||$.
+
+Both quantities are estimated in Sections 4.3--4.4 below. The closed-form
+identities of Section 4.2 reduce them to elementary operator-norm
+calculations on $B_alpha^m - B_(2 alpha)^m$.
+
+== Closed-Form Identities
 
 Throughout this chapter write
 $
@@ -28,29 +137,36 @@ $
 We assume $alpha, 2 alpha in (0, alpha_infinity]$, so that the Lyapunov contraction
 $|| B_alpha^m ||_Q^2 <= (1 - alpha a)^m$ and $|| B_(2 alpha)^m ||_Q^2 <= (1 - 2 alpha a)^m$ hold (and we use freely $1 - 2 alpha a <= 1 - alpha a$).
 
-The geometric-series identity gives the closed form
+The geometric-series identity $sum_(j = 0)^(m - 1) B_alpha^j = (alpha overline(A))^(-1)(I - B_alpha^m)$ converts <eq:Q-definition> into the closed form
 $
 Q_l^((alpha))
   = alpha sum_(j = 0)^(n - l - 1) B_alpha^j
   = alpha thin (alpha overline(A))^(-1) thin (I - B_alpha^(n - l))
   = overline(A)^(-1) (I - B_alpha^(n - l)).
 $
-Two immediate consequences are
+This makes the convergence $Q_l^((alpha)) -> overline(A)^(-1)$ as $k = n - l -> infinity$ explicit: the only obstruction is the geometric Lyapunov tail $B_alpha^k$. Two immediate consequences are
 $
 Q_l^((alpha)) - overline(A)^(-1) = - overline(A)^(-1) B_alpha^(n - l),
 quad
 Q_(l + 1)^((alpha)) - Q_l^((alpha)) = - alpha B_alpha^(n - l - 1).
 $
-The first identity, applied to $alpha$ and $2 alpha$, yields the basic RR identity
+The first is the *asymptotic-weight error* and decays geometrically in $k$. The second is the *discrete derivative* used in Abel summation; note the explicit factor $alpha$ in front.
+
+Applying both identities at $alpha$ and $2 alpha$ and combining yields the basic *RR identities*:
 $
 cal(Q)_l^("RR") - overline(A)^(-1)
   = - overline(A)^(-1) thin (2 B_alpha^k - B_(2 alpha)^k),
 $
-and the second yields the discrete-difference identity
 $
 cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")
   = - 2 alpha thin (B_alpha^(k - 1) - B_(2 alpha)^(k - 1)).
 $
+These are the exact expressions bounded in the next subsection. Note the structural asymmetry between them:
+
+- The asymptotic-weight error $2 B_alpha^k - B_(2 alpha)^k$ is at the *single-trajectory* rate $(1 - alpha a)^(k slash 2)$ — the triangle inequality $|2 X - Y| <= 2 |X| + |Y|$ does not see the RR coupling, and indeed the leading $-overline(A)^(-1)$ in $cal(Q)_l^("RR")$ is the same as in the single-step weight $Q_l^((alpha))$.
+- The discrete derivative $B_alpha^(k - 1) - B_(2 alpha)^(k - 1)$, however, is a *true* difference of contractions evaluated at the same exponent. The elementary identity $X^m - Y^m = (X - Y) sum_(i = 1)^m X^(i - 1) Y^(m - i)$ with $X = B_alpha$, $Y = B_(2 alpha)$, $X - Y = alpha overline(A)$ extracts an extra factor of $alpha$, gaining one full power of $alpha$ over the single-step case $Q_(l + 1)^((alpha)) - Q_l^((alpha)) = -alpha B_alpha^(k - 1)$.
+
+This local $alpha$-gain in the discrete derivative is the *only* manifestation of Richardson--Romberg cancellation visible at the level of the PR weights.
 
 == Pointwise Bounds for the RR Weights
 

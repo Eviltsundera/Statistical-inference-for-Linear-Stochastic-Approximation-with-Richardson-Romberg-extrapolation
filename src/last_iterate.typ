@@ -303,15 +303,23 @@ $
 whose centered part must be controlled to feed into a Berry--Esseen statement
 for $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$. The bias is not
 the obstruction: by Levin et al. (2025, Proposition 2),
-$ bb(E)_pi[J_infinity^((1, alpha))] = alpha Delta + O(alpha^2), $
+$ bb(E)_pi lr([J_infinity^((1, alpha))]) = alpha Delta + O(alpha^2), $
 so the linear term $alpha Delta$ cancels in the RR-combination and the
 stationary bias of $D_1^("mis, RR")$ is $O(alpha^2)$. What remains is the
 centered fluctuation.
 
+Define
+$
+Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) / a
+                + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
+$
 The lemma applied at $alpha$ and at $2 alpha$ gives, separately,
-$ ||T_n^((1, alpha)) - bb(E) T_n^((1, alpha))||_(L_p) <= C alpha thin Phi(p, alpha), quad
-||T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha))||_(L_p) <= C alpha thin Phi(p, alpha), $
-where $Phi(p, alpha) = p^(3 slash 2) t_"mix"^(1 slash 2) / a + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(alpha / a)$ collects the constants. Combining the two by the triangle inequality and accounting for the index-shift identification $J_k^((1, alpha)) = T_k^((1, alpha))$ up to a single $B$-factor, we get
+$
+||T_n^((1, alpha)) - bb(E) T_n^((1, alpha))||_(L_p) <= C alpha thin Phi(p, alpha),
+quad
+||T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha))||_(L_p) <= C alpha thin Phi(p, 2 alpha) <= C' alpha thin Phi(p, alpha),
+$
+where $C' = sqrt(2) C$ absorbs the $sqrt(2)$-factor coming from the $2 alpha$ scaling. Combining the two by the triangle inequality and using the index-shift identity $T_k^((1, alpha)) = B thin J_k^((1, alpha))$ from the start of this section, we get
 $
 ||(2 J_k^((1, alpha)) - J_k^((1, 2 alpha))) - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))||_(L_p)
   <= C alpha thin Phi(p, alpha),

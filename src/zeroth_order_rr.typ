@@ -13,13 +13,14 @@ $ J_k^((0)) = -sum_(l=1)^k alpha thin Gamma_(l+1:k) thin epsilon.alt(Z_l), quad
 H_k^((0)) = -sum_(l=1)^k alpha thin Gamma_(l+1:k) (A(Z_l) - overline(A)) J_(l-1)^((0)), $
 with initial conditions $J_0^((0)) = H_0^((0)) = 0$.
 
-A standard decomposition yields
-$ sqrt(n) (theta_n^((alpha)) - theta^*) = W + D_1, $
-where
-$ W = frac(1, sqrt(n)) sum_(l=1)^(n-1) Q_l thin epsilon.alt(Z_l), quad
-D_1 = frac(1, sqrt(n)) sum_(k=0)^(n-1) Gamma_(1:k) (theta_0 - theta^*) + frac(1, sqrt(n)) sum_(k=1)^(n-1) J_k^((0)), $
-and
-$ Q_l = alpha sum_(k=l)^(n-1) (I - alpha overline(A))^(n-k-1). $
+A standard PR-averaged decomposition (cf. Section 4.1 below for the full derivation) yields
+$ sqrt(n) (overline(theta)_n^((alpha)) - theta^*) = W + D_1, $
+where the leading martingale-like term is
+$ W = -frac(1, sqrt(n)) sum_(l=1)^(n-1) Q_l thin epsilon.alt(Z_l),
+quad
+Q_l = alpha sum_(k=l)^(n-1) (I - alpha overline(A))^(n-k-1), $
+and the residual term is
+$ D_1 = frac(1, sqrt(n)) sum_(k=0)^(n-1) Gamma_(1:k) (theta_0 - theta^*) + frac(1, sqrt(n)) sum_(k=1)^(n-1) J_k^((0)). $
 
 == RR Combination and the $tilde(J)_n^((0, alpha))$ Term
 
@@ -60,38 +61,36 @@ To bound $||H_j^((n))||$ we use the following standard result.
   $Q = Q^top succ 0$ satisfying
   $ overline(A)^top Q + Q overline(A) = P. $
   Moreover, letting
-  $ a = frac(lambda_"min" (P), 2 ||Q||), quad
-  alpha_infinity = frac(lambda_"min" (P), 2 kappa_Q ||overline(A)||_Q^2) and frac(||Q||, lambda_"min" (P)), $
-  with $kappa_Q = lambda_"max" (Q) slash lambda_"min" (Q)$, one has for all
+  $ a := frac(lambda_"min" (P), 2 ||Q||), quad
+  alpha_infinity := min (frac(lambda_"min" (P), 2 kappa_Q ||overline(A)||_Q^2), frac(||Q||, lambda_"min" (P))), $
+  with $kappa_Q := lambda_"max" (Q) slash lambda_"min" (Q)$, one has for all
   $alpha in [0, alpha_infinity]$:
   $ alpha a <= 1 slash 2, quad ||I - alpha overline(A)||_Q^2 <= 1 - alpha a. $
 ]
 
-We now estimate $||H_j^((n))||$ by combining the triangle inequality, submultiplicativity, the Lyapunov contraction (applied at step sizes $alpha$ and $2 alpha$), and the equivalence of $||dot||$ and $||dot||_Q$ which absorbs $kappa_Q$ into a generic constant $C_A$:
+We now estimate $||H_j^((n))||$ by combining the triangle inequality, submultiplicativity, the equivalence $|| X || <= kappa_Q^(1 slash 2) || X ||_Q$ (applied to *each* operator-norm factor, hence two factors of $kappa_Q^(1 slash 2)$ multiplying to $kappa_Q$), and the Lyapunov contraction at step sizes $alpha$ and $2 alpha$:
 $
 ||H_j^((n))||
 &<= sum_(i=1)^(n-j) ||I - alpha overline(A)||^(i-1) thin ||I - 2 alpha overline(A)||^(n-j-i)
-  quad &"(triangle + submultiplicativity)" \
-&<= C_A sum_(i=1)^(n-j) (1 - alpha a)^((i-1) slash 2) (1 - 2 alpha a)^((n-j-i) slash 2)
-  quad &"(Lyapunov contraction)" \
-&= C_A (1 - alpha a)^((n-j-1) slash 2) sum_(k=0)^(n-j-1) ((1 - 2 alpha a) / (1 - alpha a))^(k slash 2)
-  quad &"(reindex" k = n-j-i") " \
-&<= C_A (1 - alpha a)^((n-j-1) slash 2) frac(1, 1 - sqrt((1 - 2 alpha a) / (1 - alpha a)))
-  quad &"(geometric series)".
+  &&"(triangle + submult.)" \
+&<= kappa_Q sum_(i=1)^(n-j) (1 - alpha a)^((i-1) slash 2) (1 - 2 alpha a)^((n-j-i) slash 2)
+  &&"(equiv. + Lyapunov)" \
+&= kappa_Q (1 - alpha a)^((n-j-1) slash 2) sum_(k=0)^(n-j-1) ((1 - 2 alpha a) / (1 - alpha a))^(k slash 2)
+  &&"(reindex" k = n-j-i") " \
+&<= kappa_Q (1 - alpha a)^((n-j-1) slash 2) frac(1, 1 - sqrt((1 - 2 alpha a) / (1 - alpha a)))
+  &&"(geometric series)".
 $
-It remains to bound the geometric rate $1 - sqrt((1 - 2 alpha a) / (1 - alpha a))$ from below. Writing $(1 - 2 alpha a) / (1 - alpha a) = 1 - alpha a / (1 - alpha a)$ and Taylor-expanding $sqrt(1 - x)$ at $x = alpha a / (1 - alpha a)$ gives
+For $alpha a <= 1 slash 2$ the geometric rate is bounded below by an *elementary* inequality: combining $sqrt((1 - 2 alpha a) slash (1 - alpha a)) <= sqrt(1 - alpha a)$ (since $(1-2alpha a) <= (1-alpha a)^2$) with $1 - sqrt(1 - x) >= x slash 2$ on $[0, 1]$ gives
 $
-sqrt(frac(1 - 2 alpha a, 1 - alpha a))
-= 1 - frac(alpha a, 2 (1 - alpha a)) + O((alpha a)^2)
-= 1 - frac(1, 2) alpha a + O(alpha^2),
+1 - sqrt(frac(1 - 2 alpha a, 1 - alpha a))
+  >= 1 - sqrt(1 - alpha a)
+  >= frac(alpha a, 2),
+quad "i.e." quad
+frac(1, 1 - sqrt((1 - 2 alpha a) / (1 - alpha a))) <= frac(2, alpha a).
 $
-where the second equality uses $alpha a <= 1 slash 2$. Consequently,
-$
-1 - sqrt(frac(1 - 2 alpha a, 1 - alpha a)) = frac(1, 2) alpha a + O(alpha^2),
-quad
-frac(1, 1 - sqrt((1 - 2 alpha a) / (1 - alpha a))) = frac(2, alpha a) + O(1).
-$
-Folding the $O(1)$ correction into a constant $overline(C)_A$, we arrive at the final estimate
+Defining the chapter-local constant
+$ overline(C)_A := kappa_Q $
+(distinct from the assumption-2 sup-norm constant $C_A$, which enters separately via $|| overline(A) ||$ in the next subsection), we arrive at the final estimate
 $
 ||H_j^((n))|| <= overline(C)_A thin (1 - alpha a)^((n-j-1) slash 2) thin frac(2, alpha a).
 $
@@ -118,20 +117,29 @@ is a weighted sum of values of the centered noise function $epsilon.alt$ along t
   _Proof._ The proof follows the lines of Durmus et al. (2025, Lemma 9).
 ]
 
-We apply the lemma with $g_j(z) = -2 alpha^2 overline(A) H_j^((n)) epsilon.alt(z)$. Each $g_j$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Plugging the bound on $||H_j^((n))||$ from the previous subsection and writing $tilde(C)_A = ||A|| thin overline(C)_A$ yields the per-summand bound
+We apply the lemma with $g_j(z) = -2 alpha^2 overline(A) H_j^((n)) epsilon.alt(z)$. Each $g_j$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Combining the bound $|| overline(A) || <= C_A$ (Assumption 2) with the previous subsection, define
+$
+tilde(C)_A := C_A thin overline(C)_A = C_A thin kappa_Q.
+$
+Then the per-summand bound is
 $
 ||g_j||_infinity
-&<= 2 alpha^2 tilde(C)_A (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity
-= 4 alpha tilde(C)_A ||epsilon.alt||_infinity (1 - alpha a)^((n-j-1) slash 2).
+&<= 2 alpha^2 tilde(C)_A (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity \
+&= 4 alpha tilde(C)_A ||epsilon.alt||_infinity (1 - alpha a)^((n-j-1) slash 2).
 $
-Note the prefactor $alpha^2$ collapsing to $alpha$: the $1 slash (alpha a)$ blow-up in $H_j^((n))$ is exactly absorbed by one factor of $alpha$. Squaring and summing over $j$, we get a geometric series whose closed form is bounded uniformly in $n$:
+Note the prefactor $alpha^2$ collapsing to $alpha$: the $1 slash (alpha a)$ blow-up in $H_j^((n))$ is exactly absorbed by one factor of $alpha$. Squaring and summing over $j$, using $1 - alpha a >= 1 slash 2$:
 $
 sum_(j=1)^n ||g_j||_infinity^2
 &<= 16 alpha^2 tilde(C)_A^2 ||epsilon.alt||_infinity^2 sum_(j=1)^n (1 - alpha a)^(n-j-1) \
-&<= 16 alpha^2 tilde(C)_A^2 ||epsilon.alt||_infinity^2 thin frac(1, (1 - alpha a) alpha a)
-<= frac(C^2, a) thin alpha thin ||epsilon.alt||_infinity^2,
+&<= 16 alpha^2 tilde(C)_A^2 ||epsilon.alt||_infinity^2 thin frac(1, (1 - alpha a) alpha a) \
+&<= frac(32 alpha tilde(C)_A^2 ||epsilon.alt||_infinity^2, a).
 $
-where in the last step we used $1 - alpha a >= 1 slash 2$. Plugging this into the variance proxy $u_n$ from the lemma absorbs the constants $64 dot 16$ and $sqrt(t_"mix")$ into a constant $hat(C)_A$ depending on $a$, $t_"mix"$, and $||epsilon.alt||_infinity$:
+Plugging this into the variance proxy $u_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j||_infinity^2$ from the lemma and defining
+$
+hat(C)_A := sqrt(2048) thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a))
+            = 32 sqrt(2) thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a)),
+$
+gives
 $
 u_n^2 <= hat(C)_A^2 thin alpha.
 $
