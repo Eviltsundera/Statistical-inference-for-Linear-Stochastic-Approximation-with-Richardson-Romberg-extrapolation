@@ -421,10 +421,10 @@ $\sqrt n\,\alpha^2$ для соответствующего centered first-order
 
 Коротко: готова вся **детерминированная RR-weight часть**, диагностика
 misadjustment, **Poisson martingale approximation** для $W^{\mathrm{RR}}$
-(boundary/Abel remainder), и теперь **predictable quadratic variation
-concentration** для $\langle M^{\mathrm{RR}}\rangle_n$. Ещё не готовы
-мартингальный Berry--Esseen step, Levin-misadjustment transfer и
-smoothing-сборка.
+(boundary/Abel remainder), **predictable quadratic variation concentration**
+для $\langle M^{\mathrm{RR}}\rangle_n$, и теперь **martingale Berry--Esseen
+step** через Bolthausen--Fan для $u^\top M_n^{\mathrm{RR}}/(\sqrt n\,\sigma_n^{\mathrm{RR}}(u))$.
+Ещё не готовы Levin-misadjustment transfer и smoothing-сборка.
 
 Уточнение по нумерации:
 
@@ -433,8 +433,9 @@ smoothing-сборка.
   перенесён в optional refinement;
 - если считать по **обновлённому плану**, то пункт 1 готов почти полностью
   (с caveat про burn-in), пункт 2 готов целиком (Poisson approximation +
-  quadratic variation concentration); остаётся только Bolthausen/Fan,
-  пункт 3 готов.
+  quadratic variation concentration + Bolthausen/Fan), пункт 3 готов.
+  Остаются пункты 4--6 (Levin transfer, smoothing, $\sigma_n\to\sigma$
+  corollary для полной BE).
 
 ### Готово в тексте thesis
 
@@ -592,14 +593,27 @@ smoothing-сборка.
 
 1. **Формальная Theorem statement для RR Berry--Esseen.**  
    В thesis пока нет секции с полным theorem statement, диапазоном
-   $\alpha,n,p$, burn-in и условием $\sigma^2(u)>0$.
+   $\alpha,n,p$, burn-in и условием $\sigma^2(u)>0$. Мартингальная часть
+   зафиксирована (Theorem в `src/pr_weights.typ`, секция "Martingale
+   Berry--Esseen Step"); нужна композитная теорема для всего
+   $\sqrt n\,u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)$.
 
-2. **Martingale Berry--Esseen step.**  
-   Нужно явно применить Bolthausen/Fan к $M_n^{\mathrm{RR}}$ и получить
-   $n^{-1/4}\mathrm{polylog}(n)$. Ингредиенты на месте: ограниченные
-   приращения $|\Delta M_l^{\mathrm{RR}}|\le 6\,t_{\mathrm{mix}}\|\varepsilon\|_\infty C_{\mathcal Q}$
-   из Poisson lemma, концентрация $\langle M^{\mathrm{RR}}\rangle_n$ из новой
-   секции 4.7. Остаётся подставить в Lemma 21 / Proposition 13 Samsonov.
+2. ~~**Martingale Berry--Esseen step.**~~ Готово (`src/pr_weights.typ`,
+   секция "Martingale Berry--Esseen Step", 2026-05-03). Применяется
+   Lemma 21 Samsonov 2025 (Bolthausen 1982 + Fan 2019) с
+   $\varkappa = 6\,t_{\mathrm{mix}}\,C_{\mathcal Q}\|\varepsilon\|_\infty\|u\|$,
+   $s_n^2 = n\,\sigma_n^{2,\mathrm{RR}}(u)$, $p=\lceil\log n\rceil$.
+   Result:
+   $$
+   d_K\!\left(\frac{u^\top M_n^{\mathrm{RR}}}{\sqrt n\,\sigma_n^{\mathrm{RR}}(u)},N(0,1)\right)
+   \le \frac{C_{K,1}(u)\log^{3/4}n}{n^{1/4}}+\frac{C_{K,2}(u)\log n}{\sqrt n}
+   $$
+   при $n\alpha a\ge 2C_3\|u\|^2/\sigma^2(u)$ (что выполняется при
+   $\alpha=cn^{-1/2}$ для всех достаточно больших $n$).
+   Постоянная $C_{K,1}(u)\asymp C_{\mathcal Q}\|u\|^2 t_{\mathrm{mix}}^{5/4}\|\varepsilon\|_\infty/\sigma(u)$.
+   Включён corollary с заменой нормировки $\sigma_n^{\mathrm{RR}}\to\sigma$
+   (Lipschitz cdf normalization argument), который добавляет $O(n^{-1/2})$
+   при working scale.
 
 4. **Levin-to-our-notation misadjustment transfer.**  
    Самый важный оставшийся non-martingale кусок: надо аккуратно переписать
@@ -622,16 +636,15 @@ smoothing-сборка.
 
 ### Минимальный следующий шаг
 
-Predictable quadratic variation concentration готова (см. `src/pr_weights.typ`,
-секция "Predictable Quadratic Variation Concentration"). Следующий кирпич:
+Martingale Berry--Esseen готов (см. `src/pr_weights.typ`, секция "Martingale
+Berry--Esseen Step", 2026-05-03). Следующий кирпич:
 
-> применить Bolthausen/Fan martingale Berry--Esseen (Samsonov 2025, Lemma 21 /
-> Proposition 13) к $M_n^{\mathrm{RR}}/(\sqrt n\,\sigma_n^{\mathrm{RR}}(u))$,
-> используя уже готовые ограниченные приращения и concentration
-> $\langle M^{\mathrm{RR}}\rangle_n - n\sigma_n^{2,\mathrm{RR}}(u)$.
+> Levin-misadjustment transfer: переписать depth-two разложение
+> $H^{(0,\alpha)}=J^{(1,\alpha)}+J^{(2,\alpha)}+H^{(2,\alpha)}$ в наших
+> обозначениях и доказать
+> $\|R_n^{\mathrm{mis,RR}}\|_{L_p}\le C\,\mathrm{poly}(p,t_{\mathrm{mix}})(\sqrt n\,\alpha^{3/2}+\sqrt n\,\alpha^2)+R_{\mathrm{burn}}$.
 
-После него естественно идёт Levin-misadjustment transfer и финальная
-smoothing-сборка.
+После него — финальная smoothing-сборка через Samsonov Proposition 12.
 
 ### Следующий шаг для misadjustment
 
