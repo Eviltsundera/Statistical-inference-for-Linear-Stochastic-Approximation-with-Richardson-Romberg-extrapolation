@@ -419,23 +419,30 @@ $\sqrt n\,\alpha^2$ для соответствующего centered first-order
 
 ## Статус готовности плана (2026-05-03)
 
-Коротко: готова вся **детерминированная RR-weight часть**, диагностика
-misadjustment, **Poisson martingale approximation** для $W^{\mathrm{RR}}$
-(boundary/Abel remainder), **predictable quadratic variation concentration**
-для $\langle M^{\mathrm{RR}}\rangle_n$, и теперь **martingale Berry--Esseen
-step** через Bolthausen--Fan для $u^\top M_n^{\mathrm{RR}}/(\sqrt n\,\sigma_n^{\mathrm{RR}}(u))$.
-Ещё не готовы Levin-misadjustment transfer и smoothing-сборка.
+Коротко: готова **вся секция 4** обновлённого плана. К ранее завершённым
+пунктам (детерминированная RR-weight часть, диагностика misadjustment,
+Poisson martingale approximation, predictable quadratic variation
+concentration, martingale Berry--Esseen step, Levin-to-our-notation
+misadjustment transfer) добавлены **smoothing assembly** и
+**$\sigma_n\to\sigma$ corollary**. Все шесть пунктов обновлённого плана
+закрыты в `src/pr_weights.typ` (секция "Smoothing Assembly", 2026-05-03).
 
 Уточнение по нумерации:
 
 - если считать по **старому списку задач**, то пункты 1--2 готовы, а пункт 3
   (*RR-misadjustment через $\nabla_\alpha S_n^{(\alpha)}$*) **не готов** и
   перенесён в optional refinement;
-- если считать по **обновлённому плану**, то пункт 1 готов почти полностью
-  (с caveat про burn-in), пункт 2 готов целиком (Poisson approximation +
-  quadratic variation concentration + Bolthausen/Fan), пункт 3 готов.
-  Остаются пункты 4--6 (Levin transfer, smoothing, $\sigma_n\to\sigma$
-  corollary для полной BE).
+- если считать по **обновлённому плану**, то пункты 1--6 готовы:
+  пункт 1 (декомпозиция) — целиком (burn-in $n_0=\lceil 2\log n/(\alpha a)\rceil$
+  явно введён в smoothing assembly),
+  пункт 2 (ведущий мартингал) — целиком (Poisson approximation + quadratic
+  variation concentration + Bolthausen/Fan),
+  пункт 3 (variance comparison) — готов,
+  пункт 4 (Levin depth-two misadjustment transfer) — готов,
+  пункт 5 (smoothing assembly + composite Theorem) — готов
+  (`src/pr_weights.typ`, секция "Smoothing Assembly", 2026-05-03),
+  пункт 6 ($\sigma_n^{\mathrm{RR}}\to\sigma$ corollary) — готов
+  (тот же раздел, Corollary `cor:RR-BE-sigma`).
 
 ### Готово в тексте thesis
 
@@ -591,12 +598,14 @@ step** через Bolthausen--Fan для $u^\top M_n^{\mathrm{RR}}/(\sqrt n\,\si
 
 ### Не готово / нужно написать
 
-1. **Формальная Theorem statement для RR Berry--Esseen.**  
-   В thesis пока нет секции с полным theorem statement, диапазоном
-   $\alpha,n,p$, burn-in и условием $\sigma^2(u)>0$. Мартингальная часть
-   зафиксирована (Theorem в `src/pr_weights.typ`, секция "Martingale
-   Berry--Esseen Step"); нужна композитная теорема для всего
-   $\sqrt n\,u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)$.
+1. ~~**Формальная Theorem statement для RR Berry--Esseen.**~~ Готово
+   (`src/pr_weights.typ`, Theorem `thm:RR-BE` + Corollary `cor:RR-BE-working`,
+   секция "Smoothing Assembly", 2026-05-03). Композитная теорема для всего
+   $\sqrt n\,u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)$ зафиксирована с
+   диапазоном $\alpha,2\alpha\in(0,\alpha_\infty]$, $p=\lceil\log n\rceil$,
+   burn-in $n_0=\lceil 2\log n/(\alpha a)\rceil$, условием
+   `eq:variance-lb-condition` ($n\alpha a\ge 2C_3\|u\|^2/\sigma^2(u)$)
+   и стационарным стартом augmented chain.
 
 2. ~~**Martingale Berry--Esseen step.**~~ Готово (`src/pr_weights.typ`,
    секция "Martingale Berry--Esseen Step", 2026-05-03). Применяется
@@ -615,36 +624,80 @@ step** через Bolthausen--Fan для $u^\top M_n^{\mathrm{RR}}/(\sqrt n\,\si
    (Lipschitz cdf normalization argument), который добавляет $O(n^{-1/2})$
    при working scale.
 
-4. **Levin-to-our-notation misadjustment transfer.**  
-   Самый важный оставшийся non-martingale кусок: надо аккуратно переписать
-   Levin depth-two decomposition в наши обозначения и получить
-
+4. ~~**Levin-to-our-notation misadjustment transfer.**~~ Готово
+   (`src/pr_weights.typ`, секция "Misadjustment via Levin Depth-Two",
+   2026-05-03). Перенесены в наши обозначения четыре результата Levin et al.
+   (2025): Proposition 2 (стационарный bias $J^{(1)}$), Corollary 6
+   (centered bilinear $L_p$), Propositions 8 и 9 ($J^{(2)}, H^{(2)}$
+   moment bounds). Через recursion-telescoping identity для $J^{(1)}$
+   получена оценка
    $$
    \|R_n^{\mathrm{mis,RR}}\|_{L_p}
-   \le C\mathrm{poly}(p,t_{\mathrm{mix}})
-      (\sqrt n\,\alpha^{3/2}+\sqrt n\,\alpha^2)
-      +R_{\mathrm{burn}}.
+   \le C\sqrt n\alpha^2
+      + C(1+d^{1/q})p^{7/2}t_{\mathrm{mix}}^{5/2}\sqrt n\alpha^{3/2}\log^{3/2}\!\frac1{\alpha a}
+      + C p^{3/2}\sqrt\alpha
+      + C p^3(\alpha n)^{-1/2}\log^{1/p}\!\frac1{\alpha a}
+      + C\Phi(p,\alpha) n^{-1/2},
    $$
+   с $R_{\mathrm{burn}}$ в стационарном старте равным нулю; для нестационарного
+   старта добавляется экспоненциально малый член $\rho^{n_0}$ через
+   Wasserstein-сжатие augmented chain. При $\alpha=cn^{-1/2}, p=\lceil\log n\rceil$
+   получаем corollary $\|R_n^{\mathrm{mis,RR}}\|_{L_p}\le C\,\mathrm{polylog}(n)\,n^{-1/4}$,
+   который соответствует мартингальной BE-rate.
 
-5. **Smoothing assembly.**  
-   Нужно собрать martingale BE + $L_p$-остатки через smoothing inequality и
-   выбрать $p=\lceil\log n\rceil$, $\alpha=c n^{-1/2}$.
+5. ~~**Smoothing assembly.**~~ Готово (`src/pr_weights.typ`, секция
+   "Smoothing Assembly", 2026-05-03). Декомпозиция
+   $\sqrt n u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)/\sigma_n^{\mathrm{RR}}(u)
+   = X_n + Y_n$ с $X_n = -u^\top M_n^{\mathrm{RR}}/(\sqrt n \sigma_n^{\mathrm{RR}}(u))$
+   и $Y_n = u^\top \mathcal R_n^{\mathrm{RR}}/\sigma_n^{\mathrm{RR}}(u)$, где
+   $\mathcal R_n^{\mathrm{RR}} = D_{2,n}^{\mathrm{RR}} + D_{\mathrm{tr}}^{\mathrm{RR}}
+   + R_n^{\mathrm{mis,RR}}$. Lemma `lem:R-bound` даёт $L_p$-границу на
+   $\|u^\top \mathcal R_n^{\mathrm{RR}}\|_{L_p}$ с явным burn-in
+   $n_0 = \lceil 2\log n/(\alpha a)\rceil$. Smoothing inequality
+   (Bobkov–Götze / Samsonov Prop 12) с выбором $t = e\|Y\|_{L_p}$
+   и $p = \lceil\log n\rceil$ даёт композитную теорему `thm:RR-BE`:
+   $$
+   d_K\!\left(\frac{\sqrt n u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)}
+                  {\sigma_n^{\mathrm{RR}}(u)}, N(0,1)\right)
+   \le \frac{C_{K,1}(u)\log^{3/4} n}{n^{1/4}}
+     + \frac{C_{K,2}(u)\log n}{\sqrt n}
+     + \frac{e\,\|u^\top\mathcal R_n^{\mathrm{RR}}\|_{L_p}}
+            {\sqrt{2\pi}\,\sigma_n^{\mathrm{RR}}(u)}
+     + \frac{e}{n}.
+   $$
+   Corollary `cor:RR-BE-working` сворачивает это к
+   $C(u)\,\mathrm{polylog}(n)\,n^{-1/4}$ при $\alpha = cn^{-1/2}$.
 
-6. **Corollary for replacing $\sigma_n^{\mathrm{RR}}(u)$ by $\sigma(u)$.**  
-   После theorem со $\sigma_n^{\mathrm{RR}}(u)$ это коротко следует из variance
-   comparison, но пока не написано.
+6. ~~**Corollary for replacing $\sigma_n^{\mathrm{RR}}(u)$ by $\sigma(u)$.**~~
+   Готово (`src/pr_weights.typ`, Corollary `cor:RR-BE-sigma`, 2026-05-03).
+   Через variance comparison $|\sigma_n^{\mathrm{RR}}(u) - \sigma(u)|
+   = O(n^{-1/2})$ при $\alpha=cn^{-1/2}$ и Lipschitz-аргумент для cdf
+   стандартного нормального ($\sup_x|\Phi(x/r)-\Phi(x)|\le C_\Phi|r-1|$
+   с $C_\Phi=\sqrt 2/\sqrt{\pi e}$) бонус-член $O(n^{-1/2})$ поглощается
+   ведущим $\mathrm{polylog}(n)\,n^{-1/4}$.
 
-### Минимальный следующий шаг
+### Минимальный следующий шаг (исторический)
 
-Martingale Berry--Esseen готов (см. `src/pr_weights.typ`, секция "Martingale
-Berry--Esseen Step", 2026-05-03). Следующий кирпич:
+Smoothing assembly готов (см. `src/pr_weights.typ`, секция
+"Smoothing Assembly", 2026-05-03). Базовый план секции 4 закрыт.
+Дальнейшие направления — optional refinements:
 
-> Levin-misadjustment transfer: переписать depth-two разложение
-> $H^{(0,\alpha)}=J^{(1,\alpha)}+J^{(2,\alpha)}+H^{(2,\alpha)}$ в наших
-> обозначениях и доказать
-> $\|R_n^{\mathrm{mis,RR}}\|_{L_p}\le C\,\mathrm{poly}(p,t_{\mathrm{mix}})(\sqrt n\,\alpha^{3/2}+\sqrt n\,\alpha^2)+R_{\mathrm{burn}}$.
+- $U_M^{\mathrm{RR}} + U_R^{\mathrm{RR}} \le C\alpha^2(\dots)$ через
+  RR-coupling в depth-two (open thread, см. ниже);
+- explicit non-stationary start: вернуть $R_{\mathrm{burn}}$ через
+  Wasserstein-сжатие augmented chain (Levin Prop 1);
+- сравнение с диминишинговой PR-оценкой Samsonov 2025 как corollary.
 
-После него — финальная smoothing-сборка через Samsonov Proposition 12.
+Следующий шаг по тексту thesis (если продолжать):
+
+> Smoothing assembly: применить Samsonov Proposition 12 к
+> $\sqrt n u^\top(\bar\theta_n^{\mathrm{RR}}-\theta^*)/\sigma_n^{\mathrm{RR}}(u)
+> = u^\top M_n^{\mathrm{RR}}/(\sqrt n\sigma_n^{\mathrm{RR}}(u)) + \mathcal R_n^{\mathrm{RR}}$
+> с $L_p$-bound на $\mathcal R_n^{\mathrm{RR}}$ из суммы $D_2^{\mathrm{RR}}$,
+> $D_{\mathrm{tr}}^{\mathrm{RR}}$, $R_n^{\mathrm{mis,RR}}$.
+
+После него — corollary $\sigma_n^{\mathrm{RR}}\to\sigma$ через
+variance-comparison.
 
 ### Следующий шаг для misadjustment
 

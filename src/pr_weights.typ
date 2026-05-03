@@ -939,6 +939,617 @@ constants. $square$
   full Berry--Esseen bound additionally requires $L_p$-control of
   $D_(2, n)^("RR")$ (Section 4.6, already done), the transient
   $D_("tr")^("RR")$, and the misadjustment $R_n^("mis,RR")$ via the Levin
-  depth-two transfer (still to be written), assembled by the smoothing
+  depth-two transfer of the next subsection, assembled by the smoothing
   inequality of Samsonov et al. (2025, Proposition 12).
+]
+
+== Misadjustment via Levin Depth-Two
+
+The Berry--Esseen assembly so far controls the leading martingale piece
+(Section 4.8) and the Poisson boundary remainder $D_(2, n)^("RR")$
+(Section 4.6). The remaining non-martingale contribution to
+$sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)$ is the
+*PR-averaged misadjustment*
+$
+R_n^("mis, RR") := frac(1, sqrt(n)) sum_(k = 0)^(n - 1)
+                    (2 R_k^((alpha)) - R_k^((2 alpha))),
+$ <eq:R-mis-def>
+where $R_k^((alpha)) := J_k^((1, alpha)) + H_k^((1, alpha))$ is the depth-one
+remainder of <eq:depth-one>. Chapter 3 showed that the kernel-difference
+identity bounds $R_n^("mis, RR")$ at order $O(sqrt(n) thin alpha) = O(1)$ at
+the working scale $alpha asymp n^(-1 slash 2)$ — too crude for a
+Berry--Esseen rate $n^(-1 slash 4)$. The depth-two route below transfers
+four statements of Levin et al. (2025) into the present notation and
+recovers the target $n^(-1 slash 4) thin "polylog"(n)$ rate.
+
+*Depth-two refinement.* The deterministic-product expansion of Levin et al.
+extends the depth-one decomposition by one more level. For $ell >= 1$ define
+$
+J_n^((ell, alpha)) := (I - alpha overline(A)) thin J_(n - 1)^((ell, alpha))
+                       - alpha tilde(A)(Z_n) thin J_(n - 1)^((ell - 1, alpha)),
+$
+$
+H_n^((ell, alpha)) := (I - alpha A(Z_n)) thin H_(n - 1)^((ell, alpha))
+                       - alpha tilde(A)(Z_n) thin J_(n - 1)^((ell, alpha)),
+$
+with $J_0^((ell, alpha)) = H_0^((ell, alpha)) = 0$ and the $ell = 0$
+processes as in `last_iterate.typ`. Substituting
+$A(Z_n) = overline(A) + tilde(A)(Z_n)$ and grouping terms gives, by
+induction on $n$, the recursive identity
+$
+H_n^((ell, alpha)) = J_n^((ell + 1, alpha)) + H_n^((ell + 1, alpha)),
+quad ell >= 0.
+$ <eq:depth-recursion>
+Applying <eq:depth-recursion> with $ell = 1$ refines $R_k^((alpha))$ to
+$
+R_k^((alpha)) = J_k^((1, alpha)) + J_k^((2, alpha)) + H_k^((2, alpha)),
+$
+which splits the misadjustment into three structurally different pieces:
+$
+R_n^("mis, RR") = T_n^((1)) + T_n^((2)) + T_n^((H)),
+$ <eq:R-mis-split>
+$
+T_n^((j)) := frac(1, sqrt(n)) sum_(k = 0)^(n - 1)
+              lr((2 J_k^((j, alpha)) - J_k^((j, 2 alpha)))),
+quad j in {1, 2},
+$
+with $T_n^((H))$ defined identically with $H^((2))$ in place of $J^((j))$.
+Each piece is bounded separately below.
+
+*Cited inputs.* The depth-two route imports four statements of Levin et al.
+(2025), specialized to the constant step-size LSA setting. They are stated
+here for reference; their proofs are in the cited paper.
+
+#lemma[*(Levin Proposition 2 — stationary bias of $J^((1))$.)*
+  Under stationarity for the augmented chain
+  $(Z_(t + 1), J_t^((0, alpha)), J_t^((1, alpha)))$,
+  $
+  bb(E)_pi [J_infinity^((1, alpha))] = alpha thin Delta + R(alpha),
+  quad
+  || R(alpha) ||
+    <= 12 thin || overline(A)^(-1) || thin C_A^2 thin t_"mix"^2 thin alpha^2 thin || epsilon.alt ||_infinity,
+  $
+  with $Delta := overline(A)^(-1) sum_(k >= 1)
+    bb(E)_pi [(sans(Q)^k tilde(A))(Z_0) thin epsilon.alt(Z_0)]$.
+] <lem:levin-prop-2>
+
+#lemma[*(Levin Corollary 6 — centered bilinear $L_p$ bound.)*
+  Define $overline(psi)_alpha (j, z)
+    := tilde(A)(z) j - bb(E)_(Pi_(J^((0)), alpha)) [tilde(A)(Z_1) thin J_0^((0, alpha))]$.
+  For every initial distribution, every $r >= 1$, and every $p >= 2$,
+  $
+  lr(|| sum_(t = 0)^(r - 1) overline(psi)_alpha (J_t^((0, alpha)), Z_(t + 1)) ||)_(L_p)
+    <= c_(W, 1) thin p^(3 slash 2) sqrt(alpha r)
+       + c_(W, 2) thin p^3 thin alpha^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a)),
+  $
+  with $c_(W, 1), c_(W, 2)$ depending only on
+  $C_A, kappa_Q, t_"mix", || epsilon.alt ||_infinity$.
+] <lem:levin-cor-6>
+
+#lemma[*(Levin Propositions 8 and 9 — high-order moment bounds.)*
+  For every $p >= 2$ and every $q >= 2$,
+  $
+  || J_n^((2, alpha)) ||_(L_p)
+    <= D_J thin t_"mix"^(5 slash 2) thin p^(7 slash 2) thin alpha^(3 slash 2)
+       thin log^(3 slash 2)(1 slash (alpha a)),
+  $
+  $
+  || H_n^((2, alpha)) ||_(L_p)
+    <= D_H thin d^(1 slash q) thin t_"mix"^(5 slash 2) thin p^(7 slash 2) thin alpha^(3 slash 2)
+       thin log^(3 slash 2)(1 slash (alpha a)),
+  $
+  uniformly in $n$, with $D_J, D_H$ depending only on
+  $C_A, kappa_Q, || overline(A)^(-1) ||, || epsilon.alt ||_infinity$.
+] <lem:levin-prop-89>
+
+*Telescoping identity for $J^((1))$.* Summing the recursion
+$J_k^((1, alpha)) = (I - alpha overline(A)) thin J_(k - 1)^((1, alpha))
+  - alpha tilde(A)(Z_k) thin J_(k - 1)^((0, alpha))$
+from $k = 1$ to $n$ and rearranging, with $J_0^((1, alpha)) = 0$,
+$
+overline(A) sum_(k = 0)^(n - 1) J_k^((1, alpha))
+  = -sum_(k = 1)^n tilde(A)(Z_k) thin J_(k - 1)^((0, alpha))
+    - frac(1, alpha) thin J_n^((1, alpha)).
+$
+The stationary version of the same recursion yields
+$bb(E)_pi [tilde(A)(Z_1) thin J_0^((0, alpha))]
+  = -overline(A) thin bb(E)_pi [J_infinity^((1, alpha))]$.
+Subtracting $n thin bb(E)_pi [J_infinity^((1, alpha))]$ from both sides and
+applying $overline(A)^(-1)$ gives the *centered telescoping identity*
+$
+sum_(k = 0)^(n - 1) lr((J_k^((1, alpha)) - bb(E)_pi [J_infinity^((1, alpha))]))
+  = -overline(A)^(-1) sum_(k = 1)^n
+      overline(psi)_alpha (J_(k - 1)^((0, alpha)), Z_k)
+    - frac(1, alpha) thin overline(A)^(-1) thin J_n^((1, alpha)).
+$ <eq:J1-telescope>
+This identity is the bridge between the (vector-valued) PR-average of
+$J^((1))$ and the centered bilinear sum bounded in Levin Corollary 6.
+
+#lemma[
+  Assume the chain is started from stationarity, *UGE 1*,
+  $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$, and
+  $alpha, 2 alpha in (0, alpha_infinity]$. Set
+  $
+  Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
+                   + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
+  $
+  There exists a constant $C_("mis,1")$ depending on
+  $|| overline(A) ||, || overline(A)^(-1) ||, kappa_Q, C_A,
+   || epsilon.alt ||_infinity, t_"mix"$, the universals $c_(W, 1), c_(W, 2)$
+  of Levin Corollary 6, and the constant of the centered bound in
+  `last_iterate.typ`, such that for every $p >= 2$ and every $n >= 2$,
+  $
+  || T_n^((1)) ||_(L_p)
+    &<= C_("mis,1") sqrt(n) thin alpha^2
+     + C_("mis,1") thin p^(3 slash 2) sqrt(alpha) \
+    &quad + C_("mis,1") thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+     + C_("mis,1") thin Phi(p, alpha) thin n^(-1 slash 2).
+  $
+] <lem:T1-bound>
+
+_Proof._ Decompose $T_n^((1)) = T_n^("(1, b)") + T_n^("(1, c)")$ via the
+bias-fluctuation split
+$
+T_n^("(1, b)") := sqrt(n) thin lr((
+                    2 thin bb(E)_pi [J_infinity^((1, alpha))]
+                    - bb(E)_pi [J_infinity^((1, 2 alpha))]
+                  )),
+$
+$
+T_n^("(1, c)") := frac(1, sqrt(n)) sum_(k = 0)^(n - 1) sum_(w in {alpha, 2 alpha}) c_w
+                   lr((J_k^((1, w)) - bb(E)_pi [J_infinity^((1, w))])),
+quad c_alpha = 2, thin c_(2 alpha) = -1.
+$
+The bias is deterministic; the centered piece carries all the $L_p$
+fluctuation.
+
+*Bias.* By Levin Proposition 2 applied at $w in {alpha, 2 alpha}$,
+$bb(E)_pi [J_infinity^((1, w))] = w thin Delta + R(w)$ with
+$|| R(w) || <= 12 thin || overline(A)^(-1) || thin C_A^2 thin t_"mix"^2 thin w^2 thin || epsilon.alt ||_infinity$.
+The leading $w thin Delta$ cancels in the RR combination,
+$2 alpha thin Delta - 2 alpha thin Delta = 0$, leaving
+$
+|| 2 thin bb(E)_pi [J_infinity^((1, alpha))] - bb(E)_pi [J_infinity^((1, 2 alpha))] ||
+  <= 2 thin || R(alpha) || + || R(2 alpha) ||
+  <= 72 thin || overline(A)^(-1) || thin C_A^2 thin t_"mix"^2 thin alpha^2 thin || epsilon.alt ||_infinity.
+$
+Multiplying by $sqrt(n)$ produces the first term of the bound.
+
+*Centered.* Apply <eq:J1-telescope> at $w in {alpha, 2 alpha}$, take $L_p$
+norms, and combine via the triangle inequality:
+$
+|| T_n^("(1, c)") ||_(L_p)
+  &<= frac(1, sqrt(n)) sum_(w in {alpha, 2 alpha}) |c_w| lr((
+       || overline(A)^(-1) || dot
+       || sum_(k = 1)^n overline(psi)_w (J_(k - 1)^((0, w)), Z_k) ||_(L_p) \
+    &quad quad quad quad
+       + frac(1, w) thin || overline(A)^(-1) || dot || J_n^((1, w)) ||_(L_p)
+     )).
+$
+For the bilinear sum apply Levin Corollary 6 with $r = n$,
+$
+|| sum_(k = 1)^n overline(psi)_w ||_(L_p)
+  <= c_(W, 1) thin p^(3 slash 2) sqrt(w n)
+   + c_(W, 2) thin p^3 thin w^(-1 slash 2) thin log^(1 slash p)(1 slash (w a)),
+$
+and divide by $sqrt(n)$, using $w in [alpha, 2 alpha]$ to upper-bound by the
+$alpha$-form,
+$
+frac(1, sqrt(n)) || sum overline(psi)_w ||_(L_p)
+  <= sqrt(2) c_(W, 1) thin p^(3 slash 2) sqrt(alpha)
+   + sqrt(2) c_(W, 2) thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a)).
+$
+For the boundary term, the centered last-iterate lemma in
+`last_iterate.typ`, applied to $T_n^((1, w)) = (I - w overline(A)) thin J_n^((1, w))$
+with $|| (I - w overline(A))^(-1) || <= 2$ for $w <= alpha_infinity$, gives
+$
+|| J_n^((1, w)) - bb(E) J_n^((1, w)) ||_(L_p) <= C w thin Phi(p, w),
+$
+and $|| bb(E) J_n^((1, w)) || <= w thin || Delta || + || R(w) || <= C w$ by
+Levin Proposition 2; combining,
+$
+|| J_n^((1, w)) ||_(L_p) <= C w lr((Phi(p, w) + 1)) <= C w thin Phi(p, w)
+quad "for" p >= 2.
+$
+Therefore $w^(-1) || J_n^((1, w)) ||_(L_p) <= C thin Phi(p, w) <= sqrt(2) thin C thin Phi(p, alpha)$.
+Dividing by $sqrt(n)$ produces the last term. Summing the three RR-combined
+pieces and absorbing universal factors into a single $C_("mis,1")$ completes
+the proof. $square$
+
+#lemma[
+  Under the assumptions of the previous lemma, for every $p >= 2$ and every
+  $q >= 2$,
+  $
+  || T_n^((2)) ||_(L_p) + || T_n^((H)) ||_(L_p)
+    <= C_("mis,2") thin (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
+       thin sqrt(n) thin alpha^(3 slash 2) thin log^(3 slash 2)(1 slash (alpha a)),
+  $
+  with $C_("mis,2") := 6 thin sqrt(2)^3 thin (D_J + D_H)$.
+] <lem:T2H-bound>
+
+_Proof._ Triangle inequality on the $n$ summands of $T_n^((2))$, then
+Levin Propositions 8 and 9 applied uniformly in $k$ and $w in {alpha, 2 alpha}$:
+$
+|| T_n^((2)) ||_(L_p)
+  &<= frac(1, sqrt(n)) sum_(k = 0)^(n - 1) sum_(w in {alpha, 2 alpha}) |c_w| thin || J_k^((2, w)) ||_(L_p) \
+  &<= 3 thin sqrt(n) thin sup_(w in {alpha, 2 alpha}) || J_k^((2, w)) ||_(L_p) \
+  &<= 3 thin D_J thin (2 alpha)^(3 slash 2) thin t_"mix"^(5 slash 2) thin p^(7 slash 2) thin sqrt(n) thin log^(3 slash 2)(1 slash (alpha a)),
+$
+where $|c_alpha| + |c_(2 alpha)| = 3$ absorbs the RR combination and
+$(2 alpha)^(3 slash 2)$ the worse bound at the larger step. Identical
+argument for $T_n^((H))$, with the additional $d^(1 slash q)$ factor of
+Levin Proposition 9. Adding the two bounds gives the lemma. $square$
+
+#theorem[
+  Assume *UGE 1*, $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$,
+  $alpha, 2 alpha in (0, alpha_infinity]$, and that the chain is started from
+  stationarity. There exists a constant $C$ depending on the universal and
+  problem constants of the previous two lemmas such that for every
+  $p >= 2$, every $q >= 2$, and every $n >= 2$,
+  $
+  || R_n^("mis, RR") ||_(L_p)
+    &<= C sqrt(n) thin alpha^2
+     + C thin (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
+         thin sqrt(n) thin alpha^(3 slash 2) thin log^(3 slash 2)(1 slash (alpha a)) \
+    &quad + C thin p^(3 slash 2) sqrt(alpha)
+     + C thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+     + C thin Phi(p, alpha) thin n^(-1 slash 2).
+  $
+] <thm:misadjustment>
+
+_Proof._ Triangle inequality on <eq:R-mis-split>:
+$|| R_n^("mis, RR") ||_(L_p) <= || T_n^((1)) ||_(L_p) + || T_n^((2)) ||_(L_p) + || T_n^((H)) ||_(L_p)$.
+Combine the centered $T^((1))$ bound and the raw $T^((2)) + T^((H))$ bound. $square$
+
+#corollary[
+  At the working scale $alpha = c thin n^(-1 slash 2)$, with $p = ceil(log n)$
+  and $q = ceil(log d)$,
+  $
+  || R_n^("mis, RR") ||_(L_p) <= C thin "polylog"(n) thin n^(-1 slash 4),
+  $
+  matching the leading martingale Berry--Esseen rate of Section 4.8.
+] <cor:misadjustment-rate>
+
+_Proof._ At $alpha = c thin n^(-1 slash 2)$: $sqrt(n) alpha^2 = c^2 thin n^(-1 slash 2)$,
+$sqrt(n) alpha^(3 slash 2) = c^(3 slash 2) thin n^(-1 slash 4)$,
+$sqrt(alpha) = c^(1 slash 2) thin n^(-1 slash 4)$,
+$(alpha n)^(-1 slash 2) = c^(-1 slash 2) thin n^(-1 slash 4)$, and
+$Phi(p, alpha) thin n^(-1 slash 2) = O(p^(3 slash 2) thin n^(-1 slash 2))$.
+With $p asymp log n$ and $q asymp log d$, the dominant order in
+the misadjustment theorem is $"polylog"(n) thin n^(-1 slash 4)$. $square$
+
+#remark[
+  *Burn-in.* The lemma is stated with the chain started from $pi$. For an
+  arbitrary initial distribution $xi$, the same bound holds with an
+  additional remainder
+  $
+  R_("burn") (n_0, alpha)
+    <= C thin rho^(n_0) thin (1 + || theta_0 - theta^* ||) slash sqrt(n)
+  $
+  from the Wasserstein contraction of the augmented chain
+  $(Z_t, J_t^((0, alpha)), J_t^((1, alpha)))$ (Levin et al. 2025,
+  Section 4 / Proposition 1); $n_0 asymp log(n) slash (alpha a)$ suffices to
+  absorb $R_("burn")$ into the corollary's $"polylog"(n) thin n^(-1 slash 4)$
+  rate.
+
+  *Why the depth-two route is needed.* Chapter 3 proved that a
+  kernel-difference identity bounds the centered RR-difference of $S_n$ at
+  order $O(sqrt(n) thin alpha) = O(1)$ at the working scale, which is too
+  crude for a Berry--Esseen bound at rate $n^(-1 slash 4)$. The depth-two
+  refinement avoids this by separately controlling
+  + the *bias* of $J^((1))$, where RR-cancellation drops the leading
+    $alpha thin Delta$ to leave $O(alpha^2)$ — Levin Proposition 2;
+  + the *centered* part of $J^((1))$, where the recursion-telescoping
+    identity <eq:J1-telescope> reduces it to the centered bilinear bound of
+    Levin Corollary 6;
+  + the $J^((2))$ and $H^((2))$ pieces, controlled without RR-cancellation
+    since the $alpha^(3 slash 2)$ moment bound of Levin Propositions 8 and 9
+    is already small enough.
+
+  *Optional refinement.* The depth-two analysis above does not exploit any
+  RR-coupling between the $alpha$- and $2 alpha$-trajectories at the level
+  of $J^((2))$ and $H^((2))$; the bound treats them as the sum of two
+  independent $alpha^(3 slash 2)$ contributions. A genuine RR-cancellation
+  at this level would replace $sqrt(n) thin alpha^(3 slash 2)$ by
+  $sqrt(n) thin alpha^2$ in the misadjustment theorem, making the misadjustment
+  *strictly* subleading to the martingale Berry--Esseen. This is the open
+  thread discussed at the end of Chapter 3.
+]
+
+== Smoothing Assembly
+
+The previous sections produced the four ingredients of the Berry--Esseen
+program for the PR-averaged Richardson--Romberg iterate:
+
++ the *Poisson decomposition* $W^("RR") = -n^(-1 slash 2) M_n^("RR") + D_(2, n)^("RR")$
+  with deterministic sup-norm control of $D_(2, n)^("RR")$ at the order
+  $t_"mix" slash (a^2 sqrt(n))$ (Section 4.6, equation <eq:D2-bound>);
++ the *predictable quadratic variation concentration* of
+  $u^top chevron.l M^("RR") chevron.r_n u$ around $n thin sigma_n^(2, "RR")(u)$
+  in $L_p$ at the order $sqrt(p thin n)$ (Lemma <lem:M-RR-bracket-conc>);
++ the *martingale Berry--Esseen* for
+  $u^top M_n^("RR") slash (sqrt(n) thin sigma_n^("RR")(u))$ at rate
+  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ (Theorem <thm:M-RR-BE>);
++ the *Levin depth-two misadjustment bound* on $R_n^("mis, RR")$ controlling
+  the non-martingale residual at the same $log^c(n) thin n^(-1 slash 4)$
+  rate (Theorem <thm:misadjustment>).
+
+The smoothing inequality of Bobkov--Götze (Samsonov et al. 2025,
+Proposition 12) assembles these four into a single Kolmogorov bound on
+$sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)$.
+
+*Composite remainder.* Combining the depth-one identity in Section 4.1
+with the Poisson decomposition of Section 4.6 gives
+$
+sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)
+  = -frac(u^top M_n^("RR"), sqrt(n)) + u^top cal(R)_n^("RR"),
+$ <eq:full-decomp>
+$
+cal(R)_n^("RR")
+  := D_(2, n)^("RR") + D_("tr")^("RR") + R_n^("mis, RR"),
+$
+where $D_(2, n)^("RR")$ is the Poisson boundary/Abel remainder of
+Section 4.6, $D_("tr")^("RR") := 2 thin D_("tr")^((alpha)) - D_("tr")^((2 alpha))$
+is the deterministic transient of <eq:full-decomp>'s parent decomposition
+in Section 4.1, and $R_n^("mis, RR")$ is the Levin depth-two misadjustment
+defined in <eq:R-mis-def>. Dividing by $sqrt(n) thin sigma_n^("RR")(u)$,
+$
+frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
+     sigma_n^("RR")(u))
+  = X_n + Y_n,
+$ <eq:XY-split>
+$
+X_n := -frac(u^top M_n^("RR"), sqrt(n) thin sigma_n^("RR")(u)),
+quad
+Y_n := frac(u^top cal(R)_n^("RR"), sigma_n^("RR")(u)).
+$
+Theorem <thm:M-RR-BE> bounds $d_K(X_n, cal(N)(0, 1))$; the symmetry
+$- cal(N)(0, 1) =^d cal(N)(0, 1)$ of the standard normal makes the sign
+of the leading term irrelevant ($d_K(X_n, cal(N)) = d_K(-X_n, cal(N))$).
+
+*Smoothing inequality.* For random variables $X, Y$ on the same probability
+space and any $t > 0$,
+$
+d_K (X + Y, cal(N)(0, 1))
+  <= d_K (X, cal(N)(0, 1))
+   + bb(P)(|Y| > t)
+   + frac(t, sqrt(2 pi)),
+$ <eq:smoothing>
+where the third term uses the $1 slash sqrt(2 pi)$ Lipschitz constant of
+the standard normal cdf (Bobkov--Götze; see Samsonov et al. 2025,
+Proposition 12 for an LSA-tailored statement). Bounding
+$bb(P)(|Y| > t) <= || Y ||_(L_p)^p slash t^p$ via Markov's inequality and
+choosing $t = e thin || Y ||_(L_p)$ gives the *working form*
+$
+d_K (X + Y, cal(N)(0, 1))
+  <= d_K (X, cal(N)(0, 1))
+   + frac(e thin || Y ||_(L_p), sqrt(2 pi))
+   + e^(-p),
+$ <eq:smoothing-Lp>
+in which the trailing tail probability $e^(-p)$ is absorbed into
+$O(1 slash n)$ as soon as $p >= log n$.
+
+*$L_p$-bound on the composite remainder.* The three pieces of
+$cal(R)_n^("RR")$ contribute additively. To make the burn-in handling
+explicit, fix $n_0 := ceil(2 log(n) slash (alpha a))$; this
+choice makes $(1 - alpha a)^(n_0 slash 2) <= e^(- log n) = 1 slash n$ and
+$n_0 <= n slash 2$ for all $n$ large enough that
+$alpha thin a thin n >= 4 thin log n$, which is automatic at the working
+scale $alpha = c thin n^(-1 slash 2)$ once $n$ is bounded below by a
+constant.
+
+#lemma[
+  Assume the standing hypotheses of Theorem <thm:misadjustment>. Let
+  $n_0 := ceil(2 log(n) slash (alpha a))$ and assume
+  $n_0 <= n slash 2$. Then for every $u in bb(R)^d$, every $p >= 2$, and
+  every $q >= 2$,
+  $
+  || u^top cal(R)_n^("RR") ||_(L_p)
+    &<= frac(C_("D2") thin || u ||, sqrt(n))
+     + frac(C_("tr") thin || u || thin || theta_0 - theta^* ||,
+            n^(3 slash 2) thin alpha thin a) \
+    &quad + || u || thin C_("mis") thin lr((
+        sqrt(n) thin alpha^2
+        + (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
+            thin sqrt(n) thin alpha^(3 slash 2) thin log^(3 slash 2)(1 slash (alpha a))
+      \
+        & quad quad quad quad
+        + p^(3 slash 2) thin sqrt(alpha)
+        + p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+        + Phi(p, alpha) thin n^(-1 slash 2)
+      )),
+  $
+  with constants
+  $
+  C_("D2") := 3 thin t_"mix" thin || epsilon.alt ||_infinity
+              thin (C_(cal(Q)) + C_2 slash a^2),
+  quad
+  C_("tr") := 12 thin kappa_Q,
+  $
+  and $C_("mis")$ the constant of Theorem <thm:misadjustment>.
+] <lem:R-bound>
+
+_Proof._ Triangle inequality on $u^top cal(R)_n^("RR")$:
+
+(a) The deterministic sup-norm bound <eq:D2-bound> for $D_(2, n)^("RR")$
+yields $|| u^top D_(2, n)^("RR") ||_(L_p) <= || u || thin || D_(2, n)^("RR") ||_infinity
+<= C_("D2") thin || u || slash sqrt(n)$ for every $p >= 1$.
+
+(b) The deterministic transient $D_("tr")^((alpha))$ of Section 4.1, after
+restricting the PR average to $k in {n_0, dots, n - 1}$, takes the form
+$D_("tr")^((alpha)) = sqrt(n) thin (n - n_0)^(-1) thin B_alpha^(n_0) thin
+sum_(j = 0)^(n - n_0 - 1) B_alpha^j (theta_0 - theta^*)$. Submultiplicativity
+of $|| dot ||_Q$ and Lyapunov contraction give
+$|| B_alpha^(n_0) ||_Q <= (1 - alpha a)^(n_0 slash 2)$,
+$|| sum_(j = 0)^(n - n_0 - 1) B_alpha^j ||_Q <= sum_(j >= 0)
+(1 - alpha a)^(j slash 2) <= 2 slash (alpha a)$, so by norm equivalence
+$
+|| D_("tr")^((alpha)) ||
+  <= frac(sqrt(n), n - n_0) thin kappa_Q thin (1 - alpha a)^(n_0 slash 2)
+     thin frac(2, alpha a) thin || theta_0 - theta^* ||.
+$
+With $n_0 <= n slash 2$ we have $sqrt(n) slash (n - n_0) <= 2 slash sqrt(n)$,
+and $(1 - alpha a)^(n_0 slash 2) <= 1 slash n$ by the choice of $n_0$.
+Combining,
+$|| D_("tr")^((alpha)) || <= 4 thin kappa_Q thin || theta_0 - theta^* ||
+slash (n^(3 slash 2) thin alpha thin a)$. The RR combination
+$D_("tr")^("RR") = 2 D_("tr")^((alpha)) - D_("tr")^((2 alpha))$ contributes a
+factor at most $3$, giving $|| D_("tr")^("RR") || <= 12 thin kappa_Q thin
+|| theta_0 - theta^* || slash (n^(3 slash 2) thin alpha thin a)$, hence
+$|| u^top D_("tr")^("RR") || <= C_("tr") || u || thin || theta_0 - theta^* ||
+slash (n^(3 slash 2) alpha a)$.
+
+(c) The misadjustment bound is Theorem <thm:misadjustment>, which gives
+the third group of summands directly. $square$
+
+#theorem[
+  Under the standing hypotheses of Theorem <thm:misadjustment> and Theorem
+  <thm:M-RR-BE>, with $p = ceil(log n)$, $q = ceil(log d)$,
+  burn-in $n_0 = ceil(2 log(n) slash (alpha a))$, and $n$ large
+  enough that <eq:variance-lb-condition> holds and $n_0 <= n slash 2$,
+  $
+  d_K lr((
+    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
+         sigma_n^("RR")(u)),
+    cal(N)(0, 1)
+  ))
+    &<= frac(C_(K, 1)(u) thin log^(3 slash 4) n, n^(1 slash 4))
+     + frac(C_(K, 2)(u) thin log n, sqrt(n)) \
+    &quad + frac(e thin || u^top cal(R)_n^("RR") ||_(L_p),
+                 sqrt(2 pi) thin sigma_n^("RR")(u))
+     + frac(e, n),
+  $ <eq:RR-BE-master>
+  with $|| u^top cal(R)_n^("RR") ||_(L_p)$ bounded by Lemma
+  <lem:R-bound>, and $C_(K, 1)(u), C_(K, 2)(u)$ the constants of Theorem
+  <thm:M-RR-BE>.
+] <thm:RR-BE>
+
+_Proof._ Apply <eq:smoothing-Lp> with $X = X_n$ and $Y = Y_n$ from
+<eq:XY-split>. The first two terms come from Theorem <thm:M-RR-BE> applied
+to $-X_n$ (using $d_K(X_n, cal(N)) = d_K(-X_n, cal(N))$ by symmetry of the
+standard normal). The remainder term is
+$e thin || Y_n ||_(L_p) slash sqrt(2 pi) = e thin || u^top cal(R)_n^("RR")
+||_(L_p) slash (sqrt(2 pi) thin sigma_n^("RR")(u))$. The trailing $e^(-p)$
+satisfies $e^(-p) <= e thin n^(-1)$ for $p = ceil(log n)$. $square$
+
+#corollary[
+  At the working scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$ such
+  that $alpha, 2 alpha in (0, alpha_infinity]$, the bound <eq:RR-BE-master>
+  reduces to
+  $
+  d_K lr((
+    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
+         sigma_n^("RR")(u)),
+    cal(N)(0, 1)
+  ))
+    <= frac(C(u) thin "polylog"(n), n^(1 slash 4)),
+  $
+  where $C(u)$ depends on $|| u ||$, $sigma(u)$,
+  $|| theta_0 - theta^* ||$, $C_(cal(Q))$, $|| overline(A) ||$,
+  $|| overline(A)^(-1) ||$, $kappa_Q$, $C_A$,
+  $|| epsilon.alt ||_infinity$, $|| Sigma_(epsilon.alt)^(("M")) ||$,
+  $t_"mix"$, $a$, $alpha_infinity$, $c$, and the universal constants of
+  the smoothing, Bolthausen--Fan, and Levin Markov-concentration
+  inequalities.
+] <cor:RR-BE-working>
+
+_Proof._ Substitute $alpha = c thin n^(-1 slash 2)$ in Lemma
+<lem:R-bound> and bound each term separately:
+$C_("D2") || u || slash sqrt(n) = O(n^(-1 slash 2))$;
+$C_("tr") || u || thin || theta_0 - theta^* || slash (n^(3 slash 2) alpha a)
+= O(n^(-1))$;
+$sqrt(n) alpha^2 = c^2 thin n^(-1 slash 2)$;
+$p^(7 slash 2) thin sqrt(n) thin alpha^(3 slash 2) thin
+log^(3 slash 2)(1 slash (alpha a))
+= O("polylog"(n) thin n^(-1 slash 4))$ at $p = ceil(log n)$;
+$p^(3 slash 2) sqrt(alpha) = O(log^(3 slash 2)(n) thin n^(-1 slash 4))$;
+$p^3 (alpha n)^(-1 slash 2) log^(1 slash p)(1 slash (alpha a))
+= O(log^3(n) thin n^(-1 slash 4))$;
+$Phi(p, alpha) thin n^(-1 slash 2) = O(log^(3 slash 2)(n) thin n^(-1 slash 2))$.
+Adding and dividing by $sigma_n^("RR")(u) >= sigma(u) slash sqrt(2)$
+(from <eq:variance-lb-condition>), the dominant order is
+$"polylog"(n) thin n^(-1 slash 4)$. Combining with the leading
+$log^(3 slash 4)(n) thin n^(-1 slash 4)$ Berry--Esseen of Theorem
+<thm:M-RR-BE> gives the claim. $square$
+
+#corollary[
+  Under the hypotheses of Corollary <cor:RR-BE-working>, the same bound
+  (with a different constant $C'(u)$) holds when the empirical
+  normalisation $sigma_n^("RR")(u)$ is replaced by the asymptotic
+  $sigma(u)$:
+  $
+  d_K lr((
+    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
+         sigma(u)),
+    cal(N)(0, 1)
+  ))
+    <= frac(C'(u) thin "polylog"(n), n^(1 slash 4)).
+  $
+] <cor:RR-BE-sigma>
+
+_Proof._ Set $r := sigma_n^("RR")(u) slash sigma(u)$ and write
+$W := sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)
+slash sigma_n^("RR")(u)$, so $W r = sqrt(n) thin u^top
+(overline(theta)_n^(("RR", alpha)) - theta^*) slash sigma(u)$. Under
+<eq:variance-lb-condition>, $r in [1 slash sqrt(2), thin r_max]$ for some
+finite $r_max$ (from the trivial upper bound
+$sigma_n^(2, "RR")(u) <= C_(cal(Q))^2 thin || Sigma ||  thin || u ||^2$).
+For $r$ in this compact interval, the standard normal cdf satisfies
+$
+sup_x | Phi(x slash r) - Phi(x) | <= C_Phi thin |r - 1|,
+quad
+C_Phi := sqrt(2) slash sqrt(pi e),
+$
+where the constant arises from the maximum of $|x thin phi(x)|$ over
+$x in bb(R)$ being $1 slash sqrt(2 pi e)$ (cf. the proof of Lemma 9 of
+Samsonov et al. 2025). Hence
+$
+d_K (W r, cal(N)(0, 1))
+  <= d_K (W, cal(N)(0, 1)) + C_Phi thin |r - 1|.
+$
+The variance comparison of Section 4.5 gives
+$
+|r - 1|
+  = frac(|sigma_n^(2, "RR")(u) - sigma^2(u)|,
+         sigma(u) thin (sigma_n^("RR")(u) + sigma(u)))
+  <= frac(C_3 thin || u ||^2,
+          n thin alpha thin a thin sigma^2(u))
+  = O(n^(-1 slash 2))
+$
+at the working scale, using $sigma_n^("RR")(u) + sigma(u) >= sigma(u)$.
+Adding this to Corollary <cor:RR-BE-working> proves the claim. $square$
+
+#remark[
+  *Stationary start vs. burn-in.* Theorem <thm:RR-BE> is stated under the
+  stationary-start convention used in Theorem <thm:misadjustment> for the
+  augmented chain $(Z_(t + 1), J_t^((0, alpha)), J_t^((1, alpha)))$, in
+  addition to the deterministic burn-in $n_0$ on $theta_0 - theta^*$. For
+  an arbitrary initial $(xi, theta_0)$, a Wasserstein contraction of the
+  augmented chain (Levin et al. 2025, Proposition 1) introduces an extra
+  remainder
+  $R_("burn")(n_0, alpha) <= C thin rho^(n_0) thin (1 + || theta_0 - theta^* ||) slash sqrt(n)$.
+  The same choice $n_0 asymp log(n) slash (alpha a)$ absorbs this remainder
+  into the $"polylog"(n) thin n^(-1 slash 4)$ rate.
+
+  *RR removes the worst remainder, the depth-two transfer recovers the
+  rate.* The Poisson boundary remainder is one boundary piece smaller than
+  in the single-step PR case (because $cal(Q)_(n - 1)^("RR") = 0$ removes
+  one of the two boundary terms); the misadjustment is *not* improved by
+  RR at the level of the depth-two analysis used here, because $J^((2)) +
+  H^((2))$ are bounded uniformly in step size at order $alpha^(3 slash 2)$
+  and only $J^((1))$ enjoys RR-cancellation. The
+  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ leading rate is therefore
+  governed by the *martingale* Berry--Esseen, with the misadjustment
+  matching but not strictly subleading. A genuine RR-cancellation at the
+  $J^((2)) + H^((2))$ level would push the misadjustment to $sqrt(n)
+  alpha^2 = O(n^(-1 slash 2))$, strictly subleading -- the open thread of
+  Section 4.9.
+
+  *No improvement over single-step PR rate.* The Berry--Esseen rate
+  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ matches that of Samsonov et al.
+  (2025, Theorem 1) for the single-step PR estimator at the diminishing
+  schedule $alpha_k asymp k^(-3 slash 4)$. Richardson--Romberg extrapolation
+  in the *constant*-step regime achieves the same rate without diminishing
+  schedule, at the cost of running two coupled trajectories with step
+  sizes $alpha$ and $2 alpha$.
 ]
