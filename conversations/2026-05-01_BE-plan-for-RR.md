@@ -420,10 +420,11 @@ $\sqrt n\,\alpha^2$ для соответствующего centered first-order
 ## Статус готовности плана (2026-05-03)
 
 Коротко: готова вся **детерминированная RR-weight часть**, диагностика
-misadjustment, и теперь **Poisson martingale approximation** для
-$W^{\mathrm{RR}}$ (boundary/Abel remainder). Ещё не готовы concentration of
-predictable quadratic variation, мартингальный Berry--Esseen step,
-Levin-misadjustment transfer и smoothing-сборка.
+misadjustment, **Poisson martingale approximation** для $W^{\mathrm{RR}}$
+(boundary/Abel remainder), и теперь **predictable quadratic variation
+concentration** для $\langle M^{\mathrm{RR}}\rangle_n$. Ещё не готовы
+мартингальный Berry--Esseen step, Levin-misadjustment transfer и
+smoothing-сборка.
 
 Уточнение по нумерации:
 
@@ -431,8 +432,8 @@ Levin-misadjustment transfer и smoothing-сборка.
   (*RR-misadjustment через $\nabla_\alpha S_n^{(\alpha)}$*) **не готов** и
   перенесён в optional refinement;
 - если считать по **обновлённому плану**, то пункт 1 готов почти полностью
-  (с caveat про burn-in), пункт 2 готов в части Poisson approximation
-  (boundary/Abel) — остаются quadratic variation concentration и Bolthausen/Fan,
+  (с caveat про burn-in), пункт 2 готов целиком (Poisson approximation +
+  quadratic variation concentration); остаётся только Bolthausen/Fan,
   пункт 3 готов.
 
 ### Готово в тексте thesis
@@ -524,16 +525,16 @@ Levin-misadjustment transfer и smoothing-сборка.
    с явными мартингальными приращениями
 
    $$
-   \Delta M_l^{\mathrm{RR}}=\mathcal Q_l^{\mathrm{RR}}\bigl(\hat\varepsilon(Z_l)-\sans Q\hat\varepsilon(Z_{l-1})\bigr),\qquad 2\le l\le n-1,
+   \Delta M_l^{\mathrm{RR}}=\mathcal Q_l^{\mathrm{RR}}\bigl(\hat\varepsilon(Z_l)-\mathsf Q\hat\varepsilon(Z_{l-1})\bigr),\qquad 2\le l\le n-1,
    $$
 
    и Poisson boundary/Abel остатком
 
    $$
-   D_{2,n}^{\mathrm{RR}}=-\frac1{\sqrt n}\Bigl[\mathcal Q_1^{\mathrm{RR}}\hat\varepsilon(Z_1)+\sum_{l=1}^{n-2}(\mathcal Q_{l+1}^{\mathrm{RR}}-\mathcal Q_l^{\mathrm{RR}})\sans Q\hat\varepsilon(Z_l)\Bigr].
+   D_{2,n}^{\mathrm{RR}}=-\frac1{\sqrt n}\Bigl[\mathcal Q_1^{\mathrm{RR}}\hat\varepsilon(Z_1)+\sum_{l=1}^{n-2}(\mathcal Q_{l+1}^{\mathrm{RR}}-\mathcal Q_l^{\mathrm{RR}})\mathsf Q\hat\varepsilon(Z_l)\Bigr].
    $$
 
-   Правый boundary $\mathcal Q_{n-1}^{\mathrm{RR}}\sans Q\hat\varepsilon(Z_{n-1})$
+   Правый boundary $\mathcal Q_{n-1}^{\mathrm{RR}}\mathsf Q\hat\varepsilon(Z_{n-1})$
    отсутствует, потому что $\mathcal Q_{n-1}^{\mathrm{RR}}=0$ —
    RR-сокращение убирает один из двух Poisson-граничных членов outright.
    Получена *детерминированная* sup-norm оценка
@@ -546,6 +547,34 @@ Levin-misadjustment transfer и smoothing-сборка.
    для всех $p\ge 1$ — лучше, чем заявленное в плане
    $\mathrm{poly}(p,t_{\mathrm{mix}})/\sqrt n$ ($p$-зависимость отсутствует,
    потому что используются только pointwise bounds).
+
+8. **Predictable quadratic variation concentration.**
+   В `src/pr_weights.typ` (секция "Predictable Quadratic Variation
+   Concentration", 2026-05-03) доказан RR-аналог Samsonov Lemmas 22--23.
+   Сначала прямым вычислением условного второго момента приращений
+   $\Delta M_l^{\mathrm{RR}}$ получено
+   $$
+   \langle M^{\mathrm{RR}}\rangle_n
+   = \sum_{l=2}^{n-1}\mathcal Q_l^{\mathrm{RR}}\,\bar\varepsilon(Z_{l-1})\,(\mathcal Q_l^{\mathrm{RR}})^\top,
+   \qquad
+   \bar\varepsilon(z) := \mathsf Q(\hat\varepsilon\hat\varepsilon^\top)(z)
+   - (\mathsf Q\hat\varepsilon)(z)(\mathsf Q\hat\varepsilon)(z)^\top,
+   $$
+   с $\pi(\bar\varepsilon)=\Sigma_\varepsilon^{(\mathrm M)}$. Затем оценка
+   $\|\bar\varepsilon\|_\infty\le 18\,t_{\mathrm{mix}}^2\|\varepsilon\|_\infty^2$
+   и Markov-концентрация (Levin et al. 2025, Lemma 11), переписанные через
+   $h_l(z)=u^\top\mathcal Q_l^{\mathrm{RR}}\bar\varepsilon(z)(\mathcal Q_l^{\mathrm{RR}})^\top u$,
+   дают
+   $$
+   \bigl\|u^\top\langle M^{\mathrm{RR}}\rangle_n u
+        - n\,\sigma_n^{2,\mathrm{RR}}(u)\bigr\|_{L_p}
+   \le C_4\,C_{\mathcal Q}^2\|u\|^2\|\varepsilon\|_\infty^2\,t_{\mathrm{mix}}^{5/2}\sqrt{p\,n},
+   \qquad C_4 \le 850.
+   $$
+   Corollary с заменой $\sigma_n^{2,\mathrm{RR}}\to\sigma^2$ через variance
+   comparison добавляет $C_3\|u\|^2/(\alpha a)$. При $\alpha=cn^{-1/2}$ и
+   $p=\lceil\log n\rceil$ это даёт нужный вход в Bolthausen/Fan для
+   Berry--Esseen rate $n^{-1/4}\mathrm{polylog}(n)$.
 
 ### Готово только как notes / перенос из литературы
 
@@ -565,25 +594,12 @@ Levin-misadjustment transfer и smoothing-сборка.
    В thesis пока нет секции с полным theorem statement, диапазоном
    $\alpha,n,p$, burn-in и условием $\sigma^2(u)>0$.
 
-2. **Predictable quadratic variation concentration.**  
-   Нужен RR-аналог Samsonov Lemmas 22--23:
-
-   $$
-   \langle M^{\mathrm{RR}}\rangle_n
-   \approx n(\sigma_n^{\mathrm{RR}}(u))^2.
-   $$
-
-   Самый естественный следующий кирпич: Poisson approximation уже даёт
-   мартингал $M_n^{\mathrm{RR}}$ и явные мартингальные приращения
-   $\Delta M_l^{\mathrm{RR}}=\mathcal Q_l^{\mathrm{RR}}(\hat\varepsilon(Z_l)-\sans Q\hat\varepsilon(Z_{l-1}))$.
-   Дальше применяется Пуассоновское уравнение для функции
-   $\bar\varepsilon(z)=\sans Q(\hat\varepsilon\hat\varepsilon^\top)(z)-\sans Q\hat\varepsilon(z)\sans Q\hat\varepsilon(z)^\top$
-   и Paulin-концентрация (см. шаг (S5) Samsonov), переписанные с весами
-   $\mathcal Q_l^{\mathrm{RR}}$.
-
-3. **Martingale Berry--Esseen step.**  
+2. **Martingale Berry--Esseen step.**  
    Нужно явно применить Bolthausen/Fan к $M_n^{\mathrm{RR}}$ и получить
-   $n^{-1/4}\mathrm{polylog}(n)$.
+   $n^{-1/4}\mathrm{polylog}(n)$. Ингредиенты на месте: ограниченные
+   приращения $|\Delta M_l^{\mathrm{RR}}|\le 6\,t_{\mathrm{mix}}\|\varepsilon\|_\infty C_{\mathcal Q}$
+   из Poisson lemma, концентрация $\langle M^{\mathrm{RR}}\rangle_n$ из новой
+   секции 4.7. Остаётся подставить в Lemma 21 / Proposition 13 Samsonov.
 
 4. **Levin-to-our-notation misadjustment transfer.**  
    Самый важный оставшийся non-martingale кусок: надо аккуратно переписать
@@ -606,15 +622,16 @@ Levin-misadjustment transfer и smoothing-сборка.
 
 ### Минимальный следующий шаг
 
-Poisson martingale approximation готова (см. `src/pr_weights.typ`, секция
-“Poisson Martingale Approximation”). Следующий кирпич:
+Predictable quadratic variation concentration готова (см. `src/pr_weights.typ`,
+секция "Predictable Quadratic Variation Concentration"). Следующий кирпич:
 
-> написать lemma “RR predictable quadratic variation concentration” для
-> $\langle M^{\mathrm{RR}}\rangle_n$, используя уже готовые
-> $\Delta M_l^{\mathrm{RR}}$ и variance comparison из Section 4.5.
+> применить Bolthausen/Fan martingale Berry--Esseen (Samsonov 2025, Lemma 21 /
+> Proposition 13) к $M_n^{\mathrm{RR}}/(\sqrt n\,\sigma_n^{\mathrm{RR}}(u))$,
+> используя уже готовые ограниченные приращения и concentration
+> $\langle M^{\mathrm{RR}}\rangle_n - n\sigma_n^{2,\mathrm{RR}}(u)$.
 
-После неё естественно идёт Bolthausen/Fan на $M_n^{\mathrm{RR}}$, потом
-Levin-misadjustment transfer и финальная smoothing-сборка.
+После него естественно идёт Levin-misadjustment transfer и финальная
+smoothing-сборка.
 
 ### Следующий шаг для misadjustment
 
