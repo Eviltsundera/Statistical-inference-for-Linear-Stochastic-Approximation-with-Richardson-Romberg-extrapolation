@@ -73,9 +73,10 @@ $
 T_n^((1, alpha)) = - alpha S_n = B thin J_n^((1, alpha)),
 $
 i.e. $T_n^((1, alpha))$ is exactly $J_n^((1, alpha))$ pre-multiplied by one
-additional $B$. In particular, any $L_p$ bound on $S_n$ (or $T_n^((1, alpha))$)
-implies the same bound on $J_n^((1, alpha))$ up to the contraction factor
-$||B||_Q <= 1$.
+additional $B$. Transferring a bound from $T_n^((1, alpha))$ back to
+$J_n^((1, alpha))$ therefore requires a local inverse bound on
+$B^(-1) = (I - alpha overline(A))^(-1)$; this inverse-bound step is used
+explicitly when the shifted estimate is applied below.
 
 #lemma[
   Assume the Markov chain is started from stationarity, that is, the law of
@@ -268,7 +269,7 @@ $
   &&"(plug previous bound)" \
 &<= C p^(3 slash 2) t_"mix"^(1 slash 2)
     ||epsilon.alt||_infinity frac(1, alpha a)
-  &&"(use" sum_m m thin x^m <= C x^(-2) ")".
+  &&"(use" sum_m m thin r^m <= C (1-r)^(-2), thin r = 1 - alpha a ")".
 $
 The extra factor $1 slash sqrt(alpha a)$ relative to $U_R$ is precisely the cost of using conditional rather than stationary centering.
 
@@ -319,7 +320,7 @@ $
 quad
 ||T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha))||_(L_p) <= C alpha thin Phi(p, 2 alpha) <= C' alpha thin Phi(p, alpha),
 $
-where $C' = sqrt(2) C$ absorbs the $sqrt(2)$-factor coming from the $2 alpha$ scaling. Combining the two by the triangle inequality and using the index-shift identity $T_k^((1, alpha)) = B thin J_k^((1, alpha))$ from the start of this section, we get
+where $C' = sqrt(2) C$ absorbs the $sqrt(2)$-factor coming from the $2 alpha$ scaling. Combining the two by the triangle inequality and using the index-shift identity $T_k^((1, w)) = (I - w overline(A)) thin J_k^((1, w))$ together with the local inverse bound $|| (I - w overline(A))^(-1) || <= 2$ for $w in {alpha, 2 alpha}$, we get
 $
 ||(2 J_k^((1, alpha)) - J_k^((1, 2 alpha))) - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))||_(L_p)
   <= C alpha thin Phi(p, alpha),

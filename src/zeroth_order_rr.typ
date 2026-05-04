@@ -8,31 +8,45 @@ $ theta_k = theta_(k-1) - alpha_k (A(Z_k) theta_(k-1) - b(Z_k)), quad alpha_k = 
 Define the transition products
 $ Gamma_(m:k) = product_(l=m)^k (I - alpha A(Z_l)). $
 
-We also introduce
-$ J_k^((0)) = -sum_(l=1)^k alpha thin Gamma_(l+1:k) thin epsilon.alt(Z_l), quad
-H_k^((0)) = -sum_(l=1)^k alpha thin Gamma_(l+1:k) (A(Z_l) - overline(A)) J_(l-1)^((0)), $
-with initial conditions $J_0^((0)) = H_0^((0)) = 0$.
+Write $B_alpha := I - alpha overline(A)$ and introduce the deterministic-product
+linearized term
+$
+J_k^((0, alpha)) = -alpha sum_(l=1)^k B_alpha^(k-l) thin epsilon.alt(Z_l),
+quad J_0^((0, alpha)) = 0.
+$
+The difference between the exact random-product expansion and this
+deterministic-product term is denoted by $R_k^((alpha))$:
+$
+theta_k^((alpha)) - theta^*
+  = J_k^((0, alpha)) + B_alpha^k (theta_0 - theta^*) + R_k^((alpha)).
+$
+This convention matches the weight decomposition in Section 4.1.
 
-A standard PR-averaged decomposition (cf. Section 4.1 below for the full derivation) yields
+A standard PR-averaged decomposition (cf. Chapter 4 for the full derivation) yields
 $ sqrt(n) (overline(theta)_n^((alpha)) - theta^*) = W + D_1, $
 where the leading martingale-like term is
 $ W = -frac(1, sqrt(n)) sum_(l=1)^(n-1) Q_l thin epsilon.alt(Z_l),
 quad
-Q_l = alpha sum_(k=l)^(n-1) (I - alpha overline(A))^(n-k-1), $
+Q_l = alpha sum_(k=l)^(n-1) B_alpha^(k-l), $
 and the residual term is
-$ D_1 = frac(1, sqrt(n)) sum_(k=0)^(n-1) Gamma_(1:k) (theta_0 - theta^*) + frac(1, sqrt(n)) sum_(k=1)^(n-1) J_k^((0)). $
+$ D_1 = frac(1, sqrt(n)) sum_(k=0)^(n-1) B_alpha^k (theta_0 - theta^*) + frac(1, sqrt(n)) sum_(k=1)^(n-1) R_k^((alpha)). $
 
 == RR Combination and the $tilde(J)_n^((0, alpha))$ Term
 
-Applying the decomposition of the previous subsection separately to step sizes $alpha$ and $2 alpha$ and forming the Richardson--Romberg combination, we obtain
+Applying the deterministic-product decomposition of the previous subsection
+separately to step sizes $alpha$ and $2 alpha$, and writing
+$B_(2 alpha) := I - 2 alpha overline(A)$, the Richardson--Romberg combination
+has the form
 $
 theta_n^(("RR", alpha)) - theta^*
-&= [2 Gamma_(1:n)^((alpha)) - Gamma_(1:n)^((2 alpha))](theta_0 - theta^*) \
+&= [2 B_alpha^n - B_(2 alpha)^n](theta_0 - theta^*) \
 &quad + [2 J_n^((0, alpha)) - J_n^((0, 2 alpha))]
-  + [2 J_n^((1, alpha)) - J_n^((1, 2 alpha))]
-  + [2 H_n^((1, alpha)) - H_n^((1, 2 alpha))].
+  + [2 R_n^((alpha)) - R_n^((2 alpha))].
 $
-The first bracket is the deterministic transient and is exponentially small. The remaining three brackets are stochastic and need separate analysis. In this subsection we focus on the zeroth-order RR difference, which we denote
+The first bracket is the deterministic transient in this convention. The
+second bracket is the linearized stochastic RR difference, and the last one is
+the higher-order random-product remainder. In this subsection we focus on the
+zeroth-order RR difference, which we denote
 $
 tilde(J)_n^((0, alpha)) = 2 J_n^((0, alpha)) - J_n^((0, 2 alpha)),
 $

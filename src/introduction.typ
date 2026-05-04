@@ -21,9 +21,14 @@ The use of a constant step size $alpha > 0$ offers several practical advantages:
 However, unlike the classical regime $alpha_k -> 0$ with $sum alpha_k = infinity$ and $sum alpha_k^2 < infinity$, a constant step size produces iterates that converge only _in distribution_ to a stationary measure $Pi_alpha$, rather than almost surely to $theta^*$.
 The stationary expectation $bb(E)[theta_infinity^((alpha))]$ is generally _biased_ with respect to $theta^*$, and this bias cannot be eliminated by Polyak--Ruppert averaging alone.
 
-As shown in Levin, Naumov, and Samsonov (2025) and Huo, Chen, and Xie (2023), the asymptotic bias admits a power-series expansion in $alpha$:
-$ lim_(n -> infinity) bb(E)[theta_n^((alpha))] = theta^* + alpha Delta + O(alpha^2), $ <eq:bias-expansion>
+As shown in Levin, Naumov, and Samsonov (2025), the stationary bias has a
+leading linear term in $alpha$:
+$ lim_(n -> infinity) bb(E)[theta_n^((alpha))] = theta^* + alpha Delta + O(alpha^(3\/2)), $ <eq:bias-expansion>
 where $Delta = overline(A)^(-1) sum_(k=1)^infinity bb(E)[{sans(Q)^k tilde(A)(Z_infinity)} epsilon.alt(Z_infinity)]$ depends on the correlation structure of the Markov chain, and $tilde(A)(z) = A(z) - overline(A)$ is the centered matrix-valued function.
+Under stronger expansion assumptions, the power-series approach of Huo, Chen,
+and Xie (2023) gives higher-order bias expansions in integer powers of
+$alpha$; in the Levin decomposition, the first misadjustment bias component
+itself has an $O(alpha^2)$ remainder after the leading $alpha Delta$ term.
 
 == Richardson--Romberg extrapolation
 
@@ -34,11 +39,12 @@ Since both sequences share the same noise realization, the leading bias term $al
 
 More generally, one can consider the multi-level extrapolation with $M$ step sizes $cal(A) = {alpha_1, dots, alpha_M}$ and coefficients ${h_m}$ determined by the Vandermonde system (Huo et al., 2023):
 $ sum_(m=1)^M h_m = 1, quad sum_(m=1)^M h_m alpha_m^l = 0, quad l = 1, dots, M-1, $
-which reduces the bias from $O(alpha)$ to $O(alpha^M)$.
+which cancels successive powers in settings where such a power-series
+expansion is available.
 
 == Problem statement and goals
 
-The high-order moment bounds for the RR iterate $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show that the leading error term scales as $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined in Section 1.4 below, matching the minimax optimal rate.
+The high-order moment bounds for the RR iterate $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show that the leading error term scales as $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in the key quantities subsection, matching the minimax optimal rate.
 Berry--Esseen type bounds and bootstrap inference procedures for the _standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation) under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines, and Naumov (2025).
 
 However, the _distributional approximation_ --- specifically, the central limit theorem and Berry--Esseen bounds --- for the _averaged Richardson--Romberg iterates_ $overline(theta)_n^((alpha, "RR"))$ remains an open problem.
@@ -86,12 +92,12 @@ $ theta_k^((alpha)) - theta^* = (I - alpha A(Z_k))(theta_(k-1)^((alpha)) - theta
 == Key quantities
 
 The _Markovian noise covariance matrix_ captures both the marginal variance and the temporal correlations of the noise:
-$ Sigma_epsilon.alt^(("M")) = bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_0)^top] + 2 sum_(ell=1)^infinity bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_ell)^top]. $ <eq:noise-cov>
+$ Sigma_epsilon.alt^(("M")) = bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_0)^top] + sum_(ell=1)^infinity lr((bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_ell)^top] + bb(E)_pi [epsilon.alt(Z_ell) epsilon.alt(Z_0)^top])). $ <eq:noise-cov>
 This matrix is the limiting covariance in the Markov chain CLT for the partial sums $n^(-1\/2) sum_(t=0)^(n-1) epsilon.alt(Z_t)$ (cf. Douc et al., 2018, Theorem 21.2.10).
 
 The _asymptotically optimal covariance matrix_ is given by
 $ Sigma_infinity = overline(A)^(-1) Sigma_epsilon.alt^(("M")) (overline(A)^(-1))^top. $ <eq:asymp-cov>
-This covariance is optimal in the Hájek--Le Cam sense and represents the best achievable asymptotic variance for estimating $theta^*$ via averaged LSA.
+This is the covariance target attained by the averaged linearized recursion. We call it optimal in the usual averaged-SA sense; a full Hájek--Le Cam optimality statement would require an additional local-asymptotic experiment argument, which is not part of this thesis.
 
 The _Lyapunov equation_ plays a central role in the contraction analysis. For any $P = P^top succ 0$, there exists a unique $Q = Q^top succ 0$ satisfying $overline(A)^top Q + Q overline(A) = P$. Defining $a = lambda_"min" (P) \/ (2 ||Q||)$ and $kappa_Q = lambda_"max" (Q) \/ lambda_"min" (Q)$, the key contraction property holds: for all $alpha in [0, alpha_infinity]$,
 $ ||I - alpha overline(A)||_Q^2 <= 1 - alpha a. $ <eq:contraction>
