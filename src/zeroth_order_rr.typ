@@ -31,14 +31,19 @@ Q_l = alpha sum_(k=l)^(n-1) B_alpha^(k-l), $
 and the residual term is
 $ D_1 = frac(1, sqrt(n)) sum_(k=0)^(n-1) B_alpha^k (theta_0 - theta^*) + frac(1, sqrt(n)) sum_(k=1)^(n-1) R_k^((alpha)). $
 
-== RR Combination and the $tilde(J)_n^((0, alpha))$ Term
+== Last-Iterate RR Combination and the $tilde(J)_(n, "last")^((0, alpha))$ Term
 
 Applying the deterministic-product decomposition of the previous subsection
 separately to step sizes $alpha$ and $2 alpha$, and writing
-$B_(2 alpha) := I - 2 alpha overline(A)$, the Richardson--Romberg combination
-has the form
+$B_(2 alpha) := I - 2 alpha overline(A)$, define the chapter-local
+last-iterate Richardson--Romberg object
 $
-theta_n^(("RR", alpha)) - theta^*
+theta_(n, "last")^(("RR", alpha)) := 2 theta_n^((alpha)) - theta_n^((2 alpha)).
+$
+It is not the PR-averaged RR estimator $overline(theta)_n^(("RR", alpha))$
+studied in Chapters 4--5. Its deterministic-product decomposition has the form
+$
+theta_(n, "last")^(("RR", alpha)) - theta^*
 &= [2 B_alpha^n - B_(2 alpha)^n](theta_0 - theta^*) \
 &quad + [2 J_n^((0, alpha)) - J_n^((0, 2 alpha))]
   + [2 R_n^((alpha)) - R_n^((2 alpha))].
@@ -48,7 +53,7 @@ second bracket is the linearized stochastic RR difference, and the last one is
 the higher-order random-product remainder. In this subsection we focus on the
 zeroth-order RR difference, which we denote
 $
-tilde(J)_n^((0, alpha)) = 2 J_n^((0, alpha)) - J_n^((0, 2 alpha)),
+tilde(J)_(n, "last")^((0, alpha)) = 2 J_n^((0, alpha)) - J_n^((0, 2 alpha)),
 $
 where, by definition,
 $
@@ -57,7 +62,7 @@ $
 
 Substituting and using the elementary identity $X^m - Y^m = (X - Y) sum_(i=1)^m X^(i-1) Y^(m-i)$ with $X = I - alpha overline(A)$, $Y = I - 2 alpha overline(A)$, $X - Y = alpha overline(A)$, we get
 $
-tilde(J)_n^((0, alpha))
+tilde(J)_(n, "last")^((0, alpha))
 &= -2 alpha sum_(j=1)^n [(I - alpha overline(A))^(n-j) - (I - 2 alpha overline(A))^(n-j)] epsilon.alt(Z_j) \
 &= -2 alpha^2 overline(A) sum_(j=1)^n
   underbrace(sum_(i=1)^(n-j) (I - alpha overline(A))^(i-1) (I - 2 alpha overline(A))^(n-j-i), =: H_j^((n)))
@@ -109,13 +114,13 @@ $ overline(C)_A := kappa_Q $
 $
 ||H_j^((n))|| <= overline(C)_A thin (1 - alpha a)^((n-j-1) slash 2) thin frac(2, alpha a).
 $
-The kernel decays geometrically in $n - j$ at rate $sqrt(1 - alpha a)$ but its summed weight is of order $1 slash (alpha a)$. The next subsection keeps the remaining powers of $a$ explicit when this kernel is multiplied by the prefactor $alpha^2$ in $tilde(J)_n^((0, alpha))$.
+The kernel decays geometrically in $n - j$ at rate $sqrt(1 - alpha a)$ but its summed weight is of order $1 slash (alpha a)$. The next subsection keeps the remaining powers of $a$ explicit when this kernel is multiplied by the prefactor $alpha^2$ in $tilde(J)_(n, "last")^((0, alpha))$.
 
 == Scalar $L^p$ Bound for the Zeroth-Order Term
 
 The expression
 $
-tilde(J)_n^((0, alpha)) = -sum_(j=1)^(n-1) 2 alpha^2 overline(A) H_j^((n)) thin epsilon.alt(Z_j)
+tilde(J)_(n, "last")^((0, alpha)) = -sum_(j=1)^(n-1) 2 alpha^2 overline(A) H_j^((n)) thin epsilon.alt(Z_j)
 $
 is a weighted sum of values of the centered noise function $epsilon.alt$ along the Markov chain. In the Berry--Esseen argument below only fixed scalar projections are used, so we state the concentration input in scalar form.
 
@@ -129,7 +134,13 @@ is a weighted sum of values of the centered noise function $epsilon.alt$ along t
   where
   $ v_n = 8 (sum_(i=1)^n c_i^2)^(1 slash 2) sqrt(t_"mix"). $
 
-  _Proof._ The proof follows the lines of Durmus et al. (2025, Lemma 9).
+  _Proof._ This is the scalar specialization of Levin et al. (2025, Lemma
+  11). Their lemma gives the same sub-Gaussian tail bound for vector-valued
+  time-inhomogeneous functions under *UGE 1*, assumes the centering condition
+  $pi(g_i)=0$, and is stated for an arbitrary initial law $xi$. Thus the
+  imported estimate is a tail bound around zero, not merely around
+  $bb(E)_xi sum_i g_i(Z_i)$, and no additional initial-bias term is introduced
+  here.
 ]
 
 Fix a deterministic direction $u in bb(R)^d$. We apply the lemma with
@@ -170,16 +181,19 @@ To convert the sub-Gaussian tail into a moment bound, we use the following stand
   $ bb(E)[|X|^p] <= 2 thin p^(p slash 2) thin sigma^p. $
 ]
 
-Applying the lemma with $X = u^top tilde(J)_n^((0, alpha))$ and
+Applying the lemma with $X = u^top tilde(J)_(n, "last")^((0, alpha))$ and
 $sigma^2 = v_n^2 <= ||u||^2 hat(C)_A^2 alpha$ gives, for any $p >= 2$,
 $
-bb(E)^(1 slash p) [|u^top tilde(J)_n^((0, alpha))|^p]
+bb(E)^(1 slash p) [|u^top tilde(J)_(n, "last")^((0, alpha))|^p]
 <= 2^(1 slash p) sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha)
 <= 2 sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha),
 $
 or equivalently
 $
-frac(1, sqrt(alpha)) thin ||u^top tilde(J)_n^((0, alpha))||_(L_p)
+frac(1, sqrt(alpha)) thin ||u^top tilde(J)_(n, "last")^((0, alpha))||_(L_p)
 <= 2 sqrt(p) thin ||u|| thin hat(C)_A.
 $
-Thus every fixed scalar projection of the zeroth-order RR difference is $O(sqrt(alpha))$ in $L^p$, uniformly in $n$. A Euclidean-norm bound can be recovered in fixed dimension by applying the scalar estimate to a coordinate basis, but no dimension-free vector concentration is claimed here.
+Thus every fixed scalar projection of the last-iterate zeroth-order RR
+difference is $O(sqrt(alpha))$ in $L^p$, uniformly in $n$. A Euclidean-norm
+bound can be recovered in fixed dimension by applying the scalar estimate to a
+coordinate basis, but no dimension-free vector concentration is claimed here.

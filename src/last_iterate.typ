@@ -6,7 +6,8 @@ The purpose of this section is to isolate the last-iteration weighted term
 which appears in the analysis of $J_n^((1, alpha))$, and to record a clean
 $L_p$ bound for its centered part. The proof uses the deterministic-product
 perturbation expansion from Samsonov et al. (2025, Proposition 9), specialized
-to the constant-stepsize setting.
+to the constant-stepsize setting, and isolates the future-centered bilinear
+concentration input used in that argument.
 
 Let
 $
@@ -79,18 +80,47 @@ $B^(-1) = (I - alpha overline(A))^(-1)$; this inverse-bound step is used
 explicitly when the shifted estimate is applied below.
 
 #lemma[
-  Assume the Markov chain is started from stationarity, that is, the law of
-  $Z_1$ is $pi$, and $pi(tilde(A)) = 0$. For every $p >= 2$,
+  *(Imported future-centered bilinear estimate.)*
+  Assume UGE 1 and stationarity. Let $cal(F)_k = sigma(Z_1, dots, Z_k)$.
+  For $1 <= k <= n - 1$ and $1 <= l <= n - k$, let
+  $g_(k,l) : cal(Z) -> bb(R)^d$ be deterministic functions satisfying
+  $pi(g_(k,l)) = 0$ and $||g_(k,l)||_infinity <= beta_(k,l)$. Let
+  $xi_k$ be $cal(F)_k$-measurable vectors with
+  $sup_k ||xi_k||_infinity <= M_xi$. Then, for every $p >= 2$,
   $
-  ||S_n - bb(E)S_n||_(L_p)
-    <= C ||epsilon.alt||_infinity
+  &|| sum_(k=1)^(n-1) {
+      sum_(l=1)^(n-k) g_(k,l)(Z_(k+l))^top xi_k
+      - bb(E) lr([
+          sum_(l=1)^(n-k) g_(k,l)(Z_(k+l))^top xi_k
+          thin | thin cal(F)_k
+        ])
+    } ||_(L_p) \
+  &quad <= C p^(3 slash 2) t_"mix"^(1 slash 2) M_xi
+     lr((sum_(k=1)^(n-1) sum_(l=1)^(n-k) beta_(k,l)^2))^(1 slash 2).
+  $
+  This is the scalar, constant-stepsize specialization of the
+  block-decomposition and Berbee-coupling estimate used in Samsonov et al.
+  (2025, Appendix D.2, Proposition 9; see in particular their Lemma 11 and the
+  treatment of the coupled term $T_(21) + T_(22)$). The centering in the
+  display is the conditional centering with respect to $cal(F)_k$; no
+  stationary-centering inequality is applied to a future chain started from
+  $Z_k$.
+]
+
+#lemma[
+  Assume the Markov chain is started from stationarity, that is, the law of
+  $Z_1$ is $pi$, and $pi(tilde(A)) = 0$. For every deterministic direction
+  $u in bb(R)^d$ and every $p >= 2$,
+  $
+  ||u^top (S_n - bb(E)S_n)||_(L_p)
+    <= C ||u|| thin ||epsilon.alt||_infinity
       (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
         + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
   $
   Consequently,
   $
-  ||T_n^((1, alpha)) - bb(E)T_n^((1, alpha))||_(L_p)
-    <= C alpha ||epsilon.alt||_infinity
+  ||u^top (T_n^((1, alpha)) - bb(E)T_n^((1, alpha)))||_(L_p)
+    <= C alpha ||u|| thin ||epsilon.alt||_infinity
       (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
         + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
   $
@@ -177,10 +207,14 @@ U_R
 $
 This decomposition splits the centered statistic into two structurally different parts: $U_R$ is an ordinary centered additive functional of the original Markov chain, while $U_M$ is a future-centered bilinear term — the conditional expectation given $cal(F)_k$ vanishes summand-wise, but the summands are not forward martingale differences. We bound each piece separately.
 
-_Step 1: bound on $U_R$._ Because $pi(tilde(A)) = 0$, applying $sans(Q)^l$ followed by integration against $pi$ replaces $tilde(A)$ by its $l$-step propagation away from stationarity. UGE then gives the geometric Dobrushin bound
+Fix a deterministic direction $u$. The case $u = 0$ is trivial. By homogeneity,
+it is enough to prove the estimate for $||u|| = 1$; the general statement
+follows by multiplying the right-hand side by $||u||$.
+
+_Step 1: bound on $u^top U_R$._ Because $pi(tilde(A)) = 0$, applying $sans(Q)^l$ followed by integration against $pi$ replaces $tilde(A)$ by its $l$-step propagation away from stationarity. UGE then gives the geometric Dobrushin bound
 $
 ||(sans(Q)^l tilde(A))(z)||
-  = lr(|| integral tilde(A)(u) {sans(Q)^l (z, thin d u) - pi(d u)} ||)
+  = lr(|| integral tilde(A)(y) {sans(Q)^l (z, thin d y) - pi(d y)} ||)
   <= 2 C_A Delta(sans(Q)^l)
   <= 2 C_A (1 slash 4)^(floor(l slash t_"mix")).
 $
@@ -206,7 +240,7 @@ $
 $
 The functions $v_k^((w, epsilon))(Z_k) - pi(v_k^((w, epsilon)))$ are centered under $pi$ and uniformly bounded by the previous display, so the weighted Markov concentration/Rosenthal bound for centered time-dependent functions yields
 $
-||U_R||_(L_p)
+||u^top U_R||_(L_p)
 &<= C p^(1 slash 2) t_"mix"^(1 slash 2)
     lr((sum_(k=1)^(n-1) ||v_k^((w, epsilon))||_infinity^2))^(1 slash 2)
   &&"(Rosenthal)" \
@@ -218,13 +252,14 @@ $
   &&"(geometric series)".
 $
 
-_Step 2: bound on $U_M$._ Project onto a deterministic unit vector $u$ and unfold $H_(k+1)^((w)) u$ as a sum over future states:
+_Step 2: bound on $u^top U_M$._ Unfold the projected matrix kernel through
+$(H_(k+1)^((w)))^top u$:
 $
-H_(k+1)^((w))u
+(H_(k+1)^((w)))^top u
   = sum_(l=1)^(n-k) g_(k,l)(Z_(k+l)),
 quad
 g_(k,l)(z)
-  = B^(n-k-l+1) tilde(A)(z) B^(l-1) u.
+  = (B^(l-1))^top thin tilde(A)(z)^top thin (B^(n-k-l+1))^top u.
 $
 Each $g_(k,l)$ is centered under $pi$ (since $pi(tilde(A)) = 0$), and the two $B$-powers give the uniform bound
 $
@@ -238,35 +273,25 @@ sum_(l=1)^(n-k) ||g_(k,l)||_infinity^2
 $
 Note the contrast with the $U_R$ analysis: there, UGE folded the $l$-sum into a single $t_"mix"$ factor, whereas here the same $l$-independent bound is applied $(n-k)$ times — the price of conditional centering being weaker than $pi$-centering.
 
-Applying the Markov concentration lemma to the future chain conditionally on $cal(F)_k$,
+The conditional expectation in the imported future-centered estimate is exactly
 $
-||H_(k+1)^((w))u
-    - bb(E)[H_(k+1)^((w))u thin | thin cal(F)_k]||_(L_p)
-  <= C p^(1 slash 2) t_"mix"^(1 slash 2)
-      sqrt((n-k)(1 - alpha a)^(n-k)),
+bb(E) lr([
+  sum_(l=1)^(n-k) g_(k,l)(Z_(k+l))^top epsilon.alt(Z_k)
+  thin | thin cal(F)_k
+])
+  = u^top v_k^((w, epsilon))(Z_k).
 $
-and multiplying by $epsilon.alt(Z_k)$ (which is $cal(F)_k$-measurable and bounded by $||epsilon.alt||_infinity$) gives
+Therefore the whole future-centered sum $u^top U_M$ can be bounded in one step
+by applying the imported estimate with
+$xi_k = epsilon.alt(Z_k)$ and
+$beta_(k,l) = C (1 - alpha a)^((n-k) slash 2)$:
 $
-||H_(k+1)^((w)) epsilon.alt(Z_k)
-    - v_k^((w, epsilon))(Z_k)||_(L_p)
-  <= C p^(1 slash 2) t_"mix"^(1 slash 2)
-      ||epsilon.alt||_infinity
-      sqrt((n-k)(1 - alpha a)^(n-k)).
-$
-
-The summands in $U_M$ are centered conditionally on $cal(F)_k$, but they are _not_ forward martingale differences: the kernel $H_(k+1)^((w))$ peeks into the future of $Z_k$. To assemble the per-$k$ bounds into a bound on the sum we therefore invoke the weighted Burkholder/block-coupling estimate for future-centered bilinear Markov sums of Samsonov et al. (2025, Proposition 9), specialized to the present constant-stepsize kernel:
-$
-||U_M||_(L_p)
-  <= C p lr((sum_(k=1)^(n-1)
-       ||H_(k+1)^((w)) epsilon.alt(Z_k)
-          - v_k^((w, epsilon))(Z_k)||_(L_p)^2))^(1 slash 2).
-$
-Plugging in the previous bound and evaluating the resulting sum:
-$
-||U_M||_(L_p)
+||u^top U_M||_(L_p)
 &<= C p^(3 slash 2) t_"mix"^(1 slash 2) ||epsilon.alt||_infinity
-    lr((sum_(k=1)^(n-1) (n-k)(1 - alpha a)^(n-k)))^(1 slash 2)
-  &&"(plug previous bound)" \
+    lr((sum_(k=1)^(n-1) sum_(l=1)^(n-k)
+      (1 - alpha a)^(n-k)))^(1 slash 2) \
+&= C p^(3 slash 2) t_"mix"^(1 slash 2) ||epsilon.alt||_infinity
+    lr((sum_(k=1)^(n-1) (n-k)(1 - alpha a)^(n-k)))^(1 slash 2) \
 &<= C p^(3 slash 2) t_"mix"^(1 slash 2)
     ||epsilon.alt||_infinity frac(1, alpha a)
   &&"(use" sum_m m thin r^m <= C (1-r)^(-2), thin r = 1 - alpha a ")".
@@ -275,13 +300,13 @@ The extra factor $1 slash sqrt(alpha a)$ relative to $U_R$ is precisely the cost
 
 _Step 3: assembly._ Combining the two pieces via $S_n - bb(E)S_n = -alpha (U_M + U_R)$ and the triangle inequality,
 $
-||S_n - bb(E)S_n||_(L_p)
-&<= alpha thin (||U_M||_(L_p) + ||U_R||_(L_p)) \
+||u^top (S_n - bb(E)S_n)||_(L_p)
+&<= alpha thin (||u^top U_M||_(L_p) + ||u^top U_R||_(L_p)) \
 &<= C ||epsilon.alt||_infinity
   lr((p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
     + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a)))).
 $
-The first term (from $U_M$) is the leading contribution for small $alpha$; the second (from $U_R$) carries the heavier $t_"mix"$ dependence but vanishes as $alpha -> 0$. Multiplying by $alpha$ gives the asserted bound for $T_n^((1, alpha)) = -alpha S_n$. #h(1fr) $square$
+The first term (from $U_M$) is the leading contribution for small $alpha$; the second (from $U_R$) carries the heavier $t_"mix"$ dependence but vanishes as $alpha -> 0$. Restoring the factor $||u||$ and multiplying by $alpha$ gives the asserted bound for $T_n^((1, alpha)) = -alpha S_n$. #h(1fr) $square$
 
 == Application to the PR-averaged RR Misadjustment
 
@@ -317,27 +342,39 @@ $
 Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) / a
                 + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
 $
-The lemma applied at $alpha$ and at $2 alpha$ gives, separately,
+Fix a deterministic direction $u$. The lemma applied at $alpha$ and at
+$2 alpha$ gives, separately,
 $
-||T_n^((1, alpha)) - bb(E) T_n^((1, alpha))||_(L_p) <= C alpha thin Phi(p, alpha),
+||u^top (T_n^((1, alpha)) - bb(E) T_n^((1, alpha)))||_(L_p)
+  <= C ||u|| thin alpha thin Phi(p, alpha),
 quad
-||T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha))||_(L_p) <= C alpha thin Phi(p, 2 alpha) <= C' alpha thin Phi(p, alpha),
+||u^top (T_n^((1, 2 alpha)) - bb(E) T_n^((1, 2 alpha)))||_(L_p)
+  <= C ||u|| thin alpha thin Phi(p, 2 alpha)
+  <= C' ||u|| thin alpha thin Phi(p, alpha),
 $
-where $C' = sqrt(2) C$ absorbs the $sqrt(2)$-factor coming from the $2 alpha$ scaling. Combining the two by the triangle inequality and using the index-shift identity $T_k^((1, w)) = (I - w overline(A)) thin J_k^((1, w))$ together with the local inverse bound $|| (I - w overline(A))^(-1) || <= 2$ for $w in {alpha, 2 alpha}$, we get
+where $C' = sqrt(2) C$ absorbs the $sqrt(2)$-factor coming from the $2 alpha$ scaling. Combining the two by the triangle inequality and using the index-shift identity $T_k^((1, w)) = (I - w overline(A)) thin J_k^((1, w))$ gives
 $
-||(2 J_k^((1, alpha)) - J_k^((1, 2 alpha))) - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))||_(L_p)
-  <= C alpha thin Phi(p, alpha),
+u^top J_k^((1, w))
+  = ((I - w overline(A))^(-top) u)^top T_k^((1, w)).
+$
+The local inverse bound $|| (I - w overline(A))^(-1) || <= 2$ for
+$w in {alpha, 2 alpha}$ therefore yields
+$
+||u^top lr((2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))
+     - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha))))||_(L_p)
+  <= C ||u|| thin alpha thin Phi(p, alpha),
 $
 uniformly in $k$. PR-averaging through $sqrt(n) / (n - n_0)$ and absorbing the constant therefore yields
 $
-||D_(1, "c")^("mis, RR")||_(L_p)
-  <= C sqrt(n) thin alpha thin Phi(p, alpha)
+||u^top D_(1, "c")^("mis, RR")||_(L_p)
+  <= C ||u|| thin sqrt(n) thin alpha thin Phi(p, alpha)
   = O(sqrt(n) thin alpha).
 $
 Together with the bias estimate,
 $
-||D_1^("mis, RR")||_(L_p)
-  <= C sqrt(n) thin alpha thin Phi(p, alpha) + C sqrt(n) thin alpha^2.
+||u^top D_1^("mis, RR")||_(L_p)
+  <= C ||u|| thin sqrt(n) thin alpha thin Phi(p, alpha)
+    + C ||u|| thin sqrt(n) thin alpha^2.
 $
 At the optimal scale $alpha asymp n^(-1 slash 2)$ the centered-fluctuation
 term is $O(1)$, whereas the stationary bias is $O(n^(-1 slash 2))$. Hence this

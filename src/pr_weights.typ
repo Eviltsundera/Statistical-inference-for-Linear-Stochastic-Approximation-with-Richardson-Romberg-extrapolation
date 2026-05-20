@@ -613,7 +613,8 @@ $ <eq:M-RR-conc-decomp>
 For the centered sum, set $tilde(g)_i := g_(i + 1)$ for $i in {1, dots, n - 2}$. By
 construction $pi(tilde(g)_i) = 0$ and
 $|| tilde(g)_i ||_infinity <= c := 36 thin C_(cal(Q))^2 thin || u ||^2 thin t_"mix"^2 thin || epsilon.alt ||_infinity^2$.
-The Markov concentration lemma of Section 2.2 (Levin et al. 2025, Lemma 11) applied to
+The scalar Markov concentration lemma of Section 2.2, imported from Levin et al.
+(2025, Lemma 11) and valid for arbitrary initial law, applied to
 $sum_(i = 1)^(n - 2) tilde(g)_i(Z_i)$ yields, for every $t >= 0$,
 $
 bb(P)_xi lr((

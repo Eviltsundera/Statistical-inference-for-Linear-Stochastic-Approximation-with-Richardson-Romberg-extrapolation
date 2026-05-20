@@ -500,8 +500,9 @@ u^top chevron.l M^("bRR") chevron.r_(n,n_0) u
   - m thin sigma_(n,n_0)^(2, "bRR")(u)
   = sum_(l = 2)^(n - 1) g_l(Z_(l - 1)).
 $
-The Markov concentration lemma used in the stationary chapter, applied to the
-time-inhomogeneous centered functions $g_l$, gives the displayed
+The scalar Markov concentration lemma used in the stationary chapter is valid
+for arbitrary initial law by Levin et al. (2025, Lemma 11). Applied to the
+time-inhomogeneous centered functions $g_l$, it gives the displayed
 $sqrt(p n)$ bound. $square$
 
 #corollary[
@@ -570,9 +571,12 @@ H_k^((2,w))
         tilde(A)(Z_l) J_(l - 1)^((2,w)).
 $ <eq:levin-H2-representation>
 For startup transfer, however, one must compare two copies of this display.
-The following lemma records the resulting full-state contraction. It is the
-only place where the $H^((2,w))$ coordinate is added to the Levin
-Proposition-5 coupling.
+The following lemma records the resulting full-state contraction. It is a
+technical extension of the Levin Proposition-5 coupling: the $J^((0))$,
+$J^((1))$, and $J^((2))$ coordinates use Levin Appendix B.2 directly, while
+the $H^((2))$ coordinate is controlled by applying the random-product stability
+estimate used inside Levin Appendix D.1, Proposition 9, to the difference of
+two representations @eq:levin-H2-representation.
 
 Let $alpha_("st")(p)$ denote the step-size ceiling under which the argument
 below is valid. It is the minimum of the Proposition-5 restriction for
@@ -644,9 +648,18 @@ Delta H_k^((2,w))
     - w sum_(l = T + 1)^k Gamma_(l + 1:k)^((w))
         tilde(A)(Z_l) Delta J_(l - 1)^((2,w)),
 $ <eq:burn-H2-coupled-diff>
-where $Delta$ denotes finite-start minus stationary. On $T > k$ we simply use
-Holder inequality, the tail bound for $T$, and the one-trajectory
-Levin Proposition 9 moment bound for the two $H^((2,w))$ copies. This gives
+where $Delta$ denotes finite-start minus stationary.
+
+On the bad event $T > k$, Holder inequality gives the explicit reduction
+$
+|| Delta H_k^((2,w)) 1_(T > k) ||_(L_p)
+  <= lr((
+       || H_(k, op("fin"))^((2,w)) ||_(L_(2p))
+       + || H_(k, op("aug"))^((2,w)) ||_(L_(2p))
+     )) thin bb(P)(T > k)^(1 slash (2p)).
+$
+Levin Proposition 9 bounds both one-trajectory terms uniformly in $k$, and UGE
+gives $bb(P)(T > k)^(1 slash (2p)) <= C e^(-c k slash p)$. Therefore
 $
 || Delta H_k^((2,w)) 1_(T > k) ||_(L_p)
   <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
@@ -654,21 +667,29 @@ $
        e^(-c k slash p).
 $ <eq:burn-H2-bad-event>
 Since $w a <= 1$, this is bounded by the right-hand side of
-@eq:burn-startup-pointwise.
+@eq:burn-startup-pointwise after absorbing a fixed power of $a^(-1)$ into
+$C_("st")$.
 
-For the first term in @eq:burn-H2-coupled-diff, combine the random-product
-estimate used in Levin Proposition 9 with the same one-trajectory moment bound:
+For the first term in @eq:burn-H2-coupled-diff, use the random-product
+stability estimate used in Levin Proposition 9: for an
+$cal(F)_s$-measurable vector $V_s$ with the moment order used below,
+$
+|| Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
+  <= C e^(-c w a (k - s) slash p) || V_s ||_(L_(2p)).
+$ <eq:burn-imported-product-stability>
+Apply this conditionally with $s = T$ and $V_T = Delta H_T^((2,w))$, then use
+the same one-trajectory moment bound and the exponential moment of $T$:
 $
 || Gamma_(T + 1:k)^((w)) Delta H_T^((2,w)) 1_(T <= k) ||_(L_p)
   <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
        w^(3 slash 2) log^(3 slash 2)(1 slash (w a))
        e^(-c w a k slash p).
 $ <eq:burn-H2-initial-term>
-Here the exponential moment of $T$ is finite because
-$w <= alpha_("st")(p)$.
+The step-size ceiling in $alpha_("st")(p)$ is chosen so that this product
+stability estimate is valid at moment order $2p$.
 
-For the convolution term, use the same product estimate and the
-$J^((2,w))$ contraction @eq:burn-J-startup-proof:
+For the convolution term, apply @eq:burn-imported-product-stability term by
+term and then use the $J^((2,w))$ contraction @eq:burn-J-startup-proof:
 $
 & w sum_(l = 1)^k
   || Gamma_(l + 1:k)^((w)) tilde(A)(Z_l)
@@ -678,8 +699,13 @@ $
      e^(-c w a l slash p) \
 &quad <= C A_("st")(p,q,w) e^(-c w a k slash p).
 $ <eq:burn-H2-convolution-term>
-The last line absorbs the geometric convolution into the constant after
-decreasing $c$; fixed powers of $a^(-1)$ are included in $C_("st")$. Combining
+Indeed, with $r = k - l$ and $p >= 2$,
+$
+w sum_(l = 1)^k e^(-c w a (k - l)) e^(-c w a l slash p)
+  <= C a^(-1) e^(-c w a k slash p),
+$
+after decreasing $c$; the fixed factor $a^(-1)$ is included in $C_("st")$.
+Combining
 @eq:burn-H2-bad-event, @eq:burn-H2-initial-term, and
 @eq:burn-H2-convolution-term gives the same startup bound for
 $H^((2,w))$. Adding the already controlled $J^((1,w))$ and $J^((2,w))$ pieces

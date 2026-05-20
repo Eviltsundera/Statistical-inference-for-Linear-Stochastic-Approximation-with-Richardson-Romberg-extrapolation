@@ -9,7 +9,7 @@ In this work, we study the LSA recursion with a _constant step size_ $alpha > 0$
 $ theta_k^((alpha)) = theta_(k-1)^((alpha)) - alpha {A(Z_k) theta_(k-1)^((alpha)) - b(Z_k)}, quad k >= 1, $ <eq:lsa>
 where ${Z_k}_(k in bb(N))$ is a time-homogeneous Markov chain on a measurable space $(sans(Z), cal(Z))$ with transition kernel $sans(Q)$ and unique invariant distribution $pi$.
 The mappings $A : sans(Z) -> bb(R)^(d times d)$ and $b : sans(Z) -> bb(R)^d$ are measurable functions satisfying $overline(A) := integral_(sans(Z)) A(z) d pi(z)$ and $overline(b) := integral_(sans(Z)) b(z) d pi(z)$.
-Assuming that $-overline(A)$ is a _Hurwitz matrix_ (all eigenvalues have strictly negative real parts), the target parameter $theta^* = overline(A)^(-1) overline(b)$ is uniquely defined.
+We use the stability convention that $-overline(A)$ is Hurwitz, equivalently all eigenvalues of $overline(A)$ have strictly positive real parts. Then the target parameter $theta^* = overline(A)^(-1) overline(b)$ is uniquely defined.
 
 The _Polyak--Ruppert averaging_ procedure (Polyak, 1990; Ruppert, 1988) provides an effective variance reduction technique.
 Given a burn-in period $n_0 >= 0$, the averaged iterate is defined as
@@ -44,15 +44,34 @@ expansion is available.
 
 == Problem statement and goals
 
-The high-order moment bounds for the RR iterate $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show that the leading error term scales as $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in the key quantities subsection, matching the minimax optimal rate.
-Berry--Esseen type bounds and bootstrap inference procedures for the _standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation) under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines, and Naumov (2025).
+The high-order moment bounds for the PR-averaged RR iterate
+$overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show
+that the leading error term scales as
+$sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where
+$Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in
+the key quantities subsection, matching the minimax optimal rate.
+Berry--Esseen type bounds and bootstrap inference procedures for the
+_standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation)
+under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines,
+and Naumov (2025).
 
-However, the _distributional approximation_ --- specifically, the central limit theorem and Berry--Esseen bounds --- for the _averaged Richardson--Romberg iterates_ $overline(theta)_n^((alpha, "RR"))$ remains an open problem.
-The main goal of this work is to fill this gap by establishing:
+These results do not directly give the distributional approximation needed for
+the PR-averaged Richardson--Romberg statistic under Markovian noise, especially
+when the stationary full-window analysis must be transferred to a
+deterministic-start, burned-in estimator. The main goal of this work is
+therefore narrower: to assemble a CLT and Berry--Esseen analysis for
+$overline(theta)_n^((alpha, "RR"))$, and to add the burn-in transfer needed for
+finite-start inference.
 
-+ A _central limit theorem_ for $sqrt(n)(overline(theta)_n^((alpha, "RR")) - theta^*)$, identifying the limiting covariance matrix.
-+ _Non-asymptotic Berry--Esseen bounds_ for the rate of convergence to the Gaussian limit.
-+ A practical _inference procedure_ (confidence intervals) based on the RR-extrapolated iterates.
+Concretely, we establish:
+
++ A stationary full-window _central limit theorem_ for
+  $sqrt(n)(overline(theta)_n^((alpha, "RR")) - theta^*)$, identifying the
+  limiting covariance matrix.
++ _Non-asymptotic Berry--Esseen bounds_ for scalar projections of the
+  PR-averaged RR statistic.
++ A deterministic-start transfer theorem with logarithmic burn-in, yielding the
+  corresponding balanced-scale bound for the thesis-facing burned-in statistic.
 
 == Setting and assumptions <sec:assumptions>
 
@@ -76,7 +95,7 @@ Let ${Z_k}_(k in bb(N))$ be a Markov chain on a complete separable metric space 
 ]
 
 #assumption("Hurwitz condition and boundedness")[
-  The matrix $-overline(A)$ is Hurwitz, i.e., all eigenvalues of $overline(A)$ have strictly positive real parts. Moreover,
+  The matrix $-overline(A)$ is Hurwitz; equivalently, all eigenvalues of $overline(A)$ have strictly positive real parts. Moreover,
   $ C_A := max( sup_(z in sans(Z)) ||A(z)|| , sup_(z in sans(Z)) ||tilde(A)(z)|| ) < infinity, $
   where $tilde(A)(z) := A(z) - overline(A)$.
 ]
