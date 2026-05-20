@@ -5,6 +5,7 @@
 #set page(paper: "us-letter", margin: (x: 1in, y: 1in), numbering: "1")
 #set text(font: "New Computer Modern", size: 10pt, lang: "en")
 #set heading(numbering: "1.")
+#set math.equation(numbering: "(1)", supplement: [Eq.])
 #set par(justify: true, first-line-indent: 1em)
 
 #import "src/defs.typ": *
@@ -49,3 +50,9 @@
 = Richardson--Romberg PR Weight Bounds <sec:pr_weights>
 
 #include "src/pr_weights.typ"
+
+#pagebreak()
+
+= Burn-in Transfer for Deterministic Starts <sec:burn_in_transfer>
+
+#include "src/burn_in_transfer.typ"

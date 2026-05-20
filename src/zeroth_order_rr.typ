@@ -62,8 +62,9 @@ tilde(J)_n^((0, alpha))
 &= -2 alpha^2 overline(A) sum_(j=1)^n
   underbrace(sum_(i=1)^(n-j) (I - alpha overline(A))^(i-1) (I - 2 alpha overline(A))^(n-j-i), =: H_j^((n)))
   epsilon.alt(Z_j) \
-&= -2 alpha^2 overline(A) sum_(j=1)^n H_j^((n)) thin epsilon.alt(Z_j).
+&= -2 alpha^2 overline(A) sum_(j=1)^(n-1) H_j^((n)) thin epsilon.alt(Z_j),
 $
+where the last equality uses $H_n^((n)) = 0$ because the inner sum is empty.
 The extra factor $alpha overline(A)$ pulled out front is the source of the additional $alpha$-decay of the RR difference compared to a single LSA trajectory.
 
 == Norm Estimate for $H_j^((n))$
@@ -82,7 +83,7 @@ To bound $||H_j^((n))||$ we use the following standard result.
   $ alpha a <= 1 slash 2, quad ||I - alpha overline(A)||_Q^2 <= 1 - alpha a. $
 ]
 
-We now estimate $||H_j^((n))||$ by combining the triangle inequality, submultiplicativity, the equivalence $|| X || <= kappa_Q^(1 slash 2) || X ||_Q$ (applied to *each* operator-norm factor, hence two factors of $kappa_Q^(1 slash 2)$ multiplying to $kappa_Q$), and the Lyapunov contraction at step sizes $alpha$ and $2 alpha$:
+For $1 <= j <= n-1$, we estimate $||H_j^((n))||$ by combining the triangle inequality, submultiplicativity, the equivalence $|| X || <= kappa_Q^(1 slash 2) || X ||_Q$ (applied to *each* operator-norm factor, hence two factors of $kappa_Q^(1 slash 2)$ multiplying to $kappa_Q$), and the Lyapunov contraction at step sizes $alpha$ and $2 alpha$:
 $
 ||H_j^((n))||
 &<= sum_(i=1)^(n-j) ||I - alpha overline(A)||^(i-1) thin ||I - 2 alpha overline(A)||^(n-j-i)
@@ -108,74 +109,77 @@ $ overline(C)_A := kappa_Q $
 $
 ||H_j^((n))|| <= overline(C)_A thin (1 - alpha a)^((n-j-1) slash 2) thin frac(2, alpha a).
 $
-The kernel decays geometrically in $n - j$ at rate $sqrt(1 - alpha a)$ but its summed weight is of order $1 slash (alpha a)$. The next subsection shows how the prefactor $alpha^2$ in $tilde(J)_n^((0, alpha))$ exactly compensates this divergence.
+The kernel decays geometrically in $n - j$ at rate $sqrt(1 - alpha a)$ but its summed weight is of order $1 slash (alpha a)$. The next subsection keeps the remaining powers of $a$ explicit when this kernel is multiplied by the prefactor $alpha^2$ in $tilde(J)_n^((0, alpha))$.
 
-== $L^2$ Bound for the Zeroth-Order Term
+== Scalar $L^p$ Bound for the Zeroth-Order Term
 
 The expression
 $
-tilde(J)_n^((0, alpha)) = -sum_(j=1)^n 2 alpha^2 overline(A) H_j^((n)) thin epsilon.alt(Z_j)
+tilde(J)_n^((0, alpha)) = -sum_(j=1)^(n-1) 2 alpha^2 overline(A) H_j^((n)) thin epsilon.alt(Z_j)
 $
-is a weighted sum of values of the centered noise function $epsilon.alt$ along the Markov chain. We control its tail via the following Markov concentration statement.
+is a weighted sum of values of the centered noise function $epsilon.alt$ along the Markov chain. In the Berry--Esseen argument below only fixed scalar projections are used, so we state the concentration input in scalar form.
 
 #lemma[
   Assume *UGE 1*. Let ${g_i}_(i=1)^n$ be a family of measurable functions
-  $g_i : Z -> bb(R)^d$ such that
+  $g_i : Z -> bb(R)$ such that
   $ c_i = ||g_i||_infinity < infinity quad "for all" i >= 1, quad
   pi(g_i) = 0 quad "for all" i in {1, dots, n}. $
   Then, for any initial distribution $xi$ on $(Z, cal(Z))$, any $n in bb(N)$ and any $t >= 0$,
-  $ bb(P)_xi (lr(||sum_(i=1)^n g_i (Z_i)||) >= t) <= 2 exp(-frac(t^2, 2 u_n^2)), $
+  $ bb(P)_xi (lr(|sum_(i=1)^n g_i (Z_i)|) >= t) <= 2 exp(-frac(t^2, 2 v_n^2)), $
   where
-  $ u_n = 8 (sum_(i=1)^n c_i^2)^(1 slash 2) sqrt(t_"mix"). $
+  $ v_n = 8 (sum_(i=1)^n c_i^2)^(1 slash 2) sqrt(t_"mix"). $
 
   _Proof._ The proof follows the lines of Durmus et al. (2025, Lemma 9).
 ]
 
-We apply the lemma with $g_j(z) = -2 alpha^2 overline(A) H_j^((n)) epsilon.alt(z)$. Each $g_j$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Combining the bound $|| overline(A) || <= C_A$ (Assumption 2) with the previous subsection, define
+Fix a deterministic direction $u in bb(R)^d$. We apply the lemma with
+$g_j^u(z) = -2 alpha^2 u^top overline(A) H_j^((n)) epsilon.alt(z)$ for $1 <= j <= n-1$ and $g_n^u = 0$. Each $g_j^u$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Combining the bound $|| overline(A) || <= C_A$ (Assumption 2) with the previous subsection, define
 $
 tilde(C)_A := C_A thin overline(C)_A = C_A thin kappa_Q.
 $
 Then the per-summand bound is
 $
-||g_j||_infinity
-&<= 2 alpha^2 tilde(C)_A (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity \
-&= 4 alpha tilde(C)_A ||epsilon.alt||_infinity (1 - alpha a)^((n-j-1) slash 2).
+||g_j^u||_infinity
+&<= 2 alpha^2 ||u|| thin tilde(C)_A (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity \
+&= frac(4 alpha ||u|| thin tilde(C)_A ||epsilon.alt||_infinity, a) (1 - alpha a)^((n-j-1) slash 2),
+quad 1 <= j <= n-1.
 $
-Note the prefactor $alpha^2$ collapsing to $alpha$: the $1 slash (alpha a)$ blow-up in $H_j^((n))$ is exactly absorbed by one factor of $alpha$. Squaring and summing over $j$, using $1 - alpha a >= 1 slash 2$:
+Note the prefactor $alpha^2$ collapsing to $alpha slash a$: the $1 slash (alpha a)$ blow-up in $H_j^((n))$ is absorbed only by one factor of $alpha$. Squaring and summing over $j$:
 $
-sum_(j=1)^n ||g_j||_infinity^2
-&<= 16 alpha^2 tilde(C)_A^2 ||epsilon.alt||_infinity^2 sum_(j=1)^n (1 - alpha a)^(n-j-1) \
-&<= 16 alpha^2 tilde(C)_A^2 ||epsilon.alt||_infinity^2 thin frac(1, (1 - alpha a) alpha a) \
-&<= frac(32 alpha tilde(C)_A^2 ||epsilon.alt||_infinity^2, a).
+sum_(j=1)^n ||g_j^u||_infinity^2
+&= sum_(j=1)^(n-1) ||g_j^u||_infinity^2 \
+&<= frac(16 alpha^2 ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^2) sum_(j=1)^(n-1) (1 - alpha a)^(n-j-1) \
+&<= frac(16 alpha^2 ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^2) thin frac(1, alpha a) \
+&= frac(16 alpha ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^3).
 $
-Plugging this into the variance proxy $u_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j||_infinity^2$ from the lemma and defining
+Plugging this into the variance proxy $v_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j^u||_infinity^2$ from the lemma and defining
 $
-hat(C)_A := sqrt(2048) thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a))
-            = 32 sqrt(2) thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a)),
+hat(C)_A := 32 thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a^3)),
 $
 gives
 $
-u_n^2 <= hat(C)_A^2 thin alpha.
+v_n^2 <= ||u||^2 thin hat(C)_A^2 thin alpha.
 $
 
 To convert the sub-Gaussian tail into a moment bound, we use the following standard fact.
 
 #lemma[
-  Let $X$ be an $bb(R)^d$-valued random variable satisfying
-  $ bb(P)(||X|| >= t) <= 2 exp(-frac(t^2, 2 sigma^2)) quad "for all" t >= 0, $
+  Let $X$ be an $bb(R)$-valued random variable satisfying
+  $ bb(P)(|X| >= t) <= 2 exp(-frac(t^2, 2 sigma^2)) quad "for all" t >= 0, $
   for some $sigma^2 > 0$. Then, for any $p >= 2$, it holds that
-  $ bb(E)[||X||^p] <= 2 thin p^(p slash 2) thin sigma^p. $
+  $ bb(E)[|X|^p] <= 2 thin p^(p slash 2) thin sigma^p. $
 ]
 
-Applying the lemma with $sigma^2 = u_n^2 <= hat(C)_A^2 alpha$ and an arbitrary $p >= 2$ gives
+Applying the lemma with $X = u^top tilde(J)_n^((0, alpha))$ and
+$sigma^2 = v_n^2 <= ||u||^2 hat(C)_A^2 alpha$ gives, for any $p >= 2$,
 $
-bb(E)^(1 slash p) [||tilde(J)_n^((0, alpha))||^p]
-<= 2^(1 slash p) sqrt(p) thin hat(C)_A thin sqrt(alpha)
-<= 2 sqrt(p) thin hat(C)_A thin sqrt(alpha),
+bb(E)^(1 slash p) [|u^top tilde(J)_n^((0, alpha))|^p]
+<= 2^(1 slash p) sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha)
+<= 2 sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha),
 $
 or equivalently
 $
-frac(1, sqrt(alpha)) thin bb(E)^(1 slash p) [||tilde(J)_n^((0, alpha))||^p]
-<= 2 sqrt(p) thin hat(C)_A.
+frac(1, sqrt(alpha)) thin ||u^top tilde(J)_n^((0, alpha))||_(L_p)
+<= 2 sqrt(p) thin ||u|| thin hat(C)_A.
 $
-The zeroth-order RR difference is therefore $O(sqrt(alpha))$ in $L^p$ for every $p >= 2$, uniformly in $n$ — an order-$sqrt(alpha)$ gain over a single LSA trajectory, which is $O(1)$ in $L^p$ in the stationary regime. The $p = 2$ statement used in the rest of the analysis is a special case.
+Thus every fixed scalar projection of the zeroth-order RR difference is $O(sqrt(alpha))$ in $L^p$, uniformly in $n$. A Euclidean-norm bound can be recovered in fixed dimension by applying the scalar estimate to a coordinate basis, but no dimension-free vector concentration is claimed here.

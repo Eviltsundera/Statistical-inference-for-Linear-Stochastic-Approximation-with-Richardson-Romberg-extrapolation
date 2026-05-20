@@ -1,33 +1,16 @@
-// Theorem environments
-#let theorem-counter = counter("theorem")
-#let lemma-counter = counter("lemma")
-#let remark-counter = counter("remark")
-#let corollary-counter = counter("corollary")
-
-#let theorem(body) = {
-  theorem-counter.step()
+// Theorem environments. These are implemented as captionless figures so that
+// labels after theorem-like blocks can be referenced with @lem:..., @thm:....
+#let theorem-like(name, kind, supplement, body) = figure(
   block(width: 100%, spacing: 0.8em)[
-    *Theorem #context theorem-counter.display().* #body
-  ]
-}
+    *#name #context counter(figure.where(kind: kind)).display().* #body
+  ],
+  kind: kind,
+  supplement: supplement,
+  numbering: "1.",
+  caption: none,
+)
 
-#let lemma(body) = {
-  lemma-counter.step()
-  block(width: 100%, spacing: 0.8em)[
-    *Lemma #context lemma-counter.display().* #body
-  ]
-}
-
-#let remark(body) = {
-  remark-counter.step()
-  block(width: 100%, spacing: 0.8em)[
-    *Remark #context remark-counter.display().* #body
-  ]
-}
-
-#let corollary(body) = {
-  corollary-counter.step()
-  block(width: 100%, spacing: 0.8em)[
-    *Corollary #context corollary-counter.display().* #body
-  ]
-}
+#let theorem(body) = theorem-like([Theorem], "theorem", [Theorem], body)
+#let lemma(body) = theorem-like([Lemma], "lemma", [Lemma], body)
+#let remark(body) = theorem-like([Remark], "remark", [Remark], body)
+#let corollary(body) = theorem-like([Corollary], "corollary", [Corollary], body)

@@ -1,11 +1,17 @@
 #import "defs.typ": *
 
+Throughout this chapter, unnamed constants $C$ may change from line to line
+and are independent of $n$, $alpha$, $p$, and $q$. Named constants display the
+dependencies that matter for the rate; fixed problem parameters may be absorbed
+only when they are not being tracked explicitly in the surrounding display.
+
 == PR-Averaged Error Decomposition and the RR Weight
 
-The starting point for all subsequent estimates is the *explicit*
-representation of $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$
-as a noise-weighted sum with a deterministic kernel. This subsection
-derives that representation step by step.
+The deterministic weight estimates start from the finite-start representation
+of $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$ as a noise-weighted
+sum with a deterministic kernel. The stationary $n_0 = 0$ Berry--Esseen bound
+proved below is stated for the augmented-chain assembly built from the same
+full-window weights.
 
 *Depth-one expansion.* Unfolding the error recursion of Chapter 1
 gives, for every $k >= 1$,
@@ -37,22 +43,20 @@ is the only piece that carries the limiting Gaussian.
 
 *PR averaging produces $Q_l^((alpha))$.* Recall the PR average
 $overline(theta)_n^((alpha)) = (n - n_0)^(-1) sum_(k = n_0)^(n - 1) theta_k^((alpha))$.
-For notational clarity, and for the theorem proved in this chapter, we set
-$n_0 = 0$ from this point on. This is not only a cosmetic convention: a
-burned-in average has a different deterministic weight,
+For notational clarity, and for the stationary result proved in this chapter,
+we set $n_0 = 0$ from this point on. A burned-in average has a different
+deterministic weight,
 $
 Q_(l,n_0)^((alpha))
   = frac(n, n - n_0) alpha sum_(k = max(n_0, l))^(n - 1)
       B_alpha^(k - l),
 $
 when the statistic is normalized as
-$- n^(-1 slash 2) sum_l Q_(l,n_0)^((alpha)) epsilon.alt(Z_l)$. Thus the
-burned-in non-stationary theorem requires redoing the weight, Poisson, and
-variance-comparison arguments with $Q_(l,n_0)^((alpha))$. The present chapter
-proves the full-average result and keeps the deterministic initial-condition
-transient explicit in the final assembly. Subtracting $theta^*$, substituting
-the depth-one decomposition above, and *exchanging the order of summation* in
-the depth-zero piece,
+$- n^(-1 slash 2) sum_l Q_(l,n_0)^((alpha)) epsilon.alt(Z_l)$. The
+burned-in non-stationary theorem therefore requires separate weight, Poisson,
+and variance-comparison arguments. Subtracting $theta^*$, substituting the
+depth-one decomposition above, and *exchanging the order of summation* in the
+depth-zero piece,
 $
 sum_(k = 0)^(n - 1) sum_(l = 1)^k B_alpha^(k - l) epsilon.alt(Z_l)
   = sum_(l = 1)^(n - 1)
@@ -66,10 +70,8 @@ Q_l^((alpha))
   := alpha sum_(k = l)^(n - 1) B_alpha^(k - l)
    = alpha sum_(j = 0)^(n - l - 1) B_alpha^j.
 $ <eq:Q-definition>
-Operationally, $Q_l^((alpha))$ collects the cumulative contribution of
-$epsilon.alt(Z_l)$ to all averaged iterates $theta_l, theta_(l + 1), dots,
-theta_(n - 1)$. Multiplying the resulting identity by $sqrt(n)$ gives the
-PR-averaged decomposition
+Multiplying the resulting identity by $sqrt(n)$ gives the PR-averaged
+decomposition
 $
 sqrt(n) thin (overline(theta)_n^((alpha)) - theta^*) = W^((alpha)) + D^((alpha)),
 $
@@ -77,7 +79,7 @@ where the *leading martingale-like sum* is
 $
 W^((alpha)) := -frac(1, sqrt(n)) sum_(l = 1)^(n - 1) Q_l^((alpha)) thin epsilon.alt(Z_l),
 $ <eq:W-alpha>
-and the remainder $D^((alpha))$ packs the deterministic transient $D_(op("tr"))^((alpha))$
+and the remainder $D^((alpha))$ contains the deterministic transient $D_(op("tr"))^((alpha))$
 and the higher-order stochastic part $D_R^((alpha))$:
 $
 D^((alpha)) := D_(op("tr"))^((alpha)) + D_R^((alpha)),
@@ -92,10 +94,9 @@ The first sum is the deterministic initial-condition transient. Under the
 full-average convention it is only $O((sqrt(n) alpha a)^(-1))$ in general, so
 it must either be retained explicitly or removed by a centered initialization
 $theta_0 = theta^*$. The second is the source of the leading non-Gaussian
-correction in the Berry--Esseen rate; its RR-combination
-$2 D_R^((alpha)) - D_R^((2 alpha))$ is exactly the *misadjustment*
-$D_1^("mis, RR")$ diagnosed in Chapters 2 and 3 and controlled below through
-the Levin depth-two transfer.
+correction in the Berry--Esseen rate. Its RR-combination
+$2 D_R^((alpha)) - D_R^((2 alpha))$ is the *misadjustment*
+$D_1^("mis, RR")$ controlled below by the Levin depth-two transfer.
 
 *RR combination produces $cal(Q)_l^("RR")$.* The Richardson--Romberg
 iterate $overline(theta)_n^(("RR", alpha)) := 2 overline(theta)_n^((alpha)) - overline(theta)_n^((2 alpha))$
@@ -113,20 +114,19 @@ where the *RR weight* is
 $
 cal(Q)_l^("RR") := 2 Q_l^((alpha)) - Q_l^((2 alpha)).
 $ <eq:Q-RR-definition>
-Crucially, both PR averages share the *same* noise realization
-${Z_k}$, so the bracket $cal(Q)_l^("RR")$ is a single deterministic
+Since both PR averages share the *same* noise realization
+${Z_k}$, the bracket $cal(Q)_l^("RR")$ is a single deterministic
 matrix kernel: all the stochastic content of $W^("RR")$ now lives in
 $epsilon.alt(Z_l)$ alone.
 
-*Why $cal(Q)_l^("RR")$ is the right object.* Two questions about
-$W^("RR")$ drive the rest of the chapter, and both answer themselves
-in terms of $cal(Q)_l^("RR")$:
+*Two deterministic estimates.* The rest of the martingale approximation uses
+two quantities determined by $cal(Q)_l^("RR")$:
 
 + *Variance comparison.* The target CLT covariance of $W^("RR")$ is
   $Sigma_infinity = overline(A)^(-1) Sigma_epsilon.alt^(("M")) overline(A)^(-top)$
-  (the Markov-chain CLT covariance), which is exactly what one obtains
-  if every $cal(Q)_l^("RR")$ is replaced by the asymptotic weight
-  $overline(A)^(-1)$. The finite-$n$ deviation is therefore controlled by
+  (the Markov-chain CLT covariance). Replacing each $cal(Q)_l^("RR")$ by the
+  asymptotic weight $overline(A)^(-1)$ gives this covariance, so the
+  finite-$n$ deviation is controlled by
   $sum_l ||cal(Q)_l^("RR") - overline(A)^(-1)||^2$ — see Section 4.5.
 
 + *Poisson-equation / Abel-summation remainder.* The standard
@@ -154,7 +154,7 @@ $
 We assume $alpha, 2 alpha in (0, alpha_infinity]$, so that the Lyapunov contraction
 $|| B_alpha^m ||_Q^2 <= (1 - alpha a)^m$ and $|| B_(2 alpha)^m ||_Q^2 <= (1 - 2 alpha a)^m$ hold (and we use freely $1 - 2 alpha a <= 1 - alpha a$).
 
-The geometric-series identity $sum_(j = 0)^(m - 1) B_alpha^j = (alpha overline(A))^(-1)(I - B_alpha^m)$ converts <eq:Q-definition> into the closed form
+The geometric-series identity $sum_(j = 0)^(m - 1) B_alpha^j = (alpha overline(A))^(-1)(I - B_alpha^m)$ converts @eq:Q-definition into the closed form
 $
 Q_l^((alpha))
   = alpha sum_(j = 0)^(n - l - 1) B_alpha^j
@@ -260,23 +260,6 @@ sum_(k >= 2) (k - 1) thin (1 - alpha a)^((k - 2) slash 2)
 $
 where the last step uses $1 - sqrt(1 - alpha a) >= alpha a / 2$ for $alpha a <= 1 slash 2$. Multiplying by $2 tilde(C)_A alpha^2$ gives the claim, up to the stated universal constant. $square$
 
-#remark[
-  Comparison with the single-step case. The same identities for $Q_l^((alpha))$ give
-  $|| Q_l^((alpha)) - overline(A)^(-1) || <= C_Q (1 - alpha a)^(k slash 2)$ and
-  $|| Q_(l + 1)^((alpha)) - Q_l^((alpha)) || <= alpha kappa_Q^(1 slash 2) (1 - alpha a)^((k - 1) slash 2)$.
-  Part (i) of the lemma above is therefore the same order as the single-step bound: the leading
-  $- overline(A)^(-1)$ term of $cal(Q)_(n - 1)^("RR")$ is exactly $- overline(A)^(-1)$ (since
-  $cal(Q)_(n - 1)^("RR") = 0$ identically), so no factor of $alpha$ is gained on the boundary.
-  The Richardson--Romberg cancellation is visible in the successive difference of
-  (ii): for fixed lag $k$ the discrete derivative gains an extra factor of $alpha$.
-  This local gain comes with the factor $k - 1$, so after summing over the geometric
-  tail it should not be read as a global extra factor of $alpha$ in the Abel term.
-  What is needed for the Poisson-equation remainder is the uniform total-variation
-  bound in the corollary. On the variance side the corollary gives
-  $sum || cal(Q)_l^("RR") - overline(A)^(-1) ||^2 = O(1 / (alpha a))$, which yields
-  the finite-horizon comparison error $O(1 / (n alpha a))$.
-]
-
 == Variance Comparison
 
 After the Poisson decomposition the $l = 1$ noise sample is absorbed into the
@@ -372,17 +355,6 @@ where we used $alpha a <= 1$. This proves the operator-norm bound. The scalar bo
 $| sigma_n^(2, "RR")(u) - sigma^2(u) | = | u^top (Sigma_n^("RR") - Sigma_infinity) u |$
 follows from the Cauchy--Schwarz inequality. $square$
 
-#remark[
-  The constant $C_3$ is independent of $alpha$ and $n$; only $a$ enters through the
-  Lyapunov contraction. The bound is tight in the geometric scale: the dominant
-  contribution comes from the near-boundary region $l approx n$, where
-  $|| Delta_l ||$ is bounded below by a positive constant (see the boundary identity
-  $cal(Q)_(n - 1)^("RR") = 0$). The same calculation for the single-step PR weights
-  yields $|| Sigma_n^("PR") - Sigma_infinity || <= C / (n alpha a)$, so
-  Richardson--Romberg does not improve the variance comparison rate, but it also does
-  not degrade it: the leading-order variance is preserved.
-]
-
 == Poisson Martingale Approximation
 
 The variance comparison of the previous section identifies the limiting
@@ -420,7 +392,7 @@ hat(epsilon.alt) - sans(Q) hat(epsilon.alt) = epsilon.alt.
 $ <eq:poisson-eq>
 
 *Conditional centering.* Let $cal(F)_l := sigma(Z_1, dots, Z_l)$. Substituting
-<eq:poisson-eq> into the noise sample and adding and subtracting the
+@eq:poisson-eq into the noise sample and adding and subtracting the
 conditional mean,
 $
 epsilon.alt(Z_l)
@@ -431,7 +403,7 @@ $
 where the first bracket is centered conditionally on $cal(F)_(l - 1)$ since
 the Markov property gives $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)] = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
 The $l = 1$ term has no past state to condition on; we treat it directly via
-<eq:poisson-eq> as $epsilon.alt(Z_1) = hat(epsilon.alt)(Z_1) - sans(Q) hat(epsilon.alt)(Z_1)$.
+@eq:poisson-eq as $epsilon.alt(Z_1) = hat(epsilon.alt)(Z_1) - sans(Q) hat(epsilon.alt)(Z_1)$.
 The decomposition therefore separates $W^("RR")$ into a martingale piece and
 a deterministic-coefficient telescope; Abel summation against the kernel
 sequence ${cal(Q)_l^("RR")}$ converts the telescope into boundary terms plus
@@ -484,7 +456,7 @@ _Proof._ The increments $Delta M_l^("RR")$ are $cal(F)_l$-martingale
 differences because $cal(Q)_l^("RR")$ is deterministic and the Markov property
 gives $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)] = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
 
-For the decomposition, substitute <eq:poisson-eq> into the definition <eq:W-RR>:
+For the decomposition, substitute @eq:poisson-eq into the definition in @eq:W-RR:
 $
 W^("RR")
   = -frac(1, sqrt(n)) sum_(l = 1)^(n - 1)
@@ -530,7 +502,7 @@ $Q_(n - 1)^((alpha)) = alpha I$ and $Q_(n - 1)^((2 alpha)) = 2 alpha I$).
 Multiplying by $1 slash sqrt(n)$ and absorbing the sign into $D_(2, n)^("RR")$
 produces exactly the stated formula.
 
-For the sup-norm bound <eq:D2-bound>, use $|| g_l ||_infinity <= || hat(epsilon.alt) ||_infinity <= 3 t_"mix" || epsilon.alt ||_infinity$,
+For the sup-norm bound @eq:D2-bound, use $|| g_l ||_infinity <= || hat(epsilon.alt) ||_infinity <= 3 t_"mix" || epsilon.alt ||_infinity$,
 the uniform bound $|| cal(Q)_1^("RR") || <= C_(cal(Q))$ on the left boundary,
 and the summed-total-variation bound
 $sum_(l = 1)^(n - 2) || cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR") || <= C_2 slash a^2$
@@ -540,33 +512,6 @@ $
   <= 3 t_"mix" || epsilon.alt ||_infinity (C_(cal(Q)) + C_2 slash a^2).
 $
 The $L_p$ bound is immediate from the deterministic sup-norm bound. $square$
-
-#remark[
-  *Two structural features.* First, the bound is *deterministic*: no
-  martingale concentration or moment inequality is invoked, only pointwise
-  bounds on $cal(Q)_l^("RR")$, on its discrete derivative, and on
-  $hat(epsilon.alt)$. The dependence on $p$ promised in the working plan
-  ($"poly"(p, t_"mix")$) is therefore absorbed into the constant; the
-  effective scaling is $|| D_(2, n)^("RR") ||_(L_p) <= C thin t_"mix" slash (a^2 sqrt(n))$.
-  Second, the $1 slash a^2$ factor is *exactly* the cost of the discrete
-  derivative summed Abel-style: it is the same $C_2 slash a^2$ that appears
-  in the second part of the Corollary of Section 4.4. No further $1 slash alpha$
-  blow-up enters, because the kernel-difference bound of Section 4.3 already
-  carries the cancelling $alpha^2 (k - 1)$ prefactor.
-
-  *Boundary asymmetry.* The right-end boundary vanishes because
-  $cal(Q)_(n - 1)^("RR") = 0$ — a Richardson--Romberg cancellation that does
-  not occur for the single-step PR weight $Q_(n - 1)^((alpha)) = alpha I$,
-  which contributes a (small) $alpha t_"mix" slash sqrt(n)$ residue. RR
-  therefore *removes* one of the two Poisson-boundary terms outright.
-
-  *Comparison with martingale scale.* The leading martingale piece
-  $M_n^("RR") slash sqrt(n)$ has $L_2$-norm of order $1$ (it is the natural
-  $sqrt(n)$-scaled object whose CLT variance equals $sigma_n^(2, "RR")(u)$ at
-  leading order, by the variance-comparison lemma). The remainder
-  $D_(2, n)^("RR")$ is therefore $O(n^(-1 slash 2))$ relative to it, well
-  below the target Berry--Esseen scale $n^(-1 slash 4)$.
-]
 
 == Predictable Quadratic Variation Concentration
 
@@ -592,38 +537,40 @@ bb(E)[Delta M_l^("RR") thin (Delta M_l^("RR"))^top thin | thin cal(F)_(l - 1)]
   &quad - cal(Q)_l^("RR") thin sans(Q) hat(epsilon.alt)(Z_(l - 1))
         thin (sans(Q) hat(epsilon.alt))(Z_(l - 1))^top thin
         (cal(Q)_l^("RR"))^top \
-  &= cal(Q)_l^("RR") thin overline(epsilon.alt)(Z_(l - 1)) thin (cal(Q)_l^("RR"))^top,
+  &= cal(Q)_l^("RR") thin cal(V)_(epsilon.alt)(Z_(l - 1)) thin (cal(Q)_l^("RR"))^top,
 $
 where the cross-terms in the expansion of
 $(hat(epsilon.alt)(Z_l) - sans(Q) hat(epsilon.alt)(Z_(l - 1)))(hat(epsilon.alt)(Z_l) - sans(Q) hat(epsilon.alt)(Z_(l - 1)))^top$
 cancel by the Markov property and we have set
 $
-overline(epsilon.alt)(z)
+cal(V)_(epsilon.alt)(z)
   := sans(Q)(hat(epsilon.alt) hat(epsilon.alt)^top)(z)
    - (sans(Q) hat(epsilon.alt))(z) thin (sans(Q) hat(epsilon.alt))(z)^top.
 $ <eq:bar-eps-def>
+This is a matrix-valued conditional covariance of the Poisson martingale
+increment; the vector noise remains denoted by $epsilon.alt$.
 Summing over $l in {2, dots, n - 1}$ and tracking that
 $chevron.l M^("RR") chevron.r_n
 := sum_(l = 2)^(n - 1) bb(E)[Delta M_l^("RR") thin (Delta M_l^("RR"))^top | cal(F)_(l - 1)]$,
 $
 chevron.l M^("RR") chevron.r_n
   = sum_(l = 2)^(n - 1)
-    cal(Q)_l^("RR") thin overline(epsilon.alt)(Z_(l - 1)) thin (cal(Q)_l^("RR"))^top.
+    cal(Q)_l^("RR") thin cal(V)_(epsilon.alt)(Z_(l - 1)) thin (cal(Q)_l^("RR"))^top.
 $ <eq:M-RR-bracket>
-The function $overline(epsilon.alt)$ has stationary mean equal to the long-run
-noise covariance,
+The conditional covariance function $cal(V)_(epsilon.alt)$ has stationary mean
+equal to the long-run noise covariance,
 $
-pi(overline(epsilon.alt)) = Sigma_(epsilon.alt)^(("M")) =: Sigma,
+pi(cal(V)_(epsilon.alt)) = Sigma_(epsilon.alt)^(("M")) =: Sigma,
 $
 which is a standard identity for the Poisson solution of a Markov chain
 (Samsonov et al. 2025, Eq. (10); see also Douc--Moulines--Priouret--Soulier
 2018, Theorem 21.2.5).
 
-*Sup-norm bound on $overline(epsilon.alt)$.* Since
+*Sup-norm bound on $cal(V)_(epsilon.alt)$.* Since
 $|| hat(epsilon.alt) ||_infinity <= 3 thin t_"mix" thin || epsilon.alt ||_infinity$
 and $sans(Q)$ is a Markov kernel (so $sans(Q) f$ inherits the sup-norm of $f$),
 $
-|| overline(epsilon.alt) ||_infinity
+|| cal(V)_(epsilon.alt) ||_infinity
   &<= || sans(Q)(hat(epsilon.alt) hat(epsilon.alt)^top) ||_infinity
    + || (sans(Q) hat(epsilon.alt))(sans(Q) hat(epsilon.alt))^top ||_infinity \
   &<= 2 thin || hat(epsilon.alt) ||_infinity^2
@@ -645,18 +592,18 @@ $ <eq:bar-eps-sup>
   $ <eq:M-RR-conc>
 ] <lem:M-RR-bracket-conc>
 
-_Proof._ Write $h_l(z) := u^top cal(Q)_l^("RR") thin overline(epsilon.alt)(z) thin (cal(Q)_l^("RR"))^top u$
+_Proof._ Write $h_l(z) := u^top cal(Q)_l^("RR") thin cal(V)_(epsilon.alt)(z) thin (cal(Q)_l^("RR"))^top u$
 and $g_l(z) := h_l(z) - pi(h_l)$. Submultiplicativity of the operator norm and
-<eq:bar-eps-sup> give
+@eq:bar-eps-sup gives
 $
 |h_l(z)|
-  <= C_(cal(Q))^2 thin || u ||^2 thin || overline(epsilon.alt) ||_infinity
+  <= C_(cal(Q))^2 thin || u ||^2 thin || cal(V)_(epsilon.alt) ||_infinity
   <= 18 thin C_(cal(Q))^2 thin || u ||^2 thin t_"mix"^2 thin || epsilon.alt ||_infinity^2,
 quad
 || g_l ||_infinity <= 2 thin |h_l(z)|
   <= 36 thin C_(cal(Q))^2 thin || u ||^2 thin t_"mix"^2 thin || epsilon.alt ||_infinity^2.
 $
-By <eq:M-RR-bracket> and the variance definition
+By @eq:M-RR-bracket and the variance definition
 $n thin sigma_n^(2, "RR")(u) = sum_(l = 2)^(n - 1) pi(h_l)$,
 $
 u^top chevron.l M^("RR") chevron.r_n u - n thin sigma_n^(2, "RR")(u)
@@ -695,7 +642,7 @@ bb(E)_xi^(1 slash p) lr([
   = 576 sqrt(2) thin C_(cal(Q))^2 thin || u ||^2 thin || epsilon.alt ||_infinity^2
        thin t_"mix"^(5 slash 2) thin sqrt(p thin n).
 $
-Rounding the resulting prefactor to $C_4 := 850$ gives <eq:M-RR-conc>. $square$
+Rounding the resulting prefactor to $C_4 := 850$ gives the stated bound. $square$
 
 #corollary[
   Under the assumptions of the previous lemma, for every $u in bb(R)^d$, every
@@ -717,41 +664,9 @@ $
   <= | u^top chevron.l M^("RR") chevron.r_n u - n thin sigma_n^(2, "RR")(u) |
    + n thin | sigma_n^(2, "RR")(u) - sigma^2(u) |.
 $
-The first piece is bounded in $L_p$ by <eq:M-RR-conc>; the second is the
+The first piece is bounded in $L_p$ by @eq:M-RR-conc; the second is the
 deterministic bound $n thin C_3 thin || u ||^2 slash (n thin alpha thin a) = C_3 || u ||^2 slash (alpha a)$.
 $square$
-
-#remark[
-  *Working scale and Berry--Esseen consequence.* The bound
-  $|| u^top chevron.l M^("RR") chevron.r_n u - n sigma_n^(2, "RR")(u) ||_(L_p)
-   <= C thin t_"mix"^(5 slash 2) thin sqrt(p thin n)$
-  is exactly what feeds into the martingale Berry--Esseen of
-  Bolthausen--Fan type (cf. Lemma 21 / Proposition 13 of Samsonov et al. 2025): the
-  conditional-variance term in the Bolthausen--Fan inequality is
-  $sqrt(p) thin s_n^(- 2 p slash (2 p + 1)) thin
-   bb(E)^(1 slash (2 p + 1))[|sum sigma_l^2 - s_n^2|^p]$,
-  which with $s_n^2 = n thin sigma_n^(2, "RR")(u) asymp n$ (uniformly in
-  $alpha$ at the working scale) and the exponent
-  $sqrt(p n) -> n^(p slash (2 p + 1))$ gives the standard $n^(- 1 slash 4)$
-  rate after taking $p = ceil(log n)$.
-
-  *RR vs single-step structure.* The bound is structurally identical to the
-  single-step PR case (Samsonov et al. 2025, Lemma 23): the only RR-specific
-  input is the uniform sup bound $|| cal(Q)_l^("RR") || <= C_(cal(Q))$. No extra
-  $1 slash a$ or $1 slash alpha$ factor enters, because the Markov concentration
-  is applied to a *bounded* function and the weights $cal(Q)_l^("RR")$ enter
-  only through their sup-norm. Variance comparison (Section 4.5) is the only
-  place where $1 slash (alpha thin a)$ appears, and at the working scale
-  $alpha = c thin n^(- 1 slash 2)$ this contributes $O(sqrt(n))$ — the same
-  order as the leading concentration term.
-
-  *Why we centred against $sigma_n^(2, "RR")(u)$.* The natural normalisation in
-  the Bolthausen--Fan martingale BE step is $s_n^2 = sum_l sigma_l^2$, which is
-  precisely $n thin sigma_n^(2, "RR")(u)$ for the increments
-  $Delta M_l^("RR")$. Centering against $n thin sigma^2(u)$ (corollary above) is
-  used in the corollary that converts the BE statement from the
-  $sigma_n^("RR")(u)$ normalisation to the asymptotic $sigma(u)$ normalisation.
-]
 
 == Martingale Berry--Esseen Step
 
@@ -790,7 +705,7 @@ n thin alpha thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u))
 $ <eq:variance-lb-condition>
 one has $sigma_n^(2, "RR")(u) >= sigma^2(u) slash 2$, i.e.
 $s_n^2 >= n sigma^2(u) slash 2$. At the working scale
-$alpha = c thin n^(-1 slash 2)$, condition <eq:variance-lb-condition> is
+$alpha = c thin n^(-1 slash 2)$, the variance lower-bound condition @eq:variance-lb-condition is
 satisfied for $n >= (2 C_3 || u ||^2 slash (c thin a thin sigma^2(u)))^2$.
 The trivial upper bound
 $sigma_n^(2, "RR")(u) <= C_(cal(Q))^2 || Sigma_(epsilon.alt)^(("M")) || || u ||^2$
@@ -818,9 +733,9 @@ constant appearing in Samsonov et al.'s statement, and $C_1, C_2$ universal.
   constants $C_(K, 1)(u), C_(K, 2)(u) > 0$ depending only on $|| u ||$,
   $sigma(u)$, $C_(cal(Q))$, $t_"mix"$, $|| epsilon.alt ||_infinity$,
   $|| Sigma_(epsilon.alt)^(("M")) ||$, and the constants
-  $L_B(kappa.alt(u)), C_1, C_2$ of <eq:bolthausen-fan>, such that for every
+  $L_B(kappa.alt(u)), C_1, C_2$ of @eq:bolthausen-fan, such that for every
   $n >= 3$ satisfying
-  <eq:variance-lb-condition>,
+  the variance lower-bound condition @eq:variance-lb-condition,
   $
   d_K lr((
     frac(u^top M_n^("RR"), sqrt(n) thin sigma_n^("RR")(u)),
@@ -831,8 +746,8 @@ constant appearing in Samsonov et al.'s statement, and $C_1, C_2$ universal.
   $ <eq:M-RR-BE>
 ] <thm:M-RR-BE>
 
-_Proof._ Apply <eq:bolthausen-fan> with $S_n = u^top M_n^("RR")$, the
-increment bound $kappa.alt = kappa.alt(u)$ from <eq:M-RR-incr>,
+_Proof._ Apply @eq:bolthausen-fan with $S_n = u^top M_n^("RR")$, the
+increment bound $kappa.alt = kappa.alt(u)$ from @eq:M-RR-incr,
 $s_n^2 = n thin sigma_n^(2, "RR")(u)$, and $p = ceil(log n)$ (so
 $log n <= p <= log n + 1$). Bound the three terms in turn, using
 $s_n^2 in [n thin sigma^2(u) slash 2, thin K^2(u) thin n]$ from the variance
@@ -865,56 +780,39 @@ with $C^("(III)")(u)$ depending on $|| u ||, sigma(u), C_(cal(Q)),
 || Sigma_(epsilon.alt)^(("M")) ||, t_"mix", || epsilon.alt ||_infinity$ and on
 $C_2$.
 
-*Term II (conditional-variance concentration).* By Lemma 4.7
-(equation <eq:M-RR-conc>), for every $p >= 2$,
+*Term II (conditional-variance concentration).* By the bracket concentration
+bound above, for every $p >= 2$,
 $
 (bb(E) | V_n^2 - s_n^2 |^p)^(1 slash p)
   <= B(u) thin sqrt(p thin n),
 quad
 B(u) := C_4 thin C_(cal(Q))^2 thin || u ||^2 thin || epsilon.alt ||_infinity^2 thin t_"mix"^(5 slash 2),
 $ <eq:Bu-def>
-hence $(bb(E) | V_n^2 - s_n^2 |^p)^(1 slash (2 p + 1)) <= B(u)^(p slash (2 p + 1)) thin (p thin n)^(p slash (2 (2 p + 1)))$.
-Combining with $s_n^(-1) <= sqrt(2 slash (sigma^2(u) thin n))$ and
-$s_n^(1 slash (2 p + 1)) <= max(1, K(u))^(1 slash (2 p + 1)) thin n^(1 slash (2 (2 p + 1)))$,
+Using $s_n^(-a_p) = s_n^(-1) s_n^(1 slash (2 p + 1))$, the variance lower
+bound $s_n^2 >= n sigma^2(u) / 2$, and the upper bound
+$s_n <= K(u) sqrt(n)$, the second Bolthausen--Fan term is bounded by
 $
 &C_1 thin sqrt(p) thin s_n^(- a_p) thin (bb(E) | V_n^2 - s_n^2 |^p)^(1 slash (2 p + 1)) \
-&quad<= C_1 thin sqrt(p) thin sqrt(2 slash (sigma^2(u) n))
-        thin max(1, K(u))^(1 slash (2 p + 1)) thin n^(1 slash (2 (2 p + 1))) \
-&quad quad times B(u)^(p slash (2 p + 1)) thin p^(p slash (2 (2 p + 1))) thin n^(p slash (2 (2 p + 1))) \
-&quad= C_1 thin sqrt(2 slash sigma^2(u)) thin max(1, K(u))^(1 slash (2 p + 1)) thin
-        B(u)^(p slash (2 p + 1)) thin p^((3 p + 1) slash (2 (2 p + 1))) thin
+&quad<= C thin C_1 thin sigma^(-1)(u)
+        thin max(1, K(u))^(1 slash (2 p + 1))
+        thin max(1, B(u))^(p slash (2 p + 1)) \
+&quad quad times p^((3 p + 1) slash (2 (2 p + 1)))
         n^(- p slash (2 (2 p + 1))).
 $ <eq:term-II-1>
-At $p = ceil(log n) >= log n$, three elementary bounds hold:
-$
-&p^((3 p + 1) slash (2 (2 p + 1))) <= p^(3 slash 4) <= 2^(3 slash 4) thin (log n)^(3 slash 4),
-$
-$
-&n^(- p slash (2 (2 p + 1))) = n^(- 1 slash 4 + 1 slash (4 (2 p + 1))) <= e^(1 slash 8) thin n^(- 1 slash 4),
-$
-$
-&B(u)^(p slash (2 p + 1)) <= max(1, sqrt(B(u))) thin e^(1 slash 2),
-$
-where the first uses $(3 p + 1) slash (2 (2 p + 1)) <= 3 slash 4$ (equivalent to
-$4(3p + 1) <= 6(2 p + 1)$, true), the second uses
-$log(n^(1 slash (4 (2 p + 1)))) = log(n) slash (4 (2 p + 1)) <= 1 slash 8$ for
-$p >= log n$, and the third uses $|p slash (2 p + 1) - 1 slash 2| <= 1 slash (2 (2 p + 1))$
-together with $log B(u) slash (2 p + 1) <= 1$ for $n >= max(1, B(u))$
-(absorbed into $C^("(II)")(u)$). Likewise
-$max(1, K(u))^(1 slash (2 p + 1)) <= e^(1 slash 2)$ for $n >= K(u)$. Substituting,
+
+For $p = ceil(log n)$ and $n$ large enough depending on $u$,
+$p^((3 p + 1) slash (2 (2 p + 1))) <= C log^(3 slash 4) n$ and
+$n^(- p slash (2 (2 p + 1))) <= C n^(-1 slash 4)$; the remaining
+$K(u)$- and $B(u)$-factors are absorbed into the direction-dependent constant.
+Thus
 $
 "Term II"
-  &<= C_1 thin sqrt(2 slash sigma^2(u)) thin e^(1 slash 2) thin max(1, sqrt(B(u))) thin e^(1 slash 2) thin
-       2^(3 slash 4) thin (log n)^(3 slash 4) thin e^(1 slash 8) thin n^(- 1 slash 4) \
-  &<= 2^(3 slash 4) thin e^(9 slash 8) thin C_1 thin
-       sqrt(2 max(1, B(u)) slash sigma^2(u)) thin
-       frac(log^(3 slash 4) n, n^(1 slash 4))
-  =: frac(C^("(II)")(u) thin log^(3 slash 4) n, n^(1 slash 4)).
+  <= frac(C^("(II)")(u) thin log^(3 slash 4) n, n^(1 slash 4)).
 $ <eq:term-II>
 
-Adding <eq:term-I>, <eq:term-II>, <eq:term-III> and setting
+Adding the three term bounds and setting
 $C_(K, 1)(u) := C^("(II)")(u)$, $C_(K, 2)(u) := C^("(I)")(u) + C^("(III)")(u)$
-proves <eq:M-RR-BE>. $square$
+proves the martingale Berry--Esseen bound. $square$
 
 #corollary[
   Under the hypotheses of the previous theorem,
@@ -933,7 +831,7 @@ proves <eq:M-RR-BE>. $square$
 
 _Proof._ Set $r := sigma_n^("RR")(u) slash sigma(u)$ and
 $W := u^top M_n^("RR") slash (sqrt(n) sigma_n^("RR")(u))$. Then the statistic
-normalised by $sigma(u)$ is $W r$. Under <eq:variance-lb-condition>,
+normalised by $sigma(u)$ is $W r$. Under the variance lower-bound condition @eq:variance-lb-condition,
 $r >= 1 slash sqrt(2)$, while the trivial upper bound on
 $sigma_n^(2, "RR")(u)$ gives $r <= r_max(u) < infinity$. On this compact
 interval the standard normal cdf satisfies
@@ -954,33 +852,11 @@ $
   <= frac(C_3 thin || u ||^2,
           n thin alpha thin a thin sigma^2(u)).
 $
-Adding this perturbation to Theorem <thm:M-RR-BE> proves the stated bound after
-absorbing $C_Phi$ into the constants. $square$
+Adding this perturbation to the martingale Berry--Esseen bound proves the
+stated claim after absorbing $C_Phi$ into the constants. $square$
 
-#remark[
-  *Working scale and rate.* At $alpha = c thin n^(-1 slash 2)$ the leading
-  rate $log^(3 slash 4)(n) thin n^(-1 slash 4)$ matches the single-step PR
-  Berry--Esseen of Samsonov et al. (2025, Proposition 13). Richardson--Romberg
-  neither improves nor degrades the martingale Berry--Esseen rate; the
-  cancellation acts on the *misadjustment* remainder, not on the leading
-  martingale.
-
-  *Constants.* The dominant $C_(K, 1)(u)$ scales as
-  $sqrt(B(u) slash sigma^2(u))$ with $B(u)$ the conditional-variance
-  concentration constant of <eq:Bu-def>: explicitly $C_(K, 1)(u) asymp
-  C_(cal(Q)) || u ||^2 thin t_"mix"^(5 slash 4) thin || epsilon.alt ||_infinity slash sigma(u)$.
-  The $sigma(u)^(-1)$ blow-up at degenerate directions is genuine and
-  reflects the assumption $sigma^2(u) > 0$.
-
-  *Scope.* This theorem bounds the Kolmogorov distance for the martingale
-  $u^top M_n^("RR")$ alone, not for the full PR-averaged RR iterate
-  $sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)$. The
-  full Berry--Esseen bound additionally requires $L_p$-control of
-  $D_(2, n)^("RR")$ (Section 4.6, already done), the transient
-  $D_("tr")^("RR")$, and the misadjustment $R_n^("mis,RR")$ via the Levin
-  depth-two transfer of the next subsection, assembled by the smoothing
-  inequality of Samsonov et al. (2025, Proposition 12).
-]
+This theorem concerns only the martingale term; the stationary assembly below
+adds the Poisson remainder and the Levin depth-two misadjustment.
 
 == Misadjustment via Levin Depth-Two
 
@@ -994,10 +870,10 @@ R_n^("mis, RR") := frac(1, sqrt(n)) sum_(k = 0)^(n - 1)
                     (2 R_k^((alpha)) - R_k^((2 alpha))),
 $ <eq:R-mis-def>
 where $R_k^((alpha)) := J_k^((1, alpha)) + H_k^((1, alpha))$ is the depth-one
-remainder of <eq:depth-one>. Chapter 3 showed that the kernel-difference
-identity bounds $R_n^("mis, RR")$ at order $O(sqrt(n) thin alpha) = O(1)$ at
-the working scale $alpha asymp n^(-1 slash 2)$ — too crude for a
-Berry--Esseen rate $n^(-1 slash 4)$. The depth-two route below transfers
+remainder of @eq:depth-one. A direct kernel-difference route only bounds
+$R_n^("mis, RR")$ at order $O(sqrt(n) thin alpha) = O(1)$ at the working scale
+$alpha asymp n^(-1 slash 2)$ — too crude for a Berry--Esseen rate
+$n^(-1 slash 4)$. The depth-two route below transfers
 four statements of Levin et al. (2025) into the present notation and
 recovers the target $n^(-1 slash 4) thin "polylog"(n)$ rate.
 
@@ -1019,7 +895,7 @@ $
 H_n^((ell, alpha)) = J_n^((ell + 1, alpha)) + H_n^((ell + 1, alpha)),
 quad ell >= 0.
 $ <eq:depth-recursion>
-Applying <eq:depth-recursion> with $ell = 1$ refines $R_k^((alpha))$ to
+Applying @eq:depth-recursion with $ell = 1$ refines $R_k^((alpha))$ to
 $
 R_k^((alpha)) = J_k^((1, alpha)) + J_k^((2, alpha)) + H_k^((2, alpha)),
 $
@@ -1087,8 +963,11 @@ here for reference; their proofs are in the cited paper.
 *Stationary augmented-chain convention.* The recursions above are displayed in
 finite-time notation with $J_0^((ell, alpha)) = H_0^((ell, alpha)) = 0$, while
 Levin Proposition 2 is a statement about the stationary augmented chain. The
-misadjustment estimates below use the stationary quantities as deterministic
-centers and should be read under the stationary augmented-chain convention.
+misadjustment estimates below use the stationary versions of
+$(Z_(t + 1), J_t^((0, w)), J_t^((1, w)), J_t^((2, w)), H_t^((2, w)))$,
+$w in {alpha, 2 alpha}$, as deterministic centers and should be read under
+this stationary augmented-chain convention. We keep the same symbols
+$J_t^((ell, w))$ and $H_t^((ell, w))$ to avoid duplicating notation.
 For a zero-start full average, the transfer from finite-start sums to
 stationary centered sums is not a single terminal $rho^n$ term: summing
 pointwise contractions over $k = 0, dots, n - 1$ produces a startup
@@ -1103,14 +982,68 @@ burn-in average with the burned-in weights $Q_(l,n_0)^((alpha))$ of
 Section 4.1 or a separate transfer lemma with the correct accumulated
 startup dependence.
 
+#lemma[
+  *(Stationary-limit transfer for the centered first-order iterate.)*
+  Fix $w in (0, alpha_infinity]$ and set $B_w := I - w overline(A)$. Assume
+  the stationary augmented-chain convention above, *UGE 1*,
+  $pi(tilde(A)) = 0$, and $|| epsilon.alt ||_infinity < infinity$. Let
+  $(J_t^((0, w)), J_t^((1, w)))_(t in ZZ)$ be the stationary two-sided
+  solution of the first two perturbation recursions, and set
+  $T_t^((1, w)) := B_w thin J_t^((1, w))$. Then, with
+  $
+  Phi(p, w) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
+               + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(w slash a),
+  $
+  there exists a constant $C_("stat,1")$, depending only on the constants in
+  the zero-start centered last-iterate bound of `last_iterate.typ`, such that
+  for every $p >= 2$ and every $t in ZZ$,
+  $
+  || T_t^((1, w)) - bb(E)_pi T_t^((1, w)) ||_(L_p)
+    <= C_("stat,1") thin w thin Phi(p, w).
+  $
+  Consequently, whenever $||B_w^(-1)|| <= 2$,
+  $
+  || J_t^((1, w)) - bb(E)_pi J_t^((1, w)) ||_(L_p)
+    <= 2 C_("stat,1") thin w thin Phi(p, w).
+  $
+] <lem:stationary-limit-J1>
+
+_Proof._ For $m >= 1$, run the same recursions on the stationary driving
+chain over the finite window $\{t - m + 1, dots, t\}$ with zero initial
+conditions at time $t - m$; denote the resulting variables by
+$J_(t, m)^((0, w))$ and $J_(t, m)^((1, w))$. Stationarity of the driving chain
+implies that $B_w J_(t, m)^((1, w))$ has the same law as the zero-start
+$T_m^((1, w))$ in `last_iterate.typ`. Therefore the centered last-iterate
+bound gives, uniformly in $m$ and $t$,
+$
+|| B_w J_(t, m)^((1, w)) - bb(E) B_w J_(t, m)^((1, w)) ||_(L_p)
+  <= C_("stat,1") thin w thin Phi(p, w).
+$
+The deterministic-product expansions give
+$
+J_(t, m)^((0, w))
+  = -w sum_(r = 0)^(m - 1) B_w^r epsilon.alt(Z_(t - r)),
+$
+and express $J_(t, m)^((1, w))$ as a bounded double series whose summands are
+dominated by
+$C w^2 s (1 - w a)^(s slash 2) ||epsilon.alt||_infinity$ at total lag $s$.
+Since $sum_(s >= 0) s (1 - w a)^(s slash 2) < infinity$, the finite-past
+approximations are Cauchy in every $L_p$ and converge to the stationary
+two-sided solution. Passing to the limit in the preceding uniform bound yields
+the displayed estimate for $T_t^((1, w))$. The estimate for $J_t^((1, w))$
+then follows from
+$J_t^((1, w)) - bb(E)_pi J_t^((1, w))
+  = B_w^(-1) lr((T_t^((1, w)) - bb(E)_pi T_t^((1, w))))$.
+$square$
+
 *Telescoping identity for $J^((1))$.* Summing the recursion
 $J_k^((1, alpha)) = (I - alpha overline(A)) thin J_(k - 1)^((1, alpha))
   - alpha tilde(A)(Z_k) thin J_(k - 1)^((0, alpha))$
-from $k = 1$ to $n$ and rearranging, with $J_0^((1, alpha)) = 0$,
+from $k = 1$ to $n$ and rearranging gives, for an arbitrary initial value,
 $
 overline(A) sum_(k = 0)^(n - 1) J_k^((1, alpha))
   = -sum_(k = 1)^n tilde(A)(Z_k) thin J_(k - 1)^((0, alpha))
-    - frac(1, alpha) thin J_n^((1, alpha)).
+    + frac(1, alpha) thin lr((J_0^((1, alpha)) - J_n^((1, alpha)))).
 $
 The stationary version of the same recursion yields
 $bb(E)_pi [tilde(A)(Z_1) thin J_0^((0, alpha))]
@@ -1121,14 +1054,16 @@ $
 sum_(k = 0)^(n - 1) lr((J_k^((1, alpha)) - bb(E)_pi [J_infinity^((1, alpha))]))
   = -overline(A)^(-1) sum_(k = 1)^n
       overline(psi)_alpha (J_(k - 1)^((0, alpha)), Z_k)
-    - frac(1, alpha) thin overline(A)^(-1) thin J_n^((1, alpha)).
+    + frac(1, alpha) thin overline(A)^(-1)
+      lr((J_0^((1, alpha)) - J_n^((1, alpha)))).
 $ <eq:J1-telescope>
 This identity is the bridge between the (vector-valued) PR-average of
 $J^((1))$ and the centered bilinear sum bounded in Levin Corollary 6.
 
 #lemma[
   Assume the stationary augmented-chain convention above, *UGE 1*,
-  $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$, and
+  $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
+  $|| epsilon.alt ||_infinity < infinity$, and
   $alpha, 2 alpha in (0, alpha_infinity]$. Set
   $
   Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
@@ -1176,7 +1111,7 @@ $
 $
 Multiplying by $sqrt(n)$ produces the first term of the bound.
 
-*Centered.* Apply <eq:J1-telescope> at $w in {alpha, 2 alpha}$, take $L_p$
+*Centered.* Apply @eq:J1-telescope at $w in {alpha, 2 alpha}$, take $L_p$
 norms, and combine via the triangle inequality:
 $
 || T_n^("(1, c)") ||_(L_p)
@@ -1184,7 +1119,8 @@ $
        || overline(A)^(-1) || dot
        || sum_(k = 1)^n overline(psi)_w (J_(k - 1)^((0, w)), Z_k) ||_(L_p) \
     &quad quad quad quad
-       + frac(1, w) thin || overline(A)^(-1) || dot || J_n^((1, w)) ||_(L_p)
+       + frac(1, w) thin || overline(A)^(-1) || dot
+         || J_0^((1, w)) - J_n^((1, w)) ||_(L_p)
      )).
 $
 For the bilinear sum apply Levin Corollary 6 with $r = n$,
@@ -1200,9 +1136,10 @@ frac(1, sqrt(n)) || sum overline(psi)_w ||_(L_p)
   <= sqrt(2) c_(W, 1) thin p^(3 slash 2) sqrt(alpha)
    + sqrt(2) c_(W, 2) thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a)).
 $
-For the boundary term, the centered last-iterate lemma in
-`last_iterate.typ`, applied to $T_n^((1, w)) = (I - w overline(A)) thin J_n^((1, w))$
-with $|| (I - w overline(A))^(-1) || <= 2$ for $w <= alpha_infinity$, gives
+For the boundary term, apply the stationary-limit transfer
+@lem:stationary-limit-J1 to
+$T_n^((1, w)) = (I - w overline(A)) thin J_n^((1, w))$ with
+$|| (I - w overline(A))^(-1) || <= 2$ for $w <= alpha_infinity$. This gives
 $
 || J_n^((1, w)) - bb(E) J_n^((1, w)) ||_(L_p) <= C w thin Phi(p, w),
 $
@@ -1212,14 +1149,17 @@ $
 || J_n^((1, w)) ||_(L_p) <= C w lr((Phi(p, w) + 1)) <= C w thin Phi(p, w)
 quad "for" p >= 2.
 $
-Therefore $w^(-1) || J_n^((1, w)) ||_(L_p) <= C thin Phi(p, w) <= sqrt(2) thin C thin Phi(p, alpha)$.
+The same bound holds for $J_0^((1, w))$ under stationarity, so
+$w^(-1) || J_0^((1, w)) - J_n^((1, w)) ||_(L_p)
+<= C thin Phi(p, w) <= sqrt(2) thin C thin Phi(p, alpha)$ after absorbing
+the factor $2$ into $C$.
 Dividing by $sqrt(n)$ produces the last term. Summing the three RR-combined
 pieces and absorbing universal factors into a single $C_("mis,1")$ completes
 the proof. $square$
 
 #lemma[
   Under the assumptions of the previous lemma, for every $p >= 2$ and every
-  $q >= 2$ satisfying $p <= q slash 2$ and $alpha <= alpha_*(q, t_"mix")$,
+  $q >= 2$ satisfying $p <= q slash 2$ and $2 alpha <= alpha_*(q, t_"mix")$,
   $
   || T_n^((2)) ||_(L_p) + || T_n^((H)) ||_(L_p)
     <= C_("mis,2") thin (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
@@ -1242,12 +1182,14 @@ argument for $T_n^((H))$, with the additional $d^(1 slash q)$ factor of
 Levin Proposition 9. Adding the two bounds gives the lemma. $square$
 
 #theorem[
-  Assume *UGE 1*, $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$,
+  *(Stationary PR-averaged RR misadjustment bound.)*
+  Assume *UGE 1*, $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
+  $|| epsilon.alt ||_infinity < infinity$,
   $alpha, 2 alpha in (0, alpha_infinity]$, and the stationary augmented-chain
   convention above. There exists a constant $C$ depending on the universal and
   problem constants of the previous two lemmas such that for every
   $p >= 2$, every $q >= 2$ satisfying $p <= q slash 2$, every
-  $alpha <= alpha_*(q, t_"mix")$, and every $n >= 2$,
+  $2 alpha <= alpha_*(q, t_"mix")$, and every $n >= 2$,
   $
   || R_n^("mis, RR") ||_(L_p)
     &<= C sqrt(n) thin alpha^2
@@ -1259,14 +1201,14 @@ Levin Proposition 9. Adding the two bounds gives the lemma. $square$
   $
 ] <thm:misadjustment>
 
-_Proof._ Triangle inequality on <eq:R-mis-split>:
+_Proof._ Triangle inequality on @eq:R-mis-split:
 $|| R_n^("mis, RR") ||_(L_p) <= || T_n^((1)) ||_(L_p) + || T_n^((2)) ||_(L_p) + || T_n^((H)) ||_(L_p)$.
 Combine the centered $T^((1))$ bound and the raw $T^((2)) + T^((H))$ bound. $square$
 
 #corollary[
   At the working scale $alpha = c thin n^(-1 slash 2)$, with
-  $p = ceil(log n)$ and $q = max(2 p, ceil(log(e thin d)), 2)$, and for $n$
-  large enough that $alpha <= alpha_*(q, t_"mix")$,
+  $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$, and for $n$
+  large enough that $2 alpha <= alpha_*(q, t_"mix")$,
   $
   || R_n^("mis, RR") ||_(L_p) <= C thin "polylog"(n) thin n^(-1 slash 4),
   $
@@ -1280,93 +1222,66 @@ $(alpha n)^(-1 slash 2) = c^(-1 slash 2) thin n^(-1 slash 4)$, and
 $Phi(p, alpha) thin n^(-1 slash 2) = O(p^(3 slash 2) thin n^(-1 slash 2))$.
   With $p asymp log n$ and $q >= log(e d)$, the factor $d^(1 slash q)$ is
   bounded by a universal constant, and the dominant order in
-  the misadjustment theorem is $"polylog"(n) thin n^(-1 slash 4)$. $square$
+  the stationary misadjustment bound is $"polylog"(n) thin n^(-1 slash 4)$. $square$
 
-#remark[
-  *Finite-start transfer is not included.* The misadjustment theorem is stated
-  under the stationary augmented-chain convention introduced above. For a
-  zero-start recursion or an arbitrary initial distribution $xi$, the
-  Wasserstein contraction of
-  $(Z_t, J_t^((0, alpha)), J_t^((1, alpha)))$ (Levin et al. 2025,
-  Section 4 / Proposition 1) must be summed over the averaging window. For the
-  full average $n_0 = 0$ this accumulated startup contribution is generally of
-  order $1 slash (sqrt(n) alpha a)$ and is not negligible at
-  $alpha asymp n^(-1 slash 2)$. A logarithmic-burn-in theorem is therefore a
-  separate extension and must be proved with the corresponding burned-in
-  weights.
-
-  *Why the depth-two route is needed.* Chapter 3 proved that a
-  kernel-difference identity bounds the centered RR-difference of $S_n$ at
-  order $O(sqrt(n) thin alpha) = O(1)$ at the working scale, which is too
-  crude for a Berry--Esseen bound at rate $n^(-1 slash 4)$. The depth-two
-  refinement avoids this by separately controlling
-  + the *bias* of $J^((1))$, where RR-cancellation drops the leading
-    $alpha thin Delta$ to leave $O(alpha^2)$ — Levin Proposition 2;
-  + the *centered* part of $J^((1))$, where the recursion-telescoping
-    identity <eq:J1-telescope> reduces it to the centered bilinear bound of
-    Levin Corollary 6;
-  + the $J^((2))$ and $H^((2))$ pieces, controlled without RR-cancellation
-    since the $alpha^(3 slash 2)$ moment bound of Levin Propositions 8 and 9
-    is already small enough.
-
-  *Optional refinement.* The depth-two analysis above does not exploit any
-  RR-coupling between the $alpha$- and $2 alpha$-trajectories at the level
-  of $J^((2))$ and $H^((2))$; the bound treats them as the sum of two
-  independent $alpha^(3 slash 2)$ contributions. A genuine RR-cancellation
-  at this level would replace $sqrt(n) thin alpha^(3 slash 2)$ by
-  $sqrt(n) thin alpha^2$ in the misadjustment theorem, making the misadjustment
-  *strictly* subleading to the martingale Berry--Esseen. This is the open
-  thread discussed at the end of Chapter 3.
-]
+The theorem just proved is only a stationary augmented-chain misadjustment
+bound at $n_0 = 0$. A finite-start theorem with burn-in requires the burned-in
+weights $Q_(l,n_0)^((alpha))$ and is not used in the assembly below.
 
 == Smoothing Assembly
 
-The previous sections produced the four ingredients of the Berry--Esseen
-program for the PR-averaged Richardson--Romberg iterate:
+The previous sections produced the four ingredients of the stationary
+$n_0 = 0$ Berry--Esseen program for the PR-averaged Richardson--Romberg
+statistic:
 
 + the *Poisson decomposition* $W^("RR") = -n^(-1 slash 2) M_n^("RR") + D_(2, n)^("RR")$
   with deterministic sup-norm control of $D_(2, n)^("RR")$ at the order
-  $t_"mix" slash (a^2 sqrt(n))$ (Section 4.6, equation <eq:D2-bound>);
+  $t_"mix" slash (a^2 sqrt(n))$;
 + the *predictable quadratic variation concentration* of
   $u^top chevron.l M^("RR") chevron.r_n u$ around $n thin sigma_n^(2, "RR")(u)$
-  in $L_p$ at the order $sqrt(p thin n)$ (Lemma <lem:M-RR-bracket-conc>);
+  in $L_p$ at the order $sqrt(p thin n)$;
 + the *martingale Berry--Esseen* for
   $u^top M_n^("RR") slash (sqrt(n) thin sigma_n^("RR")(u))$ at rate
-  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ (Theorem <thm:M-RR-BE>);
+  $log^(3 slash 4)(n) thin n^(-1 slash 4)$;
 + the *Levin depth-two misadjustment bound* on $R_n^("mis, RR")$ controlling
   the non-martingale residual at the same $log^c(n) thin n^(-1 slash 4)$
-  rate (Theorem <thm:misadjustment>).
+  rate.
 
 The smoothing inequality of Bobkov--Götze (Samsonov et al. 2025,
 Proposition 12) assembles these four into a single Kolmogorov bound on
-$sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)$.
+the stationary $n_0 = 0$ augmented-chain RR statistic.
 
-*Composite remainder.* Combining the depth-one identity in Section 4.1
-with the Poisson decomposition of Section 4.6 gives
+*Stationary assembled statistic.* Combining the depth-one identity in
+Section 4.1 with the Poisson decomposition of Section 4.6 gives a finite-start
+identity. Since the transfer from a zero-start recursion to the stationary
+augmented chain is not proved here, the bound below is stated for the
+stationary $n_0 = 0$ assembled scalar statistic
 $
-sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)
-  = -frac(u^top M_n^("RR"), sqrt(n)) + u^top cal(R)_n^("RR"),
+S_(n, "stat")^("RR")(u)
+  := -frac(u^top M_n^("RR"), sqrt(n)) + u^top cal(R)_(n, "stat")^("RR"),
 $ <eq:full-decomp>
 $
-cal(R)_n^("RR")
-  := D_(2, n)^("RR") + D_("tr")^("RR") + R_n^("mis, RR"),
+cal(R)_(n, "stat")^("RR")
+  := D_(2, n)^("RR") + R_n^("mis, RR"),
 $
 where $D_(2, n)^("RR")$ is the Poisson boundary/Abel remainder of
-Section 4.6, $D_("tr")^("RR") := 2 thin D_("tr")^((alpha)) - D_("tr")^((2 alpha))$
-is the deterministic transient of <eq:full-decomp>'s parent decomposition
-in Section 4.1, and $R_n^("mis, RR")$ is the Levin depth-two misadjustment
-defined in <eq:R-mis-def>. Dividing by $sqrt(n) thin sigma_n^("RR")(u)$,
+Section 4.6 and $R_n^("mis, RR")$ is the Levin depth-two misadjustment
+defined in @eq:R-mis-def, both read under the stationary augmented-chain
+convention. The deterministic-start transient
+$D_("tr")^("RR") := 2 thin D_("tr")^((alpha)) - D_("tr")^((2 alpha))$ is not
+part of this stationary result; handling it together with the accumulated
+startup error belongs to a later finite-start/burn-in transfer theorem. Dividing by
+$sigma_n^("RR")(u)$,
 $
-frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
-     sigma_n^("RR")(u))
+frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u))
   = X_n + Y_n,
 $ <eq:XY-split>
 $
 X_n := -frac(u^top M_n^("RR"), sqrt(n) thin sigma_n^("RR")(u)),
 quad
-Y_n := frac(u^top cal(R)_n^("RR"), sigma_n^("RR")(u)).
+Y_n := frac(u^top cal(R)_(n, "stat")^("RR"), sigma_n^("RR")(u)).
 $
-Theorem <thm:M-RR-BE> bounds $d_K(X_n, cal(N)(0, 1))$; the symmetry
+The martingale Berry--Esseen bound controls $d_K(X_n, cal(N)(0, 1))$; the symmetry
 $- cal(N)(0, 1) =^d cal(N)(0, 1)$ of the standard normal makes the sign
 of the leading term irrelevant ($d_K(X_n, cal(N)) = d_K(-X_n, cal(N))$).
 
@@ -1392,23 +1307,21 @@ $ <eq:smoothing-Lp>
 in which the trailing tail probability $e^(-p)$ is absorbed into
 $O(1 slash n)$ as soon as $p >= log n$.
 
-*$L_p$-bound on the composite remainder.* The three pieces of
-$cal(R)_n^("RR")$ contribute additively. Consistently with the weight
-derivation of Section 4.1, this assembly is for the full average $n_0 = 0$.
-The deterministic transient is therefore not hidden inside a burn-in argument;
-it remains as an explicit term and disappears in the working-rate corollary
-under the centered initialization $theta_0 = theta^*$.
+*$L_p$-bound on the composite remainder.* The two pieces of
+$cal(R)_(n, "stat")^("RR")$ contribute additively. The finite-start
+deterministic transient displayed in Section 4.1 is deliberately excluded:
+setting $theta_0 = theta^*$ would remove only that deterministic term, but not
+the startup discrepancy between zero-start perturbation variables and the
+stationary augmented chain.
 
 #lemma[
-  Assume the standing hypotheses of Theorem <thm:misadjustment>. Then for every
-  $u in bb(R)^d$, every $p >= 2$, and every $q >= 2$ satisfying the restrictions
-  of Theorem <thm:misadjustment>,
+  Assume the hypotheses and step-size restrictions of the stationary
+  PR-averaged RR misadjustment bound above. Then for every $u in bb(R)^d$,
+  every $p >= 2$, and every admissible $q >= 2$,
   $
-  || u^top cal(R)_n^("RR") ||_(L_p)
+  || u^top cal(R)_(n, "stat")^("RR") ||_(L_p)
     &<= frac(C_("D2") thin || u ||, sqrt(n))
-     + frac(C_("tr") thin || u || thin || theta_0 - theta^* ||,
-            sqrt(n) thin alpha thin a) \
-    &quad + || u || thin C_("mis") thin lr((
+     + || u || thin C_("mis") thin lr((
         sqrt(n) thin alpha^2
         + (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
             thin sqrt(n) thin alpha^(3 slash 2) thin log^(3 slash 2)(1 slash (alpha a))
@@ -1423,118 +1336,153 @@ under the centered initialization $theta_0 = theta^*$.
   $
   C_("D2") := 3 thin t_"mix" thin || epsilon.alt ||_infinity
               thin (C_(cal(Q)) + C_2 slash a^2),
-  quad
-  C_("tr") := 6 thin kappa_Q,
   $
-  and $C_("mis")$ the constant of Theorem <thm:misadjustment>.
+  and $C_("mis")$ the constant in the misadjustment theorem.
 ] <lem:R-bound>
 
-_Proof._ Triangle inequality on $u^top cal(R)_n^("RR")$:
+_Proof._ Triangle inequality on $u^top cal(R)_(n, "stat")^("RR")$:
 
-(a) The deterministic sup-norm bound <eq:D2-bound> for $D_(2, n)^("RR")$
+(a) The deterministic sup-norm bound for $D_(2, n)^("RR")$
 yields $|| u^top D_(2, n)^("RR") ||_(L_p) <= || u || thin || D_(2, n)^("RR") ||_infinity
 <= C_("D2") thin || u || slash sqrt(n)$ for every $p >= 1$.
 
-(b) The deterministic transient $D_("tr")^((alpha))$ of Section 4.1 is
-$D_("tr")^((alpha)) = n^(-1 slash 2) sum_(k = 0)^(n - 1) B_alpha^k
-(theta_0 - theta^*)$. Submultiplicativity of $|| dot ||_Q$ and Lyapunov
-contraction give
-$|| sum_(k = 0)^(n - 1) B_alpha^k ||_Q <= sum_(k >= 0)
-(1 - alpha a)^(k slash 2) <= 2 slash (alpha a)$, so by norm equivalence
-$
-|| D_("tr")^((alpha)) ||
-  <= frac(2 thin kappa_Q, sqrt(n) thin alpha thin a)
-     thin || theta_0 - theta^* ||.
-$
-The RR combination $D_("tr")^("RR") = 2 D_("tr")^((alpha)) - D_("tr")^((2 alpha))$
-contributes a factor at most $3$, giving
-$|| D_("tr")^("RR") || <= 6 thin kappa_Q thin || theta_0 - theta^* ||
-slash (sqrt(n) thin alpha thin a)$, hence
-$|| u^top D_("tr")^("RR") || <= C_("tr") || u || thin || theta_0 - theta^* ||
-slash (sqrt(n) alpha a)$.
-
-(c) The misadjustment bound is Theorem <thm:misadjustment>, which gives
-the third group of summands directly. $square$
+(b) The misadjustment theorem gives
+the remaining summands directly. $square$
 
 #theorem[
-  Under the standing hypotheses of Theorem <thm:misadjustment> and Theorem
-  <thm:M-RR-BE>, with $p = ceil(log n)$ and
-  $q = max(2 p, ceil(log(e thin d)), 2)$, and with $n$ large enough that
-  <eq:variance-lb-condition> holds and $alpha <= alpha_*(q, t_"mix")$,
+  *(Stationary $n_0 = 0$ PR-averaged RR Berry--Esseen bound.)*
+  Assume *UGE 1*, $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
+  $|| epsilon.alt ||_infinity < infinity$, $sigma^2(u) > 0$,
+  $alpha, 2 alpha in (0, alpha_infinity]$, and the stationary augmented-chain
+  convention above. Set
+  $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$.
+  If $n$ is large enough that the variance lower-bound condition @eq:variance-lb-condition holds and
+  $2 alpha <= alpha_*(q, t_"mix")$, then
   $
   d_K lr((
-    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
-         sigma_n^("RR")(u)),
+    frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
     cal(N)(0, 1)
   ))
     &<= frac(C_(K, 1)(u) thin log^(3 slash 4) n, n^(1 slash 4))
      + frac(C_(K, 2)(u) thin log n, sqrt(n)) \
-    &quad + frac(e thin || u^top cal(R)_n^("RR") ||_(L_p),
+    &quad + frac(e thin || u^top cal(R)_(n, "stat")^("RR") ||_(L_p),
                  sqrt(2 pi) thin sigma_n^("RR")(u))
      + frac(e, n),
   $ <eq:RR-BE-master>
-  with $|| u^top cal(R)_n^("RR") ||_(L_p)$ bounded by Lemma
-  <lem:R-bound>, and $C_(K, 1)(u), C_(K, 2)(u)$ the constants of Theorem
-  <thm:M-RR-BE>.
+  with $|| u^top cal(R)_(n, "stat")^("RR") ||_(L_p)$ bounded by the preceding
+  lemma, and $C_(K, 1)(u), C_(K, 2)(u)$ the constants of the martingale
+  Berry--Esseen theorem.
 ] <thm:RR-BE>
 
-_Proof._ Apply <eq:smoothing-Lp> with $X = X_n$ and $Y = Y_n$ from
-<eq:XY-split>. The first two terms come from Theorem <thm:M-RR-BE> applied
-to $-X_n$ (using $d_K(X_n, cal(N)) = d_K(-X_n, cal(N))$ by symmetry of the
-standard normal). The remainder term is
-$e thin || Y_n ||_(L_p) slash sqrt(2 pi) = e thin || u^top cal(R)_n^("RR")
-||_(L_p) slash (sqrt(2 pi) thin sigma_n^("RR")(u))$. The trailing $e^(-p)$
-satisfies $e^(-p) <= e thin n^(-1)$ for $p = ceil(log n)$. $square$
+_Proof._ Apply the smoothing inequality with $X = X_n$ and $Y = Y_n$ from the
+displayed decomposition above. The first two terms come from the martingale
+Berry--Esseen bound applied to $-X_n$ (using
+$d_K(X_n, cal(N)) = d_K(-X_n, cal(N))$ by symmetry of the standard normal).
+The remainder term is
+$e thin || Y_n ||_(L_p) slash sqrt(2 pi) = e thin || u^top cal(R)_(n, "stat")^("RR")
+||_(L_p) slash (sqrt(2 pi) thin sigma_n^("RR")(u))$. Since
+$p = max(2, ceil(log n)) >= log n$, the trailing $e^(-p)$ is at most
+$n^(-1)$. $square$
 
 #corollary[
-  At the working scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$ such
-  that $alpha, 2 alpha in (0, alpha_infinity]$, with $p = ceil(log n)$ and
-  $q = max(2 p, ceil(log(e thin d)), 2)$ satisfying
-  $alpha <= alpha_*(q, t_"mix")$, and under the centered initialization
-  $theta_0 = theta^*$, the bound <eq:RR-BE-master> reduces to
+  Let $alpha = alpha_n$ be an admissible step-size sequence and set
+  $p_n := max(2, ceil(log n))$, $q_n := max(2 p_n, ceil(log(e thin d)), 2)$,
+  and $Lambda_n := log(1 slash (alpha_n a))$. Assume the step-size restrictions
+  $2 alpha_n <= alpha_infinity$ and
+  $2 alpha_n <= alpha_*(q_n, t_"mix")$, and the variance lower-bound condition
+  @eq:variance-lb-condition. If
+  $
+  p_n^3 (n alpha_n)^(-1 slash 2) Lambda_n^(1 slash p_n) -> 0,
+  quad
+  p_n^(7 slash 2) sqrt(n) thin alpha_n^(3 slash 2) Lambda_n^(3 slash 2) -> 0,
+  $ <eq:alpha-window>
+  then
   $
   d_K lr((
-    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
-         sigma_n^("RR")(u)),
+    frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
+    cal(N)(0, 1)
+  )) -> 0.
+  $
+  In particular, for a power scale $alpha_n = c thin n^(-gamma)$, up to
+  logarithmic factors, the admissible window is
+  $
+  frac(1, 3) < gamma < 1.
+  $
+] <cor:RR-BE-admissible-alpha>
+
+_Proof._ Apply the stationary $n_0 = 0$ Berry--Esseen bound and the preceding
+remainder lemma with
+$p = p_n$, $q = q_n$, and $alpha = alpha_n$. The Poisson boundary term is
+$O(n^(-1 slash 2))$. The bias term $sqrt(n) alpha_n^2$ is smaller than
+$sqrt(n) alpha_n^(3 slash 2)$ for all sufficiently large $n$, because the
+admissibility conditions imply $alpha_n -> 0$. The terms
+$p_n^(3 slash 2) sqrt(alpha_n)$ and $Phi(p_n, alpha_n) n^(-1 slash 2)$
+are also negligible under the second admissibility condition. The remaining
+nontrivial terms are exactly the two quantities displayed in the statement.
+The martingale Berry--Esseen terms
+$log^(3 slash 4)(n) n^(-1 slash 4)$ and $log(n) n^(-1 slash 2)$ vanish
+independently of $alpha_n$. For $alpha_n = c n^(-gamma)$, the two displayed
+conditions reduce, modulo logarithms, to
+$n^(-(1 - gamma) slash 2) -> 0$ and
+$n^(1 slash 2 - 3 gamma slash 2) -> 0$, i.e. $gamma < 1$ and
+$gamma > 1 slash 3$. $square$
+
+#corollary[
+  At the balanced scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$ such
+  that $alpha, 2 alpha in (0, alpha_infinity]$, with
+  $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$
+  satisfying $2 alpha <= alpha_*(q, t_"mix")$, the bound
+  @eq:RR-BE-master reduces to
+  $
+  d_K lr((
+    frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
     cal(N)(0, 1)
   ))
     <= frac(C(u) thin "polylog"(n), n^(1 slash 4)),
-	  $
-	  where $C(u)$ depends on $|| u ||$, $sigma(u)$,
-	  $C_(cal(Q))$, $|| overline(A) ||$, $|| overline(A)^(-1) ||$, $kappa_Q$, $C_A$,
+  $
+  where $C(u)$ depends on $|| u ||$, $sigma(u)$, $C_(cal(Q))$,
+  $|| overline(A) ||$, $|| overline(A)^(-1) ||$, $kappa_Q$, $C_A$,
   $|| epsilon.alt ||_infinity$, $|| Sigma_(epsilon.alt)^(("M")) ||$,
   $t_"mix"$, $a$, $alpha_infinity$, $c$, and the universal constants of
   the smoothing, Bolthausen--Fan, and Levin Markov-concentration
   inequalities.
 ] <cor:RR-BE-working>
 
-_Proof._ Substitute $alpha = c thin n^(-1 slash 2)$ in Lemma
-<lem:R-bound> and bound each term separately:
+_Proof._ The scale $alpha = c thin n^(-1 slash 2)$ satisfies
+@eq:alpha-window, but gives the sharper balanced rate. Indeed,
 $C_("D2") || u || slash sqrt(n) = O(n^(-1 slash 2))$;
-the deterministic transient is zero because $theta_0 = theta^*$;
 $sqrt(n) alpha^2 = c^2 thin n^(-1 slash 2)$;
-$p^(7 slash 2) thin sqrt(n) thin alpha^(3 slash 2) thin
-log^(3 slash 2)(1 slash (alpha a))
-= O("polylog"(n) thin n^(-1 slash 4))$ at $p = ceil(log n)$;
-$p^(3 slash 2) sqrt(alpha) = O(log^(3 slash 2)(n) thin n^(-1 slash 4))$;
+$p^(7 slash 2) sqrt(n) alpha^(3 slash 2) log^(3 slash 2)(1 slash (alpha a))
+= O("polylog"(n) n^(-1 slash 4))$;
+$p^(3 slash 2) sqrt(alpha) = O("polylog"(n) n^(-1 slash 4))$;
 $p^3 (alpha n)^(-1 slash 2) log^(1 slash p)(1 slash (alpha a))
-= O(log^3(n) thin n^(-1 slash 4))$;
-$Phi(p, alpha) thin n^(-1 slash 2) = O(log^(3 slash 2)(n) thin n^(-1 slash 2))$.
-Adding and dividing by $sigma_n^("RR")(u) >= sigma(u) slash sqrt(2)$
-(from <eq:variance-lb-condition>), the dominant order is
-$"polylog"(n) thin n^(-1 slash 4)$. Combining with the leading
-$log^(3 slash 4)(n) thin n^(-1 slash 4)$ Berry--Esseen of Theorem
-<thm:M-RR-BE> gives the claim. $square$
+= O("polylog"(n) n^(-1 slash 4))$; and
+$Phi(p, alpha) n^(-1 slash 2) = O("polylog"(n) n^(-1 slash 2))$.
+After division by $sigma_n^("RR")(u) >= sigma(u) slash sqrt(2)$, these
+terms are dominated by $"polylog"(n) n^(-1 slash 4)$. Combining with the
+martingale Berry--Esseen term proves the claim.
+$square$
 
 #corollary[
-  Under the hypotheses of Corollary <cor:RR-BE-working>, the same bound
-  (with a different constant $C'(u)$) holds when the empirical
-  normalisation $sigma_n^("RR")(u)$ is replaced by the asymptotic
-  $sigma(u)$:
+  Under the hypotheses of the stationary $n_0 = 0$ Berry--Esseen bound above,
+  the same finite-$n$ bound with asymptotic normalisation contains one
+  additional variance-comparison term:
   $
   d_K lr((
-    frac(sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*),
-         sigma(u)),
+    frac(S_(n, "stat")^("RR")(u), sigma(u)),
+    cal(N)(0, 1)
+  ))
+    &<= frac(C_(K, 1)(u) thin log^(3 slash 4) n, n^(1 slash 4))
+     + frac(C_(K, 2)(u) thin log n, sqrt(n)) \
+    &quad + frac(e thin || u^top cal(R)_(n, "stat")^("RR") ||_(L_p),
+                 sqrt(2 pi) thin sigma_n^("RR")(u))
+     + frac(e, n)
+     + frac(C thin || u ||^2, n thin alpha thin a thin sigma^2(u)).
+  $ <eq:RR-BE-sigma-master>
+  Consequently, under the balanced-scale hypotheses above,
+  $
+  d_K lr((
+    frac(S_(n, "stat")^("RR")(u), sigma(u)),
     cal(N)(0, 1)
   ))
     <= frac(C'(u) thin "polylog"(n), n^(1 slash 4)).
@@ -1542,21 +1490,18 @@ $log^(3 slash 4)(n) thin n^(-1 slash 4)$ Berry--Esseen of Theorem
 ] <cor:RR-BE-sigma>
 
 _Proof._ Set $r := sigma_n^("RR")(u) slash sigma(u)$ and write
-$W := sqrt(n) thin u^top (overline(theta)_n^(("RR", alpha)) - theta^*)
-slash sigma_n^("RR")(u)$, so $W r = sqrt(n) thin u^top
-(overline(theta)_n^(("RR", alpha)) - theta^*) slash sigma(u)$. Under
-<eq:variance-lb-condition>, $r in [1 slash sqrt(2), thin r_max]$ for some
+$W := S_(n, "stat")^("RR")(u) slash sigma_n^("RR")(u)$, so
+$W r = S_(n, "stat")^("RR")(u) slash sigma(u)$. Under
+the variance lower-bound condition @eq:variance-lb-condition, $r in [1 slash sqrt(2), thin r_max]$ for some
 finite $r_max$ (from the trivial upper bound
-$sigma_n^(2, "RR")(u) <= C_(cal(Q))^2 thin || Sigma ||  thin || u ||^2$).
-For $r$ in this compact interval, the standard normal cdf satisfies
+$sigma_n^(2, "RR")(u) <= C_(cal(Q))^2 thin || Sigma || thin || u ||^2$).
+For $r$ in this compact interval,
 $
 sup_x | Phi(x slash r) - Phi(x) | <= C_Phi thin |r - 1|,
 quad
 C_Phi := sqrt(2) slash sqrt(pi e),
 $
-where the constant arises from the maximum of $|x thin phi(x)|$ over
-$x in bb(R)$ being $1 slash sqrt(2 pi e)$ (cf. the proof of Lemma 9 of
-Samsonov et al. 2025). Hence
+because $sup_x |x thin phi(x)| = 1 slash sqrt(2 pi e)$. Hence
 $
 d_K (W r, cal(N)(0, 1))
   <= d_K (W, cal(N)(0, 1)) + C_Phi thin |r - 1|.
@@ -1567,44 +1512,15 @@ $
   = frac(|sigma_n^(2, "RR")(u) - sigma^2(u)|,
          sigma(u) thin (sigma_n^("RR")(u) + sigma(u)))
   <= frac(C_3 thin || u ||^2,
-          n thin alpha thin a thin sigma^2(u))
-  = O(n^(-1 slash 2))
+          n thin alpha thin a thin sigma^2(u)),
 $
-at the working scale, using $sigma_n^("RR")(u) + sigma(u) >= sigma(u)$.
-Adding this to Corollary <cor:RR-BE-working> proves the claim. $square$
+using $sigma_n^("RR")(u) + sigma(u) >= sigma(u)$. This proves the displayed
+asymptotic-normalisation bound. At $alpha = c n^(-1 slash 2)$ the final term is
+$O(n^(-1 slash 2))$, hence it is absorbed into the balanced-scale bound of
+the preceding corollary. $square$
 
-#remark[
-  *Full average vs. burn-in.* Theorem <thm:RR-BE> is a full-average
-  ($n_0 = 0$) statement. The working-rate corollary removes the deterministic
-  initial-condition transient by assuming $theta_0 = theta^*$. A practical
-  arbitrary-start theorem with logarithmic burn-in is a separate extension:
-  it must replace every $Q_l^((alpha))$ in Sections 4.1--4.8 by the burned-in
-  weight $Q_(l,n_0)^((alpha))$ displayed in Section 4.1 and then redo the
-  Poisson, variance-comparison, and misadjustment bookkeeping. The
-  Wasserstein contraction of the augmented chain (Levin et al. 2025,
-  Proposition 1) is the expected tool for this transfer, but the accumulated
-  startup contribution over the averaging window is not part of the theorem
-  proved here.
-
-  *RR removes the worst remainder, the depth-two transfer recovers the
-  rate.* The Poisson boundary remainder is one boundary piece smaller than
-  in the single-step PR case (because $cal(Q)_(n - 1)^("RR") = 0$ removes
-  one of the two boundary terms); the misadjustment is *not* improved by
-  RR at the level of the depth-two analysis used here, because $J^((2)) +
-  H^((2))$ are bounded uniformly in step size at order $alpha^(3 slash 2)$
-  and only $J^((1))$ enjoys RR-cancellation. The
-  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ leading rate is therefore
-  governed by the *martingale* Berry--Esseen, with the misadjustment
-  matching but not strictly subleading. A genuine RR-cancellation at the
-  $J^((2)) + H^((2))$ level would push the misadjustment to $sqrt(n)
-  alpha^2 = O(n^(-1 slash 2))$, strictly subleading -- the open thread of
-  Section 4.9.
-
-  *No improvement over single-step PR rate.* The Berry--Esseen rate
-  $log^(3 slash 4)(n) thin n^(-1 slash 4)$ matches that of Samsonov et al.
-  (2025, Theorem 1) for the single-step PR estimator at the diminishing
-  schedule $alpha_k asymp k^(-3 slash 4)$. Richardson--Romberg extrapolation
-  in the *constant*-step regime achieves the same rate without diminishing
-  schedule, at the cost of running two coupled trajectories with step
-  sizes $alpha$ and $2 alpha$.
-]
+The bound above is therefore an $n_0 = 0$ stationary augmented-chain statement
+for $S_(n, "stat")^("RR")(u)$, not the deterministic-start RR average itself.
+A deterministic-start theorem with logarithmic burn-in requires a separate
+transfer theorem with $Q_(l,n_0)^((alpha))$ and the corresponding Poisson,
+variance-comparison, and misadjustment bounds.
