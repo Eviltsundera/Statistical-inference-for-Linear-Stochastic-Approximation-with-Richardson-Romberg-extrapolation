@@ -165,7 +165,8 @@ sum_(j=1)^n ||g_j^u||_infinity^2
 $
 Plugging this into the variance proxy $v_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j^u||_infinity^2$ from the lemma and defining
 $
-hat(C)_A := 32 thin tilde(C)_A thin ||epsilon.alt||_infinity sqrt(frac(t_"mix", a^3)),
+hat(C)_A := 32 thin tilde(C)_A thin ||epsilon.alt||_infinity
+  frac(sqrt(t_"mix"), a^(3 slash 2)),
 $
 gives
 $

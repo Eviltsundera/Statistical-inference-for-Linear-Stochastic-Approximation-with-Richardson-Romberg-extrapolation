@@ -23,23 +23,32 @@ quad
 Gamma_(l + 1 : k)^((alpha))
   := product_(j = l + 1)^k (I - alpha A(Z_j)).
 $
-Replacing each random product $Gamma_(l + 1 : k)^((alpha))$ by its
-deterministic counterpart $B_alpha^(k - l) := (I - alpha overline(A))^(k - l)$
-and absorbing the difference into a higher-order remainder yields the
-*depth-one decomposition* (Samsonov et al., 2025, Proposition 9):
+Replacing the random products in the noise sum by their deterministic
+counterparts $B_alpha^(k - l) := (I - alpha overline(A))^(k - l)$ and keeping
+the initial-product discrepancy separate yields the *depth-one decomposition*
+(Samsonov et al., 2025, Proposition 9):
+$
+R_(k, op("init"))^((alpha))
+  := lr((Gamma_(1 : k)^((alpha)) - B_alpha^k)) (theta_0 - theta^*),
+$ <eq:init-product-remainder>
 $
 theta_k^((alpha)) - theta^*
   = -alpha sum_(l = 1)^k B_alpha^(k - l) epsilon.alt(Z_l)
     + B_alpha^k (theta_0 - theta^*)
+    + R_(k, op("init"))^((alpha))
     + R_k^((alpha)),
 $ <eq:depth-one>
 where $R_k^((alpha)) := J_k^((1, alpha)) + H_k^((1, alpha))$ is the
-first misadjustment remainder. Its leading component $J_k^((1, alpha))$
-has a stationary bias of order $alpha$, so it is not treated as an
-$alpha^(3 slash 2)$ term. The Berry--Esseen proof below controls this
-remainder by refining it to depth two, where $J^((2)) + H^((2))$ carries the
-$alpha^(3 slash 2)$ moment scale. The first sum is the *depth-zero* term and
-is the only piece that carries the limiting Gaussian.
+first noise-driven misadjustment remainder. The term
+$R_(k, op("init"))^((alpha))$ vanishes when $theta_0 = theta^*$; otherwise it
+is a finite-start transient and is handled in the burn-in transfer theorem,
+not by the stationary augmented-chain misadjustment bound. The leading
+component $J_k^((1, alpha))$ has a stationary bias of order $alpha$, so it is
+not treated as an $alpha^(3 slash 2)$ term. The Berry--Esseen proof below
+controls this noise-driven remainder by refining it to depth two, where
+$J^((2)) + H^((2))$ carries the $alpha^(3 slash 2)$ moment scale. The first
+sum is the *depth-zero* term and is the only piece that carries the limiting
+Gaussian.
 
 *PR averaging produces $Q_l^((alpha))$.* Recall the PR average
 $overline(theta)_n^((alpha)) = (n - n_0)^(-1) sum_(k = n_0)^(n - 1) theta_k^((alpha))$.
@@ -79,13 +88,22 @@ where the *leading martingale-like sum* is
 $
 W^((alpha)) := -frac(1, sqrt(n)) sum_(l = 1)^(n - 1) Q_l^((alpha)) thin epsilon.alt(Z_l),
 $ <eq:W-alpha>
-and the remainder $D^((alpha))$ contains the deterministic transient $D_(op("tr"))^((alpha))$
-and the higher-order stochastic part $D_R^((alpha))$:
+and the remainder $D^((alpha))$ contains the deterministic transient
+$D_(op("tr"))^((alpha))$, the random initial-product transient
+$D_(op("init"))^((alpha))$, and the higher-order noise-driven stochastic part
+$D_R^((alpha))$:
 $
-D^((alpha)) := D_(op("tr"))^((alpha)) + D_R^((alpha)),
+D^((alpha))
+  := D_(op("tr"))^((alpha))
+     + D_(op("init"))^((alpha))
+     + D_R^((alpha)),
 quad
 D_(op("tr"))^((alpha))
   := frac(1, sqrt(n)) sum_(k = 0)^(n - 1) B_alpha^k (theta_0 - theta^*),
+quad
+D_(op("init"))^((alpha))
+  := frac(1, sqrt(n)) sum_(k = 0)^(n - 1)
+      R_(k, op("init"))^((alpha)),
 quad
 D_R^((alpha))
   := frac(1, sqrt(n)) sum_(k = 0)^(n - 1) R_k^((alpha)).
@@ -93,8 +111,10 @@ $
 The first sum is the deterministic initial-condition transient. Under the
 full-average convention it is only $O((sqrt(n) alpha a)^(-1))$ in general, so
 it must either be retained explicitly or removed by a centered initialization
-$theta_0 = theta^*$. The second is the source of the leading non-Gaussian
-correction in the Berry--Esseen rate. Its RR-combination
+$theta_0 = theta^*$. The second sum is stochastic but still purely
+finite-start: it is controlled after burn-in by random-product stability. The
+third is the source of the leading non-Gaussian correction in the
+Berry--Esseen rate. Its RR-combination
 $2 D_R^((alpha)) - D_R^((2 alpha))$ is the *misadjustment*
 $D_1^("mis, RR")$ controlled below by the Levin depth-two transfer.
 
@@ -983,6 +1003,14 @@ burn-in average with the burned-in weights $Q_(l,n_0)^((alpha))$ of
 Section 4.1 or a separate transfer lemma with the correct accumulated
 startup dependence.
 
+For the shifted-to-unshifted first-order transfer we use the explicit local
+inverse ceiling
+$
+alpha_("inv") := frac(1, 2 || overline(A) ||).
+$ <eq:alpha-inv>
+If $w <= alpha_("inv")$, the Neumann series yields
+$|| (I - w overline(A))^(-1) || <= 2$.
+
 #lemma[
   *(Stationary-limit transfer for the centered first-order iterate.)*
   Fix $w in (0, alpha_infinity]$ and set $B_w := I - w overline(A)$. Assume
@@ -1002,7 +1030,7 @@ startup dependence.
   || T_t^((1, w)) - bb(E)_pi T_t^((1, w)) ||_(L_p)
     <= C_("stat,1") thin w thin Phi(p, w).
   $
-  Consequently, whenever $||B_w^(-1)|| <= 2$,
+  Consequently, whenever $w <= alpha_("inv")$,
   $
   || J_t^((1, w)) - bb(E)_pi J_t^((1, w)) ||_(L_p)
     <= 2 C_("stat,1") thin w thin Phi(p, w).
@@ -1028,11 +1056,14 @@ $
 and express $J_(t, m)^((1, w))$ as a bounded double series whose summands are
 dominated by
 $C w^2 s (1 - w a)^(s slash 2) ||epsilon.alt||_infinity$ at total lag $s$.
-Since $sum_(s >= 0) s (1 - w a)^(s slash 2) < infinity$, the finite-past
+For the fixed admissible $w$ in the lemma,
+$sum_(s >= 0) s (1 - w a)^(s slash 2) < infinity$, so the finite-past
 approximations are Cauchy in every $L_p$ and converge to the stationary
-two-sided solution. Passing to the limit in the preceding uniform bound yields
-the displayed estimate for $T_t^((1, w))$. The estimate for $J_t^((1, w))$
-then follows from
+two-sided solution. This domination is not asserted uniformly as $w -> 0$;
+the later estimates retain the resulting step-size dependence through
+$Phi(p,w)$. Passing to the limit in the preceding uniform bound yields the
+displayed estimate for $T_t^((1, w))$. The estimate for $J_t^((1, w))$ then
+follows from
 $J_t^((1, w)) - bb(E)_pi J_t^((1, w))
   = B_w^(-1) lr((T_t^((1, w)) - bb(E)_pi T_t^((1, w))))$.
 $square$
@@ -1065,7 +1096,8 @@ $J^((1))$ and the centered bilinear sum bounded in Levin Corollary 6.
   Assume the stationary augmented-chain convention above, *UGE 1*,
   $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
   $|| epsilon.alt ||_infinity < infinity$, and
-  $alpha, 2 alpha in (0, alpha_infinity]$. Set
+  $alpha, 2 alpha in (0, alpha_infinity]$ and
+  $2 alpha <= alpha_("inv")$. Set
   $
   Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
                    + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
@@ -1140,7 +1172,7 @@ $
 For the boundary term, apply the stationary-limit transfer
 @lem:stationary-limit-J1 to
 $T_n^((1, w)) = (I - w overline(A)) thin J_n^((1, w))$ with
-$|| (I - w overline(A))^(-1) || <= 2$ for $w <= alpha_infinity$. This gives
+$w <= alpha_("inv")$. This gives
 $
 || J_n^((1, w)) - bb(E) J_n^((1, w)) ||_(L_p) <= C w thin Phi(p, w),
 $
@@ -1186,9 +1218,10 @@ Levin Proposition 9. Adding the two bounds gives the lemma. $square$
   *(Stationary PR-averaged RR misadjustment bound.)*
   Assume *UGE 1*, $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
   $|| epsilon.alt ||_infinity < infinity$,
-  $alpha, 2 alpha in (0, alpha_infinity]$, and the stationary augmented-chain
-  convention above. There exists a constant $C$ depending on the universal and
-  problem constants of the previous two lemmas such that for every
+  $alpha, 2 alpha in (0, alpha_infinity]$, $2 alpha <= alpha_("inv")$, and
+  the stationary augmented-chain convention above. There exists a constant $C$
+  depending on the universal and problem constants of the previous two lemmas
+  such that for every
   $p >= 2$, every $q >= 2$ satisfying $p <= q slash 2$, every
   $2 alpha <= alpha_*(q, t_"mix")$, and every $n >= 2$,
   $
@@ -1209,7 +1242,8 @@ Combine the centered $T^((1))$ bound and the raw $T^((2)) + T^((H))$ bound. $squ
 #corollary[
   At the working scale $alpha = c thin n^(-1 slash 2)$, with
   $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$, and for $n$
-  large enough that $2 alpha <= alpha_*(q, t_"mix")$,
+  large enough that $2 alpha <= alpha_("inv")$ and
+  $2 alpha <= alpha_*(q, t_"mix")$,
   $
   || R_n^("mis, RR") ||_(L_p) <= C thin "polylog"(n) thin n^(-1 slash 4),
   $
@@ -1269,9 +1303,11 @@ where $D_(2, n)^("RR")$ is the Poisson boundary/Abel remainder of
 Section 4.6 and $R_n^("mis, RR")$ is the Levin depth-two misadjustment
 defined in @eq:R-mis-def, both read under the stationary augmented-chain
 convention. The deterministic-start transient
-$D_("tr")^("RR") := 2 thin D_("tr")^((alpha)) - D_("tr")^((2 alpha))$ is not
-part of this stationary result; handling it together with the accumulated
-startup error belongs to a later finite-start/burn-in transfer theorem. Dividing by
+$D_("tr")^("RR") := 2 thin D_("tr")^((alpha)) - D_("tr")^((2 alpha))$ and the
+random initial-product discrepancy
+$2 D_(op("init"))^((alpha)) - D_(op("init"))^((2 alpha))$ are not part of this
+stationary result; handling them together with the accumulated startup error
+belongs to the finite-start/burn-in transfer theorem. Dividing by
 $sigma_n^("RR")(u)$,
 $
 frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u))
@@ -1358,7 +1394,7 @@ the remaining summands directly. $square$
   convention above. Set
   $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$.
   If $n$ is large enough that the variance lower-bound condition @eq:variance-lb-condition holds and
-  $2 alpha <= alpha_*(q, t_"mix")$, then
+  $2 alpha <= alpha_("inv")$ and $2 alpha <= alpha_*(q, t_"mix")$, then
   $
   d_K lr((
     frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
@@ -1389,7 +1425,7 @@ $n^(-1)$. $square$
   Let $alpha = alpha_n$ be an admissible step-size sequence and set
   $p_n := max(2, ceil(log n))$, $q_n := max(2 p_n, ceil(log(e thin d)), 2)$,
   and $Lambda_n := log(1 slash (alpha_n a))$. Assume the step-size restrictions
-  $2 alpha_n <= alpha_infinity$ and
+  $2 alpha_n <= alpha_infinity$, $2 alpha_n <= alpha_("inv")$, and
   $2 alpha_n <= alpha_*(q_n, t_"mix")$, and the variance lower-bound condition
   @eq:variance-lb-condition. If
   $
@@ -1430,7 +1466,8 @@ $gamma > 1 slash 3$. $square$
 
 #corollary[
   At the balanced scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$ such
-  that $alpha, 2 alpha in (0, alpha_infinity]$, with
+  that $alpha, 2 alpha in (0, alpha_infinity]$ and
+  $2 alpha <= alpha_("inv")$, with
   $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$
   satisfying $2 alpha <= alpha_*(q, t_"mix")$, the bound
   @eq:RR-BE-master reduces to

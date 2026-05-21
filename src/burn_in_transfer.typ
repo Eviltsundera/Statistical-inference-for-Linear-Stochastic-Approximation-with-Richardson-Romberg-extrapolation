@@ -25,6 +25,10 @@ overline(theta)_(n,n_0)^(("RR", alpha))
   := 2 overline(theta)_(n,n_0)^((alpha))
      - overline(theta)_(n,n_0)^((2 alpha)).
 $ <eq:burn-rr-average>
+Both stepsizes are run from the same deterministic initial point $theta_0$ and
+on the same Markov trajectory. This coupling is part of the RR statistic; if
+the two levels use different paths, the deterministic-weight decomposition
+below is a different object.
 
 The finite-start burned-in vector statistic is
 $
@@ -304,6 +308,105 @@ $(1 - alpha a)^(n_0 slash 2) <= n^(-beta)$. Substitute this into
 then $(alpha sqrt(m))^(-1) <= sqrt(2) slash c$, so the displayed
 $O(n^(-beta))$ bound follows. $square$
 
+The deterministic transient is not the full initial-condition contribution:
+the exact recursion contains the random product
+$Gamma_(1:k)^((w)) := product_(j = 1)^k (I - w A(Z_j))$. The difference
+between this product and $B_w^k$ is another finite-start term. We use the same
+random-product stability input that appears in Levin et al. (2025,
+Appendix D.1, Proposition 9). Let $alpha_("st")(p)$ denote the minimum of the
+Levin depth-two startup ceiling and the product-stability ceiling at moment
+order $2p$; the startup section below uses the same threshold.
+
+#lemma[
+  *(Imported random-product stability.)*
+  Under the stability and bounded-noise assumptions used in Levin et al.
+  (2025, Appendix D.1, Proposition 9), if $2 alpha <= alpha_("st")(p)$, then
+  there exist constants $C_("prod") < infinity$ and $c_("prod") > 0$ such
+  that, for every $p >= 2$, every $w in {alpha, 2 alpha}$, every $0 <= s < k$,
+  and every $cal(F)_s$-measurable vector $V_s$,
+  $
+  || Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
+    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
+       || V_s ||_(L_(2p)).
+  $ <eq:burn-product-stability>
+] <lem:burn-product-stability>
+
+Define the accumulated RR random initial-product discrepancy by
+$
+cal(I)_(n,n_0)^("init,RR")(u)
+  := frac(1, sqrt(m)) sum_(k = n_0)^(n - 1)
+      u^top lr([
+        2 lr((Gamma_(1:k)^((alpha)) - B_alpha^k))
+        - lr((Gamma_(1:k)^((2 alpha)) - B_(2 alpha)^k))
+      ]) (theta_0 - theta^*),
+$ <eq:burn-random-init-discrepancy>
+where the empty product at $k = 0$ is the identity.
+
+#lemma[
+  *(Burned-in random initial-product transient.)*
+  Assume the hypotheses of @lem:burn-product-stability,
+  $alpha, 2 alpha in (0, alpha_infinity]$, $alpha a <= 1 slash 4$, and
+  the Lyapunov contraction @eq:contraction. Then, for every $p >= 2$,
+  $
+  || cal(I)_(n,n_0)^("init,RR")(u) ||_(L_p)
+    <= frac(C_("init,RR") ||u|| ||theta_0 - theta^*|| p,
+             alpha a sqrt(m))
+       exp(-c_("init") alpha a n_0 slash p),
+  $ <eq:burn-random-init-bound>
+  where $C_("init,RR") < infinity$ and $c_("init") > 0$ depend only on
+  $C_("prod")$, $c_("prod")$, and the Lyapunov norm-equivalence constant.
+] <lem:burn-random-initial-product>
+
+_Proof._ Let $e_0 := theta_0 - theta^*$. By @lem:burn-product-stability with
+$s = 0$ and $V_0 = e_0$,
+$
+|| Gamma_(1:k)^((w)) e_0 ||_(L_p)
+  <= C_("prod") exp(-c_("prod") w a k slash p) ||e_0||.
+$
+The deterministic Lyapunov contraction gives
+$
+|| B_w^k e_0 ||
+  <= sqrt(kappa_Q) (1 - w a)^(k slash 2) ||e_0||
+  <= sqrt(kappa_Q) exp(-w a k slash (2 p)) ||e_0||,
+$
+since $p >= 1$. Hence, after decreasing the exponential constant,
+$
+|| lr((Gamma_(1:k)^((w)) - B_w^k)) e_0 ||_(L_p)
+  <= C thin exp(-c_("init") w a k slash p) ||e_0||.
+$
+Apply this estimate at $w = alpha$ and $w = 2 alpha$, use the triangle
+inequality in @eq:burn-random-init-discrepancy, and extend the geometric sum
+to infinity:
+$
+|| cal(I)_(n,n_0)^("init,RR")(u) ||_(L_p)
+  <= frac(C ||u|| ||e_0||, sqrt(m))
+     sum_(k = n_0)^infinity exp(-c_("init") alpha a k slash p).
+$
+Because $alpha a <= 1 slash 4$ and $p >= 2$,
+$1 - exp(-c_("init") alpha a slash p) >= C^(-1) alpha a slash p$, which gives
+@eq:burn-random-init-bound. $square$
+
+#corollary[
+  *(Logarithmic burn-in removes the random initial-product discrepancy.)*
+  If, for some $beta > 0$,
+  $
+  n_0 >= frac(beta p, c_("init") alpha a) log n,
+  $ <eq:burn-log-init-condition>
+  then
+  $
+  || cal(I)_(n,n_0)^("init,RR")(u) ||_(L_p)
+    <= frac(C_("init,RR") ||u|| ||theta_0 - theta^*|| p,
+             alpha a sqrt(m)) n^(-beta).
+  $ <eq:burn-log-init-bound>
+  At the balanced scale $alpha = c n^(-1 slash 2)$, with
+  $m >= n slash 2$ and $p$ logarithmic in $n$, this is
+  $"polylog"(n) thin n^(-beta)$.
+] <cor:burn-log-initial-product>
+
+_Proof._ Substitute @eq:burn-log-init-condition into
+@eq:burn-random-init-bound. At the balanced scale,
+$(alpha sqrt(m))^(-1) = O(1)$, so the remaining factor is logarithmic. $square$
+
 == Burned-in Variance Proxy
 
 For the stochastic depth-zero term, write
@@ -578,10 +681,9 @@ the $H^((2))$ coordinate is controlled by applying the random-product stability
 estimate used inside Levin Appendix D.1, Proposition 9, to the difference of
 two representations @eq:levin-H2-representation.
 
-Let $alpha_("st")(p)$ denote the step-size ceiling under which the argument
-below is valid. It is the minimum of the Proposition-5 restriction for
-$Y_k^((w))$ and the product-stability restriction used in Levin Proposition 9
-with moments up to order $2 p$. For $w in {alpha, 2 alpha}$ write
+The threshold $alpha_("st")(p)$ was fixed above as the common ceiling for the
+Levin depth-two startup contraction and the random-product stability estimate.
+For $w in {alpha, 2 alpha}$ write
 $
 R_(k, op("fin"))^((w))
   := J_(k, op("fin"))^((1,w))
@@ -612,9 +714,9 @@ $(Z_(k + 1), J_k^((0,w)), J_k^((1,w)), J_k^((2,w)), H_k^((2,w)))$.
   where
   $
   A_("st")(p,q,w)
-    := C_("st") (1 + d^(1 slash q)) p^7
-       t_"mix"^5 sqrt(w slash a)
-       log^(3 slash 2)(1 slash (w a)).
+    := C_("st") (1 + d^(1 slash q)) p^8
+       t_"mix"^5 frac(1, a) sqrt(w slash a)
+       log^3(1 slash (w a)).
   $
 ] <lem:burn-full-startup>
 
@@ -637,8 +739,15 @@ bb(E)^(1 slash p) [c_(J,2)^((w))(Y_0^("fin"),Y_0^("aug"))^p]
   <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
      sqrt(w slash a) log^(3 slash 2)(1 slash (w a)).
 $ <eq:burn-initial-cost-proof>
-Hence the $J^((1,w))$ and $J^((2,w))$ parts of $R_k^((w))$ satisfy
-@eq:burn-startup-pointwise after enlarging $C_("st")$.
+Thus the $J^((1,w))$ and $J^((2,w))$ parts of $R_k^((w))$ satisfy the
+pointwise bound with
+$
+A_("J")(p,q,w)
+  := C (1 + d^(1 slash q)) p^7 t_"mix"^5 sqrt(w slash a)
+     log^3(1 slash (w a)).
+$ <eq:burn-startup-J-scale>
+Since $A_("J")(p,q,w) <= A_("st")(p,q,w)$ after enlarging $C_("st")$, these
+parts already satisfy @eq:burn-startup-pointwise.
 
 It remains to control $H^((2,w))$. On the event $T <= k$, the base chains are
 identical after time $T$, and subtracting @eq:levin-H2-representation gives
@@ -670,41 +779,35 @@ Since $w a <= 1$, this is bounded by the right-hand side of
 @eq:burn-startup-pointwise after absorbing a fixed power of $a^(-1)$ into
 $C_("st")$.
 
-For the first term in @eq:burn-H2-coupled-diff, use the random-product
-stability estimate used in Levin Proposition 9: for an
-$cal(F)_s$-measurable vector $V_s$ with the moment order used below,
-$
-|| Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
-  <= C e^(-c w a (k - s) slash p) || V_s ||_(L_(2p)).
-$ <eq:burn-imported-product-stability>
-Apply this conditionally with $s = T$ and $V_T = Delta H_T^((2,w))$, then use
-the same one-trajectory moment bound and the exponential moment of $T$:
+For the first term in @eq:burn-H2-coupled-diff, apply
+@lem:burn-product-stability conditionally with $s = T$ and
+$V_T = Delta H_T^((2,w))$, then use the same one-trajectory moment bound and
+the exponential moment of $T$:
 $
 || Gamma_(T + 1:k)^((w)) Delta H_T^((2,w)) 1_(T <= k) ||_(L_p)
   <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
        w^(3 slash 2) log^(3 slash 2)(1 slash (w a))
        e^(-c w a k slash p).
 $ <eq:burn-H2-initial-term>
-The step-size ceiling in $alpha_("st")(p)$ is chosen so that this product
-stability estimate is valid at moment order $2p$.
-
-For the convolution term, apply @eq:burn-imported-product-stability term by
-term and then use the $J^((2,w))$ contraction @eq:burn-J-startup-proof:
+For the convolution term, apply @lem:burn-product-stability term by term and
+then use the $J^((2,w))$ contraction @eq:burn-J-startup-proof:
 $
 & w sum_(l = 1)^k
   || Gamma_(l + 1:k)^((w)) tilde(A)(Z_l)
      Delta J_(l - 1)^((2,w)) ||_(L_p) \
-&quad <= C w A_("st")(p,q,w) sum_(l = 1)^k
-     e^(-c w a (k - l))
+&quad <= C w A_("J")(p,q,w) sum_(l = 1)^k
+     e^(-c w a (k - l) slash p)
      e^(-c w a l slash p) \
 &quad <= C A_("st")(p,q,w) e^(-c w a k slash p).
 $ <eq:burn-H2-convolution-term>
 Indeed, with $r = k - l$ and $p >= 2$,
 $
-w sum_(l = 1)^k e^(-c w a (k - l)) e^(-c w a l slash p)
-  <= C a^(-1) e^(-c w a k slash p),
+w sum_(l = 1)^k
+  e^(-c w a (k - l) slash p) e^(-c w a l slash p)
+  <= C frac(p, a) e^(-c' w a k slash p),
 $
-after decreasing $c$; the fixed factor $a^(-1)$ is included in $C_("st")$.
+after decreasing the exponential constant from $c$ to $c'$. The additional
+factor $p slash a$ is the reason for the enlarged definition of $A_("st")$.
 Combining
 @eq:burn-H2-bad-event, @eq:burn-H2-initial-term, and
 @eq:burn-H2-convolution-term gives the same startup bound for
@@ -801,9 +904,11 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
 #theorem[
   *(Burned-in PR-averaged RR misadjustment bound.)*
   Assume *UGE 1*, $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$,
-  $alpha, 2 alpha in (0, alpha_infinity]$, $alpha a <= 1 slash 4$, and the
-  step-size restrictions of the Levin depth-two and startup-contraction
-  bounds. Set
+  $alpha, 2 alpha in (0, alpha_infinity]$,
+  $2 alpha <= alpha_("inv")$,
+  $alpha a <= 1 slash 4$, and the step-size restrictions of the Levin
+  depth-two and startup-contraction bounds, where $alpha_("inv")$ is defined
+  in @eq:alpha-inv. Set
   $
   Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
                    + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
@@ -869,7 +974,7 @@ two estimates gives @eq:burn-mis-bound. $square$
   n_0 >= frac(beta p, c_("st") alpha a) log n,
   $
   and $n$ is large enough that $2 alpha <= alpha_*(q, t_"mix")$ and
-  $2 alpha <= alpha_("st")(p)$, then
+  $2 alpha <= alpha_("st")(p)$ and $2 alpha <= alpha_("inv")$, then
   $
   || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
     <= C_("burn,mis") thin "polylog"(n) thin n^(-1 slash 4).
@@ -972,24 +1077,29 @@ where the composite non-Gaussian remainder is
 $
 cal(R)_(n,n_0, op("fin"))^("bRR")(u)
   := D_(op("tr"), n, n_0)^("RR")(u)
+     + cal(I)_(n,n_0)^("init,RR")(u)
      + u^top D_(2,n,n_0)^("bRR")
      + u^top R_(n,n_0, op("fin"))^("mis,RR").
 $ <eq:burn-composite-remainder>
 The terms are controlled by @lem:burn-deterministic-transient,
-@lem:burn-poisson-decomp, and @thm:burn-misadjustment, respectively.
+@lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
+@thm:burn-misadjustment, respectively.
 
 Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
 @eq:burn-mis-bound.
 
 #lemma[
   Assume the hypotheses of @lem:burn-deterministic-transient,
-  @lem:burn-poisson-decomp, and @thm:burn-misadjustment. Then, for every
-  $p >= 2$ and admissible $q >= 2$,
+  @lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
+  @thm:burn-misadjustment. Then, for every $p >= 2$ and admissible $q >= 2$,
   $
   || cal(R)_(n,n_0, op("fin"))^("bRR")(u) ||_(L_p)
     &<= frac(5 sqrt(kappa_Q) || u || || theta_0 - theta^* ||,
              alpha a sqrt(m))
         (1 - alpha a)^(n_0 slash 2) \
+    &quad + frac(C_("init,RR") ||u|| ||theta_0 - theta^*|| p,
+             alpha a sqrt(m))
+       exp(-c_("init") alpha a n_0 slash p) \
     &quad + frac(C_("burn,D2") thin || u ||, sqrt(m))
      + || u || thin cal(B)_("mis")(m,n_0,p,q,alpha),
   $ <eq:burn-R-bound>
@@ -1002,8 +1112,8 @@ Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
 ] <lem:burn-R-bound>
 
 _Proof._ Apply the triangle inequality in @eq:burn-composite-remainder. The
-deterministic part is @eq:burn-RR-transient-bound. The Poisson boundary term
-is bounded by
+deterministic part is @eq:burn-RR-transient-bound. The random initial-product
+term is @eq:burn-random-init-bound. The Poisson boundary term is bounded by
 $
 || u^top D_(2,n,n_0)^("bRR") ||_(L_p)
   <= ||u|| thin ||D_(2,n,n_0)^("bRR")||_infinity
@@ -1028,7 +1138,8 @@ $
 
 #theorem[
   *(Finite-window burned-in PR-averaged RR Berry--Esseen bound.)*
-  Assume the hypotheses of @thm:burn-M-BE and @thm:burn-misadjustment. Let
+  Assume the hypotheses of @thm:burn-M-BE, @lem:burn-random-initial-product,
+  and @thm:burn-misadjustment. Let
   $p = max(2, ceil(log n))$ and
   $q = max(2 p, ceil(log(e thin d)), 2)$. If
   $2 alpha <= alpha_*(q, t_"mix")$ and $2 alpha <= alpha_("st")(p)$, then
@@ -1130,13 +1241,16 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   alpha_("adm")(p,q)
     := min (
       alpha_infinity,
+      alpha_("inv"),
       frac(1, 2 a),
       alpha_*(q, t_"mix"),
       alpha_("st")(p)
     ).
   $ <eq:burn-final-alpha-adm>
-  Here $alpha_*(q,t_"mix")$ collects the Levin depth-two moment admissibility
-  restrictions, while $alpha_("st")(p)$ is the full-state startup threshold in
+  Here $alpha_("inv")$ is the local inverse ceiling from @eq:alpha-inv,
+  $alpha_*(q,t_"mix")$ collects the Levin depth-two moment admissibility
+  restrictions, and $alpha_("st")(p)$ is the common product-stability and
+  full-state startup threshold in @lem:burn-product-stability and
   @lem:burn-full-startup.
   Suppose $n >= 3$ is such that
   $
@@ -1147,9 +1261,11 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   m thin alpha thin a
     >= frac(2 C_("burn,3") || u ||^2, sigma^2(u)),
   $ <eq:burn-final-step-conditions>
-  and the burn-in satisfies the two explicit logarithmic conditions
+  and the burn-in satisfies the explicit logarithmic conditions
   $
   n_0 >= frac(2, alpha a) log n,
+  quad
+  n_0 >= frac(p, c_("init") alpha a) log n,
   quad
   n_0 >= frac(p, c_("st") alpha a) log n.
   $ <eq:burn-final-log-conditions>
@@ -1180,9 +1296,11 @@ It remains to bound the composite remainder in @lem:burn-R-bound. The first
 condition in @eq:burn-final-log-conditions is @eq:burn-log-condition with
 $beta = 1$; by @cor:burn-log-transient and
 $alpha = c n^(-1 slash 2)$, $m >= n slash 2$, the deterministic transient is
-$O(n^(-1))$. The Poisson Abel remainder is $O(m^(-1 slash 2))$. The second
-condition in @eq:burn-final-log-conditions is the startup condition
-@eq:burn-log-startup-condition with $beta = 1$, so
+$O(n^(-1))$. The second condition is @eq:burn-log-init-condition with
+$beta = 1$, so @cor:burn-log-initial-product makes the random initial-product
+term $O("polylog"(n) n^(-1))$. The Poisson Abel remainder is
+$O(m^(-1 slash 2))$. The third condition in @eq:burn-final-log-conditions is
+the startup condition @eq:burn-log-startup-condition with $beta = 1$, so
 @cor:burn-misadjustment-rate gives
 $
 || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
@@ -1210,8 +1328,10 @@ $square$
 
 Condition @eq:burn-final-step-conditions collects the finite-$n$ admissibility
 requirements. The inequality $2 alpha <= alpha_("adm")(p,q)$ enforces the
-Lyapunov small-step ceiling, the Levin depth-two admissibility threshold, and
-the full-state startup contraction @lem:burn-full-startup. Since
+Lyapunov small-step ceiling, the local inverse ceiling, the Levin depth-two
+admissibility threshold, the random-product stability estimate
+@lem:burn-product-stability, and the full-state startup contraction
+@lem:burn-full-startup. Since
 $alpha = c n^(-1 slash 2)$ and $m >= n slash 2$, the elementary step-size
 constraints and @eq:burn-variance-lb-condition hold automatically for all
 sufficiently large $n$. The remaining non-elementary large-$n$ requirement is
@@ -1220,7 +1340,7 @@ $
   <= min (alpha_*(q, t_"mix"), alpha_("st")(p)),
 $ <eq:burn-final-levin-eventual>
 with $p,q$ as in the theorem. Under this Levin/startup admissibility condition,
-the large-$n$ reading of the theorem keeps only $m >= n slash 2$ and the two
+the large-$n$ reading of the theorem keeps only $m >= n slash 2$ and the
 burn-in lower bounds in @eq:burn-final-log-conditions.
 
 #corollary[
@@ -1239,15 +1359,24 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
   Xi_(n,n_0)^("n,RR")(u)
     := frac(T_(n,n_0)^("RR,n")(u), sigma(u)).
   $
-  If, in addition, the burn-in window has the logarithmic upper bound
+  For the logarithmic choice $p = max(2, ceil(log n))$ in
+  @thm:burn-final-balanced, the lower burn-in conditions
+  @eq:burn-final-log-conditions are implied by
   $
-  n_0 <= C_0 thin (alpha a)^(-1) log^2 n
-  $ <eq:burn-log-upper-window>
-  for some finite $C_0$, then there exists a finite constant
-  $C_("burn,n")(u,c,theta_0,C_0)$ such that
+  n_0 >= C_- thin (alpha a)^(-1) log^2 n
+  $
+  with any fixed $C_-$ large enough. If, in addition, the burn-in window stays
+  in the same logarithmic scale,
+  $
+  C_- thin (alpha a)^(-1) log^2 n
+    <= n_0
+    <= C_0 thin (alpha a)^(-1) log^2 n
+  $ <eq:burn-log-window>
+  for some finite $C_0$ and such a fixed $C_-$, then there exists a finite constant
+  $C_("burn,n")(u,c,theta_0,C_0,C_-)$ such that
   $
   d_K lr((Xi_(n,n_0)^("n,RR")(u), cal(N)(0, 1)))
-    <= frac(C_("burn,n")(u,c,theta_0,C_0) thin "polylog"(n),
+    <= frac(C_("burn,n")(u,c,theta_0,C_0,C_-) thin "polylog"(n),
              n^(1 slash 4)).
   $ <eq:burn-sqrt-n-final>
 ] <cor:burn-sqrt-n-transfer>
@@ -1268,7 +1397,7 @@ by the same scaling argument as in @lem:burn-normalization-transfer. Applying
 this with $W = Xi_(n,n_0)^("asy,RR")(u)$ and using
 @thm:burn-final-balanced gives the already proved
 $"polylog"(n) n^(-1 slash 4)$ term. The upper burn-in bound
-@eq:burn-log-upper-window and $alpha = c n^(-1 slash 2)$ give
+in @eq:burn-log-window and $alpha = c n^(-1 slash 2)$ give
 $
 |s_(n,n_0) - 1|
   <= frac(2 C_0, c a) frac(log^2 n, n^(1 slash 2)),
@@ -1276,6 +1405,6 @@ $
 which is lower order and is absorbed into the same balanced-scale rate.
 $square$
 
-The burn-in lower bounds in @eq:burn-final-log-conditions amount to
-$n_0 >= C (alpha a)^(-1) log^2 n$ when $p asymp log n$. This logarithmic square
-comes from the current $L_p$ startup contraction.
+The lower side of @eq:burn-log-window is the logarithmic-square burn-in needed
+by the current $L_p$ startup contraction; the upper side keeps the
+$sqrt(n slash m)$ rescaling lower order.

@@ -18,6 +18,17 @@ $
 ||B^m||_Q <= (1 - alpha a)^(m slash 2),
 quad m >= 0.
 $
+When the shifted estimate is transferred back from $T_n^((1, alpha))$ to
+$J_n^((1, alpha))$, we also use the elementary inverse-admissibility ceiling
+$
+alpha_("inv") := frac(1, 2 || overline(A) ||).
+$
+Indeed, if $w <= alpha_("inv")$, then the Neumann series gives
+$|| (I - w overline(A))^(-1) || <= 2$.
+The single-stepsize estimates below are stated for $alpha$. Whenever the
+Richardson--Romberg combination is formed, the same estimates are applied at
+both $w = alpha$ and $w = 2 alpha$; the local assumptions are then
+$2 alpha <= alpha_infinity$ and $2 alpha <= alpha_("inv")$.
 All constants denoted by $C$ may depend on $C_A$, $kappa_Q$, and norm
 equivalence constants, but not on $alpha$, $n$, $p$, or $t_"mix"$.
 
@@ -308,23 +319,35 @@ $
 $
 The first term (from $U_M$) is the leading contribution for small $alpha$; the second (from $U_R$) carries the heavier $t_"mix"$ dependence but vanishes as $alpha -> 0$. Restoring the factor $||u||$ and multiplying by $alpha$ gives the asserted bound for $T_n^((1, alpha)) = -alpha S_n$. #h(1fr) $square$
 
-== Application to the PR-averaged RR Misadjustment
+== A Depth-One RR Misadjustment Bound and Its Limitation
+
+This subsection records the natural depth-one attempt and explains why it is
+not used in the final Berry--Esseen assembly. The actual stationary and
+burned-in theorems use the depth-two Levin transfer developed in the next
+chapter.
 
 The PR-averaged Richardson--Romberg expansion produces, after Step (S8) of the
 Samsonov scheme applied separately at step sizes $alpha$ and $2 alpha$, a
-"misadjustment" remainder
+depth-one "misadjustment" remainder
 $
 D_1^("mis, RR")
   = frac(sqrt(n), n - n_0) sum_(k=n_0)^(n-1)
     (2 J_k^((1, alpha)) - J_k^((1, 2 alpha))),
 $
 whose centered part must be controlled to feed into a Berry--Esseen statement
-for $sqrt(n) (overline(theta)_n^(("RR", alpha)) - theta^*)$. We write
+by this route. We write
 $
 D_(1, "c")^("mis, RR")
   := D_1^("mis, RR") - bb(E) D_1^("mis, RR")
 $
 for this centered statistic.
+
+In this subsection assume explicitly that
+$2 alpha <= alpha_infinity$ and $2 alpha <= alpha_("inv")$. The first
+condition makes the one-stepsize last-iterate lemma admissible at both RR
+levels; the second makes the shifted-to-unshifted transfer
+$T_k^((1,w)) = (I - w overline(A)) J_k^((1,w))$ uniformly invertible for
+$w in {alpha, 2 alpha}$.
 
 The stationary bias is smaller than the fluctuation term. By Levin et al.
 (2025, Proposition 2),
@@ -357,8 +380,8 @@ $
 u^top J_k^((1, w))
   = ((I - w overline(A))^(-top) u)^top T_k^((1, w)).
 $
-The local inverse bound $|| (I - w overline(A))^(-1) || <= 2$ for
-$w in {alpha, 2 alpha}$ therefore yields
+The local inverse bound $|| (I - w overline(A))^(-1) || <= 2$ therefore holds
+for $w in {alpha, 2 alpha}$ and yields
 $
 ||u^top lr((2 J_k^((1, alpha)) - J_k^((1, 2 alpha)))
      - bb(E) (2 J_k^((1, alpha)) - J_k^((1, 2 alpha))))||_(L_p)
