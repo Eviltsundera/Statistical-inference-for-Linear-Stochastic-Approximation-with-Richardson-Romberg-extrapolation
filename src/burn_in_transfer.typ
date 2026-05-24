@@ -66,8 +66,8 @@ Xi_(n,n_0)^("asy,RR")(u)
 $ <eq:burn-asymptotic-normalization>
 We first control $Xi_(n,n_0)^("bRR")(u)$ and then pass to
 $Xi_(n,n_0)^("asy,RR")(u)$. A final corollary converts the $sqrt(m)$ statistic
-to the thesis-facing $sqrt(n)$ statistic when the burn-in window is
-logarithmic.
+to the final $sqrt(n)$ statistic when the burn-in is at the mixing scale, of
+order $alpha^(-1)$ times logarithmic factors.
 
 == Burned-in Deterministic Weights
 
@@ -192,6 +192,9 @@ $
 || B_alpha^s - B_(2 alpha)^s ||
   <= alpha tilde(C)_A thin s thin rho_alpha^(s - 1).
 $ <eq:burn-power-difference>
+The left-factored form is legitimate because $B_alpha$ and $B_(2 alpha)$ are
+polynomials in the same matrix $overline(A)$, hence commute with each other
+and with $overline(A)$.
 Thus the post-burn-in contribution is bounded by a constant times
 $a^(-2)$, as in the full-window proof.
 
@@ -283,7 +286,7 @@ $
 $square$
 
 #corollary[
-  *(Logarithmic burn-in removes the deterministic transient.)*
+  *(Mixing-scale burn-in removes the deterministic transient.)*
   If, for some $beta > 0$,
   $
   n_0 >= frac(2 beta, alpha a) log n,
@@ -387,7 +390,7 @@ $1 - exp(-c_("init") alpha a slash p) >= C^(-1) alpha a slash p$, which gives
 @eq:burn-random-init-bound. $square$
 
 #corollary[
-  *(Logarithmic burn-in removes the random initial-product discrepancy.)*
+  *(Mixing-scale burn-in removes the random initial-product discrepancy.)*
   If, for some $beta > 0$,
   $
   n_0 >= frac(beta p, c_("init") alpha a) log n,
@@ -627,6 +630,10 @@ $
 m thin |sigma_(n,n_0)^(2, "bRR")(u) - sigma^2(u)|
   <= frac(C_("burn,3") || u ||^2, alpha a).
 $
+The concentration sum still runs over the ambient indices $2, dots, n - 1$,
+including pre-burn-in weights, which is why the display keeps
+$sqrt(p thin n)$. In the final theorem this is converted to the effective
+window scale using $m >= n slash 2$.
 $square$
 
 == Startup Transfer for Augmented-Chain Remainders
@@ -673,6 +680,75 @@ H_k^((2,w))
   = - w sum_(l = 1)^k Gamma_(l + 1:k)^((w))
         tilde(A)(Z_l) J_(l - 1)^((2,w)).
 $ <eq:levin-H2-representation>
+The invariant law for the full augmented state is obtained by a finite-past
+construction. On a two-sided stationary version of the driving chain, start
+the $J^((0,w))$, $J^((1,w))$, $J^((2,w))$, and $H^((2,w))$ recursions from
+zero at time $-m$ and evaluate them at time $0$. Levin Proposition 5 gives the
+$L_p$ Cauchy property for the $J$ coordinates. For the $H$ coordinate, use the
+finite-past version of @eq:levin-H2-representation,
+$
+H_(0,m)^((2,w))
+  := - w sum_(l = -m + 1)^0 Gamma_(l + 1:0)^((w))
+        tilde(A)(Z_l) J_(l - 1,m)^((2,w)).
+$
+Levin Proposition 9 and the random-product stability estimate below make this
+sequence Cauchy in $L_p$ for each fixed admissible $p$; its limit is denoted
+$H_0^((2,w))$. Shifting the construction defines the stationary two-sided
+process
+$(Z_(k + 1), J_k^((0,w)), J_k^((1,w)), J_k^((2,w)), H_k^((2,w)))_(k in ZZ)$.
+This is the full augmented-chain invariant law used below.
+
+#lemma[
+  *(Conditional product stability at a coupling time.)*
+  Assume the hypotheses of @lem:burn-product-stability and let $T$ be an
+  exact-coupling time for two copies of the base chain satisfying
+  $bb(P)(T > r) <= C_T exp(-c_T r)$. Then, after decreasing the exponential
+  constant, the following two estimates hold uniformly in $k$ and
+  $w in {alpha, 2 alpha}$.
+
+  *(i) Random restart.* If $(V_s)_(s >= 0)$ is adapted and
+  $sup_s ||V_s||_(L_(2p)) <= B$, then
+  $
+  || Gamma_(T + 1:k)^((w)) V_T 1_(T <= k) ||_(L_p)
+    <= C frac(p, w a) B exp(-c w a k slash p).
+  $ <eq:burn-random-time-product>
+
+  *(ii) Stable convolution.* If $(U_l)_(l >= 0)$ is adapted and
+  $||U_l||_(L_(2p)) <= B exp(-c_0 w a l slash p)$ for all $l$, then
+  $
+  w sum_(l = 1)^k
+    || Gamma_(l + 1:k)^((w)) U_l ||_(L_p)
+    <= C frac(p, a) B exp(-c w a k slash p).
+  $ <eq:burn-stable-convolution>
+] <lem:burn-random-time-product>
+
+_Proof._ The proof of Levin's product-stability estimate is conditional on
+the past at the starting time, hence @eq:burn-product-stability may be applied
+on each event $T = s$ with the same constants. For the first estimate,
+Minkowski's inequality gives
+$
+|| Gamma_(T + 1:k)^((w)) V_T 1_(T <= k) ||_(L_p)
+  <= C sum_(s = 0)^k
+    exp(-c w a (k - s) slash p)
+    || V_s 1_(T = s) ||_(L_p).
+$
+Holder's inequality and the exponential tail of $T$ give
+$||V_s 1_(T=s)||_(L_p) <= B thin bb(P)(T=s)^(1 slash (2p))
+ <= C B exp(-c_T s slash (2p))$. Since $w a$ is bounded above by the
+admissible small-step constant, the convolution of
+$exp(-c w a (k-s) slash p)$ and $exp(-c_T s slash (2p))$ is bounded by
+$C (p slash (w a)) exp(-c w a k slash p)$ after decreasing $c$.
+This proves @eq:burn-random-time-product.
+
+For the second estimate, apply @eq:burn-product-stability at each deterministic
+time $l$ and use the assumed decay of $U_l$:
+$
+w sum_(l = 1)^k
+  exp(-c w a (k - l) slash p) B exp(-c_0 w a l slash p)
+  <= C frac(p, a) B exp(-c' w a k slash p).
+$
+Renaming $c'$ as $c$ proves @eq:burn-stable-convolution. $square$
+
 For startup transfer, however, one must compare two copies of this display.
 The following lemma records the resulting full-state contraction. It is a
 technical extension of the Levin Proposition-5 coupling: the $J^((0))$,
@@ -692,7 +768,7 @@ R_(k, op("fin"))^((w))
 $
 for the finite-start depth-two remainder, and define
 $R_(k, op("aug"))^((w))$ analogously for a copy initialized from the invariant
-law of the augmented chain
+law of the full augmented chain
 $(Z_(k + 1), J_k^((0,w)), J_k^((1,w)), J_k^((2,w)), H_k^((2,w)))$.
 
 #lemma[
@@ -731,9 +807,9 @@ $
      e^(-c w a k slash p)
      bb(E)^(1 slash p) [c_(J,2)^((w))(Y_0^("fin"),Y_0^("aug"))^p].
 $ <eq:burn-J-startup-proof>
-The finite-start coordinates are zero. The invariant copy satisfies the
-finite-past limits of the elementary $J^((0,w))$, $J^((1,w))$ estimates and of
-Levin Propositions 8 and 9; in particular
+The finite-start $J$ coordinates are zero. The invariant copy is the
+finite-past limit described above, so the elementary $J^((0,w))$ and
+$J^((1,w))$ estimates and Levin Proposition 8 for $J^((2,w))$ give
 $
 bb(E)^(1 slash p) [c_(J,2)^((w))(Y_0^("fin"),Y_0^("aug"))^p]
   <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
@@ -749,8 +825,17 @@ $ <eq:burn-startup-J-scale>
 Since $A_("J")(p,q,w) <= A_("st")(p,q,w)$ after enlarging $C_("st")$, these
 parts already satisfy @eq:burn-startup-pointwise.
 
-It remains to control $H^((2,w))$. On the event $T <= k$, the base chains are
-identical after time $T$, and subtracting @eq:levin-H2-representation gives
+It remains to control $H^((2,w))$. We shall repeatedly use the one-trajectory
+bound, valid for the finite-start and finite-past stationary copies,
+$
+|| H_s^((2,w)) ||_(L_(2p))
+  <= B_H(p,q,w)
+  := C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
+        w^(3 slash 2) log^(3 slash 2)(1 slash (w a)),
+$ <eq:burn-H2-one-trajectory-scale>
+where $C$ is allowed to change when $p$ is replaced by $2p$. On the event
+$T <= k$, the base chains are identical after time $T$, and subtracting
+@eq:levin-H2-representation from time $T$ onward gives
 $
 Delta H_k^((2,w))
   = Gamma_(T + 1:k)^((w)) Delta H_T^((2,w))
@@ -767,12 +852,12 @@ $
        + || H_(k, op("aug"))^((2,w)) ||_(L_(2p))
      )) thin bb(P)(T > k)^(1 slash (2p)).
 $
-Levin Proposition 9 bounds both one-trajectory terms uniformly in $k$, and UGE
-gives $bb(P)(T > k)^(1 slash (2p)) <= C e^(-c k slash p)$. Therefore
+The bound @eq:burn-H2-one-trajectory-scale controls both one-trajectory terms
+uniformly in $k$, and UGE gives
+$bb(P)(T > k)^(1 slash (2p)) <= C e^(-c k slash p)$. Therefore
 $
 || Delta H_k^((2,w)) 1_(T > k) ||_(L_p)
-  <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
-       w^(3 slash 2) log^(3 slash 2)(1 slash (w a))
+  <= C B_H(p,q,w)
        e^(-c k slash p).
 $ <eq:burn-H2-bad-event>
 Since $w a <= 1$, this is bounded by the right-hand side of
@@ -780,34 +865,32 @@ Since $w a <= 1$, this is bounded by the right-hand side of
 $C_("st")$.
 
 For the first term in @eq:burn-H2-coupled-diff, apply
-@lem:burn-product-stability conditionally with $s = T$ and
-$V_T = Delta H_T^((2,w))$, then use the same one-trajectory moment bound and
-the exponential moment of $T$:
+@lem:burn-random-time-product with $V_s = Delta H_s^((2,w))$. The input
+$sup_s ||V_s||_(L_(2p)) <= C B_H(p,q,w)$ follows from
+@eq:burn-H2-one-trajectory-scale for the two coupled copies. Hence
 $
 || Gamma_(T + 1:k)^((w)) Delta H_T^((2,w)) 1_(T <= k) ||_(L_p)
-  <= C (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
-       w^(3 slash 2) log^(3 slash 2)(1 slash (w a))
-       e^(-c w a k slash p).
+  <= C frac(p, w a) B_H(p,q,w) e^(-c w a k slash p)
+  <= C A_("st")(p,q,w) e^(-c w a k slash p).
 $ <eq:burn-H2-initial-term>
-For the convolution term, apply @lem:burn-product-stability term by term and
-then use the $J^((2,w))$ contraction @eq:burn-J-startup-proof:
+For the convolution term, set
+$U_l := tilde(A)(Z_l) Delta J_(l - 1)^((2,w))$. Applying
+@eq:burn-J-startup-proof with moment order $2p$ gives
+$
+|| U_l ||_(L_(2p))
+  <= C A_("J")(2p,q,w) exp(-c w a l slash p),
+$
+where replacing $l - 1$ by $l$ only changes the constant. The stable
+convolution estimate @eq:burn-stable-convolution yields
 $
 & w sum_(l = 1)^k
   || Gamma_(l + 1:k)^((w)) tilde(A)(Z_l)
      Delta J_(l - 1)^((2,w)) ||_(L_p) \
-&quad <= C w A_("J")(p,q,w) sum_(l = 1)^k
-     e^(-c w a (k - l) slash p)
-     e^(-c w a l slash p) \
+&quad <= C frac(p, a) A_("J")(2p,q,w) e^(-c w a k slash p) \
 &quad <= C A_("st")(p,q,w) e^(-c w a k slash p).
 $ <eq:burn-H2-convolution-term>
-Indeed, with $r = k - l$ and $p >= 2$,
-$
-w sum_(l = 1)^k
-  e^(-c w a (k - l) slash p) e^(-c w a l slash p)
-  <= C frac(p, a) e^(-c' w a k slash p),
-$
-after decreasing the exponential constant from $c$ to $c'$. The additional
-factor $p slash a$ is the reason for the enlarged definition of $A_("st")$.
+The additional factor $p slash a$ is the reason for the enlarged definition of
+$A_("st")$ relative to the pure $J$-coordinate scale $A_("J")$.
 Combining
 @eq:burn-H2-bad-event, @eq:burn-H2-initial-term, and
 @eq:burn-H2-convolution-term gives the same startup bound for
@@ -853,7 +936,7 @@ $1 - exp(-c_("st") alpha a slash p) >= C^(-1) alpha a slash p$. Extending the ge
 sum to infinity gives @eq:burn-startup-transfer. $square$
 
 #corollary[
-  *(Logarithmic burn-in removes the startup discrepancy.)*
+  *(Mixing-scale burn-in removes the startup discrepancy.)*
   If, for some $beta > 0$,
   $
   n_0 >= frac(beta p, c_("st") alpha a) log n,
@@ -867,8 +950,9 @@ sum to infinity gives @eq:burn-startup-transfer. $square$
   At the balanced scale $alpha = c n^(-1 slash 2)$, with
   $m >= n slash 2$ and $p, q$ logarithmic in $n$, this is
   $"polylog"(n) thin n^(-1 slash 4 - beta)$.
-  Thus the Berry--Esseen choice $p asymp log n$ requires
-  $n_0$ of order $(alpha a)^(-1) log^2 n$ under this $L_p$ contraction.
+  Thus the Berry--Esseen choice $p asymp log n$ requires a mixing-scale
+  burn-in with logarithmic-square factor,
+  $n_0$ of order $(alpha a)^(-1) log^2 n$, under this $L_p$ contraction.
 ] <cor:burn-log-startup>
 
 _Proof._ Substitute @eq:burn-log-startup-condition into
@@ -910,7 +994,7 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
   depth-two and startup-contraction bounds, where $alpha_("inv")$ is defined
   in @eq:alpha-inv. Set
   $
-  Phi(p, alpha) := p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
+  Phi_+(p, alpha) := 1 + p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
                    + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
   $
   There exists a constant $C_("burn,mis")$ depending only on the stationary
@@ -927,7 +1011,7 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
     &quad + C_("burn,mis") p^(3 slash 2) sqrt(alpha) \
     &quad + C_("burn,mis") p^3 (alpha m)^(-1 slash 2)
        log^(1 slash p)(1 slash (alpha a)) \
-    &quad + C_("burn,mis") Phi(p, alpha) thin m^(-1 slash 2) \
+    &quad + C_("burn,mis") Phi_+(p, alpha) thin m^(-1 slash 2) \
     &quad + frac(C_("burn,mis") p thin A_("st")(p,q,alpha),
                   alpha a sqrt(m))
        exp(-c_("st") alpha a n_0 slash p).
@@ -991,9 +1075,9 @@ $"polylog"(n) thin n^(-1 slash 4 - beta)$ at this scale. $square$
 
 The depth-zero martingale in @lem:burn-poisson-decomp has deterministic
 coefficients, but its normalization is based on the effective sample size
-$m = n - n_0$. We assume $m >= n slash 2$, the logarithmic burn-in regime, so
-the inhomogeneous concentration term of order $sqrt(p n)$ can be written on the
-$m$ scale.
+$m = n - n_0$. We assume $m >= n slash 2$ and impose the mixing-scale burn-in
+lower bounds with logarithmic factors, so the inhomogeneous concentration term
+of order $sqrt(p n)$ can be written on the $m$ scale.
 
 Fix $u in bb(R)^d$ and put
 $X_l^("bRR") := u^top Delta M_l^("bRR")$ for $2 <= l <= n - 1$. Then
@@ -1085,6 +1169,29 @@ The terms are controlled by @lem:burn-deterministic-transient,
 @lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
 @thm:burn-misadjustment, respectively.
 
+For reference, the finite-window assembly uses the following components:
+
+#table(
+  columns: (1.45fr, 2.4fr, 1.8fr),
+  inset: 4pt,
+  [*Component*], [*Input bound*], [*Role in smoothing*],
+  [$D_(op("tr"), n, n_0)^("RR")(u)$],
+  [@eq:burn-RR-transient-bound],
+  [Deterministic transient from $theta_0 - theta^*$.],
+  [$cal(I)_(n,n_0)^("init,RR")(u)$],
+  [@eq:burn-random-init-bound],
+  [Random initial-product discrepancy.],
+  [$u^top D_(2,n,n_0)^("bRR")$],
+  [@eq:burn-D2-bound],
+  [Poisson Abel boundary remainder.],
+  [$u^top R_(n,n_0, op("fin"))^("mis,RR")$],
+  [@eq:burn-mis-bound],
+  [Depth-two RR misadjustment plus startup transfer.],
+  [$u^top M_(n,n_0)^("bRR")$],
+  [@thm:burn-M-BE and @cor:burn-bracket-asymp],
+  [Leading martingale Berry--Esseen term.],
+)
+
 Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
 @eq:burn-mis-bound.
 
@@ -1157,9 +1264,11 @@ $
 
 _Proof._ Apply the smoothing inequality @eq:smoothing-Lp to the split
 @eq:burn-XY-split. The martingale Berry--Esseen term is @thm:burn-M-BE; the
-minus sign in $X_(n,n_0)^("bRR")$ is irrelevant because the standard normal
-law is symmetric. Since $p = max(2, ceil(log n))$, the smoothing tail
-$e^(-p)$ is at most $e slash n$. The $L_p$ norm of the perturbation is
+minus sign in $X_(n,n_0)^("bRR")$ is handled by applying that theorem to the
+signed increments $-u^top Delta M_l^("bRR")$. The bounded-increment constant
+and predictable quadratic variation are unchanged. Since
+$p = max(2, ceil(log n))$, the smoothing tail $e^(-p)$ is at most
+$e slash n$. The $L_p$ norm of the perturbation is
 $
 ||Y_(n,n_0)^("bRR")||_(L_p)
   = frac(||cal(R)_(n,n_0, op("fin"))^("bRR")(u)||_(L_p),
@@ -1223,9 +1332,9 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
 #theorem[
   *(Balanced-scale burned-in PR-averaged RR Berry--Esseen bound.)*
   Assume Assumptions 1--3 from @sec:assumptions. Assume also the Lyapunov
-  contraction @eq:contraction for the two step sizes used below, the Levin
-  depth-two stationary moment and misadjustment bounds used in
-  @thm:misadjustment, and the non-degeneracy condition $sigma^2(u) > 0$.
+  contraction @eq:contraction for the two step sizes used below, the imported
+  Levin and Samsonov inputs summarized in @sec:imported-inputs, and the
+  non-degeneracy condition $sigma^2(u) > 0$.
   Fix $c > 0$ and set
   $
   alpha := c thin n^(-1 slash 2),
@@ -1261,7 +1370,8 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   m thin alpha thin a
     >= frac(2 C_("burn,3") || u ||^2, sigma^2(u)),
   $ <eq:burn-final-step-conditions>
-  and the burn-in satisfies the explicit logarithmic conditions
+  and the burn-in satisfies the explicit mixing-scale conditions with
+  logarithmic factors
   $
   n_0 >= frac(2, alpha a) log n,
   quad
@@ -1286,7 +1396,9 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
 ] <thm:burn-final-balanced>
 
 _Proof._ Apply the finite-window assembly theorem @thm:burn-RR-BE-master. Since
-$m >= n slash 2$, the martingale terms satisfy
+$m >= n slash 2$, polynomial prefactors in $n$ may be written on the $m$ scale
+up to universal constants; for instance $sqrt(n) slash m <= sqrt(2) slash
+sqrt(m)$. In particular, the martingale terms satisfy
 $
 frac(log^(3 slash 4) n, m^(1 slash 4))
   + frac(log n, sqrt(m))
@@ -1345,7 +1457,7 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
 
 #corollary[
   *($sqrt(n)$-normalization for the burned-in RR statistic.)*
-  Under the assumptions of @thm:burn-final-balanced, define the thesis-facing
+  Under the assumptions of @thm:burn-final-balanced, define the final
   scalar statistic
   $
   T_(n,n_0)^("RR,n")(u)
@@ -1359,14 +1471,17 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
   Xi_(n,n_0)^("n,RR")(u)
     := frac(T_(n,n_0)^("RR,n")(u), sigma(u)).
   $
-  For the logarithmic choice $p = max(2, ceil(log n))$ in
+  For the Berry--Esseen moment choice $p = max(2, ceil(log n))$ in
   @thm:burn-final-balanced, the lower burn-in conditions
   @eq:burn-final-log-conditions are implied by
   $
   n_0 >= C_- thin (alpha a)^(-1) log^2 n
   $
-  with any fixed $C_-$ large enough. If, in addition, the burn-in window stays
-  in the same logarithmic scale,
+  with any fixed $C_-$ large enough. At the balanced scale
+  $alpha = c n^(-1 slash 2)$ this is
+  $n_0 = O(n^(1 slash 2) log^2 n)$, not a purely logarithmic burn-in in $n$.
+  If, in addition, the burn-in window stays in the same mixing-scale window
+  with logarithmic-square factor,
   $
   C_- thin (alpha a)^(-1) log^2 n
     <= n_0
@@ -1405,6 +1520,8 @@ $
 which is lower order and is absorbed into the same balanced-scale rate.
 $square$
 
-The lower side of @eq:burn-log-window is the logarithmic-square burn-in needed
-by the current $L_p$ startup contraction; the upper side keeps the
-$sqrt(n slash m)$ rescaling lower order.
+The lower side of @eq:burn-log-window is the logarithmic-square mixing-scale
+burn-in needed by the current $L_p$ startup contraction; the upper side keeps
+the $sqrt(n slash m)$ rescaling lower order. At
+$alpha = c n^(-1 slash 2)$ this window has order
+$n^(1 slash 2) log^2 n$.

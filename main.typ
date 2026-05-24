@@ -24,7 +24,16 @@
 
 #align(center)[
   *Abstract* \
-  Your abstract.
+  This thesis studies statistical inference for constant-stepsize linear
+  stochastic approximation with Markovian noise. The main object is the
+  Polyak--Ruppert averaged Richardson--Romberg estimator formed from two
+  coupled step sizes, $alpha$ and $2 alpha$. We prove a stationary
+  augmented-chain Berry--Esseen assembly for scalar RR statistics, identify
+  the asymptotic covariance target $Sigma_infinity$, and then transfer the
+  result to deterministic starts under mixing-scale burn-in conditions with
+  logarithmic factors. At the balanced scale $alpha = c n^(-1\/2)$, the final
+  burned-in statistic has a non-asymptotic normal approximation with
+  $n^(-1\/4)$ polynomial rate up to logarithmic factors.
 ]
 
 #v(2em)
@@ -56,3 +65,34 @@
 = Burn-in Transfer for Deterministic Starts <sec:burn_in_transfer>
 
 #include "src/burn_in_transfer.typ"
+
+#pagebreak()
+
+= References <sec:references>
+
+- Bobkov, S. G. and Goetze, F. (1999). Exponential integrability and
+  transportation cost related to logarithmic Sobolev inequalities. _Journal of
+  Functional Analysis_, 163(1), 1--28.
+- Bolthausen, E. (1982). Exact convergence rates in some martingale central
+  limit theorems. _Annals of Probability_, 10(3), 672--688.
+- Dieuleveut, A., Durmus, A., and Bach, F. (2020). Bridging the gap between
+  constant step-size stochastic gradient descent and Markov chains. _Annals of
+  Statistics_, 48(3), 1348--1382.
+- Douc, R., Moulines, E., Priouret, P., and Soulier, P. (2018). _Markov
+  Chains_. Springer.
+- Fan, X. (2019). Berry--Esseen bounds for martingales and applications.
+- Huo, D., Chen, Y., and Xie, Q. (2023). Effectiveness of constant stepsize in
+  Markovian LSA and statistical inference. Proceedings of the AAAI Conference
+  on Artificial Intelligence; arXiv:2312.10894.
+- Levin, I., Naumov, A., and Samsonov, S. (2025). High-order error bounds for
+  Markovian LSA with Richardson--Romberg extrapolation. arXiv:2508.05570.
+- Polyak, B. T. (1990). New stochastic approximation type procedures.
+  _Automation and Remote Control_, 51(7), 937--946.
+- Robbins, H. and Monro, S. (1951). A stochastic approximation method. _Annals
+  of Mathematical Statistics_, 22(3), 400--407.
+- Ruppert, D. (1988). Efficient estimations from a slowly convergent
+  Robbins--Monro process. Technical Report 781, Cornell University Operations
+  Research and Industrial Engineering.
+- Samsonov, S., Sheshukova, M., Moulines, E., and Naumov, A. (2025).
+  Statistical inference for linear stochastic approximation with Markovian
+  noise. arXiv:2505.19102.

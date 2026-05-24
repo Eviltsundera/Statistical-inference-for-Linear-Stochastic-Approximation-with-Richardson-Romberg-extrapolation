@@ -56,22 +56,78 @@ under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines,
 and Naumov (2025).
 
 These results do not directly give the distributional approximation needed for
-the PR-averaged Richardson--Romberg statistic under Markovian noise, especially
-when the stationary full-window analysis must be transferred to a
-deterministic-start, burned-in estimator. The main goal of this work is
-therefore narrower: to assemble a CLT and Berry--Esseen analysis for
-$overline(theta)_n^((alpha, "RR"))$, and to add the burn-in transfer needed for
-finite-start inference.
+the PR-averaged Richardson--Romberg statistic under Markovian noise. Two
+distinctions are essential here. First, the stationary theorem is proved for an
+augmented-chain scalar statistic, where the martingale noise, Poisson boundary
+term, and Richardson--Romberg misadjustment are controlled separately. Second,
+the deterministic-start estimator requires an additional burn-in transfer,
+because the deterministic transient and startup remainders are absent from the
+stationary augmented-chain theorem.
+
+The main goal of this work is therefore to build a non-asymptotic
+distributional approximation for scalar projections of the PR-averaged
+Richardson--Romberg statistic. The stationary result should be read as an
+$n_0 = 0$ augmented-chain theorem, not as a fixed-$alpha$ central limit theorem
+centered exactly at $theta^*$. Its final deterministic-start consequence is obtained
+at the balanced triangular-array scale $alpha_n = c n^(-1\/2)$, where the
+residual RR terms are absorbed into explicit remainders and the covariance
+target is $Sigma_infinity$.
 
 Concretely, we establish:
 
-+ A stationary full-window _central limit theorem_ for
-  $sqrt(n)(overline(theta)_n^((alpha, "RR")) - theta^*)$, identifying the
-  limiting covariance matrix.
-+ _Non-asymptotic Berry--Esseen bounds_ for scalar projections of the
-  PR-averaged RR statistic.
-+ A deterministic-start transfer theorem with logarithmic burn-in, yielding the
-  corresponding balanced-scale bound for the thesis-facing burned-in statistic.
++ A stationary full-window augmented-chain Berry--Esseen assembly for scalar
+  RR statistics, including the martingale approximation, predictable-variance
+  comparison, Poisson remainder, and stationary RR misadjustment.
++ A balanced triangular-array specialization, in particular for
+  $alpha_n = c n^(-1\/2)$, which identifies $Sigma_infinity$ as the covariance
+  target and gives the resulting stationary $n_0 = 0$ CLT interpretation.
++ A deterministic-start transfer theorem under mixing-scale burn-in conditions
+  with logarithmic factors, yielding the corresponding balanced-scale bound for
+  the main burned-in statistic.
+
+== Contribution map and notation guide
+
+The proof combines existing non-asymptotic tools with RR-specific algebra and
+the deterministic-start transfer developed here. The main proof blocks are:
+
+#table(
+  columns: (1.25fr, 2.3fr, 2.2fr),
+  inset: 4pt,
+  [*Block*], [*Role in the proof*], [*Status*],
+  [RR weight algebra],
+  [Controls the deterministic kernels $cal(Q)_l^("RR")$ and
+   $Q_(l;n_0,n)^("RR")$ and their variation.],
+  [Derived in Sections @sec:zeroth_order_rr and @sec:pr_weights.],
+  [Poisson and martingale reduction],
+  [Turns the Markovian depth-zero weighted sum into a martingale plus a
+   bounded Poisson remainder.],
+  [Adapted from the Samsonov et al. framework and reproved for RR weights.],
+  [Stationary misadjustment],
+  [Controls the non-martingale RR remainder
+   $J^((1)) + J^((2)) + H^((2))$ under the stationary augmented chain.],
+  [Uses Levin et al. inputs; the stationary RR assembly is carried out here.],
+  [Burn-in transfer],
+  [Transfers the stationary theorem to deterministic starts by controlling the
+   deterministic transient, random initial product, and startup discrepancy.],
+  [Developed in Section @sec:burn_in_transfer.],
+)
+
+The following notation is used throughout the later chapters:
+
+#table(
+  columns: (1.2fr, 3.3fr),
+  inset: 4pt,
+  [*Notation*], [*Meaning*],
+  [$alpha, 2 alpha$], [The two constant step sizes used by the two-level RR estimator.],
+  [$n_0$ and $m = n - n_0$], [Burn-in length and effective averaging window.],
+  [$B_w = I - w overline(A)$], [Deterministic linearized contraction at step size $w$.],
+  [$cal(Q)_l^("RR")$], [Full-window RR PR weight in the stationary $n_0 = 0$ chapter.],
+  [$Q_(l;n_0,n)^("RR")$ or $Q_l^("bRR")$], [Burned-in RR PR weight for the window $k = n_0, dots, n - 1$.],
+  [$S_(n, "stat")^("RR")(u)$], [Stationary augmented-chain scalar statistic.],
+  [$T_(n,n_0)^("RR")(u)$], [Finite-start burned-in scalar statistic with $sqrt(m)$ normalization.],
+  [$Xi_(n,n_0)^("bRR")(u)$], [Finite-window normalized burned-in statistic.],
+  [$sigma(u)^2 = u^top Sigma_infinity u$], [Asymptotic scalar variance target.],
+)
 
 == Setting and assumptions <sec:assumptions>
 
@@ -104,6 +160,9 @@ Let ${Z_k}_(k in bb(N))$ be a Markov chain on a complete separable metric space 
   The noise function $epsilon.alt(z) = tilde(A)(z) theta^* - tilde(b)(z)$, where $tilde(b)(z) = b(z) - overline(b)$, satisfies
   $ ||epsilon.alt||_infinity := sup_(z in sans(Z)) ||epsilon.alt(z)|| < +infinity. $
 ]
+
+By construction, $pi(tilde(A)) = 0$, $pi(tilde(b)) = 0$, and hence
+$pi(epsilon.alt) = 0$.
 
 Under Assumptions 1--3, the error $theta_k^((alpha)) - theta^*$ satisfies the recursion
 $ theta_k^((alpha)) - theta^* = (I - alpha A(Z_k))(theta_(k-1)^((alpha)) - theta^*) - alpha epsilon.alt(Z_k). $ <eq:error-recursion>

@@ -135,7 +135,7 @@ explicitly when the shifted estimate is applied below.
       (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
         + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
   $
-]
+] <lem:last-shifted-first-order>
 
 _Proof._ Since $J_0^((0, alpha)) = 0$, the term $t = 0$ in $S_n$ vanishes.
 Substituting the explicit formula for $J_t^((0, alpha))$ gives

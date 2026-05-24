@@ -70,6 +70,9 @@ tilde(J)_(n, "last")^((0, alpha))
 &= -2 alpha^2 overline(A) sum_(j=1)^(n-1) H_j^((n)) thin epsilon.alt(Z_j),
 $
 where the last equality uses $H_n^((n)) = 0$ because the inner sum is empty.
+The left-factored matrix-power identity is legitimate here because
+$I - alpha overline(A)$, $I - 2 alpha overline(A)$, and $overline(A)$ are
+polynomials in the same matrix $overline(A)$ and therefore commute.
 The extra factor $alpha overline(A)$ pulled out front is the source of the additional $alpha$-decay of the RR difference compared to a single LSA trajectory.
 
 == Norm Estimate for $H_j^((n))$
@@ -108,11 +111,11 @@ $
 quad "i.e." quad
 frac(1, 1 - sqrt((1 - 2 alpha a) / (1 - alpha a))) <= frac(2, alpha a).
 $
-Defining the chapter-local constant
-$ overline(C)_A := kappa_Q $
+Defining the chapter-local norm-equivalence constant
+$ K_Q := kappa_Q $
 (distinct from the assumption-2 sup-norm constant $C_A$, which enters separately via $|| overline(A) ||$ in the next subsection), we arrive at the final estimate
 $
-||H_j^((n))|| <= overline(C)_A thin (1 - alpha a)^((n-j-1) slash 2) thin frac(2, alpha a).
+||H_j^((n))|| <= K_Q thin (1 - alpha a)^((n-j-1) slash 2) thin frac(2, alpha a).
 $
 The kernel decays geometrically in $n - j$ at rate $sqrt(1 - alpha a)$ but its summed weight is of order $1 slash (alpha a)$. The next subsection keeps the remaining powers of $a$ explicit when this kernel is multiplied by the prefactor $alpha^2$ in $tilde(J)_(n, "last")^((0, alpha))$.
 
@@ -146,31 +149,31 @@ is a weighted sum of values of the centered noise function $epsilon.alt$ along t
 Fix a deterministic direction $u in bb(R)^d$. We apply the lemma with
 $g_j^u(z) = -2 alpha^2 u^top overline(A) H_j^((n)) epsilon.alt(z)$ for $1 <= j <= n-1$ and $g_n^u = 0$. Each $g_j^u$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Combining the bound $|| overline(A) || <= C_A$ (Assumption 2) with the previous subsection, define
 $
-tilde(C)_A := C_A thin overline(C)_A = C_A thin kappa_Q.
+K_(A,Q) := C_A thin K_Q = C_A thin kappa_Q.
 $
 Then the per-summand bound is
 $
 ||g_j^u||_infinity
-&<= 2 alpha^2 ||u|| thin tilde(C)_A (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity \
-&= frac(4 alpha ||u|| thin tilde(C)_A ||epsilon.alt||_infinity, a) (1 - alpha a)^((n-j-1) slash 2),
+&<= 2 alpha^2 ||u|| thin K_(A,Q) (1 - alpha a)^((n-j-1) slash 2) frac(2, alpha a) thin ||epsilon.alt||_infinity \
+&= frac(4 alpha ||u|| thin K_(A,Q) ||epsilon.alt||_infinity, a) (1 - alpha a)^((n-j-1) slash 2),
 quad 1 <= j <= n-1.
 $
 Note the prefactor $alpha^2$ collapsing to $alpha slash a$: the $1 slash (alpha a)$ blow-up in $H_j^((n))$ is absorbed only by one factor of $alpha$. Squaring and summing over $j$:
 $
 sum_(j=1)^n ||g_j^u||_infinity^2
 &= sum_(j=1)^(n-1) ||g_j^u||_infinity^2 \
-&<= frac(16 alpha^2 ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^2) sum_(j=1)^(n-1) (1 - alpha a)^(n-j-1) \
-&<= frac(16 alpha^2 ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^2) thin frac(1, alpha a) \
-&= frac(16 alpha ||u||^2 thin tilde(C)_A^2 ||epsilon.alt||_infinity^2, a^3).
+&<= frac(16 alpha^2 ||u||^2 thin K_(A,Q)^2 ||epsilon.alt||_infinity^2, a^2) sum_(j=1)^(n-1) (1 - alpha a)^(n-j-1) \
+&<= frac(16 alpha^2 ||u||^2 thin K_(A,Q)^2 ||epsilon.alt||_infinity^2, a^2) thin frac(1, alpha a) \
+&= frac(16 alpha ||u||^2 thin K_(A,Q)^2 ||epsilon.alt||_infinity^2, a^3).
 $
 Plugging this into the variance proxy $v_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j^u||_infinity^2$ from the lemma and defining
 $
-hat(C)_A := 32 thin tilde(C)_A thin ||epsilon.alt||_infinity
+K_("last",0) := 32 thin K_(A,Q) thin ||epsilon.alt||_infinity
   frac(sqrt(t_"mix"), a^(3 slash 2)),
 $
 gives
 $
-v_n^2 <= ||u||^2 thin hat(C)_A^2 thin alpha.
+v_n^2 <= ||u||^2 thin K_("last",0)^2 thin alpha.
 $
 
 To convert the sub-Gaussian tail into a moment bound, we use the following standard fact.
@@ -183,16 +186,16 @@ To convert the sub-Gaussian tail into a moment bound, we use the following stand
 ]
 
 Applying the lemma with $X = u^top tilde(J)_(n, "last")^((0, alpha))$ and
-$sigma^2 = v_n^2 <= ||u||^2 hat(C)_A^2 alpha$ gives, for any $p >= 2$,
+$sigma^2 = v_n^2 <= ||u||^2 K_("last",0)^2 alpha$ gives, for any $p >= 2$,
 $
 bb(E)^(1 slash p) [|u^top tilde(J)_(n, "last")^((0, alpha))|^p]
-<= 2^(1 slash p) sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha)
-<= 2 sqrt(p) thin ||u|| thin hat(C)_A thin sqrt(alpha),
+<= 2^(1 slash p) sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha)
+<= 2 sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha),
 $
 or equivalently
 $
 frac(1, sqrt(alpha)) thin ||u^top tilde(J)_(n, "last")^((0, alpha))||_(L_p)
-<= 2 sqrt(p) thin ||u|| thin hat(C)_A.
+<= 2 sqrt(p) thin ||u|| thin K_("last",0).
 $
 Thus every fixed scalar projection of the last-iterate zeroth-order RR
 difference is $O(sqrt(alpha))$ in $L^p$, uniformly in $n$. A Euclidean-norm
