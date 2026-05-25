@@ -44,7 +44,7 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
        log^(3 slash 2)(1 slash (alpha a)) \
     &quad + C_("burn,mis") p^(3 slash 2) sqrt(alpha) \
     &quad + C_("burn,mis") p^3 (alpha m)^(-1 slash 2)
-       log^(1 slash p)(1 slash (alpha a)) \
+       log^(1 slash 2)(1 slash (alpha a)) \
     &quad + C_("burn,mis") Phi_+(p, alpha) thin m^(-1 slash 2) \
     &quad + frac(C_("burn,mis") p thin A_("st")(p,q,alpha),
                   alpha a sqrt(m))

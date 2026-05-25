@@ -86,14 +86,18 @@
   Statistics_, 48(3), 1348--1382.
 - Douc, R., Moulines, E., Priouret, P., and Soulier, P. (2018). _Markov
   Chains_. Springer.
-- Fan, X. (2019). Berry--Esseen bounds for martingales and applications.
-  _arXiv preprint_.
-- Huo, D., Chen, Y., and Xie, Q. (2023). Effectiveness of constant stepsize in
+- Fan, X. (2019). Exact rates of convergence in some martingale central limit
+  theorems. _Journal of Mathematical Analysis and Applications_, 469(2),
+  1028--1044. https://doi.org/10.1016/j.jmaa.2018.09.049.
+- Huo, D., Chen, Y., and Xie, Q. (2024). Effectiveness of constant stepsize in
   Markovian LSA and statistical inference. _Proceedings of the AAAI Conference
-  on Artificial Intelligence_; arXiv:2312.10894.
+  on Artificial Intelligence_, 38(18), 20447--20455.
+  https://doi.org/10.1609/aaai.v38i18.30028.
 - Levin, I., Naumov, A., and Samsonov, S. (2025). High-order error bounds for
-  Markovian LSA with Richardson--Romberg extrapolation. _arXiv preprint_,
-  arXiv:2508.05570.
+  Markovian LSA with Richardson--Romberg extrapolation. Extended version,
+  arXiv:2508.05570. Conference version in _Proceedings of the AAAI Conference
+  on Artificial Intelligence_, 40(43), 36696--36704, 2026.
+  https://doi.org/10.1609/aaai.v40i43.40994.
 - Polyak, B. T. (1990). New stochastic approximation type procedures.
   _Automation and Remote Control_, 51(7), 937--946.
 - Robbins, H. and Monro, S. (1951). A stochastic approximation method. _Annals
@@ -103,4 +107,5 @@
   Research and Industrial Engineering.
 - Samsonov, S., Sheshukova, M., Moulines, E., and Naumov, A. (2025).
   Statistical inference for linear stochastic approximation with Markovian
-  noise. _arXiv preprint_, arXiv:2505.19102.
+  noise. _Advances in Neural Information Processing Systems_, 38.
+  arXiv:2505.19102.

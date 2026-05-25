@@ -330,8 +330,9 @@ not used in the final Berry--Esseen assembly. The actual stationary and
 burned-in theorems use the depth-two Levin transfer developed in the next
 chapter.
 
-The PR-averaged Richardson--Romberg expansion produces, after Step (S8) of the
-Samsonov scheme applied separately at step sizes $alpha$ and $2 alpha$, a
+The PR-averaged Richardson--Romberg expansion produces, after applying the
+first deterministic-product perturbation step underlying Samsonov et al.
+(2025, Proposition 9) separately at step sizes $alpha$ and $2 alpha$, a
 depth-one "misadjustment" remainder
 $
 D_1^("mis, RR")

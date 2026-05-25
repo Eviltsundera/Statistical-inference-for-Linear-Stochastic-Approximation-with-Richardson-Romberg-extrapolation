@@ -76,12 +76,12 @@ the main text and should not be read as separate external theorems.
   lr(|| sum_(t = 0)^(r - 1) overline(psi)_w (J_t^((0, w)), Z_(t + 1)) ||)_(L_p)
     <= c_(W, 1) thin p^(3 slash 2) sqrt(w r)
        + c_(W, 2) thin p^3 thin w^(-1 slash 2)
-         thin log^(1 slash p)(1 slash (w a)),
+         thin log^(1 slash 2)(1 slash (w a)),
   $
   with $c_(W, 1), c_(W, 2)$ depending only on
-  $C_A, kappa_Q, t_"mix", || epsilon.alt ||_infinity$. The precise logarithmic
-  factor is not rate-critical below; it is absorbed into $"polylog"(n)$ in the
-  working-scale corollaries.
+  $C_A, kappa_Q, t_"mix", || epsilon.alt ||_infinity$. The logarithmic factor
+  is the one displayed in Levin et al. (2025, Corollary 6, Eq. (67)); it is
+  absorbed into $"polylog"(n)$ in the working-scale corollaries.
 ] <lem:levin-cor-6>
 
 #lemma[

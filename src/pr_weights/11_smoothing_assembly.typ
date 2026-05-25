@@ -109,7 +109,7 @@ stationary augmented chain.
       \
         & quad quad quad quad
         + p^(3 slash 2) thin sqrt(alpha)
-        + p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+        + p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash 2)(1 slash (alpha a))
         + Phi_+(p, alpha) thin n^(-1 slash 2)
       )),
   $
@@ -257,7 +257,7 @@ $sqrt(n) alpha^2 = c^2 thin n^(-1 slash 2)$;
 $p^(7 slash 2) sqrt(n) alpha^(3 slash 2) log^(3 slash 2)(1 slash (alpha a))
 = O("polylog"(n) n^(-1 slash 4))$;
 $p^(3 slash 2) sqrt(alpha) = O("polylog"(n) n^(-1 slash 4))$;
-$p^3 (alpha n)^(-1 slash 2) log^(1 slash p)(1 slash (alpha a))
+$p^3 (alpha n)^(-1 slash 2) log^(1 slash 2)(1 slash (alpha a))
 = O("polylog"(n) n^(-1 slash 4))$; and
 $Phi_+(p, alpha) n^(-1 slash 2) = O("polylog"(n) n^(-1 slash 2))$.
 After division by $sigma_n^("RR")(u) >= sigma(u) slash sqrt(2)$, these

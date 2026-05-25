@@ -325,7 +325,7 @@ $J^((1))$ and the centered bilinear sum bounded in @lem:levin-cor-6.
   || T_n^((1)) ||_(L_p)
     &<= C_("mis,1") sqrt(n) thin alpha^2
      + C_("mis,1") thin p^(3 slash 2) sqrt(alpha) \
-    &quad + C_("mis,1") thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+    &quad + C_("mis,1") thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash 2)(1 slash (alpha a))
      + C_("mis,1") thin Phi_+(p, alpha) thin n^(-1 slash 2).
   $
 ] <lem:T1-bound>
@@ -374,14 +374,14 @@ For the bilinear sum apply @lem:levin-cor-6 with $r = n$,
 $
 || sum_(k = 1)^n overline(psi)_w ||_(L_p)
   <= c_(W, 1) thin p^(3 slash 2) sqrt(w n)
-   + c_(W, 2) thin p^3 thin w^(-1 slash 2) thin log^(1 slash p)(1 slash (w a)),
+   + c_(W, 2) thin p^3 thin w^(-1 slash 2) thin log^(1 slash 2)(1 slash (w a)),
 $
 and divide by $sqrt(n)$, using $w in [alpha, 2 alpha]$ to upper-bound by the
 $alpha$-form,
 $
 frac(1, sqrt(n)) || sum overline(psi)_w ||_(L_p)
   <= sqrt(2) c_(W, 1) thin p^(3 slash 2) sqrt(alpha)
-   + sqrt(2) c_(W, 2) thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a)).
+   + sqrt(2) c_(W, 2) thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash 2)(1 slash (alpha a)).
 $
 For the boundary term, apply the stationary-limit transfer
 @lem:stationary-limit-J1 to
@@ -445,7 +445,7 @@ argument for $T_n^((H))$, with the additional $d^(1 slash q)$ factor of
      + C thin (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
          thin sqrt(n) thin alpha^(3 slash 2) thin log^(3 slash 2)(1 slash (alpha a)) \
     &quad + C thin p^(3 slash 2) sqrt(alpha)
-     + C thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a))
+     + C thin p^3 thin (alpha n)^(-1 slash 2) thin log^(1 slash 2)(1 slash (alpha a))
      + C thin Phi_+(p, alpha) thin n^(-1 slash 2).
   $
 ] <thm:misadjustment>
