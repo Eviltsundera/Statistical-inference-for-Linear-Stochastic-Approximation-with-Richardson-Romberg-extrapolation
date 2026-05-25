@@ -3,7 +3,8 @@
 == Pointwise Bounds for the RR Weights
 
 #lemma[
-  Let $alpha, 2 alpha in (0, alpha_infinity]$, set $C_Q := kappa_Q^(1 slash 2) || overline(A)^(-1) ||$ and $tilde(C)_A := kappa_Q || overline(A) ||$, and write $k = n - l$.
+  *(Pointwise RR weight bounds.)*
+  Let $0 < alpha$ and $2 alpha <= alpha_infinity$, set $C_Q := kappa_Q^(1 slash 2) || overline(A)^(-1) ||$ and $tilde(C)_A := kappa_Q || overline(A) ||$, and write $k = n - l$.
 
   *(i)* For every $1 <= l <= n - 1$,
   $
@@ -15,7 +16,7 @@
   || cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR") ||
     <= 2 tilde(C)_A thin alpha^2 thin (k - 1) thin (1 - alpha a)^((k - 2) slash 2).
   $
-]
+] <lem:RR-weight-pointwise>
 
 _Proof of (i)._ Take norms in the basic RR identity above. Using the equivalence $|| dot || <= kappa_Q^(1 slash 2) || dot ||_Q$ and the Lyapunov contraction at both step sizes,
 $
@@ -53,4 +54,3 @@ $
   <= alpha kappa_Q || overline(A) || (k - 1) (1 - alpha a)^((k - 2) slash 2).
 $
 Inserting this bound into the discrete-difference identity finishes the proof. $square$
-

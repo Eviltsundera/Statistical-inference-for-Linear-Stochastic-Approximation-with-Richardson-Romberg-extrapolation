@@ -2,7 +2,8 @@
 
 == Target Statistic and Normalization
 
-Let $0 <= n_0 < n$ and set $m := n - n_0$. The burned-in PR average is
+Let $xi = cal(L)(Z_0)$ be the initial law of the base Markov chain, let
+$0 <= n_0 < n$, and set $m := n - n_0$. The burned-in PR average is
 $
 overline(theta)_(n,n_0)^((alpha))
   := frac(1, m) sum_(k = n_0)^(n - 1) theta_k^((alpha)),
@@ -56,4 +57,3 @@ We first control $Xi_(n,n_0)^("bRR")(u)$ and then pass to
 $Xi_(n,n_0)^("asy,RR")(u)$. A final corollary converts the $sqrt(m)$ statistic
 to the final $sqrt(n)$ statistic when the burn-in is at the mixing scale, of
 order $alpha^(-1)$ times logarithmic factors.
-

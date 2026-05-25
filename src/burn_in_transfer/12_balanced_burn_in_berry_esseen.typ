@@ -7,6 +7,7 @@ statement uses $sigma(u)$, via the following burned-in analogue of
 @cor:RR-BE-sigma.
 
 #lemma[
+  *(Burned-in normalization transfer.)*
   Assume $sigma^2(u) > 0$ and the burned-in variance lower-bound condition
   @eq:burn-variance-lb-condition. Put
   $
@@ -54,11 +55,10 @@ using @eq:burn-scalar-variance-comparison and
 $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
 
 #theorem[
-  *(Balanced-scale burned-in PR-averaged RR Berry--Esseen bound.)*
+  *(Balanced-scale deterministic-start burned-in PR-averaged RR Berry--Esseen bound.)*
   Assume Assumptions 1--3 from @sec:assumptions. Assume also the Lyapunov
-  contraction @eq:contraction for the two step sizes used below, the imported
-  Levin and Samsonov inputs summarized in @sec:imported-inputs, and the
-  non-degeneracy condition $sigma^2(u) > 0$.
+  contraction @eq:contraction for the two step sizes used below and the
+  external inputs and local extensions summarized in @sec:imported-inputs.
   Fix $c > 0$ and set
   $
   alpha := c thin n^(-1 slash 2),
@@ -67,35 +67,15 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   quad
   p := max(2, ceil(log n)),
   quad
-  q := max(2 p, ceil(log(e thin d)), 2).
+  q := max(4 p, ceil(log(e thin d)), 2).
   $
-  Put
-  $
-  alpha_("adm")(p,q)
-    := min (
-      alpha_infinity,
-      alpha_("inv"),
-      frac(1, 2 a),
-      alpha_*(q, t_"mix"),
-      alpha_("st")(p)
-    ).
-  $ <eq:burn-final-alpha-adm>
-  Here $alpha_("inv")$ is the local inverse ceiling from @eq:alpha-inv,
-  $alpha_*(q,t_"mix")$ collects the Levin depth-two moment admissibility
-  restrictions, and $alpha_("st")(p)$ is the common product-stability and
-  full-state startup threshold in @lem:burn-product-stability and
-  @lem:burn-full-startup.
-  Suppose $n >= 3$ is such that
-  $
-  m >= n slash 2,
-  quad
-  2 alpha <= alpha_("adm")(p,q),
-  quad
-  m thin alpha thin a
-    >= frac(2 C_("burn,3") || u ||^2, sigma^2(u)),
-  $ <eq:burn-final-step-conditions>
-  and the burn-in satisfies the explicit mixing-scale conditions with
-  logarithmic factors
+  Then $p >= 2$, $q >= 2$, and $p <= q slash 4$.
+  Use the deterministic-start admissibility threshold
+  $alpha_("burn")(p,q)$ defined in @eq:alpha-admissibility-thresholds.
+  Suppose $(n,n_0,p,q,alpha,u)$ is in the admissible burn-in regime
+  @eq:admissible-burn-regime.
+  Assume also that the burn-in satisfies the explicit mixing-scale conditions
+  with logarithmic factors
   $
   n_0 >= frac(2, alpha a) log n,
   quad
@@ -105,7 +85,7 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   $ <eq:burn-final-log-conditions>
   Then there exists a finite constant $C_("burn,final")(u,c,theta_0)$,
   depending only on $u$, $c$, $||theta_0 - theta^*||$, and the problem and
-  universal constants in the preceding bounds, such that
+  universal constants in the preceding bounds, but not on $xi$, such that
   $
   d_K lr((Xi_(n,n_0)^("bRR")(u), cal(N)(0, 1)))
     <= frac(C_("burn,final")(u,c,theta_0) thin "polylog"(n),
@@ -162,10 +142,11 @@ because $m >= n slash 2$ and $alpha = c n^(-1 slash 2)$. This is absorbed
 into the balanced finite-window rate, proving @eq:burn-final-asymptotic.
 $square$
 
-Condition @eq:burn-final-step-conditions collects the finite-$n$ admissibility
-requirements. The inequality $2 alpha <= alpha_("adm")(p,q)$ enforces the
-Lyapunov small-step ceiling, the local inverse ceiling, the Levin depth-two
-admissibility threshold, the random-product stability estimate
+The admissible burn-in regime @eq:admissible-burn-regime collects the
+finite-$n$ admissibility requirements. The inequality
+$2 alpha <= alpha_("burn")(p,q)$ enforces the Lyapunov small-step ceiling, the
+local inverse ceiling, the Levin depth-two admissibility threshold, the
+random-product stability estimate
 @lem:burn-product-stability, and the full-state startup contraction
 @lem:burn-full-startup. Since
 $alpha = c n^(-1 slash 2)$ and $m >= n slash 2$, the elementary step-size
@@ -173,7 +154,7 @@ constraints and @eq:burn-variance-lb-condition hold automatically for all
 sufficiently large $n$. The remaining non-elementary large-$n$ requirement is
 $
 2 c n^(-1 slash 2)
-  <= min (alpha_*(q, t_"mix"), alpha_("st")(p)),
+  <= alpha_("burn")(p,q),
 $ <eq:burn-final-levin-eventual>
 with $p,q$ as in the theorem. Under this Levin/startup admissibility condition,
 the large-$n$ reading of the theorem keeps only $m >= n slash 2$ and the
@@ -181,8 +162,11 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
 
 #corollary[
   *($sqrt(n)$-normalization for the burned-in RR statistic.)*
-  Under the assumptions of @thm:burn-final-balanced, define the final
-  scalar statistic
+  Under the assumptions of @thm:burn-final-balanced and the admissible
+  burn-in regime @eq:admissible-burn-regime, in particular
+  $m = n - n_0 >= n slash 2$, $p <= q slash 4$, $sigma^2(u) > 0$,
+  $2 alpha <= alpha_("burn")(p,q)$, and the burned-in variance lower bound
+  @eq:burn-variance-lb-condition, define the final scalar statistic
   $
   T_(n,n_0)^("RR,n")(u)
     := sqrt(n) thin u^top lr((
@@ -212,7 +196,7 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
     <= C_0 thin (alpha a)^(-1) log^2 n
   $ <eq:burn-log-window>
   for some finite $C_0$ and such a fixed $C_-$, then there exists a finite constant
-  $C_("burn,n")(u,c,theta_0,C_0,C_-)$ such that
+  $C_("burn,n")(u,c,theta_0,C_0,C_-)$, independent of $xi$, such that
   $
   d_K lr((Xi_(n,n_0)^("n,RR")(u), cal(N)(0, 1)))
     <= frac(C_("burn,n")(u,c,theta_0,C_0,C_-) thin "polylog"(n),
@@ -221,7 +205,7 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
 ] <cor:burn-sqrt-n-transfer>
 
 _Proof._ Put $s_(n,n_0) := sqrt(n slash m)$. Since
-@eq:burn-final-step-conditions gives $m >= n slash 2$,
+@eq:admissible-burn-regime gives $m >= n slash 2$,
 $
 0 <= s_(n,n_0) - 1
   = frac(n_0, m thin (s_(n,n_0) + 1))

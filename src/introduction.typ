@@ -49,7 +49,9 @@ $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show
 that the leading error term scales as
 $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where
 $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in
-the key quantities subsection, matching the minimax optimal rate.
+the key quantities subsection. This is the usual parametric $n^(-1\/2)$
+benchmark for averaged LSA; this thesis does not prove a separate
+Hajek--Le Cam or minimax lower bound.
 Berry--Esseen type bounds and bootstrap inference procedures for the
 _standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation)
 under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines,
@@ -97,7 +99,7 @@ the deterministic-start transfer developed here. The main proof blocks are:
   [RR weight algebra],
   [Controls the deterministic kernels $cal(Q)_l^("RR")$ and
    $Q_(l;n_0,n)^("RR")$ and their variation.],
-  [Derived in Sections @sec:zeroth_order_rr and @sec:pr_weights.],
+  [Derived in @sec:zeroth_order_rr and @sec:pr_weights.],
   [Poisson and martingale reduction],
   [Turns the Markovian depth-zero weighted sum into a martingale plus a
    bounded Poisson remainder.],
@@ -107,9 +109,33 @@ the deterministic-start transfer developed here. The main proof blocks are:
    $J^((1)) + J^((2)) + H^((2))$ under the stationary augmented chain.],
   [Uses Levin et al. inputs; the stationary RR assembly is carried out here.],
   [Burn-in transfer],
-  [Transfers the stationary theorem to deterministic starts by controlling the
+  [Transfers the stationary theorem to finite starts by controlling the
    deterministic transient, random initial product, and startup discrepancy.],
-  [Developed in Section @sec:burn_in_transfer.],
+  [Developed in @sec:burn_in_transfer.],
+)
+
+The theorem-level outputs should be read in the following order:
+
+#table(
+  columns: (1.25fr, 1.2fr, 2.65fr),
+  inset: 4pt,
+  [*Output*], [*Label*], [*Object controlled*],
+  [Stationary augmented-chain assembly],
+  [@thm:RR-BE],
+  [$S_(n, "stat")^("RR")(u)$ with the finite-window variance
+   $sigma_n^("RR")(u)$.],
+  [Stationary balanced triangular-array corollaries],
+  [@cor:RR-BE-working and @cor:RR-BE-sigma],
+  [$S_(n, "stat")^("RR")(u)$ at $alpha_n = c n^(-1\/2)$, with either
+   finite-window or asymptotic normalization.],
+  [Deterministic-start finite-window transfer],
+  [@thm:burn-RR-BE-master],
+  [$Xi_(n,n_0)^("bRR")(u)$ after burn-in, still normalized by
+   $sigma_(n,n_0)^("bRR")(u)$.],
+  [Deterministic-start balanced theorem],
+  [@thm:burn-final-balanced and @cor:burn-sqrt-n-transfer],
+  [$Xi_(n,n_0)^("asy,RR")(u)$ and then the final $sqrt(n)$ statistic
+   $Xi_(n,n_0)^("n,RR")(u)$.],
 )
 
 The following notation is used throughout the later chapters:
@@ -120,6 +146,16 @@ The following notation is used throughout the later chapters:
   [*Notation*], [*Meaning*],
   [$alpha, 2 alpha$], [The two constant step sizes used by the two-level RR estimator.],
   [$n_0$ and $m = n - n_0$], [Burn-in length and effective averaging window.],
+  [$(Z_k)_(k >= 0)$ and $xi$],
+  [Base Markov chain and initial law $xi = cal(L)(Z_0)$. The recursion uses
+   observations $Z_k$, $k >= 1$; stationary covariance formulas may use $Z_0$
+   by stationarity.],
+  [$cal(F)_k$],
+  [Natural filtration $sigma(Z_0, dots, Z_k)$. Local displays that begin at
+   $Z_1$ use the same filtration with the harmless extra variable $Z_0$.],
+  [$(Z_k^("stat"))_(k in ZZ)$],
+  [Two-sided stationary copy of the base chain. Under the stationary
+   augmented-chain convention the superscript is usually omitted.],
   [$B_w = I - w overline(A)$], [Deterministic linearized contraction at step size $w$.],
   [$cal(Q)_l^("RR")$], [Full-window RR PR weight in the stationary $n_0 = 0$ chapter.],
   [$Q_(l;n_0,n)^("RR")$ or $Q_l^("bRR")$], [Burned-in RR PR weight for the window $k = n_0, dots, n - 1$.],
@@ -127,6 +163,10 @@ The following notation is used throughout the later chapters:
   [$T_(n,n_0)^("RR")(u)$], [Finite-start burned-in scalar statistic with $sqrt(m)$ normalization.],
   [$Xi_(n,n_0)^("bRR")(u)$], [Finite-window normalized burned-in statistic.],
   [$sigma(u)^2 = u^top Sigma_infinity u$], [Asymptotic scalar variance target.],
+  [$"polylog"(n)$],
+  [A generic fixed power of $log n$, possibly changing from line to line.
+   It never hides polynomial dependence on $n$ or any dependence on
+   $alpha$, $p$, or $q$ that is rate-relevant in the surrounding display.],
 )
 
 == Setting and assumptions <sec:assumptions>
@@ -171,6 +211,17 @@ $ theta_k^((alpha)) - theta^* = (I - alpha A(Z_k))(theta_(k-1)^((alpha)) - theta
 
 The _Markovian noise covariance matrix_ captures both the marginal variance and the temporal correlations of the noise:
 $ Sigma_epsilon.alt^(("M")) = bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_0)^top] + sum_(ell=1)^infinity lr((bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_ell)^top] + bb(E)_pi [epsilon.alt(Z_ell) epsilon.alt(Z_0)^top])). $ <eq:noise-cov>
+The series is absolutely convergent under Assumptions 1 and 3. Indeed, for
+centered bounded $epsilon.alt$,
+$||sans(Q)^ell epsilon.alt||_infinity <=
+2 ||epsilon.alt||_infinity (1 slash 4)^(floor(ell slash t_"mix"))$, and hence
+$
+||bb(E)_pi [epsilon.alt(Z_0) epsilon.alt(Z_ell)^top]||
+  <= ||epsilon.alt||_infinity ||sans(Q)^ell epsilon.alt||_infinity
+  <= 2 ||epsilon.alt||_infinity^2 (1 slash 4)^(floor(ell slash t_"mix")).
+$
+The same bound applies to the transposed covariance term, so the covariance
+series converges absolutely in operator norm.
 This matrix is the limiting covariance in the Markov chain CLT for the partial sums $n^(-1\/2) sum_(t=0)^(n-1) epsilon.alt(Z_t)$ (cf. Douc et al., 2018, Theorem 21.2.10).
 
 The _asymptotically optimal covariance matrix_ is given by

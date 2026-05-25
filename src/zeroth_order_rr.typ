@@ -80,6 +80,7 @@ The extra factor $alpha overline(A)$ pulled out front is the source of the addit
 To bound $||H_j^((n))||$ we use the following standard result.
 
 #lemma[
+  *(Lyapunov contraction.)*
   Let $-overline(A)$ be a Hurwitz matrix. Then for any $P = P^top succ 0$ there exists a unique
   $Q = Q^top succ 0$ satisfying
   $ overline(A)^top Q + Q overline(A) = P. $
@@ -89,7 +90,11 @@ To bound $||H_j^((n))||$ we use the following standard result.
   with $kappa_Q := lambda_"max" (Q) slash lambda_"min" (Q)$, one has for all
   $alpha in [0, alpha_infinity]$:
   $ alpha a <= 1 slash 2, quad ||I - alpha overline(A)||_Q^2 <= 1 - alpha a. $
-]
+] <lem:lyapunov-contraction-local>
+
+In the RR estimates below we assume explicitly that $0 < alpha$ and
+$2 alpha <= alpha_infinity$. Hence the Lyapunov contraction applies at both
+step sizes $alpha$ and $2 alpha$.
 
 For $1 <= j <= n-1$, we estimate $||H_j^((n))||$ by combining the triangle inequality, submultiplicativity, the equivalence $|| X || <= kappa_Q^(1 slash 2) || X ||_Q$ (applied to *each* operator-norm factor, hence two factors of $kappa_Q^(1 slash 2)$ multiplying to $kappa_Q$), and the Lyapunov contraction at step sizes $alpha$ and $2 alpha$:
 $
@@ -128,23 +133,25 @@ $
 is a weighted sum of values of the centered noise function $epsilon.alt$ along the Markov chain. In the Berry--Esseen argument below only fixed scalar projections are used, so we state the concentration input in scalar form.
 
 #lemma[
+  *(Weighted Markov concentration.)*
   Assume *UGE 1*. Let ${g_i}_(i=1)^n$ be a family of measurable functions
   $g_i : Z -> bb(R)$ such that
   $ c_i = ||g_i||_infinity < infinity quad "for all" i >= 1, quad
   pi(g_i) = 0 quad "for all" i in {1, dots, n}. $
-  Then, for any initial distribution $xi$ on $(Z, cal(Z))$, any $n in bb(N)$ and any $t >= 0$,
-  $ bb(P)_xi (lr(|sum_(i=1)^n g_i (Z_i)|) >= t) <= 2 exp(-frac(t^2, 2 v_n^2)), $
-  where
-  $ v_n = 8 (sum_(i=1)^n c_i^2)^(1 slash 2) sqrt(t_"mix"). $
+  Then, for any initial distribution $xi$ on $(Z, cal(Z))$, any
+  $n in bb(N)$, and any $p >= 2$,
+  $
+  ||sum_(i=1)^n g_i(Z_i)||_(L_p(xi))
+    <= C_("MC,0") sqrt(p thin t_"mix" thin sum_(i=1)^n c_i^2).
+  $ <eq:zeroth-markov-conc>
 
-  _Proof._ This is the scalar specialization of Levin et al. (2025, Lemma
-  11). Their lemma gives the same sub-Gaussian tail bound for vector-valued
-  time-inhomogeneous functions under *UGE 1*, assumes the centering condition
-  $pi(g_i)=0$, and is stated for an arbitrary initial law $xi$. Thus the
-  imported estimate is a tail bound around zero, not merely around
-  $bb(E)_xi sum_i g_i(Z_i)$, and no additional initial-bias term is introduced
-  here.
-]
+  _Proof._ This is the local scalar specialization of the imported Markov
+  concentration statement @lem:imported-markov-concentration. The only
+  dependence on the coefficient sequence is
+  through $sqrt(p thin t_"mix" thin sum_i c_i^2)$. Their result assumes the
+  centering condition $pi(g_i)=0$ and is stated for arbitrary initial law
+  $xi$, so no additional initial-bias term is introduced here.
+] <lem:zeroth-weighted-markov-concentration>
 
 Fix a deterministic direction $u in bb(R)^d$. We apply the lemma with
 $g_j^u(z) = -2 alpha^2 u^top overline(A) H_j^((n)) epsilon.alt(z)$ for $1 <= j <= n-1$ and $g_n^u = 0$. Each $g_j^u$ is centered under $pi$ since $pi(epsilon.alt) = 0$, so the centering hypothesis holds. Combining the bound $|| overline(A) || <= C_A$ (Assumption 2) with the previous subsection, define
@@ -166,36 +173,27 @@ sum_(j=1)^n ||g_j^u||_infinity^2
 &<= frac(16 alpha^2 ||u||^2 thin K_(A,Q)^2 ||epsilon.alt||_infinity^2, a^2) thin frac(1, alpha a) \
 &= frac(16 alpha ||u||^2 thin K_(A,Q)^2 ||epsilon.alt||_infinity^2, a^3).
 $
-Plugging this into the variance proxy $v_n^2 = 64 thin t_"mix" thin sum_(j=1)^n ||g_j^u||_infinity^2$ from the lemma and defining
+Plugging this into the Markov concentration input
+@eq:zeroth-markov-conc and defining
 $
 K_("last",0) := 32 thin K_(A,Q) thin ||epsilon.alt||_infinity
   frac(sqrt(t_"mix"), a^(3 slash 2)),
 $
 gives
 $
-v_n^2 <= ||u||^2 thin K_("last",0)^2 thin alpha.
+sqrt(p thin t_"mix" thin sum_(j=1)^n ||g_j^u||_infinity^2)
+  <= sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha).
 $
-
-To convert the sub-Gaussian tail into a moment bound, we use the following standard fact.
-
-#lemma[
-  Let $X$ be an $bb(R)$-valued random variable satisfying
-  $ bb(P)(|X| >= t) <= 2 exp(-frac(t^2, 2 sigma^2)) quad "for all" t >= 0, $
-  for some $sigma^2 > 0$. Then, for any $p >= 2$, it holds that
-  $ bb(E)[|X|^p] <= 2 thin p^(p slash 2) thin sigma^p. $
-]
-
-Applying the lemma with $X = u^top tilde(J)_(n, "last")^((0, alpha))$ and
-$sigma^2 = v_n^2 <= ||u||^2 K_("last",0)^2 alpha$ gives, for any $p >= 2$,
+Applying @eq:zeroth-markov-conc with
+$X = u^top tilde(J)_(n, "last")^((0, alpha))$ gives, for any $p >= 2$,
 $
 bb(E)^(1 slash p) [|u^top tilde(J)_(n, "last")^((0, alpha))|^p]
-<= 2^(1 slash p) sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha)
-<= 2 sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha),
+  <= C_("MC,0") sqrt(p) thin ||u|| thin K_("last",0) thin sqrt(alpha),
 $
 or equivalently
 $
 frac(1, sqrt(alpha)) thin ||u^top tilde(J)_(n, "last")^((0, alpha))||_(L_p)
-<= 2 sqrt(p) thin ||u|| thin K_("last",0).
+  <= C_("MC,0") sqrt(p) thin ||u|| thin K_("last",0).
 $
 Thus every fixed scalar projection of the last-iterate zeroth-order RR
 difference is $O(sqrt(alpha))$ in $L^p$, uniformly in $n$. A Euclidean-norm

@@ -27,11 +27,7 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
 #theorem[
   *(Burned-in PR-averaged RR misadjustment bound.)*
   Assume *UGE 1*, $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$,
-  $alpha, 2 alpha in (0, alpha_infinity]$,
-  $2 alpha <= alpha_("inv")$,
-  $alpha a <= 1 slash 4$, and the step-size restrictions of the Levin
-  depth-two and startup-contraction bounds, where $alpha_("inv")$ is defined
-  in @eq:alpha-inv. Set
+  and $0 < alpha$. Set
   $
   Phi_+(p, alpha) := 1 + p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
                    + p^(1 slash 2) thin t_"mix"^(3 slash 2) sqrt(alpha slash a).
@@ -39,8 +35,7 @@ length $m$. By stationarity, the same distribution is obtained if the sum in
   There exists a constant $C_("burn,mis")$ depending only on the stationary
   misadjustment constants, the startup-contraction constants, and the problem
   constants such that, for every $p >= 2$, every $q >= 2$ satisfying
-  $p <= q slash 2$, every $2 alpha <= alpha_*(q, t_"mix")$ and
-  $2 alpha <= alpha_("st")(p)$, and every $m >= 2$,
+  $p <= q slash 4$ and $2 alpha <= alpha_("burn")(p,q)$, and every $m >= 2$,
   $
   || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
     &<= C_("burn,mis") sqrt(m) thin alpha^2 \
@@ -92,12 +87,11 @@ two estimates gives @eq:burn-mis-bound. $square$
   Assume the hypotheses of @thm:burn-misadjustment. Let
   $alpha = c thin n^(-1 slash 2)$, $m >= n slash 2$,
   $p = max(2, ceil(log n))$, and
-  $q = max(2 p, ceil(log(e thin d)), 2)$. If, for some fixed $beta > 0$,
+  $q = max(4 p, ceil(log(e thin d)), 2)$. If, for some fixed $beta > 0$,
   $
   n_0 >= frac(beta p, c_("st") alpha a) log n,
   $
-  and $n$ is large enough that $2 alpha <= alpha_*(q, t_"mix")$ and
-  $2 alpha <= alpha_("st")(p)$ and $2 alpha <= alpha_("inv")$, then
+  and $n$ is large enough that $2 alpha <= alpha_("burn")(p,q)$, then
   $
   || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
     <= C_("burn,mis") thin "polylog"(n) thin n^(-1 slash 4).
@@ -109,4 +103,3 @@ _Proof._ The stationary part of @eq:burn-mis-bound is the bound of
 the rate unchanged. The startup term is controlled by
 @cor:burn-log-startup and is
 $"polylog"(n) thin n^(-1 slash 4 - beta)$ at this scale. $square$
-

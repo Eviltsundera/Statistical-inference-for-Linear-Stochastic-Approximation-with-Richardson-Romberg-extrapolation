@@ -68,6 +68,12 @@
 
 #pagebreak()
 
+= Appendix: External Inputs and Local Extensions <sec:imported-inputs>
+
+#include "src/external_inputs.typ"
+
+#pagebreak()
+
 = References <sec:references>
 
 - Bobkov, S. G. and Goetze, F. (1999). Exponential integrability and
@@ -81,11 +87,13 @@
 - Douc, R., Moulines, E., Priouret, P., and Soulier, P. (2018). _Markov
   Chains_. Springer.
 - Fan, X. (2019). Berry--Esseen bounds for martingales and applications.
+  _arXiv preprint_.
 - Huo, D., Chen, Y., and Xie, Q. (2023). Effectiveness of constant stepsize in
-  Markovian LSA and statistical inference. Proceedings of the AAAI Conference
-  on Artificial Intelligence; arXiv:2312.10894.
+  Markovian LSA and statistical inference. _Proceedings of the AAAI Conference
+  on Artificial Intelligence_; arXiv:2312.10894.
 - Levin, I., Naumov, A., and Samsonov, S. (2025). High-order error bounds for
-  Markovian LSA with Richardson--Romberg extrapolation. arXiv:2508.05570.
+  Markovian LSA with Richardson--Romberg extrapolation. _arXiv preprint_,
+  arXiv:2508.05570.
 - Polyak, B. T. (1990). New stochastic approximation type procedures.
   _Automation and Remote Control_, 51(7), 937--946.
 - Robbins, H. and Monro, S. (1951). A stochastic approximation method. _Annals
@@ -95,4 +103,4 @@
   Research and Industrial Engineering.
 - Samsonov, S., Sheshukova, M., Moulines, E., and Naumov, A. (2025).
   Statistical inference for linear stochastic approximation with Markovian
-  noise. arXiv:2505.19102.
+  noise. _arXiv preprint_, arXiv:2505.19102.

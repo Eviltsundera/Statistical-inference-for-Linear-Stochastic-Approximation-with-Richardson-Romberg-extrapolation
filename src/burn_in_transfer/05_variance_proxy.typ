@@ -18,6 +18,7 @@ sigma_(n,n_0)^(2, "bRR")(u)
 $ <eq:burn-variance-proxy>
 
 #lemma[
+  *(Burned-in variance comparison.)*
   Assume the conditions of @lem:burn-rr-weight-bounds and $|| Sigma || < infinity$.
   There exists a constant $C_("burn,3")$, depending only on
   $kappa_Q$, $|| overline(A)^(-1) ||$, $|| overline(A) ||$, and $|| Sigma ||$,
@@ -74,3 +75,33 @@ $alpha = c thin n^(-1 slash 2)$ with $m >= n slash 2$, this condition holds
 for all sufficiently large $n$ depending on $u$, $c$, and the problem
 constants.
 
+We say that $(n,n_0,p,q,alpha,u)$ is in the *admissible burn-in regime* if
+$m := n - n_0$ and
+$
+n >= 3,
+quad
+0 <= n_0 < n,
+quad
+p >= 2,
+quad
+q >= 2,
+quad
+p <= q slash 4,
+quad
+sigma^2(u) > 0,
+$
+$
+m >= n slash 2,
+quad
+0 < alpha,
+quad
+2 alpha <= alpha_("burn")(p,q),
+quad
+m thin alpha thin a
+  >= frac(2 C_("burn,3") || u ||^2, sigma^2(u)).
+$ <eq:admissible-burn-regime>
+The last inequality is the variance lower-bound condition
+@eq:burn-variance-lb-condition. This regime is the standing finite-window
+domain for the burned-in Berry--Esseen assembly below. Every later conversion
+of an $m$-scale rate into an $n$-scale rate is made only after invoking
+$m >= n slash 2$ from this regime.

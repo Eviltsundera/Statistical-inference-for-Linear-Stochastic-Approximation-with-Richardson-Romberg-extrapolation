@@ -6,7 +6,8 @@ The depth-zero martingale in @lem:burn-poisson-decomp has deterministic
 coefficients, but its normalization is based on the effective sample size
 $m = n - n_0$. We assume $m >= n slash 2$ and impose the mixing-scale burn-in
 lower bounds with logarithmic factors, so the inhomogeneous concentration term
-of order $sqrt(p n)$ can be written on the $m$ scale.
+obtained from $sqrt(p thin t_"mix" thin sum c_i^2)$ and then written as
+$C(u) sqrt(p thin n)$ can be transferred to the $m$ scale.
 
 Fix $u in bb(R)^d$ and put
 $X_l^("bRR") := u^top Delta M_l^("bRR")$ for $2 <= l <= n - 1$. Then
@@ -36,12 +37,13 @@ $ <eq:burn-s-upper>
   *(Burned-in martingale Berry--Esseen bound.)*
   Assume *UGE 1*, $pi(epsilon.alt) = 0$,
   $|| epsilon.alt ||_infinity < infinity$, $sigma^2(u) > 0$,
-  $alpha, 2 alpha in (0, alpha_infinity]$, $m >= n slash 2$, and the
+  $0 < alpha$, $2 alpha <= alpha_infinity$, $m >= n slash 2$, and the
   burned-in variance lower-bound condition @eq:burn-variance-lb-condition.
   There exist constants $C_("bK,1")(u), C_("bK,2")(u) > 0$, depending only on
   $||u||$, $sigma(u)$, $C_("burn,Q")$, $t_"mix"$,
   $||epsilon.alt||_infinity$, $||Sigma_(epsilon.alt)^(("M"))||$, and the
-  universal Bolthausen--Fan constants, such that for every $n >= 3$,
+  universal constants in @eq:imported-bolthausen-fan, such that for every
+  $n >= 3$,
   $
   d_K lr((
     frac(u^top M_(n,n_0)^("bRR"),
@@ -53,8 +55,8 @@ $ <eq:burn-s-upper>
   $ <eq:burn-M-BE>
 ] <thm:burn-M-BE>
 
-_Proof._ Apply the Bolthausen--Fan inequality used in the stationary chapter
-to the martingale differences $X_l^("bRR")$. The bounded-increment input is
+_Proof._ Apply @eq:imported-bolthausen-fan to the martingale differences
+$X_l^("bRR")$. The bounded-increment input is
 @eq:burn-M-incr, and the target variance is $s_(n,n_0)^2(u)$. The first and
 third Bolthausen--Fan terms are bounded exactly as before, with $n$ replaced
 by $m$ in the denominator and the harmless factor $n slash m <= 2$ absorbed
@@ -67,6 +69,10 @@ bb(E)^(1 slash p) lr([
 ])
   <= C thin sqrt(p thin n).
 $
+Here the constant contains the explicit bracket coefficient
+$C_("burn,Q")^2 ||u||^2 ||epsilon.alt||_infinity^2 t_"mix"^(5 slash 2)$
+from @lem:burn-bracket-conc; the underlying concentration input is
+@eq:imported-markov-conc.
 Together with $m >= n slash 2$, @eq:burn-variance-lb-condition, and
 @eq:burn-s-upper, this gives
 $
@@ -77,4 +83,3 @@ $
 Taking $p = ceil(log n)$ gives the displayed
 $log^(3 slash 4)(n) m^(-1 slash 4)$ bound. The classical Bolthausen and
 Lindeberg terms give the second displayed term. $square$
-

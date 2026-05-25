@@ -10,7 +10,7 @@ B_(2 alpha) := I - 2 alpha overline(A),
 quad
 k := n - l.
 $
-We assume $alpha, 2 alpha in (0, alpha_infinity]$, so that the Lyapunov contraction
+We assume $0 < alpha$ and $2 alpha <= alpha_infinity$, so that the Lyapunov contraction
 $|| B_alpha^m ||_Q^2 <= (1 - alpha a)^m$ and $|| B_(2 alpha)^m ||_Q^2 <= (1 - 2 alpha a)^m$ hold (and we use freely $1 - 2 alpha a <= 1 - alpha a$).
 
 The geometric-series identity $sum_(j = 0)^(m - 1) B_alpha^j = (alpha overline(A))^(-1)(I - B_alpha^m)$ converts @eq:Q-definition into the closed form
@@ -43,4 +43,3 @@ These are the exact expressions bounded in the next subsection. Note the structu
 - The discrete derivative $B_alpha^(k - 1) - B_(2 alpha)^(k - 1)$, however, is a *true* difference of contractions evaluated at the same exponent. The elementary identity $X^m - Y^m = (X - Y) sum_(i = 1)^m X^(i - 1) Y^(m - i)$ with $X = B_alpha$, $Y = B_(2 alpha)$, $X - Y = alpha overline(A)$ extracts an extra factor of $alpha$, gaining one full power of $alpha$ over the single-step case $Q_(l + 1)^((alpha)) - Q_l^((alpha)) = -alpha B_alpha^(k - 1)$. The left-factored form is valid because $B_alpha$ and $B_(2 alpha)$ are polynomials in the same matrix $overline(A)$, hence commute with each other and with $overline(A)$.
 
 This local $alpha$-gain in the discrete derivative is the *only* manifestation of Richardson--Romberg cancellation visible at the level of the PR weights.
-

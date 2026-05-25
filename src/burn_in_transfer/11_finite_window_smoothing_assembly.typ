@@ -47,9 +47,11 @@ Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
 @eq:burn-mis-bound.
 
 #lemma[
+  *(Burned-in composite remainder bound.)*
   Assume the hypotheses of @lem:burn-deterministic-transient,
   @lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
-  @thm:burn-misadjustment. Then, for every $p >= 2$ and admissible $q >= 2$,
+  @thm:burn-misadjustment. Then, for every $p >= 2$ and every $q >= 2$
+  satisfying $p <= q slash 4$ and $2 alpha <= alpha_("burn")(p,q)$,
   $
   || cal(R)_(n,n_0, op("fin"))^("bRR")(u) ||_(L_p)
     &<= frac(5 sqrt(kappa_Q) || u || || theta_0 - theta^* ||,
@@ -95,12 +97,14 @@ Y_(n,n_0)^("bRR")
 $
 
 #theorem[
-  *(Finite-window burned-in PR-averaged RR Berry--Esseen bound.)*
+  *(Finite-window deterministic-start burned-in PR-averaged RR Berry--Esseen bound.)*
   Assume the hypotheses of @thm:burn-M-BE, @lem:burn-random-initial-product,
   and @thm:burn-misadjustment. Let
+  $m := n - n_0$ and
   $p = max(2, ceil(log n))$ and
-  $q = max(2 p, ceil(log(e thin d)), 2)$. If
-  $2 alpha <= alpha_*(q, t_"mix")$ and $2 alpha <= alpha_("st")(p)$, then
+  $q = max(4 p, ceil(log(e thin d)), 2)$. Then $p >= 2$, $q >= 2$, and
+  $p <= q slash 4$. If $(n,n_0,p,q,alpha,u)$ is in the admissible burn-in
+  regime @eq:admissible-burn-regime, then
   $
   d_K lr((Xi_(n,n_0)^("bRR")(u), cal(N)(0, 1)))
     &<= frac(C_("bK,1")(u) thin log^(3 slash 4) n, m^(1 slash 4))
@@ -110,7 +114,8 @@ $
         sqrt(2 pi) thin sigma_(n,n_0)^("bRR")(u))
      + frac(e, n),
   $ <eq:burn-RR-BE-master>
-  with the composite remainder bounded by @lem:burn-R-bound.
+  with the composite remainder bounded by @lem:burn-R-bound. The bound is
+  uniform over the initial law $xi = cal(L)(Z_0)$ of the base Markov chain.
 ] <thm:burn-RR-BE-master>
 
 _Proof._ Apply the smoothing inequality @eq:smoothing-Lp to the split
@@ -126,4 +131,3 @@ $
          sigma_(n,n_0)^("bRR")(u)),
 $
 which gives @eq:burn-RR-BE-master. $square$
-

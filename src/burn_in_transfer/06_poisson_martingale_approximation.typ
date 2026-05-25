@@ -14,6 +14,7 @@ The stationary Poisson identity applies because the coefficients
 $Q_l^("bRR")$ are deterministic.
 
 #lemma[
+  *(Burned-in Poisson martingale decomposition.)*
   Assume *UGE 1* and $pi(epsilon.alt) = 0$. Define, for $2 <= l <= n - 1$,
   $
   Delta M_l^("bRR")
@@ -61,4 +62,3 @@ $|| sans(Q) hat(epsilon.alt) ||_infinity <= || hat(epsilon.alt) ||_infinity$,
 the uniform weight bound $|| Q_l^("bRR") || <= C_("burn,Q")$ from
 @eq:burn-post-weight-error and @eq:burn-pre-weight-size, and the total-variation
 estimate @eq:burn-weight-variation. $square$
-

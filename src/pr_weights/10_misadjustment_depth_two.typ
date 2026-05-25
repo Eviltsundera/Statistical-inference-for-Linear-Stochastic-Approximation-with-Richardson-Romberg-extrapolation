@@ -15,12 +15,14 @@ where $R_k^((alpha)) := J_k^((1, alpha)) + H_k^((1, alpha))$ is the depth-one
 remainder of @eq:depth-one. A direct kernel-difference route only bounds
 $R_n^("mis, RR")$ at order $O(sqrt(n) thin alpha) = O(1)$ at the working scale
 $alpha asymp n^(-1 slash 2)$ — too crude for a Berry--Esseen rate
-$n^(-1 slash 4)$. The depth-two route below transfers
-four statements of Levin et al. (2025) into the present notation and
-recovers the target $n^(-1 slash 4) thin "polylog"(n)$ rate.
+$n^(-1 slash 4)$. The depth-two route below uses the imported working forms
+@lem:levin-prop-2, @lem:levin-cor-6, @lem:levin-prop-8, and
+@lem:levin-prop-9 to recover the target
+$n^(-1 slash 4) thin "polylog"(n)$ rate.
 
-*Depth-two refinement.* The deterministic-product expansion of Levin et al.
-extends the depth-one decomposition by one more level. For $ell >= 1$ define
+*Depth-two refinement.* The deterministic-product expansion from the
+depth-two setup extends the depth-one decomposition by one more level. For
+$ell >= 1$ define
 $
 J_n^((ell, alpha)) := (I - alpha overline(A)) thin J_(n - 1)^((ell, alpha))
                        - alpha tilde(A)(Z_n) thin J_(n - 1)^((ell - 1, alpha)),
@@ -30,7 +32,7 @@ H_n^((ell, alpha)) := (I - alpha A(Z_n)) thin H_(n - 1)^((ell, alpha))
                        - alpha tilde(A)(Z_n) thin J_(n - 1)^((ell, alpha)),
 $
 with $J_0^((ell, alpha)) = H_0^((ell, alpha)) = 0$ and the $ell = 0$
-processes as in Chapter @sec:last_iterate. Substituting
+processes as in @sec:last_iterate. Substituting
 $A(Z_n) = overline(A) + tilde(A)(Z_n)$ and grouping terms gives, by
 induction on $n$, the recursive identity
 $
@@ -51,65 +53,146 @@ T_n^((j)) := frac(1, sqrt(n)) sum_(k = 0)^(n - 1)
 quad j in {1, 2},
 $
 with $T_n^((H))$ defined identically with $H^((2))$ in place of $J^((j))$.
-Each piece is bounded separately below.
+Each piece is bounded separately below. The direct Levin working forms used in
+this section are collected in @sec:external-direct-inputs:
+@lem:levin-prop-2, @lem:levin-cor-6, @lem:levin-prop-8, and
+@lem:levin-prop-9.
 
-*Cited Levin inputs.* Input C from @sec:imported-inputs consists of the
-following Levin et al. (2025) statements, specialized to the constant
-step-size LSA setting. They are stated here in the exact working forms used
-below; their proofs are in the cited paper.
+#lemma[
+  *(Finite-past construction of the stationary full depth-two augmented state.)*
+  Fix $q >= 2$, $2 <= p <= q slash 2$, and an admissible step size
+  $0 < w <= alpha_("stat")(q)$. Let $(Z_t)_(t in ZZ)$ be a two-sided
+  stationary version of the driving Markov chain, and write
+  $B_w := I - w overline(A)$. For $m >= 1$ define the finite-past truncation
+  by starting at time $-m$ from
+  $
+  J_(-m,m)^((0,w)) = J_(-m,m)^((1,w)) = J_(-m,m)^((2,w))
+    = H_(-m,m)^((2,w)) = 0
+  $
+  and evolving, for $r = -m + 1, dots, 0$,
+  $
+  J_(r,m)^((0,w))
+    = B_w J_(r - 1,m)^((0,w)) - w epsilon.alt(Z_r),
+  $
+  $
+  J_(r,m)^((ell,w))
+    = B_w J_(r - 1,m)^((ell,w))
+      - w tilde(A)(Z_r) J_(r - 1,m)^((ell - 1,w)),
+  quad ell in {1, 2},
+  $
+  $
+  H_(r,m)^((2,w))
+    = (I - w A(Z_r)) H_(r - 1,m)^((2,w))
+      - w tilde(A)(Z_r) J_(r - 1,m)^((2,w)).
+  $
+  Then the vector
+  $
+  (J_(0,m)^((0,w)), J_(0,m)^((1,w)), J_(0,m)^((2,w)),
+   H_(0,m)^((2,w)))
+  $
+  is Cauchy in $L_p$. More precisely, for $m' >= m >= 1$,
+  $
+  || H_(0,m')^((2,w)) - H_(0,m)^((2,w)) ||_(L_p)
+    <= A_("fp")(p,q,w) exp(-c_("fp") w a m slash p),
+  $ <eq:finite-past-H2-cauchy>
+  where
+  $
+  A_("fp")(p,q,w)
+    := C_("fp") (1 + d^(1 slash q)) p^8 t_"mix"^5
+       frac(1, a) sqrt(w slash a) log^3(1 slash (w a)),
+  $
+  and $C_("fp"), c_("fp") > 0$ depend only on fixed problem constants and the
+  Levin constants. The $J$ coordinates converge to the invariant law
+  $Pi_(J,2,w)$ of @lem:levin-invariant-depth-two-law, and the $L_p$ limit
+  $
+  H_0^((2,w)) := lim_(m -> infinity) H_(0,m)^((2,w))
+  $
+  satisfies the one-trajectory bound of @lem:levin-prop-9. Shifting the
+  construction in time defines a two-sided stationary process
+  $
+  (Z_(k + 1), J_k^((0,w)), J_k^((1,w)), J_k^((2,w)), H_k^((2,w)))_(k in ZZ)
+  $
+  which solves the full depth-two recursions and whose law is the stationary
+  full augmented-chain law used below.
+] <lem:finite-past-full-augmented-state>
 
-#lemma[*(Levin Proposition 2 — stationary bias of $J^((1))$.)*
-  Under stationarity for the augmented chain
-  $(Z_(t + 1), J_t^((0, alpha)), J_t^((1, alpha)))$,
-  $
-  bb(E)_pi [J_infinity^((1, alpha))] = alpha thin Delta + R(alpha),
-  quad
-  || R(alpha) ||
-    <= 12 thin || overline(A)^(-1) || thin C_A^2 thin t_"mix"^2 thin alpha^2 thin || epsilon.alt ||_infinity,
-  $
-  with $Delta := overline(A)^(-1) sum_(k >= 1)
-    bb(E)_pi [(sans(Q)^k tilde(A))(Z_0) thin epsilon.alt(Z_0)]$.
-] <lem:levin-prop-2>
+_Proof._ The $J$-coordinate construction is @lem:levin-invariant-depth-two-law
+together with the component contraction @lem:levin-prop-5-component for
+$Y_k^((w)) = (Z_(k + 1), J_k^((0,w)), J_k^((1,w)), J_k^((2,w)))$. On the
+same two-sided driving chain, the finite-past truncations started at $-m'$ and
+$-m$ agree in the driving coordinate after time $-m$, while their
+$J$-coordinates at time $-m$ differ by the older finite-past state. The
+componentwise contraction @eq:levin-depth-two-component-contraction therefore gives, for
+$r >= -m$ and $ell in {0,1,2}$,
+$
+|| J_(r,m')^((ell,w)) - J_(r,m)^((ell,w)) ||_(L_p)
+  <= A_J(p,q,w) exp(-c w a (r + m) slash p),
+$ <eq:finite-past-J-cauchy>
+with
+$
+A_J(p,q,w)
+  := C (1 + d^(1 slash q)) p^7 t_"mix"^5
+     sqrt(w slash a) log^3(1 slash (w a)).
+$
+Here the initial finite-past cost is controlled by the elementary
+$J^((0,w))$, $J^((1,w))$ moment bounds and @lem:levin-prop-8 for
+$J^((2,w))$; the constants are uniform in $m,m'$.
 
-#lemma[*(Levin Corollary 6 — centered bilinear $L_p$ bound.)*
-  Define $overline(psi)_alpha (j, z)
-    := tilde(A)(z) j - bb(E)_(Pi_(J^((0)), alpha)) [tilde(A)(Z_1) thin J_0^((0, alpha))]$.
-  For every initial distribution, every $r >= 1$, and every $p >= 2$,
-  $
-  lr(|| sum_(t = 0)^(r - 1) overline(psi)_alpha (J_t^((0, alpha)), Z_(t + 1)) ||)_(L_p)
-    <= c_(W, 1) thin p^(3 slash 2) sqrt(alpha r)
-       + c_(W, 2) thin p^3 thin alpha^(-1 slash 2) thin log^(1 slash p)(1 slash (alpha a)),
-  $
-  with $c_(W, 1), c_(W, 2)$ depending only on
-  $C_A, kappa_Q, t_"mix", || epsilon.alt ||_infinity$. The precise logarithmic
-  factor is not rate-critical below; it is absorbed into $"polylog"(n)$ in the
-  working-scale corollaries.
-] <lem:levin-cor-6>
+It remains to justify the extra $H^((2,w))$ coordinate. Subtract the two
+finite-past versions of the representation
+@eq:levin-H2-representation from time $-m$ to time $0$. With
+$Delta H_r := H_(r,m')^((2,w)) - H_(r,m)^((2,w))$ and similarly for
+$Delta J_r^((2,w))$,
+$
+Delta H_0
+  = Gamma_(-m + 1:0)^((w)) H_(-m,m')^((2,w))
+    - w sum_(l = -m + 1)^0 Gamma_(l + 1:0)^((w))
+        tilde(A)(Z_l) Delta J_(l - 1)^((2,w)).
+$ <eq:finite-past-H2-difference>
+The product-stability working form @lem:burn-product-stability, applied at the
+deterministic time $-m$, and the one-trajectory bound @lem:levin-prop-9 give
+$
+|| Gamma_(-m + 1:0)^((w)) H_(-m,m')^((2,w)) ||_(L_p)
+  <= C B_H(p,q,w) exp(-c w a m slash p),
+$
+where
+$
+B_H(p,q,w)
+  := (1 + d^(1 slash q)) p^(7 slash 2) t_"mix"^(5 slash 2)
+     w^(3 slash 2) log^(3 slash 2)(1 slash (w a)).
+$
+For the convolution term, combine product stability with
+@eq:finite-past-J-cauchy:
+$
+w sum_(l = -m + 1)^0
+  || Gamma_(l + 1:0)^((w)) tilde(A)(Z_l) Delta J_(l - 1)^((2,w)) ||_(L_p)
+  <= C w sum_(l = -m + 1)^0
+     e^(-c w a (-l) slash p)
+     A_J(p,q,w) e^(-c w a (l + m) slash p).
+$
+The last convolution is bounded by
+$C (p slash a) A_J(p,q,w) exp(-c w a m slash (2 p))$. Enlarging the
+constant and decreasing the exponential rate gives @eq:finite-past-H2-cauchy.
+This proves the Cauchy property for the full vector.
 
-#lemma[*(Levin Propositions 8 and 9 — high-order moment bounds.)*
-  For every $q >= 2$ and every $p$ satisfying $2 <= p <= q slash 2$, under the
-  step-size restriction $alpha <= alpha_*(q, t_"mix")$ of Levin et al. (2025),
-  $
-  || J_n^((2, alpha)) ||_(L_p)
-    <= D_J thin t_"mix"^(5 slash 2) thin p^(7 slash 2) thin alpha^(3 slash 2)
-       thin log^(3 slash 2)(1 slash (alpha a)),
-  $
-  $
-  || H_n^((2, alpha)) ||_(L_p)
-    <= D_H thin d^(1 slash q) thin t_"mix"^(5 slash 2) thin p^(7 slash 2) thin alpha^(3 slash 2)
-       thin log^(3 slash 2)(1 slash (alpha a)),
-  $
-  uniformly in $n$, with $D_J, D_H$ depending only on
-  $C_A, kappa_Q, || overline(A)^(-1) ||, || epsilon.alt ||_infinity$.
-] <lem:levin-prop-89>
+The limits are measurable functions of the two-sided stationary driving
+chain. Passing to the limit in the finite-past recursions is justified in
+$L_p$, so the limiting process solves the same recursions. Stationarity follows
+because the finite-past construction is shift-covariant on the two-sided
+stationary chain. The uniform one-trajectory bound for the limiting
+$H^((2,w))$ follows from @lem:levin-prop-9 and Fatou's lemma. $square$
 
 *Stationary augmented-chain convention.* The recursions above are displayed in
 finite-time notation with $J_0^((ell, alpha)) = H_0^((ell, alpha)) = 0$, while
-Levin Proposition 2 is a statement about the stationary augmented chain. The
-misadjustment estimates below use the stationary versions of
+@lem:levin-prop-2 is a statement about the stationary augmented chain. The
+misadjustment estimates below use the stationary versions constructed in
+@lem:finite-past-full-augmented-state:
 $(Z_(t + 1), J_t^((0, w)), J_t^((1, w)), J_t^((2, w)), H_t^((2, w)))$,
 $w in {alpha, 2 alpha}$, as deterministic centers and should be read under
-this stationary augmented-chain convention. We keep the same symbols
+this stationary augmented-chain convention. The one-step shift is intentional:
+$J_t$ is the perturbation state after the observation $Z_(t + 1)$ has updated
+the recursion, while covariance formulas for the base chain may still use
+$Z_0$ by stationarity. We keep the same symbols
 $J_t^((ell, w))$ and $H_t^((ell, w))$ to avoid duplicating notation.
 For a zero-start full average, the transfer from finite-start sums to
 stationary centered sums is not a single terminal $rho^n$ term: summing
@@ -219,13 +302,14 @@ sum_(k = 0)^(n - 1) lr((J_k^((1, alpha)) - bb(E)_pi [J_infinity^((1, alpha))]))
       lr((J_0^((1, alpha)) - J_n^((1, alpha)))).
 $ <eq:J1-telescope>
 This identity is the bridge between the (vector-valued) PR-average of
-$J^((1))$ and the centered bilinear sum bounded in Levin Corollary 6.
+$J^((1))$ and the centered bilinear sum bounded in @lem:levin-cor-6.
 
 #lemma[
+  *(Stationary first-order misadjustment bound.)*
   Assume the stationary augmented-chain convention above, *UGE 1*,
   $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
   $|| epsilon.alt ||_infinity < infinity$, and
-  $alpha, 2 alpha in (0, alpha_infinity]$ and
+  $0 < alpha$, $2 alpha <= alpha_infinity$, and
   $2 alpha <= alpha_("inv")$. Set
   $
   Phi_+(p, alpha) := 1 + p^(3 slash 2) thin t_"mix"^(1 slash 2) slash a
@@ -234,7 +318,7 @@ $J^((1))$ and the centered bilinear sum bounded in Levin Corollary 6.
   There exists a constant $C_("mis,1")$ depending on
   $|| overline(A) ||, || overline(A)^(-1) ||, kappa_Q, C_A,
    || epsilon.alt ||_infinity, t_"mix"$, the universals $c_(W, 1), c_(W, 2)$
-  of Levin Corollary 6, and the constant of the centered bound in
+  of @lem:levin-cor-6, and the constant of the centered bound in
   @lem:last-shifted-first-order, such that for every $p >= 2$ and every
   $n >= 2$,
   $
@@ -262,7 +346,7 @@ $
 The bias is deterministic; the centered piece carries all the $L_p$
 fluctuation.
 
-*Bias.* By Levin Proposition 2 applied at $w in {alpha, 2 alpha}$,
+*Bias.* By @lem:levin-prop-2 applied at $w in {alpha, 2 alpha}$,
 $bb(E)_pi [J_infinity^((1, w))] = w thin Delta + R(w)$ with
 $|| R(w) || <= 12 thin || overline(A)^(-1) || thin C_A^2 thin t_"mix"^2 thin w^2 thin || epsilon.alt ||_infinity$.
 The leading $w thin Delta$ cancels in the RR combination,
@@ -286,7 +370,7 @@ $
          || J_0^((1, w)) - J_n^((1, w)) ||_(L_p)
      )).
 $
-For the bilinear sum apply Levin Corollary 6 with $r = n$,
+For the bilinear sum apply @lem:levin-cor-6 with $r = n$,
 $
 || sum_(k = 1)^n overline(psi)_w ||_(L_p)
   <= c_(W, 1) thin p^(3 slash 2) sqrt(w n)
@@ -307,7 +391,7 @@ $
 || J_n^((1, w)) - bb(E) J_n^((1, w)) ||_(L_p) <= C w thin Phi_+(p, w),
 $
 and $|| bb(E) J_n^((1, w)) || <= w thin || Delta || + || R(w) || <= C w$ by
-Levin Proposition 2; combining,
+@lem:levin-prop-2; combining,
 $
 || J_n^((1, w)) ||_(L_p) <= C w thin Phi_+(p, w).
 $
@@ -320,8 +404,10 @@ pieces and absorbing universal factors into a single $C_("mis,1")$ completes
 the proof. $square$
 
 #lemma[
+  *(Stationary second-order and depth-two remainder bound.)*
   Under the assumptions of the previous lemma, for every $p >= 2$ and every
-  $q >= 2$ satisfying $p <= q slash 2$ and $2 alpha <= alpha_*(q, t_"mix")$,
+  $q >= 2$ satisfying $p <= q slash 2$ and
+  $2 alpha <= alpha_("stat")(q)$,
   $
   || T_n^((2)) ||_(L_p) + || T_n^((H)) ||_(L_p)
     <= C_("mis,2") thin (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
@@ -331,7 +417,8 @@ the proof. $square$
 ] <lem:T2H-bound>
 
 _Proof._ Triangle inequality on the $n$ summands of $T_n^((2))$, then
-Levin Propositions 8 and 9 applied uniformly in $k$ and $w in {alpha, 2 alpha}$:
+@lem:levin-prop-8 and @lem:levin-prop-9 applied uniformly in $k$ and
+$w in {alpha, 2 alpha}$:
 $
 || T_n^((2)) ||_(L_p)
   &<= frac(1, sqrt(n)) sum_(k = 0)^(n - 1) sum_(w in {alpha, 2 alpha}) |c_w| thin || J_k^((2, w)) ||_(L_p) \
@@ -341,18 +428,17 @@ $
 where $|c_alpha| + |c_(2 alpha)| = 3$ absorbs the RR combination and
 $(2 alpha)^(3 slash 2)$ the worse bound at the larger step. Identical
 argument for $T_n^((H))$, with the additional $d^(1 slash q)$ factor of
-Levin Proposition 9. Adding the two bounds gives the lemma. $square$
+@lem:levin-prop-9. Adding the two bounds gives the lemma. $square$
 
 #theorem[
   *(Stationary PR-averaged RR misadjustment bound.)*
   Assume *UGE 1*, $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
-  $|| epsilon.alt ||_infinity < infinity$,
-  $alpha, 2 alpha in (0, alpha_infinity]$, $2 alpha <= alpha_("inv")$, and
+  $|| epsilon.alt ||_infinity < infinity$, $0 < alpha$, and
   the stationary augmented-chain convention above. There exists a constant $C$
   depending on the universal and problem constants of the previous two lemmas
   such that for every
-  $p >= 2$, every $q >= 2$ satisfying $p <= q slash 2$, every
-  $2 alpha <= alpha_*(q, t_"mix")$, and every $n >= 2$,
+  $p >= 2$, every $q >= 2$ satisfying
+  $p <= q slash 2$ and $2 alpha <= alpha_("stat")(q)$, and every $n >= 2$,
   $
   || R_n^("mis, RR") ||_(L_p)
     &<= C sqrt(n) thin alpha^2
@@ -369,10 +455,10 @@ $|| R_n^("mis, RR") ||_(L_p) <= || T_n^((1)) ||_(L_p) + || T_n^((2)) ||_(L_p) + 
 Combine the centered $T^((1))$ bound and the raw $T^((2)) + T^((H))$ bound. $square$
 
 #corollary[
+  *(Stationary balanced-scale misadjustment rate.)*
   At the working scale $alpha = c thin n^(-1 slash 2)$, with
   $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$, and for $n$
-  large enough that $2 alpha <= alpha_("inv")$ and
-  $2 alpha <= alpha_*(q, t_"mix")$,
+  large enough that $2 alpha <= alpha_("stat")(q)$,
   $
   || R_n^("mis, RR") ||_(L_p) <= C thin "polylog"(n) thin n^(-1 slash 4),
   $
@@ -392,4 +478,3 @@ $Phi_+(p, alpha) thin n^(-1 slash 2) = O(p^(3 slash 2) thin n^(-1 slash 2))$.
 The theorem just proved is only a stationary augmented-chain misadjustment
 bound at $n_0 = 0$. A finite-start theorem with burn-in requires the burned-in
 weights $Q_(l,n_0)^((alpha))$ and is not used in the assembly below.
-

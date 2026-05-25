@@ -32,7 +32,8 @@ The bounds of the previous section give a quantitative comparison between
 $Sigma_n^("RR")$ and $Sigma_infinity$.
 
 #lemma[
-  Let $alpha, 2 alpha in (0, alpha_infinity]$, set $Sigma := Sigma_(epsilon.alt)^(("M"))$,
+  *(Stationary finite-window variance comparison.)*
+  Let $0 < alpha$ and $2 alpha <= alpha_infinity$, set $Sigma := Sigma_(epsilon.alt)^(("M"))$,
   and assume $|| Sigma || < infinity$. Then
   $
   || Sigma_n^("RR") - Sigma_infinity ||
@@ -48,7 +49,7 @@ $Sigma_n^("RR")$ and $Sigma_infinity$.
     <= frac(C_3 thin || u ||^2, n thin alpha a).
   $
   At the working scale $alpha = c thin n^(- 1 slash 2)$ this is $O(n^(- 1 slash 2))$.
-]
+] <lem:RR-variance-comparison>
 
 _Proof._ Write $Delta_l := cal(Q)_l^("RR") - overline(A)^(-1)$ and expand
 $
@@ -94,4 +95,3 @@ $
 where we used $alpha a <= 1$. This proves the operator-norm bound. The scalar bound on
 $| sigma_n^(2, "RR")(u) - sigma^2(u) | = | u^top (Sigma_n^("RR") - Sigma_infinity) u |$
 follows from the Cauchy--Schwarz inequality. $square$
-

@@ -21,7 +21,8 @@ D_(op("tr"), n, n_0)^("RR")(u)
 $ <eq:burn-RR-transient>
 
 #lemma[
-  Assume $alpha, 2 alpha in (0, alpha_infinity]$ and the Lyapunov contraction
+  *(Burned-in deterministic transient.)*
+  Assume $0 < alpha$, $2 alpha <= alpha_infinity$, and the Lyapunov contraction
   @eq:contraction. Then, for each $w in {alpha, 2 alpha}$,
   $
   || D_(op("tr"), n, n_0)^((w)) ||
@@ -97,15 +98,16 @@ The deterministic transient is not the full initial-condition contribution:
 the exact recursion contains the random product
 $Gamma_(1:k)^((w)) := product_(j = 1)^k (I - w A(Z_j))$. The difference
 between this product and $B_w^k$ is another finite-start term. We use the same
-random-product stability input that appears in Levin et al. (2025,
-Appendix D.1, Proposition 9). Let $alpha_("st")(p)$ denote the minimum of the
-Levin depth-two startup ceiling and the product-stability ceiling at moment
-order $2p$; the startup section below uses the same threshold.
+deterministic-time product-stability working form that is listed as part of
+the local startup input in @sec:admissibility-thresholds. Let
+$alpha_("st")(p)$ be the local threshold defined in
+@eq:startup-local-threshold; the startup section below uses the same
+threshold.
 
 #lemma[
-  *(Imported random-product stability.)*
-  Under the stability and bounded-noise assumptions used in Levin et al.
-  (2025, Appendix D.1, Proposition 9), if $2 alpha <= alpha_("st")(p)$, then
+  *(Local product-stability working form.)*
+  Under the stability and bounded-noise assumptions of the depth-two setup, if
+  $2 alpha <= alpha_("st")(p)$, then
   there exist constants $C_("prod") < infinity$ and $c_("prod") > 0$ such
   that, for every $p >= 2$, every $w in {alpha, 2 alpha}$, every $0 <= s < k$,
   and every $cal(F)_s$-measurable vector $V_s$,
@@ -130,7 +132,7 @@ where the empty product at $k = 0$ is the identity.
 #lemma[
   *(Burned-in random initial-product transient.)*
   Assume the hypotheses of @lem:burn-product-stability,
-  $alpha, 2 alpha in (0, alpha_infinity]$, $alpha a <= 1 slash 4$, and
+  $0 < alpha$, $2 alpha <= alpha_infinity$, $alpha a <= 1 slash 4$, and
   the Lyapunov contraction @eq:contraction. Then, for every $p >= 2$,
   $
   || cal(I)_(n,n_0)^("init,RR")(u) ||_(L_p)
@@ -191,4 +193,3 @@ $1 - exp(-c_("init") alpha a slash p) >= C^(-1) alpha a slash p$, which gives
 _Proof._ Substitute @eq:burn-log-init-condition into
 @eq:burn-random-init-bound. At the balanced scale,
 $(alpha sqrt(m))^(-1) = O(1)$, so the remaining factor is logarithmic. $square$
-

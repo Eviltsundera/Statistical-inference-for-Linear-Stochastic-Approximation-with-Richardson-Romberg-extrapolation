@@ -7,9 +7,12 @@ $W^("RR") = -n^(-1 slash 2) M_n^("RR") + D_(2, n)^("RR")$, with the remainder
 $D_(2, n)^("RR")$ controlled in sup-norm at the order $n^(-1 slash 2)$. The
 quadratic variation concentration (Section 4.7) bounds
 $|u^top chevron.l M^("RR") chevron.r_n u - n thin sigma_n^(2, "RR")(u)|$ in
-$L_p$ by $C thin sqrt(p thin n)$. This subsection assembles those two inputs
-into a Berry--Esseen rate for the *scalar* martingale $u^top M_n^("RR")$,
-the leading contribution to the final RR Berry--Esseen bound.
+$L_p$ by applying the Markov concentration form
+$C sqrt(p thin t_"mix" thin sum c_i^2)$, which after the bracket
+coefficient bound becomes $B(u) sqrt(p thin n)$. This subsection assembles
+those two inputs into a Berry--Esseen rate for the *scalar* martingale
+$u^top M_n^("RR")$, the leading contribution to the final RR
+Berry--Esseen bound.
 
 *Bounded increments.* Fix $u in bb(R)^d$ and set
 $X_l := u^top Delta M_l^("RR")$ for $2 <= l <= n - 1$. The $X_l$ are
@@ -49,8 +52,9 @@ $K(u) := C_(cal(Q)) thin || Sigma_(epsilon.alt)^(("M")) ||^(1 slash 2) thin || u
 $kappa.alt(u)$.
 
 #theorem[
+  *(Stationary martingale Berry--Esseen bound.)*
   Assume *UGE 1*, $pi(epsilon.alt) = 0$, $|| epsilon.alt ||_infinity < infinity$,
-  $sigma^2(u) > 0$, and $alpha, 2 alpha in (0, alpha_infinity]$. There exist
+  $sigma^2(u) > 0$, $0 < alpha$, and $2 alpha <= alpha_infinity$. There exist
   constants $C_(K, 1)(u), C_(K, 2)(u) > 0$ depending only on $|| u ||$,
   $sigma(u)$, $C_(cal(Q))$, $t_"mix"$, $|| epsilon.alt ||_infinity$,
   $|| Sigma_(epsilon.alt)^(("M")) ||$, and the constants
@@ -136,6 +140,7 @@ $C_(K, 1)(u) := C^("(II)")(u)$, $C_(K, 2)(u) := C^("(I)")(u) + C^("(III)")(u)$
 proves the martingale Berry--Esseen bound. $square$
 
 #corollary[
+  *(Stationary martingale asymptotic-normalization bound.)*
   Under the hypotheses of the previous theorem,
   $
   d_K lr((
@@ -178,4 +183,3 @@ stated claim after absorbing $C_Phi$ into the constants. $square$
 
 This theorem concerns only the martingale term; the stationary assembly below
 adds the Poisson remainder and the Levin depth-two misadjustment.
-

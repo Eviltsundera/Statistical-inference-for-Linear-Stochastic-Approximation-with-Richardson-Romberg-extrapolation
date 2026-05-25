@@ -11,7 +11,8 @@ cal(V)_(epsilon.alt)(z)
 $ <eq:burn-bar-eps-def>
 This is the same matrix-valued conditional covariance function as in the
 stationary chapter; it is not the vector noise $epsilon.alt$.
-As before, $pi(cal(V)_(epsilon.alt)) = Sigma$ and
+By the Poisson covariance identity @lem:poisson-covariance-identity,
+$pi(cal(V)_(epsilon.alt)) = Sigma$ and
 $
 || cal(V)_(epsilon.alt) ||_infinity
   <= 18 thin t_"mix"^2 thin || epsilon.alt ||_infinity^2.
@@ -26,6 +27,7 @@ chevron.l M^("bRR") chevron.r_(n,n_0)
 $ <eq:burn-bracket>
 
 #lemma[
+  *(Burned-in predictable-variation concentration.)*
   Assume *UGE 1*, $pi(epsilon.alt) = 0$, and
   $|| epsilon.alt ||_infinity < infinity$. There exists a universal constant
   $C_4 > 0$ such that, for every $u in bb(R)^d$, every $p >= 2$, every initial
@@ -61,11 +63,24 @@ u^top chevron.l M^("bRR") chevron.r_(n,n_0) u
   = sum_(l = 2)^(n - 1) g_l(Z_(l - 1)).
 $
 The scalar Markov concentration lemma used in the stationary chapter is valid
-for arbitrary initial law by Levin et al. (2025, Lemma 11). Applied to the
-time-inhomogeneous centered functions $g_l$, it gives the displayed
-$sqrt(p n)$ bound. $square$
+for arbitrary initial law in the form @eq:imported-markov-conc. Applied to the
+time-inhomogeneous centered functions $g_l$ with
+$
+c_l := 36 thin C_("burn,Q")^2 thin || u ||^2
+  thin t_"mix"^2 thin || epsilon.alt ||_infinity^2,
+$
+it gives
+$
+||sum_(l = 2)^(n - 1) g_l(Z_(l - 1))||_(L_p(xi))
+  <= C_("MC") sqrt(p thin t_"mix" thin sum_(l = 2)^(n - 1) c_l^2)
+  <= C thin C_("burn,Q")^2 thin || u ||^2
+     thin || epsilon.alt ||_infinity^2 thin t_"mix"^(5 slash 2)
+     thin sqrt(p thin n),
+$
+which is @eq:burn-bracket-conc after increasing $C_4$. $square$
 
 #corollary[
+  *(Burned-in asymptotic-variance bracket comparison.)*
   Under the assumptions of @lem:burn-bracket-conc,
   $
   bb(E)_xi^(1 slash p) lr([
@@ -89,4 +104,3 @@ including pre-burn-in weights, which is why the display keeps
 $sqrt(p thin n)$. In the final theorem this is converted to the effective
 window scale using $m >= n slash 2$.
 $square$
-

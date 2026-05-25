@@ -11,7 +11,9 @@ statistic:
   $t_"mix" slash (a^2 sqrt(n))$;
 + the *predictable quadratic variation concentration* of
   $u^top chevron.l M^("RR") chevron.r_n u$ around $n thin sigma_n^(2, "RR")(u)$
-  in $L_p$ at the order $sqrt(p thin n)$;
+  in $L_p$, obtained from the Markov concentration scale
+  $sqrt(p thin t_"mix" thin sum c_i^2)$ and then written as
+  $B(u) sqrt(p thin n)$;
 + the *martingale Berry--Esseen* for
   $u^top M_n^("RR") slash (sqrt(n) thin sigma_n^("RR")(u))$ at rate
   $log^(3 slash 4)(n) thin n^(-1 slash 4)$;
@@ -92,9 +94,11 @@ the startup discrepancy between zero-start perturbation variables and the
 stationary augmented chain.
 
 #lemma[
+  *(Stationary composite remainder bound.)*
   Assume the hypotheses and step-size restrictions of the stationary
   PR-averaged RR misadjustment bound above. Then for every $u in bb(R)^d$,
-  every $p >= 2$, and every admissible $q >= 2$,
+  every $p >= 2$, and every $q >= 2$ satisfying $p <= q slash 2$ and
+  $2 alpha <= alpha_("stat")(q)$,
   $
   || u^top cal(R)_(n, "stat")^("RR") ||_(L_p)
     &<= frac(C_("D2") thin || u ||, sqrt(n))
@@ -130,12 +134,18 @@ the remaining summands directly. $square$
   *(Stationary augmented-chain Berry--Esseen assembly for the RR comparison statistic.)*
   Assume *UGE 1*, $pi(tilde(A)) = 0$, $pi(epsilon.alt) = 0$,
   $|| epsilon.alt ||_infinity < infinity$, $sigma^2(u) > 0$,
-  $alpha, 2 alpha in (0, alpha_infinity]$, and the stationary augmented-chain
+  $0 < alpha$, and the stationary augmented-chain
   convention above. Use the imported inputs summarized in
   @sec:imported-inputs. Set
   $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$.
-  If $n$ is large enough that the variance lower-bound condition @eq:variance-lb-condition holds and
-  $2 alpha <= alpha_("inv")$ and $2 alpha <= alpha_*(q, t_"mix")$, then
+  Then $p >= 2$, $q >= 2$, and $p <= q slash 2$. If $n >= 3$ satisfies the
+  small-step and variance lower-bound conditions
+  $
+  2 alpha <= alpha_("stat")(q),
+  quad
+  n thin alpha thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u)),
+  $ <eq:RR-BE-master-conditions>
+  where the second inequality is @eq:variance-lb-condition, then
   $
   d_K lr((
     frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
@@ -164,12 +174,18 @@ $p = max(2, ceil(log n)) >= log n$, the trailing $e^(-p)$ is at most
 $n^(-1)$. $square$
 
 #corollary[
-  Let $alpha = alpha_n$ be an admissible step-size sequence and set
+  *(Stationary triangular-array admissible-step CLT.)*
+  Assume the stationary augmented-chain hypotheses of @thm:RR-BE, including
+  $sigma^2(u) > 0$. Let $alpha = alpha_n$ be a step-size sequence and set
   $p_n := max(2, ceil(log n))$, $q_n := max(2 p_n, ceil(log(e thin d)), 2)$,
-  and $Lambda_n := log(1 slash (alpha_n a))$. Assume the step-size restrictions
-  $2 alpha_n <= alpha_infinity$, $2 alpha_n <= alpha_("inv")$, and
-  $2 alpha_n <= alpha_*(q_n, t_"mix")$, and the variance lower-bound condition
-  @eq:variance-lb-condition. If
+  and $Lambda_n := log(1 slash (alpha_n a))$. Then $p_n <= q_n slash 2$.
+  Assume that, for all sufficiently large $n$,
+  $
+  2 alpha_n <= alpha_("stat")(q_n),
+  quad
+  n thin alpha_n thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u)).
+  $
+  If
   $
   p_n^3 (n alpha_n)^(-1 slash 2) Lambda_n^(1 slash p_n) -> 0,
   quad
@@ -207,11 +223,17 @@ $n^(1 slash 2 - 3 gamma slash 2) -> 0$, i.e. $gamma < 1$ and
 $gamma > 1 slash 3$. $square$
 
 #corollary[
-  At the balanced scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$ such
-  that $alpha, 2 alpha in (0, alpha_infinity]$ and
-  $2 alpha <= alpha_("inv")$, with
-  $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$
-  satisfying $2 alpha <= alpha_*(q, t_"mix")$, the bound
+  *(Stationary balanced-scale augmented-chain Berry--Esseen bound.)*
+  At the balanced scale $alpha = c thin n^(-1 slash 2)$ with $c > 0$, put
+  $p = max(2, ceil(log n))$ and $q = max(2 p, ceil(log(e thin d)), 2)$.
+  Then $p <= q slash 2$. Assume the stationary augmented-chain hypotheses of
+  @thm:RR-BE, including $sigma^2(u) > 0$. If $n >= 3$ satisfies
+  $
+  2 alpha <= alpha_("stat")(q),
+  quad
+  n thin alpha thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u)),
+  $
+  the bound
   @eq:RR-BE-master reduces to
   $
   d_K lr((
@@ -224,8 +246,8 @@ $gamma > 1 slash 3$. $square$
   $|| overline(A) ||$, $|| overline(A)^(-1) ||$, $kappa_Q$, $C_A$,
   $|| epsilon.alt ||_infinity$, $|| Sigma_(epsilon.alt)^(("M")) ||$,
   $t_"mix"$, $a$, $alpha_infinity$, $c$, and the universal constants of
-  the smoothing, Bolthausen--Fan, and Levin Markov-concentration
-  inequalities.
+  the smoothing inequality, @eq:imported-bolthausen-fan, and
+  @eq:imported-markov-conc.
 ] <cor:RR-BE-working>
 
 _Proof._ The scale $alpha = c thin n^(-1 slash 2)$ satisfies
@@ -244,8 +266,16 @@ martingale Berry--Esseen term proves the claim.
 $square$
 
 #corollary[
-  Under the hypotheses of the stationary $n_0 = 0$ Berry--Esseen bound above,
-  the same finite-$n$ bound with asymptotic normalisation contains one
+  *(Stationary asymptotic-normalization version.)*
+  Assume the stationary augmented-chain hypotheses of @thm:RR-BE for the same
+  $n,p,q,alpha,u$. In particular, assume $p <= q slash 2$, $sigma^2(u) > 0$,
+  and
+  $
+  2 alpha <= alpha_("stat")(q),
+  quad
+  n thin alpha thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u)).
+  $
+  Then the same finite-$n$ bound with asymptotic normalisation contains one
   additional variance-comparison term:
   $
   d_K lr((

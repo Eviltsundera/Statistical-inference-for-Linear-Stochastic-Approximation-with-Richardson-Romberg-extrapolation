@@ -10,7 +10,7 @@ deterministic kernel bounds of Sections 4.3--4.4 enter once and for all in
 the boundary/Abel control of the remainder.
 
 *Poisson kernel.* Let $sans(Q)$ denote the one-step Markov transition kernel
-of $(Z_k)_(k >= 1)$, acting on bounded measurable functions $f : Z -> bb(R)^d$ by
+of $(Z_k)_(k >= 0)$, acting on bounded measurable functions $f : Z -> bb(R)^d$ by
 $
 (sans(Q) f)(z) = bb(E) lr([f(Z_(k + 1)) | Z_k = z]).
 $
@@ -36,7 +36,7 @@ $
 hat(epsilon.alt) - sans(Q) hat(epsilon.alt) = epsilon.alt.
 $ <eq:poisson-eq>
 
-*Conditional centering.* Let $cal(F)_l := sigma(Z_1, dots, Z_l)$. Substituting
+*Conditional centering.* Let $cal(F)_l := sigma(Z_0, dots, Z_l)$. Substituting
 @eq:poisson-eq into the noise sample and adding and subtracting the
 conditional mean,
 $
@@ -47,8 +47,9 @@ quad l >= 2,
 $
 where the first bracket is centered conditionally on $cal(F)_(l - 1)$ since
 the Markov property gives $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)] = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
-The $l = 1$ term has no past state to condition on; we treat it directly via
-@eq:poisson-eq as $epsilon.alt(Z_1) = hat(epsilon.alt)(Z_1) - sans(Q) hat(epsilon.alt)(Z_1)$.
+The $l = 1$ term is kept as the left boundary of the Abel transform rather than
+included in $M_n^("RR")$; we treat it directly via @eq:poisson-eq as
+$epsilon.alt(Z_1) = hat(epsilon.alt)(Z_1) - sans(Q) hat(epsilon.alt)(Z_1)$.
 The decomposition therefore separates $W^("RR")$ into a martingale piece and
 a deterministic-coefficient telescope; Abel summation against the kernel
 sequence ${cal(Q)_l^("RR")}$ converts the telescope into boundary terms plus
@@ -56,6 +57,7 @@ a sum against the discrete derivative $cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")$,
 which is exactly the object bounded in the Corollary of Section 4.4.
 
 #lemma[
+  *(Stationary Poisson martingale decomposition.)*
   Assume *UGE 1* and $pi(epsilon.alt) = 0$. Set
   $
   Delta M_l^("RR")
@@ -95,7 +97,7 @@ which is exactly the object bounded in the Corollary of Section 4.4.
   $
   with a constant $C$ depending only on $|| overline(A)^(-1) ||$, $kappa_Q$,
   and $|| overline(A) ||$.
-]
+] <lem:poisson-martingale-decomp>
 
 _Proof._ The increments $Delta M_l^("RR")$ are $cal(F)_l$-martingale
 differences because $cal(Q)_l^("RR")$ is deterministic and the Markov property
@@ -157,4 +159,3 @@ $
   <= 3 t_"mix" || epsilon.alt ||_infinity (C_(cal(Q)) + C_2 slash a^2).
 $
 The $L_p$ bound is immediate from the deterministic sup-norm bound. $square$
-

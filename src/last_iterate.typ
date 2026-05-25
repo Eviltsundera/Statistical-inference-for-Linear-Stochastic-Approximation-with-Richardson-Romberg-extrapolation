@@ -29,8 +29,10 @@ The single-stepsize estimates below are stated for $alpha$. Whenever the
 Richardson--Romberg combination is formed, the same estimates are applied at
 both $w = alpha$ and $w = 2 alpha$; the local assumptions are then
 $2 alpha <= alpha_infinity$ and $2 alpha <= alpha_("inv")$.
-All constants denoted by $C$ may depend on $C_A$, $kappa_Q$, and norm
-equivalence constants, but not on $alpha$, $n$, $p$, or $t_"mix"$.
+All constants denoted by $C$ may depend on fixed problem parameters, including
+fixed powers of $a^(-1)$, but not on $alpha$, $n$, $p$, or $q$. Dependence on
+the displayed variables, and in particular on $t_"mix"$ when it is tracked in
+the rate, is written explicitly.
 
 The deterministic-product components are defined by
 $
@@ -92,7 +94,7 @@ explicitly when the shifted estimate is applied below.
 
 #lemma[
   *(Imported future-centered bilinear estimate.)*
-  Assume UGE 1 and stationarity. Let $cal(F)_k = sigma(Z_1, dots, Z_k)$.
+  Assume UGE 1 and stationarity. Let $cal(F)_k = sigma(Z_0, dots, Z_k)$.
   For $1 <= k <= n - 1$ and $1 <= l <= n - k$, let
   $g_(k,l) : cal(Z) -> bb(R)^d$ be deterministic functions satisfying
   $pi(g_(k,l)) = 0$ and $||g_(k,l)||_infinity <= beta_(k,l)$. Let
@@ -116,9 +118,10 @@ explicitly when the shifted estimate is applied below.
   display is the conditional centering with respect to $cal(F)_k$; no
   stationary-centering inequality is applied to a future chain started from
   $Z_k$.
-]
+] <lem:future-centered-bilinear-input>
 
 #lemma[
+  *(Centered shifted first-order bound.)*
   Assume the Markov chain is started from stationarity, that is, the law of
   $Z_1$ is $pi$, and $pi(tilde(A)) = 0$. For every deterministic direction
   $u in bb(R)^d$ and every $p >= 2$,
@@ -165,7 +168,7 @@ S_n - bb(E)S_n
       {H_(k+1)^((w)) epsilon.alt(Z_k) - mu_k^((w))}.
 $
 
-Let $cal(F)_k = sigma(Z_1, dots, Z_k)$. The Markov property gives
+Let $cal(F)_k = sigma(Z_0, dots, Z_k)$. The Markov property gives
 $
 bb(E)[H_(k+1)^((w)) epsilon.alt(Z_k) | cal(F)_k]
   = v_k^((w, epsilon))(Z_k),
@@ -249,12 +252,13 @@ $
   <= C t_"mix" ||epsilon.alt||_infinity
       (1 - alpha a)^((n-k) slash 2).
 $
-The functions $v_k^((w, epsilon))(Z_k) - pi(v_k^((w, epsilon)))$ are centered under $pi$ and uniformly bounded by the previous display, so the weighted Markov concentration/Rosenthal bound for centered time-dependent functions yields
+The functions $v_k^((w, epsilon))(Z_k) - pi(v_k^((w, epsilon)))$ are centered under $pi$ and uniformly bounded by the previous display. Applying the Markov concentration input in the form
+$C sqrt(p thin t_"mix" thin sum_k c_k^2)$ gives
 $
 ||u^top U_R||_(L_p)
 &<= C p^(1 slash 2) t_"mix"^(1 slash 2)
     lr((sum_(k=1)^(n-1) ||v_k^((w, epsilon))||_infinity^2))^(1 slash 2)
-  &&"(Rosenthal)" \
+  &&"(Markov concentration)" \
 &<= C p^(1 slash 2) t_"mix"^(3 slash 2) ||epsilon.alt||_infinity
     lr((sum_(k=1)^(n-1) (1 - alpha a)^(n-k)))^(1 slash 2)
   &&"(plug previous bound)" \
@@ -349,8 +353,8 @@ levels; the second makes the shifted-to-unshifted transfer
 $T_k^((1,w)) = (I - w overline(A)) J_k^((1,w))$ uniformly invertible for
 $w in {alpha, 2 alpha}$.
 
-The stationary bias is smaller than the fluctuation term. By Levin et al.
-(2025, Proposition 2),
+The stationary bias is smaller than the fluctuation term. By the working form
+@lem:levin-prop-2,
 $ bb(E)_pi lr([J_infinity^((1, alpha))]) = alpha Delta + O(alpha^2), $
 so the linear term $alpha Delta$ cancels in the RR-combination and the
 per-iterate stationary RR bias is $O(alpha^2)$. Therefore the PR-scaled

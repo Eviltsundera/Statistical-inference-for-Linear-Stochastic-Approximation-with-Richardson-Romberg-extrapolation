@@ -21,7 +21,8 @@ $overline(A)^(-1)$. The pre-burn-in weights are instead exponentially small as
 one moves backward from $n_0$. Empty sums below are interpreted as zero.
 
 #lemma[
-  Assume $alpha, 2 alpha in (0, alpha_infinity]$ and the Lyapunov contraction
+  *(Burned-in RR weight bounds.)*
+  Assume $0 < alpha$, $2 alpha <= alpha_infinity$, and the Lyapunov contraction
   @eq:contraction. Let
   $
   rho_alpha := sqrt(1 - alpha a),
@@ -120,4 +121,3 @@ $
 and @eq:burn-power-difference with $s = m$ bounds this term by the same
 $a^(-2)$ scale. Combining the pre-burn-in, boundary, and post-burn-in
 contributions proves @eq:burn-weight-variation. $square$
-
