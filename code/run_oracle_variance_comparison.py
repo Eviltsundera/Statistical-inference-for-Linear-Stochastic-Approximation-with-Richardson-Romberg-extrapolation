@@ -146,10 +146,9 @@ def _worker(args):
 
 def _aggregate(rows):
     df = pd.DataFrame(rows)
-    agg = df.groupby(['method', 'label'], sort=False).agg(
+    agg = df.groupby(['T', 'method', 'label'], sort=False).agg(
         rr_alpha_1=('rr_alpha_1', 'first'),
         rr_alpha_2=('rr_alpha_2', 'first'),
-        T=('T', 'first'),
         T_eff=('T_eff', 'first'),
         n_problems=('problem_seed', 'nunique'),
         n_traj=('n_traj', 'first'),
@@ -163,91 +162,115 @@ def _aggregate(rows):
         diverged_total=('diverged', 'sum'),
     ).reset_index()
 
-    oracle_width = float(
-        agg.loc[agg['method'] == 'RR_ORACLE', 'width_median_x1e3'].iloc[0]
+    oracle_width_by_T = (
+        agg.loc[agg['method'] == 'RR_ORACLE']
+        .set_index('T')['width_median_x1e3']
     )
-    agg['width_ratio_to_oracle'] = agg['width_median_x1e3'] / oracle_width
+    agg['width_ratio_to_oracle'] = (
+        agg['width_median_x1e3'] / agg['T'].map(oracle_width_by_T)
+    )
     return df, agg
 
 
-def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
+def run_experiment(n_problems, n_traj, T_values, n_states, d, seed=42,
                    n_workers=None, n_bootstrap=500, direction_coord=None,
                    eig_min=0.25, eig_max=0.60, noise_target=0.35,
                    rr_alphas=(0.2, 0.1), out='results/oracle_variance.csv'):
-    K = max(int(T ** 0.3), 5)
-    burn_in = min(1000, T // 10)
-    b_n = max(int(T ** 0.6), 10)
-    b_n = min(b_n, T // 4)
+    if isinstance(T_values, (int, np.integer)):
+        T_values = [int(T_values)]
+    else:
+        T_values = [int(T) for T in T_values]
 
     if n_workers is None:
         n_workers = min(mp.cpu_count(), n_problems)
 
     dir_desc = f"e_{direction_coord}" if direction_coord is not None else "random"
     print(f"Oracle variance comparison: {n_problems} problems x {n_traj} traj, "
-          f"T={T}, d={d}, |X|={n_states}, workers={n_workers}")
-    print(f"  RR: K={K}, burn_in={burn_in}, rr_alphas={rr_alphas}")
+          f"T={T_values}, d={d}, |X|={n_states}, workers={n_workers}")
+    print(f"  RR alphas: {rr_alphas}")
     print(f"  Variance estimators: oracle, OBM, OBM-RR, MSB; "
-          f"b_n={b_n}, n_bootstrap={n_bootstrap}")
+          f"n_bootstrap={n_bootstrap}")
     print(f"  Problem gen: eig=[{eig_min},{eig_max}], noise={noise_target}")
     print(f"  Direction: {dir_desc}")
     print(flush=True)
 
     rng_master = np.random.default_rng(seed)
     seeds = [int(rng_master.integers(0, 2**31)) for _ in range(n_problems)]
-    task_args = [
-        (s, n_traj, T, n_states, d, K, burn_in, b_n,
-         n_bootstrap, direction_coord, eig_min, eig_max, noise_target,
-         tuple(rr_alphas))
-        for s in seeds
-    ]
-
     all_rows = []
-    t_start = time.time()
-    completed = 0
-    with mp.Pool(n_workers) as pool:
-        for rows in pool.imap_unordered(_worker, task_args):
-            completed += 1
-            all_rows.extend(rows)
-            if completed % max(1, n_problems // 20) == 0 or completed == 1:
-                elapsed = time.time() - t_start
-                eta = elapsed / completed * (n_problems - completed)
-                rr_oracle = next(r for r in rows if r['method'] == 'RR_ORACLE')
-                print(f"  [{completed}/{n_problems}] "
-                      f"last oracle cov={rr_oracle['coverage_pct']:.0f}% | "
-                      f"{elapsed:.0f}s elapsed, ~{eta:.0f}s left",
-                      flush=True)
+    t_all_start = time.time()
 
-    t_total = time.time() - t_start
+    for T in T_values:
+        K = max(int(T ** 0.3), 5)
+        burn_in = min(1000, T // 10)
+        b_n = max(int(T ** 0.6), 10)
+        b_n = min(b_n, T // 4)
+        task_args = [
+            (s, n_traj, T, n_states, d, K, burn_in, b_n,
+             n_bootstrap, direction_coord, eig_min, eig_max, noise_target,
+             tuple(rr_alphas))
+            for s in seeds
+        ]
+
+        print(f"\nT={T}: K={K}, burn_in={burn_in}, b_n={b_n}", flush=True)
+        t_start = time.time()
+        completed = 0
+        with mp.Pool(n_workers) as pool:
+            for rows in pool.imap_unordered(_worker, task_args):
+                completed += 1
+                all_rows.extend(rows)
+                if completed % max(1, n_problems // 20) == 0 or completed == 1:
+                    elapsed = time.time() - t_start
+                    eta = elapsed / completed * (n_problems - completed)
+                    rr_oracle = next(
+                        r for r in rows if r['method'] == 'RR_ORACLE'
+                    )
+                    print(f"  T={T} [{completed}/{n_problems}] "
+                          f"last oracle cov={rr_oracle['coverage_pct']:.0f}% | "
+                          f"{elapsed:.0f}s elapsed, ~{eta:.0f}s left",
+                          flush=True)
+
+        print(f"Finished T={T} in {time.time() - t_start:.0f}s", flush=True)
+
+    t_total = time.time() - t_all_start
     df, agg = _aggregate(all_rows)
 
     print(f"\n{'=' * 88}")
-    print(f"RESULTS ({n_problems} problems, T={T}, {n_traj} traj) "
+    print(f"RESULTS ({n_problems} problems, T={T_values}, {n_traj} traj) "
           f"in {t_total:.0f}s ({t_total / 60:.1f}min)")
     print("Median over problems (coverage in %, L2 and CI width x 1e-3)")
     print("=" * 88)
     header = (f"{'Method':<24} {'L2':>9} {'Width':>9} {'Cov med':>9} "
               f"{'Cov mean':>10} {'W/oracle':>10} {'Div':>7}")
-    print(header)
-    print("-" * len(header))
-    for _, row in agg.iterrows():
-        print(f"{row['label']:<24} {row['l2_median_x1e3']:>9.2f} "
-              f"{row['width_median_x1e3']:>9.2f} "
-              f"{row['coverage_median_pct']:>9.1f} "
-              f"{row['coverage_mean_pct']:>10.1f} "
-              f"{row['width_ratio_to_oracle']:>10.3f} "
-              f"{int(row['diverged_total']):>7}")
+    for T, grp in agg.groupby('T', sort=True):
+        print(f"\nT={T}")
+        print(header)
+        print("-" * len(header))
+        for method in METHODS_ORDER:
+            row = grp.loc[grp['method'] == method].iloc[0]
+            print(f"{row['label']:<24} {row['l2_median_x1e3']:>9.2f} "
+                  f"{row['width_median_x1e3']:>9.2f} "
+                  f"{row['coverage_median_pct']:>9.1f} "
+                  f"{row['coverage_mean_pct']:>10.1f} "
+                  f"{row['width_ratio_to_oracle']:>10.3f} "
+                  f"{int(row['diverged_total']):>7}")
 
     pcts = [10, 25, 50, 75, 90]
     print(f"\n{'=' * 88}")
     print("COVERAGE PERCENTILES (%) across problems")
     print("=" * 88)
-    print(f"{'Method':<24}" + "".join(f"{'p' + str(p):>8}" for p in pcts))
-    print("-" * (24 + 8 * len(pcts)))
-    for method in METHODS_ORDER:
-        sub = df[df['method'] == method]
-        vals = sub['coverage_pct'].to_numpy()
-        ps = np.nanpercentile(vals, pcts)
-        print(f"{METHOD_LABELS[method]:<24}" + "".join(f"{v:>8.1f}" for v in ps))
+    pct_header = f"{'Method':<24}" + "".join(f"{'p' + str(p):>8}" for p in pcts)
+    for T in sorted(df['T'].unique()):
+        print(f"\nT={T}")
+        print(pct_header)
+        print("-" * (24 + 8 * len(pcts)))
+        for method in METHODS_ORDER:
+            sub = df[(df['T'] == T) & (df['method'] == method)]
+            vals = sub['coverage_pct'].to_numpy()
+            ps = np.nanpercentile(vals, pcts)
+            print(
+                f"{METHOD_LABELS[method]:<24}"
+                + "".join(f"{v:>8.1f}" for v in ps)
+            )
 
     out_path = Path(out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -266,7 +289,7 @@ def main():
     )
     parser.add_argument('--n-problems', type=int, default=10)
     parser.add_argument('--n-traj', type=int, default=50)
-    parser.add_argument('--T', type=int, default=10000)
+    parser.add_argument('--T', type=int, nargs='+', default=[10000])
     parser.add_argument('--n-states', type=int, default=10)
     parser.add_argument('--d', type=int, default=5)
     parser.add_argument('--seed', type=int, default=42)
