@@ -1,0 +1,130 @@
+Tue May 26 07:34:41 PM UTC 2026
+RR block-size coverage sweep: 100 problems x 100 traj, T=[20000, 100000, 1000000], workers=24
+  RR alphas: (0.2, 0.1)
+  bn_exps: [0.3, 0.4, 0.5, 0.6, 0.7, 0.8], lam=2.0
+  Problem gen: eig=[0.25,0.6], noise=0.35
+  Direction: random
+
+
+T=20000: K=19, burn_in=1000, b_grid=[(0.3, 19), (0.4, 52), (0.5, 141), (0.6, 380), (0.7, 1024), (0.8, 2759)]
+  T=20000 [1/100] last oracle cov=98% | 2s elapsed, ~177s left
+  T=20000 [5/100] last oracle cov=97% | 2s elapsed, ~42s left
+  T=20000 [10/100] last oracle cov=97% | 2s elapsed, ~22s left
+  T=20000 [15/100] last oracle cov=94% | 3s elapsed, ~18s left
+  T=20000 [20/100] last oracle cov=99% | 3s elapsed, ~14s left
+  T=20000 [25/100] last oracle cov=98% | 4s elapsed, ~11s left
+  T=20000 [30/100] last oracle cov=92% | 4s elapsed, ~10s left
+  T=20000 [35/100] last oracle cov=96% | 5s elapsed, ~9s left
+  T=20000 [40/100] last oracle cov=94% | 5s elapsed, ~8s left
+  T=20000 [45/100] last oracle cov=97% | 5s elapsed, ~7s left
+  T=20000 [50/100] last oracle cov=98% | 6s elapsed, ~6s left
+  T=20000 [55/100] last oracle cov=96% | 6s elapsed, ~5s left
+  T=20000 [60/100] last oracle cov=96% | 7s elapsed, ~4s left
+  T=20000 [65/100] last oracle cov=96% | 7s elapsed, ~4s left
+  T=20000 [70/100] last oracle cov=95% | 7s elapsed, ~3s left
+  T=20000 [75/100] last oracle cov=96% | 8s elapsed, ~3s left
+  T=20000 [80/100] last oracle cov=96% | 8s elapsed, ~2s left
+  T=20000 [85/100] last oracle cov=96% | 9s elapsed, ~2s left
+  T=20000 [90/100] last oracle cov=98% | 9s elapsed, ~1s left
+  T=20000 [95/100] last oracle cov=96% | 9s elapsed, ~0s left
+  T=20000 [100/100] last oracle cov=97% | 10s elapsed, ~0s left
+Finished T=20000 in 10s
+
+T=100000: K=31, burn_in=1000, b_grid=[(0.3, 31), (0.4, 100), (0.5, 316), (0.6, 999), (0.7, 3162), (0.8, 10000)]
+  T=100000 [1/100] last oracle cov=98% | 11s elapsed, ~1041s left
+  T=100000 [5/100] last oracle cov=95% | 11s elapsed, ~211s left
+  T=100000 [10/100] last oracle cov=97% | 11s elapsed, ~102s left
+  T=100000 [15/100] last oracle cov=95% | 11s elapsed, ~65s left
+  T=100000 [20/100] last oracle cov=93% | 12s elapsed, ~46s left
+  T=100000 [25/100] last oracle cov=99% | 21s elapsed, ~64s left
+  T=100000 [30/100] last oracle cov=92% | 22s elapsed, ~51s left
+  T=100000 [35/100] last oracle cov=93% | 23s elapsed, ~42s left
+  T=100000 [40/100] last oracle cov=89% | 23s elapsed, ~34s left
+  T=100000 [45/100] last oracle cov=94% | 23s elapsed, ~28s left
+  T=100000 [50/100] last oracle cov=96% | 32s elapsed, ~32s left
+  T=100000 [55/100] last oracle cov=97% | 33s elapsed, ~27s left
+  T=100000 [60/100] last oracle cov=97% | 34s elapsed, ~23s left
+  T=100000 [65/100] last oracle cov=96% | 34s elapsed, ~18s left
+  T=100000 [70/100] last oracle cov=95% | 34s elapsed, ~15s left
+  T=100000 [75/100] last oracle cov=95% | 43s elapsed, ~14s left
+  T=100000 [80/100] last oracle cov=96% | 44s elapsed, ~11s left
+  T=100000 [85/100] last oracle cov=97% | 45s elapsed, ~8s left
+  T=100000 [90/100] last oracle cov=98% | 45s elapsed, ~5s left
+  T=100000 [95/100] last oracle cov=93% | 46s elapsed, ~2s left
+  T=100000 [100/100] last oracle cov=91% | 53s elapsed, ~0s left
+Finished T=100000 in 53s
+
+T=1000000: K=63, burn_in=1000, b_grid=[(0.3, 63), (0.4, 251), (0.5, 1000), (0.6, 3981), (0.7, 15848), (0.8, 63095)]
+  T=1000000 [1/100] last oracle cov=94% | 109s elapsed, ~10809s left
+  T=1000000 [5/100] last oracle cov=93% | 110s elapsed, ~2088s left
+  T=1000000 [10/100] last oracle cov=95% | 111s elapsed, ~998s left
+  T=1000000 [15/100] last oracle cov=97% | 119s elapsed, ~674s left
+  T=1000000 [20/100] last oracle cov=94% | 119s elapsed, ~477s left
+  T=1000000 [25/100] last oracle cov=96% | 215s elapsed, ~645s left
+  T=1000000 [30/100] last oracle cov=96% | 217s elapsed, ~506s left
+  T=1000000 [35/100] last oracle cov=87% | 217s elapsed, ~404s left
+  T=1000000 [40/100] last oracle cov=92% | 232s elapsed, ~349s left
+  T=1000000 [45/100] last oracle cov=95% | 233s elapsed, ~285s left
+  T=1000000 [50/100] last oracle cov=99% | 325s elapsed, ~325s left
+  T=1000000 [55/100] last oracle cov=93% | 326s elapsed, ~267s left
+  T=1000000 [60/100] last oracle cov=94% | 340s elapsed, ~226s left
+  T=1000000 [65/100] last oracle cov=92% | 345s elapsed, ~186s left
+  T=1000000 [70/100] last oracle cov=92% | 346s elapsed, ~148s left
+  T=1000000 [75/100] last oracle cov=94% | 434s elapsed, ~145s left
+  T=1000000 [80/100] last oracle cov=97% | 435s elapsed, ~109s left
+  T=1000000 [85/100] last oracle cov=97% | 454s elapsed, ~80s left
+  T=1000000 [90/100] last oracle cov=93% | 455s elapsed, ~51s left
+  T=1000000 [95/100] last oracle cov=92% | 458s elapsed, ~24s left
+  T=1000000 [100/100] last oracle cov=96% | 525s elapsed, ~0s left
+Finished T=1000000 in 525s
+
+==============================================================================================================
+RESULTS (100 problems, T=[20000, 100000, 1000000], 100 traj) in 588s (9.8min)
+Median over problems. Width and L2 are x 1e-3.
+==============================================================================================================
+        T   eta       b      est       L2    Width  Cov med  Cov mean   W/orcl      bias    neg%
+------------------------------------------------------------------------------------------------
+    20000   0.3      19      OBM    21.11    19.17     66.0      65.1    0.487    -0.768    0.00
+    20000   0.3      19   OBM_RR    21.11    30.08     86.0      86.1    0.764    -0.417    0.00
+    20000   0.4      52      OBM    21.11    27.90     83.0      83.0    0.709    -0.497    0.00
+    20000   0.4      52   OBM_RR    21.11    37.46     94.0      94.0    0.951    -0.089    0.00
+    20000   0.5     141      OBM    21.11    34.58     91.5      91.5    0.878    -0.222    0.00
+    20000   0.5     141   OBM_RR    21.11    38.54     95.0      94.5    0.979    -0.022    0.00
+    20000   0.6     380      OBM    21.11    37.07     94.0      93.7    0.942    -0.098    0.00
+    20000   0.6     380   OBM_RR    21.11    37.16     93.0      92.9    0.944    -0.056    0.00
+    20000   0.7    1024      OBM    21.11    37.03     93.0      93.1    0.941    -0.081    0.00
+    20000   0.7    1024   OBM_RR    21.11    34.01     87.0      86.5    0.864    -0.170    0.91
+    20000   0.8    2759      OBM    21.11    34.79     90.0      89.7    0.884    -0.156    0.00
+    20000   0.8    2759   OBM_RR    21.11    24.54     65.5      65.2    0.623    -0.434   14.77
+    20000     -       0   ORACLE    21.11    39.37     95.5      95.2    1.000     0.000    0.00
+   100000   0.3      31      OBM     9.39    10.29     75.0      75.0    0.597    -0.650    0.00
+   100000   0.3      31   OBM_RR     9.39    15.10     91.0      91.1    0.875    -0.227    0.00
+   100000   0.4     100      OBM     9.39    14.44     89.0      89.5    0.837    -0.298    0.00
+   100000   0.4     100   OBM_RR     9.39    17.12     95.0      94.5    0.993    -0.010    0.00
+   100000   0.5     316      OBM     9.39    16.35     93.5      93.3    0.948    -0.097    0.00
+   100000   0.5     316   OBM_RR     9.39    17.09     95.0      94.5    0.991    -0.005    0.00
+   100000   0.6     999      OBM     9.39    16.87     94.0      94.1    0.978    -0.039    0.00
+   100000   0.6     999   OBM_RR     9.39    16.76     94.0      93.5    0.972    -0.029    0.00
+   100000   0.7    3162      OBM     9.39    16.71     94.0      93.6    0.969    -0.041    0.00
+   100000   0.7    3162   OBM_RR     9.39    15.86     91.0      90.4    0.920    -0.097    0.04
+   100000   0.8   10000      OBM     9.39    15.91     92.0      91.4    0.923    -0.103    0.00
+   100000   0.8   10000   OBM_RR     9.39    12.41     75.0      75.0    0.720    -0.305    6.71
+   100000     -       0   ORACLE     9.39    17.25     95.0      94.7    1.000     0.000    0.00
+  1000000   0.3      63      OBM     2.97     4.08     86.0      86.2    0.751    -0.434    0.00
+  1000000   0.3      63   OBM_RR     2.97     5.31     94.0      94.2    0.979    -0.047    0.00
+  1000000   0.4     251      OBM     2.97     5.10     93.0      93.3    0.940    -0.121    0.00
+  1000000   0.4     251   OBM_RR     2.97     5.44     95.0      94.8    1.002     0.002    0.00
+  1000000   0.5    1000      OBM     2.97     5.36     95.0      94.5    0.987    -0.028    0.00
+  1000000   0.5    1000   OBM_RR     2.97     5.43     95.0      94.7    1.001    -0.001    0.00
+  1000000   0.6    3981      OBM     2.97     5.42     95.0      94.6    0.998    -0.010    0.00
+  1000000   0.6    3981   OBM_RR     2.97     5.39     95.0      94.4    0.993    -0.011    0.00
+  1000000   0.7   15848      OBM     2.97     5.39     94.0      94.4    0.993    -0.016    0.00
+  1000000   0.7   15848   OBM_RR     2.97     5.22     93.0      93.2    0.961    -0.045    0.00
+  1000000   0.8   63095      OBM     2.97     5.20     93.0      92.9    0.958    -0.057    0.00
+  1000000   0.8   63095   OBM_RR     2.97     4.57     84.0      84.1    0.842    -0.188    1.74
+  1000000     -       0   ORACLE     2.97     5.43     95.0      94.8    1.000     0.000    0.00
+
+Saved per-problem rows to results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24.csv
+Saved summary to          results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24_summary.csv
+Tue May 26 07:44:31 PM UTC 2026
+DONE

@@ -306,6 +306,67 @@ bias--variance diagnostic below, the evidence says that lugsail is a
 variance-estimator bias-reduction device whose practical benefit depends on
 the block-size regime.
 
+== Block-size sweep for coverage
+
+To test this block-size dependence directly, the report
+`reports/2026-05-26_rr_blocksize_coverage.md` repeats the RR coverage
+experiment for
+$b = floor(T^eta)$, $eta in {0.3,0.4,0.5,0.6,0.7,0.8}$, and
+$T in {2 dot 10^4, 10^5, 10^6}$. The RR center is fixed at the adjacent pair
+$(0.20,0.10)$, so the differences in the table below are caused by the
+long-run variance estimator. The column "bias" is the median relative bias of
+the raw variance estimate against the analytic $sigma^2(u)$, and "neg." is
+the mean rate at which the raw OBM-RR estimate is negative before clamping.
+
+#table(
+  columns: (0.9fr, 0.55fr, 0.85fr, 0.95fr, 0.65fr, 0.65fr, 0.65fr),
+  inset: 4pt,
+  [*$T$*], [*$eta$*], [*OBM cov.*], [*OBM-RR cov.*],
+  [*W/oracle*], [*bias*], [*neg.*],
+  [$2 dot 10^4$], [$0.4$], [$83.0%$], [$94.0%$],
+  [$0.951$], [$-0.089$], [$0.00%$],
+  [$2 dot 10^4$], [$0.5$], [$91.5%$], [$95.0%$],
+  [$0.979$], [$-0.022$], [$0.00%$],
+  [$2 dot 10^4$], [$0.6$], [$94.0%$], [$93.0%$],
+  [$0.944$], [$-0.056$], [$0.00%$],
+  [$2 dot 10^4$], [$0.8$], [$90.0%$], [$65.5%$],
+  [$0.623$], [$-0.434$], [$14.77%$],
+  [$10^5$], [$0.4$], [$89.0%$], [$95.0%$],
+  [$0.993$], [$-0.010$], [$0.00%$],
+  [$10^5$], [$0.5$], [$93.5%$], [$95.0%$],
+  [$0.991$], [$-0.005$], [$0.00%$],
+  [$10^5$], [$0.6$], [$94.0%$], [$94.0%$],
+  [$0.972$], [$-0.029$], [$0.00%$],
+  [$10^5$], [$0.8$], [$92.0%$], [$75.0%$],
+  [$0.720$], [$-0.305$], [$6.71%$],
+  [$10^6$], [$0.3$], [$86.0%$], [$94.0%$],
+  [$0.979$], [$-0.047$], [$0.00%$],
+  [$10^6$], [$0.4$], [$93.0%$], [$95.0%$],
+  [$1.002$], [$0.002$], [$0.00%$],
+  [$10^6$], [$0.6$], [$95.0%$], [$95.0%$],
+  [$0.993$], [$-0.011$], [$0.00%$],
+  [$10^6$], [$0.8$], [$93.0%$], [$84.0%$],
+  [$0.842$], [$-0.188$], [$1.74%$],
+)
+
+This sweep resolves the apparent tension between the default-rule coverage
+sweep and the lugsail bias--variance diagnostic. Lugsail improves coverage
+when OBM is still dominated by negative Bartlett-window bias. For example,
+at $T=2 dot 10^4$ and $eta=0.5$, OBM-RR changes the median relative bias
+from $-0.222$ to $-0.022$, the width/oracle ratio from $0.878$ to $0.979$,
+and median coverage from $91.5%$ to $95.0%$. At $T=10^5$, OBM-RR with
+$eta=0.4$ or $eta=0.5$ reaches $95.0%$ median coverage, while OBM at the
+same block sizes remains too narrow.
+
+At the production rule $eta=0.6$, OBM is already close to the oracle width
+in this problem class. The lugsail correction is therefore neutral rather
+than beneficial. For very large blocks, however, OBM-RR becomes unstable:
+at $eta=0.8$ the signed lugsail estimate is negative in $14.77%$ of
+trajectory-level estimates at $T=2 dot 10^4$, $6.71%$ at $T=10^5$, and
+$1.74%$ at $T=10^6$. Thus lugsail should be reported together with
+negative/clamped-estimate diagnostics, not only with the final clamped CI
+width.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -345,12 +406,6 @@ variance-estimation accuracy, and robustness to problem conditioning.
   columns: (1.35fr, 2.75fr),
   inset: 4pt,
   [*Extension*], [*Purpose*],
-  [Block-size sweep for coverage],
-  [The completed $T$-sweep uses the production rule $b=floor(T^0.6)$. A
-   sweep over $b = floor(T^eta)$ should report coverage, width,
-   variance-estimator bias, and the frequency of negative or clamped lugsail
-   estimates. This is the next diagnostic needed to explain when lugsail is
-   useful for confidence intervals.],
   [Burn-in and initialization sweep],
   [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
    deterministic-start transfer and the practical size of the
@@ -367,8 +422,8 @@ variance-estimation accuracy, and robustness to problem conditioning.
 )
 
 The theory-aligned stepsize sweep has now been completed for three adjacent
-pairs, and the oracle $T$-sweep has been completed for the largest adjacent
-pair. The most important remaining diagnostic is therefore the block-size
-sweep for coverage, because it directly tests whether the lugsail improvement
-seen in variance-estimator MSE can be converted into better confidence
-interval coverage after tuning $b$.
+pairs, the oracle $T$-sweep has been completed for the largest adjacent pair,
+and the block-size coverage sweep has been completed for the same pair. The
+most important remaining diagnostics are therefore stress tests and
+matrix-valued covariance checks: the current evidence is scalar-directional
+and uses a single random finite-state problem generator.

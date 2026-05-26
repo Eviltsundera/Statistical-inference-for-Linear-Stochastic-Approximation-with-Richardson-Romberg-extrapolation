@@ -52,6 +52,13 @@
   `code/results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24.log`;
 - thesis section: `src/experiments.typ`, subsection
   `Coverage over trajectory length`;
+- report: `reports/2026-05-26_rr_blocksize_coverage.md`;
+- raw outputs:
+  `code/results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24.csv`,
+  `code/results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24_summary.csv`,
+  `code/results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24.log`;
+- thesis section: `src/experiments.typ`, subsection
+  `Block-size sweep for coverage`;
 - commits:
   `853950a Add theory-aligned RR alpha sweep report`,
   `c400524 Add theory-aligned RR sweep to experiments chapter`,
@@ -75,6 +82,14 @@ nominal already for `T in {2e4, 5e4, 1e5, 3e5, 1e6}`, while practical
 variance estimators are too narrow at small `T`. With default
 `b=floor(T^0.6)`, lugsail/OBM-RR does not improve coverage over OBM; the next
 diagnostic should tune block size directly.
+
+Block-size coverage sweep for the same pair confirms that lugsail helps only
+in the right block-size regime. At `T=2e4`, `eta=0.5` moves OBM-RR coverage to
+`95.0%` with relative bias `-0.022`; at `T=1e6`, `eta=0.4`--`0.5` is
+oracle-level. The production rule `eta=0.6` is mostly neutral because OBM is
+already close to oracle. Very large blocks are harmful: at `eta=0.8`,
+OBM-RR has negative raw variance estimates in `14.77%`, `6.71%`, and `1.74%`
+of trajectory-level estimates for `T=2e4`, `1e5`, and `1e6`.
 
 ## Изначальная проблема старой версии
 
@@ -364,6 +379,9 @@ Raw results and interpretation are in
 
 ### P1. Block-size sweep
 
+Статус: выполнено для pair `(0.20, 0.10)` with
+`T in {2e4, 1e5, 1e6}` and `eta in {0.3,0.4,0.5,0.6,0.7,0.8}`.
+
 Для каждого $T$:
 
 $$
@@ -372,11 +390,16 @@ $$
 
 Для OBM и OBM-RR:
 
-- variance-estimator relative bias;
-- CI width;
-- coverage;
-- MSE of variance estimator;
-- negative/clamped estimate rate.
+- [x] variance-estimator relative bias;
+- [x] CI width;
+- [x] coverage;
+- [x] MSE of variance estimator;
+- [x] negative/clamped estimate rate.
+
+Итог: lugsail improves coverage when OBM has visible negative window bias,
+but can become unstable for very large blocks because the signed OBM-RR
+estimate can be negative. Raw results and interpretation are in
+`reports/2026-05-26_rr_blocksize_coverage.md`.
 
 ### P1. Burn-in sweep
 
@@ -488,9 +511,9 @@ mostly additional computations and final PDF layout polish.
 - [x] Compare RR + oracle variance with RR + OBM, RR + OBM-RR, and RR + MSB.
 - [x] Run coverage sweep over
   `T in {2e4, 5e4, 1e5, 3e5, 1e6}`.
-- [ ] Run block-size sweep
+- [x] Run block-size sweep
   `b = floor(T^eta)` for several `eta`.
-- [ ] Track negative or clamped lugsail estimates.
+- [x] Track negative or clamped lugsail estimates.
 - [ ] Run burn-in sweep over `n_0`.
 - [ ] Run initialization sweep over `theta_0` and initial law of `Z_0`.
 - [ ] Run stress tests for slower mixing chains.
@@ -512,11 +535,10 @@ mostly additional computations and final PDF layout polish.
 
 ## Next recommended experiments
 
-1. **Block-size sweep for coverage.** For selected horizons, vary
-   `b = floor(T^eta)` and record coverage, width, variance-estimator bias,
-   MSE, and negative/clamped lugsail rate.
-2. **Negative/clamped lugsail diagnostics.** The coverage sweep used clamped
-   OBM-RR intervals but did not report the raw negative estimate rate; this
-   should be tracked in the block-size sweep.
-3. **Stress tests.** After block-size tuning, repeat the best settings for
+1. **Stress tests.** After block-size tuning, repeat the best settings for
    slower mixing chains and worse-conditioned `Abar`.
+2. **Burn-in and initialization sweep.** Vary `n_0`, `theta_0`, and the
+   initial law of `Z_0` to connect the experiments to the deterministic-start
+   transfer bounds.
+3. **Matrix covariance diagnostics.** Check full covariance estimates, PSD
+   behavior, and several scalar directions rather than one random projection.
