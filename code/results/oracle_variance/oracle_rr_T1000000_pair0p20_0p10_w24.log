@@ -1,0 +1,56 @@
+Tue May 26 05:02:21 PM UTC 2026
+Oracle variance comparison: 100 problems x 100 traj, T=1000000, d=5, |X|=10, workers=24
+  RR: K=63, burn_in=1000, rr_alphas=(0.2, 0.1)
+  Variance estimators: oracle, OBM, OBM-RR, MSB; b_n=3981, n_bootstrap=500
+  Problem gen: eig=[0.25,0.6], noise=0.35
+  Direction: random
+
+  [1/100] last oracle cov=95% | 184s elapsed, ~18173s left
+  [5/100] last oracle cov=96% | 192s elapsed, ~3643s left
+  [10/100] last oracle cov=95% | 212s elapsed, ~1909s left
+  [15/100] last oracle cov=92% | 224s elapsed, ~1269s left
+  [20/100] last oracle cov=97% | 245s elapsed, ~981s left
+  [25/100] last oracle cov=95% | 382s elapsed, ~1145s left
+  [30/100] last oracle cov=87% | 394s elapsed, ~918s left
+  [35/100] last oracle cov=95% | 416s elapsed, ~772s left
+  [40/100] last oracle cov=93% | 431s elapsed, ~646s left
+  [45/100] last oracle cov=96% | 440s elapsed, ~537s left
+  [50/100] last oracle cov=100% | 591s elapsed, ~591s left
+  [55/100] last oracle cov=96% | 605s elapsed, ~495s left
+  [60/100] last oracle cov=97% | 621s elapsed, ~414s left
+  [65/100] last oracle cov=94% | 633s elapsed, ~341s left
+  [70/100] last oracle cov=95% | 651s elapsed, ~279s left
+  [75/100] last oracle cov=94% | 799s elapsed, ~266s left
+  [80/100] last oracle cov=93% | 813s elapsed, ~203s left
+  [85/100] last oracle cov=94% | 828s elapsed, ~146s left
+  [90/100] last oracle cov=96% | 838s elapsed, ~93s left
+  [95/100] last oracle cov=93% | 862s elapsed, ~45s left
+  [100/100] last oracle cov=94% | 971s elapsed, ~0s left
+
+========================================================================================
+RESULTS (100 problems, T=1000000, 100 traj) in 971s (16.2min)
+Median over problems (coverage in %, L2 and CI width x 1e-3)
+========================================================================================
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means              2.97      5.38      94.0       94.2      0.990       0
+RR + oracle variance          2.97      5.43      95.0       94.8      1.000       0
+RR + OBM                      2.97      5.42      95.0       94.6      0.998       0
+RR + OBM-RR                   2.97      5.39      95.0       94.4      0.993       0
+RR + MSB                      2.97      5.36      95.0       94.4      0.987       0
+
+========================================================================================
+COVERAGE PERCENTILES (%) across problems
+========================================================================================
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            91.9    93.0    94.0    96.0    97.0
+RR + oracle variance        92.0    93.8    95.0    96.0    97.0
+RR + OBM                    92.0    93.8    95.0    96.0    97.0
+RR + OBM-RR                 92.0    93.0    95.0    96.0    97.0
+RR + MSB                    92.0    93.0    95.0    96.0    97.0
+
+Saved per-problem rows to results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24.csv
+Saved summary to          results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24_summary.csv
+Tue May 26 05:18:34 PM UTC 2026
+DONE

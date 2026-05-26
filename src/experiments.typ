@@ -240,6 +240,35 @@ new run reinforces the separation between the two corrections: RR in
 $alpha$ removes the point-estimator bias, while OBM or lugsail in $b$ only
 modifies the estimated long-run variance.
 
+== Oracle-variance diagnostic
+
+The theory-aligned sweep still uses estimated long-run variances. To separate
+variance-estimation error from point-estimator bias and normal-approximation
+error, the report `reports/2026-05-26_oracle_variance_rr.md` repeats the
+largest adjacent-pair experiment, $(0.20, 0.10)$, with an oracle interval
+based on the analytic finite-state value
+$sigma^2(u)=u^top Sigma_infinity u$. The interval center is the same
+RR-averaged estimator in every row.
+
+#table(
+  columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr, 0.8fr),
+  inset: 4pt,
+  [*Method*], [*L2*], [*CI width*], [*Coverage*], [*Width/oracle*],
+  [RR + batch means], [$2.97$], [$5.38$], [$94.0%$], [$0.990$],
+  [RR + oracle variance], [$2.97$], [$5.43$], [$95.0%$], [$1.000$],
+  [RR + OBM], [$2.97$], [$5.42$], [$95.0%$], [$0.998$],
+  [RR + OBM-RR], [$2.97$], [$5.39$], [$95.0%$], [$0.993$],
+  [RR + MSB], [$2.97$], [$5.36$], [$95.0%$], [$0.987$],
+)
+
+The oracle interval is nearly indistinguishable from the practical
+variance-estimator intervals. OBM is only about $0.2%$ narrower than the
+oracle interval at the median, and OBM-RR is about $0.7%$ narrower. The
+median coverage remains $95%$ for the oracle, OBM, OBM-RR, and MSB rows.
+Thus, at $T=10^6$, long-run-variance estimation is not the bottleneck for
+the RR confidence intervals. The remaining coverage error is already at the
+scale of Monte Carlo variation across the 100 generated problems.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -284,10 +313,10 @@ variance-estimation accuracy, and robustness to problem conditioning.
    $T in {2 dot 10^4, 5 dot 10^4, 10^5, 3 dot 10^5, 10^6}$ would show the
    horizon where lugsail improves coverage and the horizon where ordinary OBM
    is already sufficient.],
-  [Oracle-variance comparison],
-  [Intervals based on the analytic $sigma^2(u)$ should be compared with
-   OBM, MSB, and OBM-RR intervals. This would separate normal-approximation
-   error and point-estimator bias from variance-estimation error.],
+  [Oracle-variance comparison beyond the main pair],
+  [The oracle diagnostic has been completed for the largest adjacent pair
+   $(0.20,0.10)$. Repeating it across shorter horizons or more persistent
+   chains would show when variance-estimation error starts to dominate.],
   [Burn-in and initialization sweep],
   [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
    deterministic-start transfer and the practical size of the
@@ -309,6 +338,6 @@ variance-estimation accuracy, and robustness to problem conditioning.
 
 The theory-aligned stepsize sweep has now been completed for three adjacent
 pairs. The most important remaining diagnostics are therefore the horizon
-sweep and the oracle-variance comparison: the first would show when lugsail
-matters for coverage, and the second would separate variance-estimation error
-from point-estimator bias and normal-approximation error.
+sweep and the corresponding oracle comparison at shorter horizons: together
+they would show when lugsail matters for coverage and when ordinary OBM is
+already close to the analytic variance benchmark.

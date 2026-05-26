@@ -2,8 +2,8 @@
 
 ## Цель
 
-Превратить текущую главу `Numerical Experiments and Covariance-Estimator
-Diagnostics` из рабочей заметки в полноценную экспериментальную главу диплома:
+Превратить текущую главу `Numerical Experiments` из рабочей заметки в
+полноценную экспериментальную главу диплома:
 
 - ясно объяснить, что именно проверяют эксперименты;
 - отделить уже полученные результаты от планируемых запусков;
@@ -11,9 +11,59 @@ Diagnostics` из рабочей заметки в полноценную экс
 - не создавать впечатление, что теория OBM/lugsail для RR-LSA уже доказана в
   дипломе.
 
-## Главная проблема текущей версии
+## Статус на 2026-05-26
 
-Сейчас глава похожа на research log:
+Сделано в тексте диплома:
+
+- глава переименована в `Numerical Experiments`;
+- добавлены `Goals and scope`, `Experimental setup`, setup table, methods table
+  и paragraph с метриками;
+- OBM/lugsail motivation перенесена после setup;
+- OBM описан как estimator of long-run variance / spectral density at zero,
+  а не marginal variance;
+- lugsail описан как correction of leading window bias of the variance
+  estimator;
+- добавлены caveats: теория OBM/lugsail для RR-averaged constant-step LSA не
+  доказана; OBM-RR/lugsail covariance estimates могут быть negative/non-PSD;
+- результаты main comparison и lugsail bias-variance experiments оформлены с
+  интерпретацией;
+- завершен и добавлен в главу theory-aligned RR stepsize sweep.
+
+Новые артефакты:
+
+- report: `reports/2026-05-26_theory_rr_alpha_sweep.md`;
+- raw outputs:
+  `code/results/theory_rr_sweep/main_T1000000_base0p02_pair0p04_0p02_w24.csv`,
+  `code/results/theory_rr_sweep/main_T1000000_base0p05_pair0p10_0p05_w24.csv`,
+  `code/results/theory_rr_sweep/main_T1000000_base0p10_pair0p20_0p10_w24.csv`;
+- thesis section: `src/experiments.typ`, subsection
+  `Theory-aligned RR stepsize sweep`;
+- report: `reports/2026-05-26_oracle_variance_rr.md`;
+- raw outputs:
+  `code/results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24.csv`,
+  `code/results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24_summary.csv`,
+  `code/results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24.log`;
+- thesis section: `src/experiments.typ`, subsection
+  `Oracle-variance diagnostic`;
+- commits:
+  `853950a Add theory-aligned RR alpha sweep report`,
+  `c400524 Add theory-aligned RR sweep to experiments chapter`,
+  `a11a0c9 Add oracle variance comparison runner`.
+
+Главный новый вывод: для adjacent RR pairs `(2 alpha, alpha)` with
+`alpha in {0.02, 0.05, 0.10}` RR keeps median L2 near `2.97e-3`, CI width near
+`5.36e-3`--`5.38e-3`, and median coverage at `94%`, while single-alpha
+branches deteriorate as `alpha` grows.
+
+Oracle-variance diagnostic for pair `(0.20, 0.10)` shows that RR + oracle
+variance, RR + OBM, RR + OBM-RR, and RR + MSB are nearly indistinguishable at
+`T=10^6`: median coverage is `95%` and median widths differ from oracle by at
+most about `1.3%`. Thus long-run variance estimation is not the bottleneck in
+this long-horizon RR run.
+
+## Изначальная проблема старой версии
+
+До правки глава была похожа на research log:
 
 - начинается с технической мотивации OBM/lugsail, а не с целей экспериментов;
 - таблицы вставлены без полноценного описания setup/metrics;
@@ -24,7 +74,7 @@ Diagnostics` из рабочей заметки в полноценную экс
 - недостаточно явно сказано, какие результаты уже завершены и какие только
   планируются.
 
-## Предлагаемая структура главы
+## Целевая структура главы
 
 ```md
 = Numerical Experiments
@@ -47,9 +97,8 @@ Diagnostics` из рабочей заметки в полноценную экс
 == Discussion and planned extensions
 ```
 
-В таком порядке читатель сначала понимает экспериментальный вопрос, затем
-видит дизайн, затем результаты, и только после этого читает про OBM/lugsail
-как отдельный covariance-estimation layer.
+Эта структура в основном реализована. Дополнительно после main comparison
+добавлен отдельный subsection про completed theory-aligned RR stepsize sweep.
 
 ## Исправления в тексте
 
@@ -103,6 +152,12 @@ $\sigma^2(u)$.
 > All numerical values in this section come from the reports
 > `reports/2026-04-23_main_comparison.md` and
 > `reports/2026-04-23_lugsail_bias_variance.md`.
+
+После theory-aligned sweep список completed reports расширен:
+
+- `reports/2026-04-23_main_comparison.md`;
+- `reports/2026-04-23_lugsail_bias_variance.md`;
+- `reports/2026-05-26_theory_rr_alpha_sweep.md`.
 
 А перед future diagnostics:
 
@@ -222,24 +277,32 @@ diagnostics.
 
 ### P0. Theory-aligned RR pair
 
+Статус: выполнено и добавлено в диплом.
+
 Текущий сильный comparison использует $(0.2,0.02)$, а теория в дипломе
-написана для $(\alpha,2\alpha)$.
+написана для $(\alpha,2\alpha)$. Поэтому был запущен отдельный sweep для
+adjacent pairs.
 
-Нужно посчитать хотя бы:
+Посчитано:
 
-- $(0.02,0.04)$;
-- $(0.05,0.10)$;
-- $(0.10,0.20)$, если stability diagnostics позволяют.
+- $(0.04,0.02)$, equivalent to base pair $(0.02,0.04)$;
+- $(0.10,0.05)$, equivalent to base pair $(0.05,0.10)$;
+- $(0.20,0.10)$, equivalent to base pair $(0.10,0.20)$.
 
 Метрики:
 
-- L2 error;
-- coverage;
-- CI width;
-- divergence / instability count;
-- comparison with single $\alpha$ and $2\alpha$.
+- [x] L2 error;
+- [x] coverage;
+- [x] CI width;
+- [x] divergence / instability count;
+- [x] comparison with single $\alpha$ and $2\alpha$.
+
+Raw results and interpretation are in
+`reports/2026-05-26_theory_rr_alpha_sweep.md`.
 
 ### P0. Oracle variance intervals
+
+Статус: выполнено для pair `(0.20, 0.10)` at `T=10^6` and added to the thesis.
 
 Для finite-state setup можно вычислять analytic $\sigma^2(u)$. Нужно сравнить:
 
@@ -253,6 +316,17 @@ diagnostics.
 - CLT approximation;
 - point-estimator bias;
 - variance-estimator bias.
+
+Посчитано:
+
+- [x] RR + oracle variance;
+- [x] RR + OBM;
+- [x] RR + OBM-RR;
+- [x] RR + MSB;
+- [x] RR + batch means baseline.
+
+Raw results and interpretation are in
+`reports/2026-05-26_oracle_variance_rr.md`.
 
 ### P1. Coverage over trajectory length
 
@@ -304,7 +378,7 @@ $$
 Цель: показать, когда RR начинает проигрывать из-за variance inflation or
 stability issues.
 
-## Приоритетный порядок правок
+## Первичный порядок правок
 
 1. Перестроить главу по структуре `Goals -> Setup -> Methods -> Results ->
    OBM/lugsail -> Limitations`.
@@ -313,9 +387,12 @@ stability issues.
 4. Заменить `Additional computations needed` на `Planned experimental
    extensions`.
 5. Добавить caveats: OBM/lugsail theory not proved here, OBM-RR may be
-   non-PSD/negative, current RR pair differs from theorem pair.
+   non-PSD/negative.
 6. После новых запусков заменить planned table на actual results and move
    remaining diagnostics to future work.
+
+Статус: пункты 1--6 выполнены для текущей версии главы; remaining work is now
+mostly additional computations and final PDF layout polish.
 
 ## Checklist
 
@@ -378,13 +455,13 @@ stability issues.
 
 ### Additional computations
 
-- [ ] Run theory-aligned RR pair `(0.02, 0.04)`.
-- [ ] Run theory-aligned RR pair `(0.05, 0.10)`.
-- [ ] Run theory-aligned RR pair `(0.10, 0.20)` if stability diagnostics allow.
-- [ ] Compare theory-aligned pairs against the current Huo-style pair
+- [x] Run theory-aligned RR pair `(0.02, 0.04)`.
+- [x] Run theory-aligned RR pair `(0.05, 0.10)`.
+- [x] Run theory-aligned RR pair `(0.10, 0.20)` if stability diagnostics allow.
+- [x] Compare theory-aligned pairs against the current Huo-style pair
   `(0.02, 0.20)`.
-- [ ] Add oracle-variance intervals using analytic `sigma^2(u)`.
-- [ ] Compare RR + oracle variance with RR + OBM, RR + OBM-RR, and RR + MSB.
+- [x] Add oracle-variance intervals using analytic `sigma^2(u)`.
+- [x] Compare RR + oracle variance with RR + OBM, RR + OBM-RR, and RR + MSB.
 - [ ] Run coverage sweep over
   `T in {2e4, 5e4, 1e5, 3e5, 1e6}`.
 - [ ] Run block-size sweep
@@ -400,11 +477,24 @@ stability issues.
 
 ### Final polish
 
-- [ ] Replace future-looking planned diagnostics with actual results when the
-  new runs are complete.
-- [ ] Move any remaining uncomputed diagnostics to a short `Future work`
+- [x] Replace future-looking planned diagnostics with actual results for the
+  completed theory-aligned RR sweep.
+- [x] Move any remaining uncomputed diagnostics to a short `Future work`
   paragraph.
 - [ ] Make theorem/experiment notation consistent: `n`, `T`, `m`, `b`,
   `n_0`, `alpha`.
-- [ ] Rebuild `main.typ`.
+- [x] Rebuild `main.typ`.
 - [ ] Review the generated PDF page layout for wide tables.
+
+## Next recommended experiments
+
+1. **Coverage over trajectory length.** Run
+   `T in {2e4, 5e4, 1e5, 3e5, 1e6}` for RR+OBM and RR+OBM-RR. This is the
+   cleanest way to show when lugsail helps and when it becomes neutral.
+2. **Oracle-variance intervals over shorter horizons.** Repeat the oracle
+   comparison inside the `T` sweep. This will show whether undercoverage at
+   small `T`, if it appears, comes from variance estimation or from the RR
+   center/normal approximation.
+3. **Block-size sweep for coverage.** For selected horizons, vary
+   `b = floor(T^eta)` and record coverage, width, variance-estimator bias,
+   MSE, and negative/clamped lugsail rate.
