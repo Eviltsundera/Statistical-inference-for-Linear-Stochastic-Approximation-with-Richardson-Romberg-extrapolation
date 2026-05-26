@@ -68,6 +68,12 @@
 
 #pagebreak()
 
+= Numerical Experiments <sec:experiments>
+
+#include "src/experiments.typ"
+
+#pagebreak()
+
 = Appendix: External Inputs and Local Extensions <sec:imported-inputs>
 
 #include "src/external_inputs.typ"
@@ -89,6 +95,9 @@
 - Fan, X. (2019). Exact rates of convergence in some martingale central limit
   theorems. _Journal of Mathematical Analysis and Applications_, 469(2),
   1028--1044. https://doi.org/10.1016/j.jmaa.2018.09.049.
+- Flegal, J. M. and Jones, G. L. (2010). Batch means and spectral variance
+  estimators in Markov chain Monte Carlo. _Annals of Statistics_, 38(2),
+  1034--1070. https://doi.org/10.1214/09-AOS735.
 - Huo, D., Chen, Y., and Xie, Q. (2024). Effectiveness of constant stepsize in
   Markovian LSA and statistical inference. _Proceedings of the AAAI Conference
   on Artificial Intelligence_, 38(18), 20447--20455.
@@ -98,6 +107,11 @@
   arXiv:2508.05570. Conference version in _Proceedings of the AAAI Conference
   on Artificial Intelligence_, 40(43), 36696--36704, 2026.
   https://doi.org/10.1609/aaai.v40i43.40994.
+- Liu, Y., Vats, D., and Flegal, J. M. (2022). Batch size selection for
+  variance estimators in MCMC. _Statistics and Computing_, 32, 28.
+  https://doi.org/10.1007/s11222-022-10080-1.
+- Ng, S. and Perron, P. (1996). The exact error in estimating the spectral
+  density at the origin. _Journal of Time Series Analysis_, 17(4), 379--408.
 - Polyak, B. T. (1990). New stochastic approximation type procedures.
   _Automation and Remote Control_, 51(7), 937--946.
 - Robbins, H. and Monro, S. (1951). A stochastic approximation method. _Annals
@@ -109,3 +123,9 @@
   Statistical inference for linear stochastic approximation with Markovian
   noise. _Advances in Neural Information Processing Systems_, 38.
   arXiv:2505.19102.
+- Singh, R., Shukla, A., and Vats, D. (2025). On the utility of equal batch
+  sizes for inference in stochastic gradient descent. _Journal of Machine
+  Learning Research_, 26(31), 1--49.
+- Vats, D. and Flegal, J. M. (2022). Lugsail lag windows for estimating
+  time-average covariance matrices. _Biometrika_, 109(3), 735--750.
+  https://doi.org/10.1093/biomet/asab049.
