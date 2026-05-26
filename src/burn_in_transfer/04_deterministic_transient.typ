@@ -97,26 +97,60 @@ $O(n^(-beta))$ bound follows. $square$
 The deterministic transient is not the full initial-condition contribution:
 the exact recursion contains the random product
 $Gamma_(1:k)^((w)) := product_(j = 1)^k (I - w A(Z_j))$. The difference
-between this product and $B_w^k$ is another finite-start term. We use the same
-deterministic-time product-stability working form that is listed as part of
-the local startup input in @sec:admissibility-thresholds. Let
-$alpha_("st")(p)$ be the local threshold defined in
-@eq:startup-local-threshold; the startup section below uses the same
-threshold.
+between this product and $B_w^k$ is another finite-start term. We use the
+following product-stability input, recorded here in the exact deterministic
+and conditional forms needed later. Let $alpha_("st")(p)$ be the local
+threshold defined in @eq:startup-local-threshold; the startup section below
+uses the same threshold.
 
 #lemma[
-  *(Local product-stability working form.)*
-  Under the stability and bounded-noise assumptions of the depth-two setup, if
-  $2 alpha <= alpha_("st")(p)$, then
-  there exist constants $C_("prod") < infinity$ and $c_("prod") > 0$ such
-  that, for every $p >= 2$, every $w in {alpha, 2 alpha}$, every $0 <= s < k$,
-  and every $cal(F)_s$-measurable vector $V_s$,
+  *(Technical input: deterministic and conditional product stability.)*
+  Under the stability and bounded-noise assumptions of the depth-two setup,
+  there are product-stability ceilings $alpha_("prod")(r)$, $r >= 2$, and
+  constants $C_("prod") < infinity$ and $c_("prod") > 0$, independent of
+  $p,w,s,k$ and of the current base-chain state, with the following property.
+  If $p >= 2$, $2 alpha <= alpha_("st")(p)$, and $w in {alpha, 2 alpha}$, then
+  the product estimates below hold for every $0 <= s <= k$. The empty product
+  is $Gamma_(k + 1:k)^((w)) = I$.
+
+  First, for every deterministic vector $v$ and uniformly over the current
+  base-chain state at time $s$,
+  $
+  bb(E)^(1 slash p) lr([
+    || Gamma_(s + 1:k)^((w)) v ||^p mid Z_s
+  ])
+    <= C_("prod") exp(-c_("prod") w a (k - s) slash p) ||v||.
+  $
+  Equivalently, on any coupling extension with a joint filtration
+  $(cal(G)_r)$ and a $cal(G)_s$-measurable vector $W_s$ to which the future
+  product is adapted,
+  $
+  bb(E)^(1 slash p) lr([
+    || Gamma_(s + 1:k)^((w)) W_s ||^p mid cal(G)_s
+  ])
+    <= C_("prod") exp(-c_("prod") w a (k - s) slash p) || W_s ||.
+  $ <eq:burn-product-stability-conditional>
+  Consequently, for every such $cal(G)_s$-measurable vector $V_s$,
+  $
+  || Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
+    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
+       || V_s ||_(L_p)
+    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
+       || V_s ||_(L_(2p)).
+  $ <eq:burn-product-stability-strong>
+  In particular, with the natural base-chain filtration,
   $
   || Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
     <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
        || V_s ||_(L_(2p)).
   $ <eq:burn-product-stability>
 ] <lem:burn-product-stability>
+
+This lemma is treated as a technical input of the burn-in transfer. The thesis
+does not use any unrecorded intermediate version of product stability: the
+conditional display @eq:burn-product-stability-conditional is the form invoked
+at random coupling times, and @eq:burn-product-stability is its unconditional
+corollary for deterministic times.
 
 Define the accumulated RR random initial-product discrepancy by
 $

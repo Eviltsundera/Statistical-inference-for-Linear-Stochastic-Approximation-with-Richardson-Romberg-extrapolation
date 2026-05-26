@@ -2,9 +2,10 @@
 
 == Centered Bound for the Shifted First-Order Perturbation
 
-The purpose of this section is to isolate the last-iteration weighted term
-which appears in the analysis of $J_n^((1, alpha))$, and to record a clean
-$L_p$ bound for its centered part. The proof uses the deterministic-product
+This chapter is partly preliminary. The last-iterate RR discussion at the end
+is motivational and is not used in the final Berry--Esseen assembly; the
+downstream input retained by Chapter 4 is the centered shifted
+first-order bound proved below. The proof uses the deterministic-product
 perturbation expansion from Samsonov et al. (2025, Proposition 9), specialized
 to the constant-stepsize setting, and isolates the future-centered bilinear
 concentration input used in that argument.

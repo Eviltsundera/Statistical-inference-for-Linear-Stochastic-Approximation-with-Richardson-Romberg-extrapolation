@@ -163,6 +163,15 @@ the main text and should not be read as separate external theorems.
 
 == Local Extensions Used in This Thesis <sec:external-local-extensions>
 
+The burn-in transfer also uses one technical input:
+
+- @lem:burn-product-stability records deterministic and conditional
+  product-stability estimates for the random linear products. Its conditional
+  display @eq:burn-product-stability-conditional is the only product-stability
+  form used at random coupling times; @eq:burn-product-stability is the
+  deterministic-time corollary used for finite-past and initial-product
+  estimates.
+
 The following statements are local extensions or assemblies, not direct
 citations from Levin et al. or Samsonov et al.:
 
@@ -177,5 +186,5 @@ citations from Levin et al. or Samsonov et al.:
   $J^((1)) + J^((2)) + H^((2))$ by combining the $J$ contraction
   @lem:levin-prop-5-component with the local random-time product estimate.
 
-Whenever the main proof invokes these three statements, the invoked result is
+Whenever the main proof invokes these local statements, the invoked result is
 the local lemma named above, not an unquoted external proposition.

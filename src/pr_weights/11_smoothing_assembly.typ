@@ -275,7 +275,7 @@ $square$
   quad
   n thin alpha thin a >= frac(2 thin C_3 thin || u ||^2, sigma^2(u)).
   $
-  Then the same finite-$n$ bound with asymptotic normalisation contains one
+  Then the same finite-$n$ bound with asymptotic normalization contains one
   additional variance-comparison term:
   $
   d_K lr((
@@ -325,7 +325,7 @@ $
           n thin alpha thin a thin sigma^2(u)),
 $
 using $sigma_n^("RR")(u) + sigma(u) >= sigma(u)$. This proves the displayed
-asymptotic-normalisation bound. At $alpha = c n^(-1 slash 2)$ the final term is
+asymptotic-normalization bound. At $alpha = c n^(-1 slash 2)$ the final term is
 $O(n^(-1 slash 2))$, hence it is absorbed into the balanced-scale bound of
 the preceding corollary. $square$
 

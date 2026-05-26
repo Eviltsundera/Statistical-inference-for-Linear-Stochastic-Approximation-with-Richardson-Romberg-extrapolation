@@ -17,8 +17,6 @@
     Statistical Inference for Linear Stochastic Approximation \
     with Richardson-Romberg Extrapolation
   ]
-  #v(1.5em)
-  #text(size: 12pt)[--- ---]
   #v(2em)
 ]
 
@@ -27,11 +25,14 @@
   This thesis studies statistical inference for constant-stepsize linear
   stochastic approximation with Markovian noise. The main object is the
   Polyak--Ruppert averaged Richardson--Romberg estimator formed from two
-  coupled step sizes, $alpha$ and $2 alpha$. We prove a stationary
-  augmented-chain Berry--Esseen assembly for scalar RR statistics, identify
-  the asymptotic covariance target $Sigma_infinity$, and then transfer the
-  result to deterministic starts under mixing-scale burn-in conditions with
-  logarithmic factors. At the balanced scale $alpha = c n^(-1\/2)$, the final
+  coupled step sizes, $alpha$ and $2 alpha$. The stationary theorem is for an
+  assembled augmented-chain comparison statistic; statements for the
+  deterministic-start estimator are obtained only after the burn-in transfer.
+  We prove a stationary augmented-chain Berry--Esseen assembly for scalar RR
+  statistics, identify the asymptotic covariance target $Sigma_infinity$, and
+  then transfer the result to deterministic starts under mixing-scale burn-in
+  conditions with logarithmic factors. At the balanced scale
+  $alpha = c n^(-1\/2)$, the final
   burned-in statistic has a non-asymptotic normal approximation with
   $n^(-1\/4)$ polynomial rate up to logarithmic factors.
 ]

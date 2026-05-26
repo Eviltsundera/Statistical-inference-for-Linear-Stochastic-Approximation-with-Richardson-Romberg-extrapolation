@@ -67,12 +67,12 @@ used below.
   $ <eq:burn-stable-convolution>
 ] <lem:burn-random-time-product>
 
-_Proof._ First note the conditional form of @eq:burn-product-stability used
-here. Fix deterministic times $s <= k$ and a $cal(G)_s$-measurable vector
-$W_s$. Conditional on $cal(G)_s$, the future of either coupled base chain
-starts from a deterministic current state, and the product-stability constants
-are uniform over that state. The deterministic-vector estimate proved before
-the final Holder step in @lem:burn-product-stability gives
+_Proof._ The conditional form needed here is part of the technical input
+@lem:burn-product-stability. Fix deterministic times $s <= k$ and a
+$cal(G)_s$-measurable vector $W_s$. Conditional on $cal(G)_s$, the future of
+either coupled base chain starts from its current state, and the
+product-stability constants are uniform over that state. Applying
+@eq:burn-product-stability-conditional gives
 $
 bb(E) lr([
   || Gamma_(s + 1:k)^((w)) W_s ||^p mid cal(G)_s

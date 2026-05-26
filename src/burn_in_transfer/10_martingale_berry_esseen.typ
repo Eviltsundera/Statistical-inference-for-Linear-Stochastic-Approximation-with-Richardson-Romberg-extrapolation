@@ -60,7 +60,15 @@ $X_l^("bRR")$. The bounded-increment input is
 @eq:burn-M-incr, and the target variance is $s_(n,n_0)^2(u)$. The first and
 third Bolthausen--Fan terms are bounded exactly as before, with $n$ replaced
 by $m$ in the denominator and the harmless factor $n slash m <= 2$ absorbed
-into the constants. For the conditional-variance term use
+into the constants. Explicitly, from
+$s_(n,n_0)^2(u) >= m sigma^2(u) slash 2$ and $m >= n slash 2$,
+$
+frac((2 n + 1) log(2 n + 1), s_(n,n_0)^3(u))
+  <= C(u) frac(log n, sqrt(m)).
+$ <eq:burn-BF-first-nm>
+The bounded-increment Lindeberg term is controlled in the same way, using
+@eq:burn-s-upper and $s_(n,n_0)^2(u) >= m sigma^2(u) slash 2$. For the
+conditional-variance term use
 @lem:burn-bracket-conc:
 $
 bb(E)^(1 slash p) lr([

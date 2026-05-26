@@ -26,7 +26,7 @@ leading linear term in $alpha$:
 $ lim_(n -> infinity) bb(E)[theta_n^((alpha))] = theta^* + alpha Delta + O(alpha^(3\/2)), $ <eq:bias-expansion>
 where $Delta = overline(A)^(-1) sum_(k=1)^infinity bb(E)[{sans(Q)^k tilde(A)(Z_infinity)} epsilon.alt(Z_infinity)]$ depends on the correlation structure of the Markov chain, and $tilde(A)(z) = A(z) - overline(A)$ is the centered matrix-valued function.
 Under stronger expansion assumptions, the power-series approach of Huo, Chen,
-and Xie (2023) gives higher-order bias expansions in integer powers of
+and Xie (2024) gives higher-order bias expansions in integer powers of
 $alpha$; in the Levin decomposition, the first misadjustment bias component
 itself has an $O(alpha^2)$ remainder after the leading $alpha Delta$ term.
 
@@ -51,7 +51,7 @@ $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where
 $Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in
 the key quantities subsection. This is the usual parametric $n^(-1\/2)$
 benchmark for averaged LSA; this thesis does not prove a separate
-Hajek--Le Cam or minimax lower bound.
+Hájek--Le Cam or minimax lower bound.
 Berry--Esseen type bounds and bootstrap inference procedures for the
 _standard_ Polyak--Ruppert average $overline(theta)_n$ (without extrapolation)
 under Markovian noise have been obtained in Samsonov, Sheshukova, Moulines,
@@ -232,5 +232,9 @@ The _Lyapunov equation_ plays a central role in the contraction analysis. For an
 $ ||I - alpha overline(A)||_Q^2 <= 1 - alpha a. $ <eq:contraction>
 
 Since the iterates $theta_k^((alpha))$ alone are generally not Markovian (due to the Markovian noise), we consider the _joint process_ $(theta_k^((alpha)), Z_(k+1))$ with kernel
-$ overline(sans(P))_alpha f(theta, z) = integral_(sans(Z)) sans(Q)(z, d z') f(F_(z') (theta), z'), $
-where $F_z (theta) = (I - alpha A(z)) theta + alpha b(z)$. Under Assumptions 1--3, this joint chain admits a unique invariant distribution $Pi_alpha$ for sufficiently small $alpha > 0$ (Levin et al., 2025).
+$ overline(sans(P))_alpha f(theta, z) = integral_(sans(Z)) sans(Q)(z, d z') f(F_z (theta), z'), $
+where $F_z (theta) = (I - alpha A(z)) theta + alpha b(z)$. Thus the current
+second coordinate $z$ is the observation used to update $theta$, and the next
+coordinate $z'$ is carried forward to the following step. Under Assumptions
+1--3, this joint chain admits a unique invariant distribution $Pi_alpha$ for
+sufficiently small $alpha > 0$ (Levin et al., 2025).

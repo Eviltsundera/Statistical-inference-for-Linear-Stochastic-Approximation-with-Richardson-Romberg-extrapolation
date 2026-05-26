@@ -38,13 +38,14 @@ alpha_("st")(p)
   ).
 $ <eq:startup-local-threshold>
 The first ceiling belongs to the deterministic product-stability working form
-@lem:burn-product-stability. The second and third belong to the local
-extensions @lem:burn-random-time-product and @lem:burn-full-startup. These two
-random-coupling and full-state startup statements are proved in the thesis and
-are not direct citations from Levin et al. Thus Input D is exactly the local
-threshold @eq:startup-local-threshold plus the local statements named above,
-not an additional external theorem. This separation is recorded in
-@sec:external-local-extensions.
+@lem:burn-product-stability, including its conditional form
+@eq:burn-product-stability-conditional. The second and third belong to the
+local extensions @lem:burn-random-time-product and @lem:burn-full-startup.
+These two random-coupling and full-state startup statements are proved in the
+thesis and are not direct citations from Levin et al. Thus Input D is exactly
+the local threshold @eq:startup-local-threshold plus the product-stability
+technical input and the local statements named above, not an additional
+external theorem. This separation is recorded in @sec:external-local-extensions.
 
 For the shifted-to-unshifted first-order transfer we also use the local inverse
 ceiling

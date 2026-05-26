@@ -182,6 +182,27 @@ because the finite-past construction is shift-covariant on the two-sided
 stationary chain. The uniform one-trajectory bound for the limiting
 $H^((2,w))$ follows from @lem:levin-prop-9 and Fatou's lemma. $square$
 
+*Joint RR stationary construction.* Apply
+@lem:finite-past-full-augmented-state simultaneously at $w = alpha$ and
+$w = 2 alpha$ on the same two-sided stationary base chain
+$(Z_t)_(t in ZZ)$. The two finite-past systems are measurable functions of
+the same driving path, and the pair of full augmented vectors is Cauchy in the
+product $L_p$ norm because each coordinate is Cauchy at its own step size.
+The joint limit
+$
+lr((
+  Z_(k + 1),
+  J_k^((0, alpha)), J_k^((1, alpha)), J_k^((2, alpha)),
+  H_k^((2, alpha)),
+  J_k^((0, 2 alpha)), J_k^((1, 2 alpha)), J_k^((2, 2 alpha)),
+  H_k^((2, 2 alpha))
+))_(k in ZZ)
+$
+is therefore a stationary RR augmented state. All RR differences below, such
+as $2 J_k^((j, alpha)) - J_k^((j, 2 alpha))$ and
+$2 H_k^((2, alpha)) - H_k^((2, 2 alpha))$, are read under this joint
+construction.
+
 *Stationary augmented-chain convention.* The recursions above are displayed in
 finite-time notation with $J_0^((ell, alpha)) = H_0^((ell, alpha)) = 0$, while
 @lem:levin-prop-2 is a statement about the stationary augmented chain. The
@@ -475,6 +496,6 @@ $Phi_+(p, alpha) thin n^(-1 slash 2) = O(p^(3 slash 2) thin n^(-1 slash 2))$.
   bounded by a universal constant, and the dominant order in
   the stationary misadjustment bound is $"polylog"(n) thin n^(-1 slash 4)$. $square$
 
-The theorem just proved is only a stationary augmented-chain misadjustment
-bound at $n_0 = 0$. A finite-start theorem with burn-in requires the burned-in
-weights $Q_(l,n_0)^((alpha))$ and is not used in the assembly below.
+The preceding misadjustment bound is a stationary augmented-chain statement
+at $n_0 = 0$. A finite-start theorem with burn-in requires the burned-in
+weights $Q_(l,n_0)^((alpha))$ and is handled in the burn-in transfer chapter.

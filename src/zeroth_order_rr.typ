@@ -2,6 +2,12 @@
 
 == LSA Error Decomposition
 
+This chapter is a preliminary deterministic-product calculation for the
+zero-order RR difference. The final Berry--Esseen assembly uses the full
+PR-weight notation and hypotheses introduced in Chapter 4; the present chapter
+mainly fixes notation and explains the cancellation mechanism in a simpler
+last-iterate setting.
+
 We consider the recursion
 $ theta_k = theta_(k-1) - alpha_k (A(Z_k) theta_(k-1) - b(Z_k)), quad alpha_k = alpha = "const". $
 
