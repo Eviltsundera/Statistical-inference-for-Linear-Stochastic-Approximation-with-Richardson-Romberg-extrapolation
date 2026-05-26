@@ -20,6 +20,7 @@ Usage:
 import argparse
 import time
 import multiprocessing as mp
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -39,7 +40,7 @@ from lsa_inference.inference import batch_mean_ci, obm_ci, obm_rr_ci, msb_ci
 
 
 def generate_problem(n_states, d, rng, eig_min=0.25, eig_max=0.60,
-                     noise_target=0.35):
+                     noise_target=0.35, alpha_warn=0.2):
     """Generate a complete LSA problem instance."""
     P, pi = generate_transition_matrix(n_states, rng)
     A_list, A_bar = generate_A(n_states, d, pi, rng,
@@ -48,7 +49,7 @@ def generate_problem(n_states, d, rng, eig_min=0.25, eig_max=0.60,
     b_list = generate_b(n_states, d, rng)
     theta_star = compute_theta_star(A_list, b_list, pi)
     A_arr, b_arr = prepare_arrays(A_list, b_list)
-    diagnostics = problem_diagnostics(A_list, alpha_warn=0.2)
+    diagnostics = problem_diagnostics(A_list, alpha_warn=alpha_warn)
     return P, pi, A_bar, theta_star, A_arr, b_arr, diagnostics
 
 
@@ -168,24 +169,30 @@ def run_all_methods(A_arr, b_arr, trajs, K, burn_in, theta_star, T,
     return results
 
 
-METHOD_LABELS = {
-    'const_0.2':          'alpha=0.2 (const)',
-    'const_0.02':         'alpha=0.02 (const)',
-    'RR':                 'RR (0.2+0.02)',
-    'dim_0.2':            '0.2/sqrt(k) (dim)',
-    'dim_0.02':           '0.02/sqrt(k) (dim)',
-    'PR_OBM':             'PR + OBM',
-    'PR_MSB':             'PR + MSB',
-    'RR_OBM':             'RR + OBM',
-    'RR_MSB':             'RR + MSB',
-    'const_0.2_OBM':      'a=0.2 + OBM',
-    'const_0.2_MSB':      'a=0.2 + MSB',
-    'const_0.02_OBM':     'a=0.02 + OBM',
-    'const_0.02_MSB':     'a=0.02 + MSB',
-    'const_0.02_OBM_RR':  'a=0.02 + OBM-RR',
-    'PR_OBM_RR':          'PR + OBM-RR',
-    'RR_OBM_RR':          'RR + OBM-RR',
-}
+def make_method_labels(rr_alphas):
+    """Human-readable labels matching the configured RR stepsizes."""
+    a1, a2 = rr_alphas
+    return {
+        'const_0.2':          f'alpha={a1:g} (const)',
+        'const_0.02':         f'alpha={a2:g} (const)',
+        'RR':                 f'RR ({a1:g}+{a2:g})',
+        'dim_0.2':            f'{a1:g}/sqrt(k) (dim)',
+        'dim_0.02':           f'{a2:g}/sqrt(k) (dim)',
+        'PR_OBM':             'PR + OBM',
+        'PR_MSB':             'PR + MSB',
+        'RR_OBM':             'RR + OBM',
+        'RR_MSB':             'RR + MSB',
+        'const_0.2_OBM':      f'a={a1:g} + OBM',
+        'const_0.2_MSB':      f'a={a1:g} + MSB',
+        'const_0.02_OBM':     f'a={a2:g} + OBM',
+        'const_0.02_MSB':     f'a={a2:g} + MSB',
+        'const_0.02_OBM_RR':  f'a={a2:g} + OBM-RR',
+        'PR_OBM_RR':          'PR + OBM-RR',
+        'RR_OBM_RR':          'RR + OBM-RR',
+    }
+
+
+METHOD_LABELS = make_method_labels((0.2, 0.02))
 METHODS_ORDER = list(METHOD_LABELS.keys())
 
 
@@ -213,7 +220,7 @@ def _solve_problem_worker(args):
     rng = np.random.default_rng(prob_seed)
     P, pi, A_bar, theta_star, A_arr, b_arr, diagnostics = generate_problem(
         n_states, d, rng, eig_min=eig_min, eig_max=eig_max,
-        noise_target=noise_target,
+        noise_target=noise_target, alpha_warn=max(rr_alphas),
     )
 
     # Generate projection direction: random unit vector or e_k
@@ -271,7 +278,7 @@ def _solve_problem_worker(args):
 def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
                    n_workers=None, n_bootstrap=500, direction_coord=None,
                    eig_min=0.25, eig_max=0.60, noise_target=0.35,
-                   rr_alphas=(0.2, 0.02)):
+                   rr_alphas=(0.2, 0.02), out='results_comparison.csv'):
     """Run the full comparison experiment with multiprocessing.
 
     Args:
@@ -280,7 +287,9 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
         eig_min, eig_max: eigenvalue range for -A_bar.
         noise_target: spectral norm target for state-dependent perturbations.
         rr_alphas: (alpha1, alpha2) — step sizes for constant-step / RR methods.
+        out: CSV path for the median summary.
     """
+    method_labels = make_method_labels(rr_alphas)
     K = max(int(T ** 0.3), 5)
     burn_in = min(1000, T // 10)
 
@@ -367,7 +376,7 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
         n_probs_div = int(np.sum(divs > 0))
         max_div = int(np.max(divs)) if len(divs) > 0 else 0
         mean_div = float(np.mean(divs))
-        print(f"{METHOD_LABELS[m]:<25} {total:>10} {n_probs_div:>15} "
+        print(f"{method_labels[m]:<25} {total:>10} {n_probs_div:>15} "
               f"{max_div:>14} {mean_div:>14.1f}")
 
     if all_problem_diags:
@@ -409,10 +418,12 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
         w_med = float(np.nanmedian(w_arr)) * 1e3
         cov_med = float(np.nanmedian(cov_arr)) * 100
         cov_mean = float(np.nanmean(cov_arr)) * 100
-        print(f"{METHOD_LABELS[m]:<25} {l2_med:>10.2f} {w_med:>12.2f} "
+        print(f"{method_labels[m]:<25} {l2_med:>10.2f} {w_med:>12.2f} "
               f"{cov_med:>8.1f} {cov_mean:>10.1f}")
         rows.append({
-            'method': m, 'label': METHOD_LABELS[m],
+            'method': m, 'label': method_labels[m],
+            'rr_alpha_1': float(rr_alphas[0]), 'rr_alpha_2': float(rr_alphas[1]),
+            'T': int(T), 'n_problems': int(n_problems), 'n_traj': int(n_traj),
             'l2_median': l2_med, 'width_median': w_med,
             'cov_median': cov_med, 'cov_mean': cov_mean,
             'diverged_total': int(np.sum(all_diverged[m])),
@@ -429,7 +440,7 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['cov']) * 100
         ps = np.nanpercentile(vals, pcts)
-        print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.1f}" for v in ps))
+        print(f"{method_labels[m]:<25}" + "".join(f"{v:>8.1f}" for v in ps))
 
     print(f"\n{'=' * 80}")
     print("BIAS (L2 x 1e-3) PERCENTILES across problems")
@@ -439,11 +450,13 @@ def run_experiment(n_problems, n_traj, T, n_states, d, seed=42,
     for m in METHODS_ORDER:
         vals = np.array(all_results[m]['l2']) * 1e3
         ps = np.nanpercentile(vals, pcts)
-        print(f"{METHOD_LABELS[m]:<25}" + "".join(f"{v:>8.2f}" for v in ps))
+        print(f"{method_labels[m]:<25}" + "".join(f"{v:>8.2f}" for v in ps))
 
     df = pd.DataFrame(rows)
-    df.to_csv('results_comparison.csv', index=False)
-    print(f"\nResults saved to results_comparison.csv")
+    out_path = Path(out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    print(f"\nResults saved to {out_path}")
 
     return all_results
 
@@ -479,6 +492,8 @@ def main():
     parser.add_argument('--rr-alphas', type=float, nargs=2,
                         default=[0.2, 0.02], metavar=('A1', 'A2'),
                         help='Step sizes for RR pair (default: 0.2 0.02).')
+    parser.add_argument('--out', type=str, default='results_comparison.csv',
+                        help='Output CSV path (default: results_comparison.csv).')
     args = parser.parse_args()
 
     run_experiment(args.n_problems, args.n_traj, args.T,
@@ -486,7 +501,8 @@ def main():
                    args.n_bootstrap, args.direction_coord,
                    eig_min=args.eig_min, eig_max=args.eig_max,
                    noise_target=args.noise_target,
-                   rr_alphas=tuple(args.rr_alphas))
+                   rr_alphas=tuple(args.rr_alphas),
+                   out=args.out)
 
 
 if __name__ == '__main__':
