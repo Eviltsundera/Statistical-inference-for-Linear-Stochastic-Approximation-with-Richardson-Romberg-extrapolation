@@ -1,0 +1,271 @@
+Tue May 26 08:00:51 PM UTC 2026
+RR conditioning/noise stress sweep: 100 problems x 100 traj, T=[100000, 1000000], workers=24
+  RR alphas: (0.2, 0.1)
+  bn_exps: [0.4, 0.5, 0.6], lam=2.0
+  Direction: random
+  Scenarios:
+    baseline: eig=[0.25,0.6], noise=0.35
+    weak_mean: eig=[0.12,0.3], noise=0.18
+    high_noise: eig=[0.25,0.6], noise=0.45
+    weak_high_noise: eig=[0.15,0.35], noise=0.25
+
+
+Scenario baseline: eig=[0.25,0.6], noise=0.35
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    baseline T=100000 [1/100] last oracle cov=95% | 9s elapsed, ~908s left
+    baseline T=100000 [5/100] last oracle cov=95% | 10s elapsed, ~186s left
+    baseline T=100000 [10/100] last oracle cov=90% | 10s elapsed, ~89s left
+    baseline T=100000 [15/100] last oracle cov=94% | 10s elapsed, ~57s left
+    baseline T=100000 [20/100] last oracle cov=96% | 10s elapsed, ~41s left
+    baseline T=100000 [25/100] last oracle cov=99% | 19s elapsed, ~56s left
+    baseline T=100000 [30/100] last oracle cov=92% | 19s elapsed, ~45s left
+    baseline T=100000 [35/100] last oracle cov=94% | 19s elapsed, ~36s left
+    baseline T=100000 [40/100] last oracle cov=97% | 20s elapsed, ~30s left
+    baseline T=100000 [45/100] last oracle cov=95% | 20s elapsed, ~24s left
+    baseline T=100000 [50/100] last oracle cov=86% | 28s elapsed, ~28s left
+    baseline T=100000 [55/100] last oracle cov=97% | 29s elapsed, ~24s left
+    baseline T=100000 [60/100] last oracle cov=88% | 29s elapsed, ~19s left
+    baseline T=100000 [65/100] last oracle cov=97% | 29s elapsed, ~16s left
+    baseline T=100000 [70/100] last oracle cov=93% | 30s elapsed, ~13s left
+    baseline T=100000 [75/100] last oracle cov=90% | 38s elapsed, ~13s left
+    baseline T=100000 [80/100] last oracle cov=95% | 39s elapsed, ~10s left
+    baseline T=100000 [85/100] last oracle cov=98% | 39s elapsed, ~7s left
+    baseline T=100000 [90/100] last oracle cov=95% | 39s elapsed, ~4s left
+    baseline T=100000 [95/100] last oracle cov=93% | 40s elapsed, ~2s left
+    baseline T=100000 [100/100] last oracle cov=94% | 46s elapsed, ~0s left
+  Finished baseline T=100000 in 46s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    baseline T=1000000 [1/100] last oracle cov=95% | 95s elapsed, ~9375s left
+    baseline T=1000000 [5/100] last oracle cov=94% | 96s elapsed, ~1826s left
+    baseline T=1000000 [10/100] last oracle cov=94% | 97s elapsed, ~876s left
+    baseline T=1000000 [15/100] last oracle cov=96% | 100s elapsed, ~567s left
+    baseline T=1000000 [20/100] last oracle cov=97% | 100s elapsed, ~402s left
+    baseline T=1000000 [25/100] last oracle cov=96% | 195s elapsed, ~584s left
+    baseline T=1000000 [30/100] last oracle cov=96% | 197s elapsed, ~460s left
+    baseline T=1000000 [35/100] last oracle cov=99% | 199s elapsed, ~369s left
+    baseline T=1000000 [40/100] last oracle cov=96% | 204s elapsed, ~306s left
+    baseline T=1000000 [45/100] last oracle cov=97% | 205s elapsed, ~250s left
+    baseline T=1000000 [50/100] last oracle cov=93% | 299s elapsed, ~299s left
+    baseline T=1000000 [55/100] last oracle cov=96% | 300s elapsed, ~246s left
+    baseline T=1000000 [60/100] last oracle cov=92% | 308s elapsed, ~206s left
+    baseline T=1000000 [65/100] last oracle cov=97% | 310s elapsed, ~167s left
+    baseline T=1000000 [70/100] last oracle cov=94% | 311s elapsed, ~133s left
+    baseline T=1000000 [75/100] last oracle cov=94% | 400s elapsed, ~133s left
+    baseline T=1000000 [80/100] last oracle cov=96% | 403s elapsed, ~101s left
+    baseline T=1000000 [85/100] last oracle cov=97% | 413s elapsed, ~73s left
+    baseline T=1000000 [90/100] last oracle cov=93% | 414s elapsed, ~46s left
+    baseline T=1000000 [95/100] last oracle cov=96% | 416s elapsed, ~22s left
+    baseline T=1000000 [100/100] last oracle cov=94% | 487s elapsed, ~0s left
+  Finished baseline T=1000000 in 487s
+
+Scenario weak_mean: eig=[0.12,0.3], noise=0.18
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    weak_mean T=100000 [1/100] last oracle cov=97% | 10s elapsed, ~996s left
+    weak_mean T=100000 [5/100] last oracle cov=95% | 10s elapsed, ~196s left
+    weak_mean T=100000 [10/100] last oracle cov=96% | 10s elapsed, ~94s left
+    weak_mean T=100000 [15/100] last oracle cov=96% | 11s elapsed, ~61s left
+    weak_mean T=100000 [20/100] last oracle cov=96% | 11s elapsed, ~45s left
+    weak_mean T=100000 [25/100] last oracle cov=99% | 20s elapsed, ~60s left
+    weak_mean T=100000 [30/100] last oracle cov=96% | 20s elapsed, ~48s left
+    weak_mean T=100000 [35/100] last oracle cov=95% | 21s elapsed, ~39s left
+    weak_mean T=100000 [40/100] last oracle cov=99% | 21s elapsed, ~32s left
+    weak_mean T=100000 [45/100] last oracle cov=93% | 21s elapsed, ~26s left
+    weak_mean T=100000 [50/100] last oracle cov=96% | 30s elapsed, ~30s left
+    weak_mean T=100000 [55/100] last oracle cov=96% | 30s elapsed, ~25s left
+    weak_mean T=100000 [60/100] last oracle cov=88% | 31s elapsed, ~21s left
+    weak_mean T=100000 [65/100] last oracle cov=94% | 31s elapsed, ~17s left
+    weak_mean T=100000 [70/100] last oracle cov=95% | 32s elapsed, ~14s left
+    weak_mean T=100000 [75/100] last oracle cov=95% | 40s elapsed, ~13s left
+    weak_mean T=100000 [80/100] last oracle cov=96% | 41s elapsed, ~10s left
+    weak_mean T=100000 [85/100] last oracle cov=97% | 41s elapsed, ~7s left
+    weak_mean T=100000 [90/100] last oracle cov=95% | 42s elapsed, ~5s left
+    weak_mean T=100000 [95/100] last oracle cov=94% | 42s elapsed, ~2s left
+    weak_mean T=100000 [100/100] last oracle cov=97% | 49s elapsed, ~0s left
+  Finished weak_mean T=100000 in 49s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    weak_mean T=1000000 [1/100] last oracle cov=94% | 102s elapsed, ~10100s left
+    weak_mean T=1000000 [5/100] last oracle cov=97% | 104s elapsed, ~1967s left
+    weak_mean T=1000000 [10/100] last oracle cov=97% | 111s elapsed, ~1003s left
+    weak_mean T=1000000 [15/100] last oracle cov=95% | 113s elapsed, ~639s left
+    weak_mean T=1000000 [20/100] last oracle cov=94% | 113s elapsed, ~453s left
+    weak_mean T=1000000 [25/100] last oracle cov=96% | 204s elapsed, ~613s left
+    weak_mean T=1000000 [30/100] last oracle cov=95% | 206s elapsed, ~481s left
+    weak_mean T=1000000 [35/100] last oracle cov=92% | 224s elapsed, ~417s left
+    weak_mean T=1000000 [40/100] last oracle cov=97% | 225s elapsed, ~338s left
+    weak_mean T=1000000 [45/100] last oracle cov=98% | 226s elapsed, ~276s left
+    weak_mean T=1000000 [50/100] last oracle cov=100% | 306s elapsed, ~306s left
+    weak_mean T=1000000 [55/100] last oracle cov=96% | 309s elapsed, ~253s left
+    weak_mean T=1000000 [60/100] last oracle cov=96% | 334s elapsed, ~223s left
+    weak_mean T=1000000 [65/100] last oracle cov=92% | 336s elapsed, ~181s left
+    weak_mean T=1000000 [70/100] last oracle cov=96% | 338s elapsed, ~145s left
+    weak_mean T=1000000 [75/100] last oracle cov=92% | 407s elapsed, ~136s left
+    weak_mean T=1000000 [80/100] last oracle cov=94% | 411s elapsed, ~103s left
+    weak_mean T=1000000 [85/100] last oracle cov=95% | 438s elapsed, ~77s left
+    weak_mean T=1000000 [90/100] last oracle cov=94% | 439s elapsed, ~49s left
+    weak_mean T=1000000 [95/100] last oracle cov=92% | 444s elapsed, ~23s left
+    weak_mean T=1000000 [100/100] last oracle cov=94% | 495s elapsed, ~0s left
+  Finished weak_mean T=1000000 in 495s
+
+Scenario high_noise: eig=[0.25,0.6], noise=0.45
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    high_noise T=100000 [1/100] last oracle cov=94% | 10s elapsed, ~970s left
+    high_noise T=100000 [5/100] last oracle cov=95% | 10s elapsed, ~193s left
+    high_noise T=100000 [10/100] last oracle cov=96% | 10s elapsed, ~93s left
+    high_noise T=100000 [15/100] last oracle cov=99% | 10s elapsed, ~59s left
+    high_noise T=100000 [20/100] last oracle cov=94% | 11s elapsed, ~43s left
+    high_noise T=100000 [25/100] last oracle cov=99% | 20s elapsed, ~59s left
+    high_noise T=100000 [30/100] last oracle cov=93% | 20s elapsed, ~47s left
+    high_noise T=100000 [35/100] last oracle cov=89% | 20s elapsed, ~38s left
+    high_noise T=100000 [40/100] last oracle cov=94% | 21s elapsed, ~31s left
+    high_noise T=100000 [45/100] last oracle cov=94% | 21s elapsed, ~26s left
+    high_noise T=100000 [50/100] last oracle cov=86% | 30s elapsed, ~30s left
+    high_noise T=100000 [55/100] last oracle cov=97% | 30s elapsed, ~25s left
+    high_noise T=100000 [60/100] last oracle cov=94% | 30s elapsed, ~20s left
+    high_noise T=100000 [65/100] last oracle cov=97% | 31s elapsed, ~16s left
+    high_noise T=100000 [70/100] last oracle cov=93% | 31s elapsed, ~13s left
+    high_noise T=100000 [75/100] last oracle cov=95% | 40s elapsed, ~13s left
+    high_noise T=100000 [80/100] last oracle cov=93% | 40s elapsed, ~10s left
+    high_noise T=100000 [85/100] last oracle cov=94% | 40s elapsed, ~7s left
+    high_noise T=100000 [90/100] last oracle cov=95% | 41s elapsed, ~5s left
+    high_noise T=100000 [95/100] last oracle cov=93% | 41s elapsed, ~2s left
+    high_noise T=100000 [100/100] last oracle cov=91% | 48s elapsed, ~0s left
+  Finished high_noise T=100000 in 48s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    high_noise T=1000000 [1/100] last oracle cov=95% | 102s elapsed, ~10103s left
+    high_noise T=1000000 [5/100] last oracle cov=93% | 103s elapsed, ~1948s left
+    high_noise T=1000000 [10/100] last oracle cov=98% | 105s elapsed, ~943s left
+    high_noise T=1000000 [15/100] last oracle cov=93% | 107s elapsed, ~607s left
+    high_noise T=1000000 [20/100] last oracle cov=96% | 108s elapsed, ~430s left
+    high_noise T=1000000 [25/100] last oracle cov=96% | 200s elapsed, ~601s left
+    high_noise T=1000000 [30/100] last oracle cov=96% | 201s elapsed, ~469s left
+    high_noise T=1000000 [35/100] last oracle cov=98% | 207s elapsed, ~384s left
+    high_noise T=1000000 [40/100] last oracle cov=94% | 208s elapsed, ~312s left
+    high_noise T=1000000 [45/100] last oracle cov=95% | 209s elapsed, ~255s left
+    high_noise T=1000000 [50/100] last oracle cov=99% | 298s elapsed, ~298s left
+    high_noise T=1000000 [55/100] last oracle cov=95% | 299s elapsed, ~245s left
+    high_noise T=1000000 [60/100] last oracle cov=93% | 306s elapsed, ~204s left
+    high_noise T=1000000 [65/100] last oracle cov=95% | 307s elapsed, ~165s left
+    high_noise T=1000000 [70/100] last oracle cov=92% | 313s elapsed, ~134s left
+    high_noise T=1000000 [75/100] last oracle cov=94% | 396s elapsed, ~132s left
+    high_noise T=1000000 [80/100] last oracle cov=95% | 397s elapsed, ~99s left
+    high_noise T=1000000 [85/100] last oracle cov=97% | 404s elapsed, ~71s left
+    high_noise T=1000000 [90/100] last oracle cov=94% | 405s elapsed, ~45s left
+    high_noise T=1000000 [95/100] last oracle cov=93% | 412s elapsed, ~22s left
+    high_noise T=1000000 [100/100] last oracle cov=95% | 477s elapsed, ~0s left
+  Finished high_noise T=1000000 in 477s
+
+Scenario weak_high_noise: eig=[0.15,0.35], noise=0.25
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    weak_high_noise T=100000 [1/100] last oracle cov=96% | 9s elapsed, ~940s left
+    weak_high_noise T=100000 [5/100] last oracle cov=94% | 10s elapsed, ~183s left
+    weak_high_noise T=100000 [10/100] last oracle cov=92% | 10s elapsed, ~92s left
+    weak_high_noise T=100000 [15/100] last oracle cov=95% | 10s elapsed, ~59s left
+    weak_high_noise T=100000 [20/100] last oracle cov=94% | 11s elapsed, ~43s left
+    weak_high_noise T=100000 [25/100] last oracle cov=99% | 19s elapsed, ~58s left
+    weak_high_noise T=100000 [30/100] last oracle cov=93% | 19s elapsed, ~45s left
+    weak_high_noise T=100000 [35/100] last oracle cov=95% | 20s elapsed, ~37s left
+    weak_high_noise T=100000 [40/100] last oracle cov=92% | 20s elapsed, ~31s left
+    weak_high_noise T=100000 [45/100] last oracle cov=99% | 21s elapsed, ~25s left
+    weak_high_noise T=100000 [50/100] last oracle cov=88% | 29s elapsed, ~29s left
+    weak_high_noise T=100000 [55/100] last oracle cov=97% | 29s elapsed, ~24s left
+    weak_high_noise T=100000 [60/100] last oracle cov=87% | 30s elapsed, ~20s left
+    weak_high_noise T=100000 [65/100] last oracle cov=92% | 30s elapsed, ~16s left
+    weak_high_noise T=100000 [70/100] last oracle cov=93% | 31s elapsed, ~13s left
+    weak_high_noise T=100000 [75/100] last oracle cov=90% | 39s elapsed, ~13s left
+    weak_high_noise T=100000 [80/100] last oracle cov=96% | 39s elapsed, ~10s left
+    weak_high_noise T=100000 [85/100] last oracle cov=97% | 40s elapsed, ~7s left
+    weak_high_noise T=100000 [90/100] last oracle cov=95% | 40s elapsed, ~4s left
+    weak_high_noise T=100000 [95/100] last oracle cov=93% | 41s elapsed, ~2s left
+    weak_high_noise T=100000 [100/100] last oracle cov=91% | 47s elapsed, ~0s left
+  Finished weak_high_noise T=100000 in 47s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    weak_high_noise T=1000000 [1/100] last oracle cov=96% | 97s elapsed, ~9615s left
+    weak_high_noise T=1000000 [5/100] last oracle cov=93% | 98s elapsed, ~1858s left
+    weak_high_noise T=1000000 [10/100] last oracle cov=90% | 99s elapsed, ~893s left
+    weak_high_noise T=1000000 [15/100] last oracle cov=97% | 102s elapsed, ~575s left
+    weak_high_noise T=1000000 [20/100] last oracle cov=97% | 102s elapsed, ~407s left
+    weak_high_noise T=1000000 [25/100] last oracle cov=96% | 195s elapsed, ~584s left
+    weak_high_noise T=1000000 [30/100] last oracle cov=94% | 196s elapsed, ~457s left
+    weak_high_noise T=1000000 [35/100] last oracle cov=95% | 197s elapsed, ~366s left
+    weak_high_noise T=1000000 [40/100] last oracle cov=96% | 202s elapsed, ~303s left
+    weak_high_noise T=1000000 [45/100] last oracle cov=98% | 203s elapsed, ~248s left
+    weak_high_noise T=1000000 [50/100] last oracle cov=99% | 293s elapsed, ~293s left
+    weak_high_noise T=1000000 [55/100] last oracle cov=95% | 294s elapsed, ~240s left
+    weak_high_noise T=1000000 [60/100] last oracle cov=94% | 301s elapsed, ~200s left
+    weak_high_noise T=1000000 [65/100] last oracle cov=97% | 303s elapsed, ~163s left
+    weak_high_noise T=1000000 [70/100] last oracle cov=95% | 305s elapsed, ~131s left
+    weak_high_noise T=1000000 [75/100] last oracle cov=97% | 392s elapsed, ~131s left
+    weak_high_noise T=1000000 [80/100] last oracle cov=96% | 394s elapsed, ~98s left
+    weak_high_noise T=1000000 [85/100] last oracle cov=97% | 403s elapsed, ~71s left
+    weak_high_noise T=1000000 [90/100] last oracle cov=94% | 404s elapsed, ~45s left
+    weak_high_noise T=1000000 [95/100] last oracle cov=93% | 405s elapsed, ~21s left
+    weak_high_noise T=1000000 [100/100] last oracle cov=94% | 474s elapsed, ~0s left
+  Finished weak_high_noise T=1000000 in 474s
+
+==========================================================================================================================
+RESULTS (100 problems, T=[100000, 1000000], 100 traj) in 2124s (35.4min)
+Median over problems. Width and L2 are x 1e-3.
+==========================================================================================================================
+scenario                 T   eta      est       L2    Width  Cov med   W/orcl      bias    neg%     rho   warn%
+---------------------------------------------------------------------------------------------------------------
+baseline            100000   0.4      OBM     9.39    14.44     89.0    0.837    -0.298    0.00   0.972     0.0
+baseline            100000   0.4   OBM_RR     9.39    17.12     95.0    0.993    -0.010    0.00   0.972     0.0
+baseline            100000   0.5      OBM     9.39    16.35     93.5    0.948    -0.097    0.00   0.972     0.0
+baseline            100000   0.5   OBM_RR     9.39    17.09     95.0    0.991    -0.005    0.00   0.972     0.0
+baseline            100000   0.6      OBM     9.39    16.87     94.0    0.978    -0.039    0.00   0.972     0.0
+baseline            100000   0.6   OBM_RR     9.39    16.76     94.0    0.972    -0.029    0.00   0.972     0.0
+baseline            100000     -   ORACLE     9.39    17.25     95.0    1.000     0.000    0.00   0.972     0.0
+baseline           1000000   0.4      OBM     2.97     5.10     93.0    0.940    -0.121    0.00   0.972     0.0
+baseline           1000000   0.4   OBM_RR     2.97     5.44     95.0    1.002     0.002    0.00   0.972     0.0
+baseline           1000000   0.5      OBM     2.97     5.36     95.0    0.987    -0.028    0.00   0.972     0.0
+baseline           1000000   0.5   OBM_RR     2.97     5.43     95.0    1.001    -0.001    0.00   0.972     0.0
+baseline           1000000   0.6      OBM     2.97     5.42     95.0    0.998    -0.010    0.00   0.972     0.0
+baseline           1000000   0.6   OBM_RR     2.97     5.39     95.0    0.993    -0.011    0.00   0.972     0.0
+baseline           1000000     -   ORACLE     2.97     5.43     95.0    1.000     0.000    0.00   0.972     0.0
+high_noise          100000   0.4      OBM     9.55    14.45     90.0    0.833    -0.298    0.00   0.982     7.0
+high_noise          100000   0.4   OBM_RR     9.55    17.18     95.0    0.990    -0.008    0.00   0.982     7.0
+high_noise          100000   0.5      OBM     9.55    16.51     93.5    0.951    -0.096    0.00   0.982     7.0
+high_noise          100000   0.5   OBM_RR     9.55    17.20     95.0    0.991    -0.003    0.00   0.982     7.0
+high_noise          100000   0.6      OBM     9.55    16.95     94.5    0.977    -0.037    0.00   0.982     7.0
+high_noise          100000   0.6   OBM_RR     9.55    16.85     94.0    0.971    -0.026    0.00   0.982     7.0
+high_noise          100000     -   ORACLE     9.55    17.35     95.0    1.000     0.000    0.00   0.982     7.0
+high_noise         1000000   0.4      OBM     3.00     5.15     93.0    0.943    -0.120    0.00   0.982     7.0
+high_noise         1000000   0.4   OBM_RR     3.00     5.47     95.0    1.001     0.003    0.00   0.982     7.0
+high_noise         1000000   0.5      OBM     3.00     5.38     95.0    0.985    -0.027    0.00   0.982     7.0
+high_noise         1000000   0.5   OBM_RR     3.00     5.44     95.0    0.996     0.001    0.00   0.982     7.0
+high_noise         1000000   0.6      OBM     3.00     5.42     95.0    0.992    -0.008    0.00   0.982     7.0
+high_noise         1000000   0.6   OBM_RR     3.00     5.43     95.0    0.994    -0.010    0.00   0.982     7.0
+high_noise         1000000     -   ORACLE     3.00     5.46     95.0    1.000     0.000    0.00   0.982     7.0
+weak_high_noise     100000   0.4      OBM    16.12    21.47     85.0    0.729    -0.457    0.00   0.988     3.0
+weak_high_noise     100000   0.4   OBM_RR    16.12    28.30     94.0    0.962    -0.060    0.00   0.988     3.0
+weak_high_noise     100000   0.5      OBM    16.12    26.69     92.0    0.907    -0.167    0.00   0.988     3.0
+weak_high_noise     100000   0.5   OBM_RR    16.12    29.14     95.0    0.990    -0.006    0.00   0.988     3.0
+weak_high_noise     100000   0.6      OBM    16.12    28.43     94.0    0.966    -0.061    0.00   0.988     3.0
+weak_high_noise     100000   0.6   OBM_RR    16.12    28.57     94.0    0.971    -0.030    0.00   0.988     3.0
+weak_high_noise     100000     -   ORACLE    16.12    29.43     95.0    1.000     0.000    0.00   0.988     3.0
+weak_high_noise    1000000   0.4      OBM     5.08     8.23     92.0    0.888    -0.208    0.00   0.988     3.0
+weak_high_noise    1000000   0.4   OBM_RR     5.08     9.27     95.0    1.001     0.000    0.00   0.988     3.0
+weak_high_noise    1000000   0.5      OBM     5.08     9.05     94.0    0.977    -0.051    0.00   0.988     3.0
+weak_high_noise    1000000   0.5   OBM_RR     5.08     9.25     95.0    0.998    -0.001    0.00   0.988     3.0
+weak_high_noise    1000000   0.6      OBM     5.08     9.19     95.0    0.992    -0.015    0.00   0.988     3.0
+weak_high_noise    1000000   0.6   OBM_RR     5.08     9.24     95.0    0.997    -0.012    0.00   0.988     3.0
+weak_high_noise    1000000     -   ORACLE     5.08     9.27     95.0    1.000     0.000    0.00   0.988     3.0
+weak_mean           100000   0.4      OBM    19.23    24.25     82.5    0.694    -0.518    0.00   0.987     0.0
+weak_mean           100000   0.4   OBM_RR    19.23    33.32     93.0    0.954    -0.099    0.00   0.987     0.0
+weak_mean           100000   0.5      OBM    19.23    31.43     92.0    0.900    -0.203    0.00   0.987     0.0
+weak_mean           100000   0.5   OBM_RR    19.23    34.68     95.0    0.993    -0.008    0.00   0.987     0.0
+weak_mean           100000   0.6      OBM    19.23    33.62     94.0    0.963    -0.073    0.00   0.987     0.0
+weak_mean           100000   0.6   OBM_RR    19.23    34.07     94.0    0.975    -0.030    0.00   0.987     0.0
+weak_mean           100000     -   ORACLE    19.23    34.93     95.0    1.000     0.000    0.00   0.987     0.0
+weak_mean          1000000   0.4      OBM     6.04     9.63     91.0    0.876    -0.252    0.00   0.987     0.0
+weak_mean          1000000   0.4   OBM_RR     6.04    11.01     95.0    1.001    -0.004    0.00   0.987     0.0
+weak_mean          1000000   0.5      OBM     6.04    10.71     94.0    0.974    -0.063    0.00   0.987     0.0
+weak_mean          1000000   0.5   OBM_RR     6.04    10.99     95.0    1.000    -0.002    0.00   0.987     0.0
+weak_mean          1000000   0.6      OBM     6.04    10.91     95.0    0.992    -0.019    0.00   0.987     0.0
+weak_mean          1000000   0.6   OBM_RR     6.04    10.89     94.0    0.991    -0.013    0.00   0.987     0.0
+weak_mean          1000000     -   ORACLE     6.04    11.00     95.0    1.000     0.000    0.00   0.987     0.0
+
+Saved per-problem rows to results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24.csv
+Saved summary to          results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24_summary.csv
+Tue May 26 08:36:16 PM UTC 2026
+DONE

@@ -367,6 +367,56 @@ $1.74%$ at $T=10^6$. Thus lugsail should be reported together with
 negative/clamped-estimate diagnostics, not only with the final clamped CI
 width.
 
+== Conditioning and noise stress test
+
+The report `reports/2026-05-26_rr_conditioning_noise_stress.md` checks
+whether the block-size conclusion survives moderate changes in the problem
+generator. The run keeps the same RR pair $(0.20,0.10)$ and the same random
+finite-state Markov-chain generator, but varies the eigenvalue range of
+$-overline(A)$ and the target norm of the state-dependent matrix noise. Thus
+this is a conditioning and matrix-noise stress test, not yet a mixing-time
+stress test.
+
+#table(
+  columns: (1.25fr, 0.75fr, 0.75fr, 0.85fr, 0.85fr, 0.75fr, 0.75fr),
+  inset: 4pt,
+  [*Scenario*], [*$T$*], [*Oracle*], [*OBM*], [*OBM-RR*],
+  [*RR W/orcl*], [*RR bias*],
+  [baseline], [$10^5$], [$95.0%$], [$93.5%$], [$95.0%$],
+  [$0.991$], [$-0.005$],
+  [baseline], [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$],
+  [$1.001$], [$-0.001$],
+  [weak mean], [$10^5$], [$95.0%$], [$92.0%$], [$95.0%$],
+  [$0.993$], [$-0.008$],
+  [weak mean], [$10^6$], [$95.0%$], [$94.0%$], [$95.0%$],
+  [$1.000$], [$-0.002$],
+  [high noise], [$10^5$], [$95.0%$], [$93.5%$], [$95.0%$],
+  [$0.991$], [$-0.003$],
+  [high noise], [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$],
+  [$0.996$], [$0.001$],
+  [weak + noise], [$10^5$], [$95.0%$], [$92.0%$], [$95.0%$],
+  [$0.990$], [$-0.006$],
+  [weak + noise], [$10^6$], [$95.0%$], [$94.0%$], [$95.0%$],
+  [$0.998$], [$-0.001$],
+)
+
+The table reports the tuned block-size row $eta=0.5$. The oracle coverage is
+$95%$ in every scenario, which indicates that the RR center and the normal
+approximation remain adequate for these moderate stress levels. Weaker mean
+contraction increases the scale of the problem: for instance, at $T=10^6$
+the median L2 error is $6.04 dot 10^(-3)$ in the weak-mean scenario, compared
+with $2.97 dot 10^(-3)$ at baseline. Nevertheless, OBM-RR at $eta=0.5$ stays
+near the oracle width and has median coverage $95%$.
+
+The smaller block-size row $eta=0.4$ makes the OBM window bias more visible.
+At $T=10^6$, OBM coverage is $91%$ in the weak-mean scenario and $92%$ in
+the weak-plus-noise scenario, while OBM-RR restores $95%$ coverage in both
+cases. The corresponding raw variance-estimator bias changes from $-0.252$
+to $-0.004$ in the weak-mean scenario and from $-0.208$ to approximately zero
+in the weak-plus-noise scenario. This supports the same interpretation as the
+block-size sweep: lugsail helps when OBM is too narrow because of negative
+Bartlett-window bias, but the useful block-size range must still be checked.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -410,10 +460,10 @@ variance-estimation accuracy, and robustness to problem conditioning.
   [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
    deterministic-start transfer and the practical size of the
    $(alpha a)^(-1) log^2 n$ burn-in window.],
-  [Mixing and conditioning stress test],
-  [Varying the Markov-chain mixing rate, the spectral gap of $overline(A)$,
-   and the noise amplitude would check whether the empirical behavior follows
-   the theorem's dependence on $t_"mix"$, $a$, and bounded-noise constants.],
+  [Mixing-rate stress test],
+  [The conditioning and matrix-noise stress test above keeps the same random
+   transition-matrix generator. A separate sweep should vary the Markov-chain
+   mixing rate directly and check the theorem's dependence on $t_"mix"$.],
   [Matrix covariance diagnostics],
   [The present coverage results are scalar random-direction diagnostics.
    Additional runs should check several directions and the full estimated
@@ -422,8 +472,9 @@ variance-estimation accuracy, and robustness to problem conditioning.
 )
 
 The theory-aligned stepsize sweep has now been completed for three adjacent
-pairs, the oracle $T$-sweep has been completed for the largest adjacent pair,
-and the block-size coverage sweep has been completed for the same pair. The
-most important remaining diagnostics are therefore stress tests and
-matrix-valued covariance checks: the current evidence is scalar-directional
-and uses a single random finite-state problem generator.
+pairs, the oracle $T$-sweep and block-size coverage sweep have been completed
+for the largest adjacent pair, and a conditioning/noise stress test has been
+completed for the same pair. The most important remaining diagnostics are
+therefore direct mixing-rate sweeps and matrix-valued covariance checks: the
+current evidence is still scalar-directional and uses one transition-matrix
+generator.

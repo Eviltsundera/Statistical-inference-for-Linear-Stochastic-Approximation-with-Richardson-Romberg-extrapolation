@@ -59,6 +59,13 @@
   `code/results/blocksize_coverage/rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24.log`;
 - thesis section: `src/experiments.typ`, subsection
   `Block-size sweep for coverage`;
+- report: `reports/2026-05-26_rr_conditioning_noise_stress.md`;
+- raw outputs:
+  `code/results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24.csv`,
+  `code/results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24_summary.csv`,
+  `code/results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24.log`;
+- thesis section: `src/experiments.typ`, subsection
+  `Conditioning and noise stress test`;
 - commits:
   `853950a Add theory-aligned RR alpha sweep report`,
   `c400524 Add theory-aligned RR sweep to experiments chapter`,
@@ -90,6 +97,13 @@ oracle-level. The production rule `eta=0.6` is mostly neutral because OBM is
 already close to oracle. Very large blocks are harmful: at `eta=0.8`,
 OBM-RR has negative raw variance estimates in `14.77%`, `6.71%`, and `1.74%`
 of trajectory-level estimates for `T=2e4`, `1e5`, and `1e6`.
+
+Conditioning/noise stress test for the same pair confirms the block-size
+message under moderate changes of the LSA generator. Oracle coverage remains
+`95%` in baseline, weak-mean, high-noise, and weak-mean/high-noise scenarios.
+At `eta=0.5`, OBM-RR has `95%` median coverage in all scenarios and horizons.
+At `eta=0.4`, weaker mean contraction exposes larger OBM negative bias, and
+lugsail corrects most of it.
 
 ## Изначальная проблема старой версии
 
@@ -415,15 +429,24 @@ $$
 
 ### P2. Stress tests
 
+Статус: частично выполнено. Conditioning/noise stress test completed for
+pair `(0.20, 0.10)` with `T in {1e5, 1e6}` and
+`eta in {0.4,0.5,0.6}`.
+
 Варьировать:
 
-- mixing rate of the Markov chain;
-- minimum real part / spectral gap of $\bar A$;
-- noise amplitude;
-- dimension $d$.
+- [ ] mixing rate of the Markov chain;
+- [x] minimum real part / spectral gap of $\bar A$;
+- [x] noise amplitude;
+- [ ] dimension $d$.
 
 Цель: показать, когда RR начинает проигрывать из-за variance inflation or
 stability issues.
+
+Итог текущего stress test: RR+oracle stays near nominal; weaker contraction
+increases L2/width scale and OBM window bias, but tuned OBM-RR (`eta=0.5`)
+recovers near-oracle width and `95%` coverage. Raw results and interpretation
+are in `reports/2026-05-26_rr_conditioning_noise_stress.md`.
 
 ## Первичный порядок правок
 
@@ -517,8 +540,8 @@ mostly additional computations and final PDF layout polish.
 - [ ] Run burn-in sweep over `n_0`.
 - [ ] Run initialization sweep over `theta_0` and initial law of `Z_0`.
 - [ ] Run stress tests for slower mixing chains.
-- [ ] Run stress tests for worse conditioning of `Abar`.
-- [ ] Run stress tests for larger noise amplitude.
+- [x] Run stress tests for worse conditioning of `Abar`.
+- [x] Run stress tests for larger noise amplitude.
 - [ ] Check several random scalar directions per problem.
 - [ ] Check full covariance matrix diagnostics and PSD behavior.
 
@@ -535,8 +558,9 @@ mostly additional computations and final PDF layout polish.
 
 ## Next recommended experiments
 
-1. **Stress tests.** After block-size tuning, repeat the best settings for
-   slower mixing chains and worse-conditioned `Abar`.
+1. **Mixing-rate stress test.** Conditioning/noise stress is done; the next
+   stress axis is to modify the Markov-chain generator and vary the mixing
+   rate directly.
 2. **Burn-in and initialization sweep.** Vary `n_0`, `theta_0`, and the
    initial law of `Z_0` to connect the experiments to the deterministic-start
    transfer bounds.
