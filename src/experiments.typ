@@ -200,6 +200,46 @@ correction does not visibly improve coverage. The remaining differences in
 CI width between RR+OBM and RR+OBM-RR are within the scale of Monte Carlo
 variation in this comparison.
 
+== Theory-aligned RR stepsize sweep
+
+The main comparison above uses the wide practical pair
+$alpha in {0.2, 0.02}$. A separate sweep, recorded in
+`reports/2026-05-26_theory_rr_alpha_sweep.md`, repeats the comparison for
+the adjacent two-level pairs $(2 alpha, alpha)$ with
+$alpha in {0.02, 0.05, 0.10}$. This is the stepsize geometry closest to the
+first-order Richardson--Romberg expansion used in the theory.
+
+The setup is the same finite-state LSA experiment as in the main comparison:
+100 problems, 100 trajectories per problem, $T=10^6$, $d=5$, 10 Markov
+states, and a random scalar projection direction per problem. The same
+problem seeds are used across the three rows. The table reports medians over
+problems; L2 errors and CI widths are again in units of $10^(-3)$.
+
+#table(
+  columns: (1.15fr, 1.65fr, 0.8fr, 0.8fr, 0.8fr),
+  inset: 4pt,
+  [*RR pair*], [*Single-alpha coverage*], [*RR L2*], [*RR width*], [*RR coverage*],
+  [$(0.04, 0.02)$], [$0.04$: $92.0%$; $0.02$: $94.0%$],
+  [$2.97$], [$5.36$], [$94.0%$],
+  [$(0.10, 0.05)$], [$0.10$: $86.0%$; $0.05$: $91.5%$],
+  [$2.97$], [$5.37$], [$94.0%$],
+  [$(0.20, 0.10)$], [$0.20$: $67.5%$; $0.10$: $86.0%$],
+  [$2.97$], [$5.38$], [$94.0%$],
+)
+
+The sweep shows that the RR gain is not an artifact of one particular
+wide-pair tuning. As the larger single-alpha branch moves from $0.04$ to
+$0.20$, its median coverage deteriorates from $92.0%$ to $67.5%$. After
+Richardson--Romberg extrapolation, however, the median L2 error, CI width,
+and coverage are essentially unchanged across the three adjacent pairs.
+
+The OBM and OBM-RR versions of the RR intervals give the same qualitative
+message. In this sweep, RR+OBM and RR+OBM-RR have median coverage between
+$94.0%$ and $95.0%$, with width changes below about one percent. Thus the
+new run reinforces the separation between the two corrections: RR in
+$alpha$ removes the point-estimator bias, while OBM or lugsail in $b$ only
+modifies the estimated long-run variance.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -239,11 +279,6 @@ variance-estimation accuracy, and robustness to problem conditioning.
   columns: (1.35fr, 2.75fr),
   inset: 4pt,
   [*Extension*], [*Purpose*],
-  [Theory-aligned RR stepsize pairs],
-  [The strongest completed comparison uses the wider Huo-style pair
-   $(0.02,0.2)$. Additional runs with two-level pairs $(alpha,2 alpha)$ would
-   align the experiment directly with the theorem and separate this proof
-   regime from more aggressive Vandermonde extrapolation.],
   [Coverage as a function of $T$],
   [Repeating RR+OBM and RR+OBM-RR for
    $T in {2 dot 10^4, 5 dot 10^4, 10^5, 3 dot 10^5, 10^6}$ would show the
@@ -272,10 +307,8 @@ variance-estimation accuracy, and robustness to problem conditioning.
    corrections.],
 )
 
-The most important missing run is the theory-aligned stepsize sweep. The
-theorem is written for the pair $alpha, 2 alpha$ and the explicit RR
-combination $2 overline(theta)^((alpha)) - overline(theta)^((2 alpha))$,
-whereas the strongest completed comparison uses a wider Huo-style pair. Both
-are useful, but they answer different questions. The first validates the
-present theorem directly; the second explores a more aggressive practical
-Vandermonde extrapolation.
+The theory-aligned stepsize sweep has now been completed for three adjacent
+pairs. The most important remaining diagnostics are therefore the horizon
+sweep and the oracle-variance comparison: the first would show when lugsail
+matters for coverage, and the second would separate variance-estimation error
+from point-estimator bias and normal-approximation error.
