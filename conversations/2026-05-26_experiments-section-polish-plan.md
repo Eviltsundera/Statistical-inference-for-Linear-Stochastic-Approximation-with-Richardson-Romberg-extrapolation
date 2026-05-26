@@ -45,10 +45,19 @@
   `code/results/oracle_variance/oracle_rr_T1000000_pair0p20_0p10_w24.log`;
 - thesis section: `src/experiments.typ`, subsection
   `Oracle-variance diagnostic`;
+- report: `reports/2026-05-26_rr_coverage_T_sweep.md`;
+- raw outputs:
+  `code/results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24.csv`,
+  `code/results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24_summary.csv`,
+  `code/results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24.log`;
+- thesis section: `src/experiments.typ`, subsection
+  `Coverage over trajectory length`;
 - commits:
   `853950a Add theory-aligned RR alpha sweep report`,
   `c400524 Add theory-aligned RR sweep to experiments chapter`,
-  `a11a0c9 Add oracle variance comparison runner`.
+  `a11a0c9 Add oracle variance comparison runner`,
+  `764a683 Support oracle variance T sweeps`,
+  `Add RR coverage T sweep report`.
 
 Главный новый вывод: для adjacent RR pairs `(2 alpha, alpha)` with
 `alpha in {0.02, 0.05, 0.10}` RR keeps median L2 near `2.97e-3`, CI width near
@@ -60,6 +69,12 @@ variance, RR + OBM, RR + OBM-RR, and RR + MSB are nearly indistinguishable at
 `T=10^6`: median coverage is `95%` and median widths differ from oracle by at
 most about `1.3%`. Thus long-run variance estimation is not the bottleneck in
 this long-horizon RR run.
+
+Coverage `T`-sweep for the same pair shows that oracle coverage is near
+nominal already for `T in {2e4, 5e4, 1e5, 3e5, 1e6}`, while practical
+variance estimators are too narrow at small `T`. With default
+`b=floor(T^0.6)`, lugsail/OBM-RR does not improve coverage over OBM; the next
+diagnostic should tune block size directly.
 
 ## Изначальная проблема старой версии
 
@@ -330,13 +345,22 @@ Raw results and interpretation are in
 
 ### P1. Coverage over trajectory length
 
-Запустить:
+Статус: выполнено для pair `(0.20, 0.10)` with oracle/OBM/OBM-RR/MSB rows.
+
+Запущено:
 
 $$
 T \in \{2\cdot 10^4, 5\cdot 10^4, 10^5, 3\cdot 10^5, 10^6\}.
 $$
 
 Цель: показать, где lugsail помогает, а где становится neutral.
+
+Итог: oracle coverage остается около `95%` на всех горизонтах; OBM и
+OBM-RR недоширяют интервалы на малых `T`; при default `b=T^0.6` lugsail
+не улучшает coverage относительно OBM.
+
+Raw results and interpretation are in
+`reports/2026-05-26_rr_coverage_T_sweep.md`.
 
 ### P1. Block-size sweep
 
@@ -462,7 +486,7 @@ mostly additional computations and final PDF layout polish.
   `(0.02, 0.20)`.
 - [x] Add oracle-variance intervals using analytic `sigma^2(u)`.
 - [x] Compare RR + oracle variance with RR + OBM, RR + OBM-RR, and RR + MSB.
-- [ ] Run coverage sweep over
+- [x] Run coverage sweep over
   `T in {2e4, 5e4, 1e5, 3e5, 1e6}`.
 - [ ] Run block-size sweep
   `b = floor(T^eta)` for several `eta`.
@@ -488,13 +512,11 @@ mostly additional computations and final PDF layout polish.
 
 ## Next recommended experiments
 
-1. **Coverage over trajectory length.** Run
-   `T in {2e4, 5e4, 1e5, 3e5, 1e6}` for RR+OBM and RR+OBM-RR. This is the
-   cleanest way to show when lugsail helps and when it becomes neutral.
-2. **Oracle-variance intervals over shorter horizons.** Repeat the oracle
-   comparison inside the `T` sweep. This will show whether undercoverage at
-   small `T`, if it appears, comes from variance estimation or from the RR
-   center/normal approximation.
-3. **Block-size sweep for coverage.** For selected horizons, vary
+1. **Block-size sweep for coverage.** For selected horizons, vary
    `b = floor(T^eta)` and record coverage, width, variance-estimator bias,
    MSE, and negative/clamped lugsail rate.
+2. **Negative/clamped lugsail diagnostics.** The coverage sweep used clamped
+   OBM-RR intervals but did not report the raw negative estimate rate; this
+   should be tracked in the block-size sweep.
+3. **Stress tests.** After block-size tuning, repeat the best settings for
+   slower mixing chains and worse-conditioned `Abar`.

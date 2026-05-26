@@ -269,6 +269,43 @@ Thus, at $T=10^6$, long-run-variance estimation is not the bottleneck for
 the RR confidence intervals. The remaining coverage error is already at the
 scale of Monte Carlo variation across the 100 generated problems.
 
+== Coverage over trajectory length
+
+The report `reports/2026-05-26_rr_coverage_T_sweep.md` repeats the
+oracle-variance comparison over
+$T in {2 dot 10^4, 5 dot 10^4, 10^5, 3 dot 10^5, 10^6}$, using the same
+RR pair $(0.20,0.10)$ and the same problem seeds across horizons. The goal
+is to identify whether undercoverage at shorter horizons comes from the RR
+center and normal approximation, or from estimating the long-run variance.
+
+#table(
+  columns: (0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr),
+  inset: 4pt,
+  [*$T$*], [*Oracle cov.*], [*OBM cov.*], [*OBM-RR cov.*],
+  [*OBM/oracle width*], [*OBM-RR/oracle width*],
+  [$2 dot 10^4$], [$95.5%$], [$94.0%$], [$93.0%$], [$0.942$], [$0.944$],
+  [$5 dot 10^4$], [$95.0%$], [$94.0%$], [$93.0%$], [$0.967$], [$0.958$],
+  [$10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.978$], [$0.972$],
+  [$3 dot 10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.989$], [$0.989$],
+  [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$], [$0.998$], [$0.993$],
+)
+
+The oracle coverage is already close to the nominal level at all horizons.
+This suggests that, in this problem class, the RR center and the normal
+approximation are not the main cause of the short-horizon coverage loss.
+The gap is instead in the practical variance estimators: for example, at
+$T=2 dot 10^4$ the OBM interval is about $5.8%$ narrower than the oracle
+interval, and its median coverage is $94.0%$ instead of $95.5%$. This gap
+shrinks monotonically in the width ratio as $T$ grows.
+
+With the default block-size rule $b=floor(T^0.6)$, OBM-RR/lugsail does not
+improve coverage over OBM in this sweep. It is neutral at the largest
+horizon and slightly lower at the smaller horizons. Therefore lugsail should
+not be presented as an automatic coverage fix. Rather, together with the
+bias--variance diagnostic below, the evidence says that lugsail is a
+variance-estimator bias-reduction device whose practical benefit depends on
+the block-size regime.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -308,23 +345,16 @@ variance-estimation accuracy, and robustness to problem conditioning.
   columns: (1.35fr, 2.75fr),
   inset: 4pt,
   [*Extension*], [*Purpose*],
-  [Coverage as a function of $T$],
-  [Repeating RR+OBM and RR+OBM-RR for
-   $T in {2 dot 10^4, 5 dot 10^4, 10^5, 3 dot 10^5, 10^6}$ would show the
-   horizon where lugsail improves coverage and the horizon where ordinary OBM
-   is already sufficient.],
-  [Oracle-variance comparison beyond the main pair],
-  [The oracle diagnostic has been completed for the largest adjacent pair
-   $(0.20,0.10)$. Repeating it across shorter horizons or more persistent
-   chains would show when variance-estimation error starts to dominate.],
+  [Block-size sweep for coverage],
+  [The completed $T$-sweep uses the production rule $b=floor(T^0.6)$. A
+   sweep over $b = floor(T^eta)$ should report coverage, width,
+   variance-estimator bias, and the frequency of negative or clamped lugsail
+   estimates. This is the next diagnostic needed to explain when lugsail is
+   useful for confidence intervals.],
   [Burn-in and initialization sweep],
   [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
    deterministic-start transfer and the practical size of the
    $(alpha a)^(-1) log^2 n$ burn-in window.],
-  [Block-size sweep for coverage],
-  [For each main estimator, a sweep over $b = floor(T^eta)$ should report
-   coverage, width, variance-estimator bias, and the frequency of negative or
-   clamped lugsail estimates.],
   [Mixing and conditioning stress test],
   [Varying the Markov-chain mixing rate, the spectral gap of $overline(A)$,
    and the noise amplitude would check whether the empirical behavior follows
@@ -337,7 +367,8 @@ variance-estimation accuracy, and robustness to problem conditioning.
 )
 
 The theory-aligned stepsize sweep has now been completed for three adjacent
-pairs. The most important remaining diagnostics are therefore the horizon
-sweep and the corresponding oracle comparison at shorter horizons: together
-they would show when lugsail matters for coverage and when ordinary OBM is
-already close to the analytic variance benchmark.
+pairs, and the oracle $T$-sweep has been completed for the largest adjacent
+pair. The most important remaining diagnostic is therefore the block-size
+sweep for coverage, because it directly tests whether the lugsail improvement
+seen in variance-estimator MSE can be converted into better confidence
+interval coverage after tuning $b$.

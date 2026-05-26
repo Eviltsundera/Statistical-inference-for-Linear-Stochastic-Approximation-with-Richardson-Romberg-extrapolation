@@ -1,0 +1,231 @@
+Tue May 26 05:40:46 PM UTC 2026
+Oracle variance comparison: 100 problems x 100 traj, T=[20000, 50000, 100000, 300000, 1000000], d=5, |X|=10, workers=24
+  RR alphas: (0.2, 0.1)
+  Variance estimators: oracle, OBM, OBM-RR, MSB; n_bootstrap=500
+  Problem gen: eig=[0.25,0.6], noise=0.35
+  Direction: random
+
+
+T=20000: K=19, burn_in=1000, b_n=380
+  T=20000 [1/100] last oracle cov=97% | 3s elapsed, ~300s left
+  T=20000 [5/100] last oracle cov=91% | 4s elapsed, ~68s left
+  T=20000 [10/100] last oracle cov=99% | 4s elapsed, ~38s left
+  T=20000 [15/100] last oracle cov=97% | 5s elapsed, ~26s left
+  T=20000 [20/100] last oracle cov=98% | 5s elapsed, ~19s left
+  T=20000 [25/100] last oracle cov=99% | 7s elapsed, ~21s left
+  T=20000 [30/100] last oracle cov=95% | 8s elapsed, ~18s left
+  T=20000 [35/100] last oracle cov=96% | 8s elapsed, ~15s left
+  T=20000 [40/100] last oracle cov=94% | 9s elapsed, ~13s left
+  T=20000 [45/100] last oracle cov=96% | 9s elapsed, ~11s left
+  T=20000 [50/100] last oracle cov=96% | 11s elapsed, ~11s left
+  T=20000 [55/100] last oracle cov=94% | 12s elapsed, ~10s left
+  T=20000 [60/100] last oracle cov=94% | 12s elapsed, ~8s left
+  T=20000 [65/100] last oracle cov=94% | 13s elapsed, ~7s left
+  T=20000 [70/100] last oracle cov=92% | 13s elapsed, ~6s left
+  T=20000 [75/100] last oracle cov=90% | 15s elapsed, ~5s left
+  T=20000 [80/100] last oracle cov=96% | 16s elapsed, ~4s left
+  T=20000 [85/100] last oracle cov=96% | 16s elapsed, ~3s left
+  T=20000 [90/100] last oracle cov=93% | 17s elapsed, ~2s left
+  T=20000 [95/100] last oracle cov=96% | 17s elapsed, ~1s left
+  T=20000 [100/100] last oracle cov=97% | 19s elapsed, ~0s left
+Finished T=20000 in 19s
+
+T=50000: K=25, burn_in=1000, b_n=659
+  T=50000 [1/100] last oracle cov=96% | 7s elapsed, ~674s left
+  T=50000 [5/100] last oracle cov=96% | 8s elapsed, ~153s left
+  T=50000 [10/100] last oracle cov=95% | 9s elapsed, ~81s left
+  T=50000 [15/100] last oracle cov=93% | 10s elapsed, ~56s left
+  T=50000 [20/100] last oracle cov=98% | 11s elapsed, ~43s left
+  T=50000 [25/100] last oracle cov=95% | 17s elapsed, ~50s left
+  T=50000 [30/100] last oracle cov=96% | 18s elapsed, ~42s left
+  T=50000 [35/100] last oracle cov=92% | 19s elapsed, ~35s left
+  T=50000 [40/100] last oracle cov=92% | 20s elapsed, ~30s left
+  T=50000 [45/100] last oracle cov=94% | 22s elapsed, ~26s left
+  T=50000 [50/100] last oracle cov=95% | 25s elapsed, ~25s left
+  T=50000 [55/100] last oracle cov=94% | 27s elapsed, ~22s left
+  T=50000 [60/100] last oracle cov=94% | 29s elapsed, ~19s left
+  T=50000 [65/100] last oracle cov=91% | 30s elapsed, ~16s left
+  T=50000 [70/100] last oracle cov=98% | 32s elapsed, ~14s left
+  T=50000 [75/100] last oracle cov=97% | 34s elapsed, ~11s left
+  T=50000 [80/100] last oracle cov=93% | 35s elapsed, ~9s left
+  T=50000 [85/100] last oracle cov=96% | 37s elapsed, ~7s left
+  T=50000 [90/100] last oracle cov=95% | 38s elapsed, ~4s left
+  T=50000 [95/100] last oracle cov=93% | 40s elapsed, ~2s left
+  T=50000 [100/100] last oracle cov=92% | 42s elapsed, ~0s left
+Finished T=50000 in 42s
+
+T=100000: K=31, burn_in=1000, b_n=999
+  T=100000 [1/100] last oracle cov=88% | 12s elapsed, ~1214s left
+  T=100000 [5/100] last oracle cov=90% | 14s elapsed, ~268s left
+  T=100000 [10/100] last oracle cov=97% | 16s elapsed, ~148s left
+  T=100000 [15/100] last oracle cov=96% | 19s elapsed, ~105s left
+  T=100000 [20/100] last oracle cov=99% | 20s elapsed, ~81s left
+  T=100000 [25/100] last oracle cov=97% | 31s elapsed, ~92s left
+  T=100000 [30/100] last oracle cov=96% | 34s elapsed, ~80s left
+  T=100000 [35/100] last oracle cov=100% | 36s elapsed, ~67s left
+  T=100000 [40/100] last oracle cov=95% | 38s elapsed, ~57s left
+  T=100000 [45/100] last oracle cov=97% | 41s elapsed, ~51s left
+  T=100000 [50/100] last oracle cov=86% | 51s elapsed, ~51s left
+  T=100000 [55/100] last oracle cov=96% | 53s elapsed, ~44s left
+  T=100000 [60/100] last oracle cov=96% | 56s elapsed, ~37s left
+  T=100000 [65/100] last oracle cov=94% | 60s elapsed, ~32s left
+  T=100000 [70/100] last oracle cov=95% | 63s elapsed, ~27s left
+  T=100000 [75/100] last oracle cov=98% | 70s elapsed, ~23s left
+  T=100000 [80/100] last oracle cov=97% | 73s elapsed, ~18s left
+  T=100000 [85/100] last oracle cov=95% | 76s elapsed, ~13s left
+  T=100000 [90/100] last oracle cov=95% | 79s elapsed, ~9s left
+  T=100000 [95/100] last oracle cov=97% | 82s elapsed, ~4s left
+  T=100000 [100/100] last oracle cov=94% | 86s elapsed, ~0s left
+Finished T=100000 in 86s
+
+T=300000: K=43, burn_in=1000, b_n=1933
+  T=300000 [1/100] last oracle cov=97% | 40s elapsed, ~3949s left
+  T=300000 [5/100] last oracle cov=96% | 44s elapsed, ~832s left
+  T=300000 [10/100] last oracle cov=94% | 47s elapsed, ~420s left
+  T=300000 [15/100] last oracle cov=93% | 49s elapsed, ~280s left
+  T=300000 [20/100] last oracle cov=94% | 56s elapsed, ~223s left
+  T=300000 [25/100] last oracle cov=98% | 90s elapsed, ~269s left
+  T=300000 [30/100] last oracle cov=94% | 95s elapsed, ~223s left
+  T=300000 [35/100] last oracle cov=95% | 99s elapsed, ~183s left
+  T=300000 [40/100] last oracle cov=91% | 105s elapsed, ~157s left
+  T=300000 [45/100] last oracle cov=94% | 114s elapsed, ~139s left
+  T=300000 [50/100] last oracle cov=93% | 146s elapsed, ~146s left
+  T=300000 [55/100] last oracle cov=98% | 149s elapsed, ~122s left
+  T=300000 [60/100] last oracle cov=94% | 152s elapsed, ~101s left
+  T=300000 [65/100] last oracle cov=95% | 162s elapsed, ~87s left
+  T=300000 [70/100] last oracle cov=91% | 169s elapsed, ~72s left
+  T=300000 [75/100] last oracle cov=95% | 196s elapsed, ~65s left
+  T=300000 [80/100] last oracle cov=94% | 202s elapsed, ~50s left
+  T=300000 [85/100] last oracle cov=94% | 205s elapsed, ~36s left
+  T=300000 [90/100] last oracle cov=94% | 210s elapsed, ~23s left
+  T=300000 [95/100] last oracle cov=94% | 216s elapsed, ~11s left
+  T=300000 [100/100] last oracle cov=97% | 238s elapsed, ~0s left
+Finished T=300000 in 238s
+
+T=1000000: K=63, burn_in=1000, b_n=3981
+  T=1000000 [1/100] last oracle cov=95% | 157s elapsed, ~15570s left
+  T=1000000 [5/100] last oracle cov=96% | 166s elapsed, ~3161s left
+  T=1000000 [10/100] last oracle cov=93% | 182s elapsed, ~1641s left
+  T=1000000 [15/100] last oracle cov=97% | 211s elapsed, ~1194s left
+  T=1000000 [20/100] last oracle cov=93% | 218s elapsed, ~870s left
+  T=1000000 [25/100] last oracle cov=94% | 326s elapsed, ~979s left
+  T=1000000 [30/100] last oracle cov=91% | 341s elapsed, ~796s left
+  T=1000000 [35/100] last oracle cov=99% | 361s elapsed, ~671s left
+  T=1000000 [40/100] last oracle cov=96% | 384s elapsed, ~576s left
+  T=1000000 [45/100] last oracle cov=96% | 400s elapsed, ~489s left
+  T=1000000 [50/100] last oracle cov=93% | 506s elapsed, ~506s left
+  T=1000000 [55/100] last oracle cov=92% | 527s elapsed, ~431s left
+  T=1000000 [60/100] last oracle cov=95% | 536s elapsed, ~357s left
+  T=1000000 [65/100] last oracle cov=93% | 564s elapsed, ~304s left
+  T=1000000 [70/100] last oracle cov=92% | 584s elapsed, ~250s left
+  T=1000000 [75/100] last oracle cov=89% | 681s elapsed, ~227s left
+  T=1000000 [80/100] last oracle cov=94% | 699s elapsed, ~175s left
+  T=1000000 [85/100] last oracle cov=93% | 724s elapsed, ~128s left
+  T=1000000 [90/100] last oracle cov=94% | 743s elapsed, ~83s left
+  T=1000000 [95/100] last oracle cov=93% | 753s elapsed, ~40s left
+  T=1000000 [100/100] last oracle cov=96% | 825s elapsed, ~0s left
+Finished T=1000000 in 825s
+
+========================================================================================
+RESULTS (100 problems, T=[20000, 50000, 100000, 300000, 1000000], 100 traj) in 1210s (20.2min)
+Median over problems (coverage in %, L2 and CI width x 1e-3)
+========================================================================================
+
+T=20000
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means             21.11     36.91      92.0       92.5      0.937       0
+RR + oracle variance         21.11     39.37      95.5       95.2      1.000       0
+RR + OBM                     21.11     37.07      94.0       93.7      0.942       0
+RR + OBM-RR                  21.11     37.16      93.0       92.9      0.944       0
+RR + MSB                     21.11     36.71      94.0       93.3      0.933       0
+
+T=50000
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means             13.32     23.12      93.0       92.8      0.943       0
+RR + oracle variance         13.32     24.52      95.0       94.8      1.000       0
+RR + OBM                     13.32     23.71      94.0       93.7      0.967       0
+RR + OBM-RR                  13.32     23.48      93.0       93.1      0.958       0
+RR + MSB                     13.32     23.51      94.0       93.3      0.959       0
+
+T=100000
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means              9.39     16.64      93.5       93.2      0.965       0
+RR + oracle variance          9.39     17.25      95.0       94.7      1.000       0
+RR + OBM                      9.39     16.87      94.0       94.1      0.978       0
+RR + OBM-RR                   9.39     16.76      94.0       93.5      0.972       0
+RR + MSB                      9.39     16.66      94.0       93.6      0.966       0
+
+T=300000
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means              5.43      9.74      94.0       93.9      0.981       0
+RR + oracle variance          5.43      9.92      95.0       94.8      1.000       0
+RR + OBM                      5.43      9.82      94.0       94.5      0.989       0
+RR + OBM-RR                   5.43      9.82      94.0       94.2      0.989       0
+RR + MSB                      5.43      9.72      94.0       94.0      0.980       0
+
+T=1000000
+Method                          L2     Width   Cov med   Cov mean   W/oracle     Div
+------------------------------------------------------------------------------------
+RR + batch means              2.97      5.38      94.0       94.2      0.990       0
+RR + oracle variance          2.97      5.43      95.0       94.8      1.000       0
+RR + OBM                      2.97      5.42      95.0       94.6      0.998       0
+RR + OBM-RR                   2.97      5.39      95.0       94.4      0.993       0
+RR + MSB                      2.97      5.36      95.0       94.4      0.987       0
+
+========================================================================================
+COVERAGE PERCENTILES (%) across problems
+========================================================================================
+
+T=20000
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            90.0    90.8    92.0    94.0    96.0
+RR + oracle variance        93.0    94.0    95.5    96.2    97.0
+RR + OBM                    90.0    92.0    94.0    95.0    97.0
+RR + OBM-RR                 90.0    91.0    93.0    94.0    96.0
+RR + MSB                    90.0    92.0    94.0    95.0    96.0
+
+T=50000
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            90.0    91.0    93.0    94.0    96.0
+RR + oracle variance        92.0    93.0    95.0    96.0    97.0
+RR + OBM                    91.0    92.0    94.0    95.0    96.0
+RR + OBM-RR                 90.0    91.8    93.0    95.0    96.0
+RR + MSB                    90.0    92.0    94.0    95.0    96.0
+
+T=100000
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            90.0    92.0    93.5    95.0    97.0
+RR + oracle variance        91.0    93.0    95.0    96.2    98.0
+RR + OBM                    90.0    93.0    94.0    96.0    97.0
+RR + OBM-RR                 90.0    92.0    94.0    96.0    97.0
+RR + MSB                    90.0    92.0    94.0    95.0    97.0
+
+T=300000
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            91.0    92.0    94.0    95.0    97.0
+RR + oracle variance        92.0    94.0    95.0    96.0    97.0
+RR + OBM                    92.0    93.0    94.0    96.0    97.0
+RR + OBM-RR                 92.0    93.0    94.0    96.0    97.0
+RR + MSB                    91.0    93.0    94.0    96.0    97.0
+
+T=1000000
+Method                       p10     p25     p50     p75     p90
+----------------------------------------------------------------
+RR + batch means            91.9    93.0    94.0    96.0    97.0
+RR + oracle variance        92.0    93.8    95.0    96.0    97.0
+RR + OBM                    92.0    93.8    95.0    96.0    97.0
+RR + OBM-RR                 92.0    93.0    95.0    96.0    97.0
+RR + MSB                    92.0    93.0    95.0    96.0    97.0
+
+Saved per-problem rows to results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24.csv
+Saved summary to          results/oracle_variance/oracle_rr_Tsweep_pair0p20_0p10_w24_summary.csv
+Tue May 26 06:00:58 PM UTC 2026
+DONE
