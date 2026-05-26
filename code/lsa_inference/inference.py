@@ -215,6 +215,46 @@ def obm_rr_ci(proj, theta_bar, b_n, theta_star, lam=2, q=0.05, direction=None):
     return l2_errors, ci_widths, coverages
 
 
+def oracle_ci(theta_bar, theta_star, sigma_sq, n_eff, q=0.05, direction=None):
+    """Construct CI using an analytic long-run variance.
+
+    Args:
+        theta_bar: (n_traj, d) estimator used as the interval center.
+        theta_star: (d,) true solution.
+        sigma_sq: analytic long-run variance along `direction`.
+        n_eff: effective averaging length for the center.
+        q: CI error level.
+        direction: (d,) unit vector. If None, defaults to e_0.
+
+    Returns:
+        l2_errors, ci_widths, coverages: each (n_traj,).
+    """
+    n_traj, d = theta_bar.shape
+    z = stats.norm.ppf(1 - q / 2)
+
+    if direction is None:
+        direction = np.eye(d)[0]
+
+    sigma_sq = max(float(sigma_sq), 0.0)
+    se = np.sqrt(sigma_sq / n_eff)
+
+    l2_errors = np.linalg.norm(theta_bar - theta_star, axis=1)
+    bar_proj = theta_bar @ direction
+    star_proj = theta_star @ direction
+
+    ci_widths = np.full(n_traj, 2 * z * se, dtype=float)
+    lo = bar_proj - z * se
+    hi = bar_proj + z * se
+    coverages = ((lo <= star_proj) & (star_proj <= hi)).astype(float)
+
+    has_nan = np.any(np.isnan(theta_bar), axis=1)
+    l2_errors[has_nan] = np.nan
+    ci_widths[has_nan] = np.nan
+    coverages[has_nan] = 0.0
+
+    return l2_errors, ci_widths, coverages
+
+
 def msb_ci(proj, theta_bar, b_n, theta_star, n_bootstrap=500,
            q=0.05, direction=None, rng=None):
     """Construct CI using Multiplier Subsample Bootstrap (Samsonov et al. 2025).
