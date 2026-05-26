@@ -183,6 +183,13 @@ The main comparison confirms this pattern. The entries are medians over the
   [RR + OBM-RR], [$4.52$], [$8.22$], [$95.0%$],
 )
 
+#figure(
+  image("../figures/experiments/main_methods_comparison.svg", width: 100%),
+  caption: [Main comparison at $T=10^6$. The left panel shows median
+    Euclidean error and the right panel shows median scalar coverage across
+    the same 100 generated problems.],
+) <fig:main-methods-comparison>
+
 The RR combination reduces the median L2 error to $4.52 dot 10^(-3)$ and
 brings the median scalar coverage close to the nominal 95% level. Its
 interval widths are comparable to the single-stepsize intervals, so the
@@ -313,45 +320,21 @@ To test this block-size dependence directly, the report
 experiment for
 $b = floor(T^eta)$, $eta in {0.3,0.4,0.5,0.6,0.7,0.8}$, and
 $T in {2 dot 10^4, 10^5, 10^6}$. The RR center is fixed at the adjacent pair
-$(0.20,0.10)$, so the differences in the table below are caused by the
-long-run variance estimator. The column "bias" is the median relative bias of
-the raw variance estimate against the analytic $sigma^2(u)$, and "neg." is
-the mean rate at which the raw OBM-RR estimate is negative before clamping.
+$(0.20,0.10)$, so the differences across rows are caused by the
+long-run variance estimator. The full grid is reported in the CSV file and in
+the report; here we plot the most informative slice.
 
-#table(
-  columns: (0.9fr, 0.55fr, 0.85fr, 0.95fr, 0.65fr, 0.65fr, 0.65fr),
-  inset: 4pt,
-  [*$T$*], [*$eta$*], [*OBM cov.*], [*OBM-RR cov.*],
-  [*W/oracle*], [*bias*], [*neg.*],
-  [$2 dot 10^4$], [$0.4$], [$83.0%$], [$94.0%$],
-  [$0.951$], [$-0.089$], [$0.00%$],
-  [$2 dot 10^4$], [$0.5$], [$91.5%$], [$95.0%$],
-  [$0.979$], [$-0.022$], [$0.00%$],
-  [$2 dot 10^4$], [$0.6$], [$94.0%$], [$93.0%$],
-  [$0.944$], [$-0.056$], [$0.00%$],
-  [$2 dot 10^4$], [$0.8$], [$90.0%$], [$65.5%$],
-  [$0.623$], [$-0.434$], [$14.77%$],
-  [$10^5$], [$0.4$], [$89.0%$], [$95.0%$],
-  [$0.993$], [$-0.010$], [$0.00%$],
-  [$10^5$], [$0.5$], [$93.5%$], [$95.0%$],
-  [$0.991$], [$-0.005$], [$0.00%$],
-  [$10^5$], [$0.6$], [$94.0%$], [$94.0%$],
-  [$0.972$], [$-0.029$], [$0.00%$],
-  [$10^5$], [$0.8$], [$92.0%$], [$75.0%$],
-  [$0.720$], [$-0.305$], [$6.71%$],
-  [$10^6$], [$0.3$], [$86.0%$], [$94.0%$],
-  [$0.979$], [$-0.047$], [$0.00%$],
-  [$10^6$], [$0.4$], [$93.0%$], [$95.0%$],
-  [$1.002$], [$0.002$], [$0.00%$],
-  [$10^6$], [$0.6$], [$95.0%$], [$95.0%$],
-  [$0.993$], [$-0.011$], [$0.00%$],
-  [$10^6$], [$0.8$], [$93.0%$], [$84.0%$],
-  [$0.842$], [$-0.188$], [$1.74%$],
-)
+#figure(
+  image("../figures/experiments/variance_and_mixing_diagnostics.svg", width: 100%),
+  caption: [Left: block-size sensitivity of OBM and OBM-RR at $T=10^5$.
+    Right: slow-mixing stress test at $T=10^6$, comparing oracle variance
+    intervals with OBM-RR intervals at $eta=0.5$.],
+) <fig:variance-mixing-diagnostics>
 
 This sweep resolves the apparent tension between the default-rule coverage
 sweep and the lugsail bias--variance diagnostic. Lugsail improves coverage
-when OBM is still dominated by negative Bartlett-window bias. For example,
+when OBM is still dominated by negative Bartlett-window bias, as shown in
+the left panel of @fig:variance-mixing-diagnostics. For example,
 at $T=2 dot 10^4$ and $eta=0.5$, OBM-RR changes the median relative bias
 from $-0.222$ to $-0.022$, the width/oracle ratio from $0.878$ to $0.979$,
 and median coverage from $91.5%$ to $95.0%$. At $T=10^5$, OBM-RR with
@@ -377,36 +360,13 @@ $-overline(A)$ and the target norm of the state-dependent matrix noise. Thus
 this is a conditioning and matrix-noise stress test, not yet a mixing-time
 stress test.
 
-#table(
-  columns: (1.25fr, 0.75fr, 0.75fr, 0.85fr, 0.85fr, 0.75fr, 0.75fr),
-  inset: 4pt,
-  [*Scenario*], [*$T$*], [*Oracle*], [*OBM*], [*OBM-RR*],
-  [*RR W/orcl*], [*RR bias*],
-  [baseline], [$10^5$], [$95.0%$], [$93.5%$], [$95.0%$],
-  [$0.991$], [$-0.005$],
-  [baseline], [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$],
-  [$1.001$], [$-0.001$],
-  [weak mean], [$10^5$], [$95.0%$], [$92.0%$], [$95.0%$],
-  [$0.993$], [$-0.008$],
-  [weak mean], [$10^6$], [$95.0%$], [$94.0%$], [$95.0%$],
-  [$1.000$], [$-0.002$],
-  [high noise], [$10^5$], [$95.0%$], [$93.5%$], [$95.0%$],
-  [$0.991$], [$-0.003$],
-  [high noise], [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$],
-  [$0.996$], [$0.001$],
-  [weak + noise], [$10^5$], [$95.0%$], [$92.0%$], [$95.0%$],
-  [$0.990$], [$-0.006$],
-  [weak + noise], [$10^6$], [$95.0%$], [$94.0%$], [$95.0%$],
-  [$0.998$], [$-0.001$],
-)
-
-The table reports the tuned block-size row $eta=0.5$. The oracle coverage is
-$95%$ in every scenario, which indicates that the RR center and the normal
-approximation remain adequate for these moderate stress levels. Weaker mean
-contraction increases the scale of the problem: for instance, at $T=10^6$
-the median L2 error is $6.04 dot 10^(-3)$ in the weak-mean scenario, compared
-with $2.97 dot 10^(-3)$ at baseline. Nevertheless, OBM-RR at $eta=0.5$ stays
-near the oracle width and has median coverage $95%$.
+The main conclusion is short: the oracle coverage is $95%$ in every moderate
+conditioning/noise scenario, which indicates that the RR center and the normal
+approximation remain adequate for these stress levels. Weaker mean
+contraction increases the scale of the problem: at $T=10^6$, the median L2
+error is $6.04 dot 10^(-3)$ in the weak-mean scenario, compared with
+$2.97 dot 10^(-3)$ at baseline. Nevertheless, OBM-RR at $eta=0.5$ stays near
+the oracle width and has median coverage $95%$.
 
 The smaller block-size row $eta=0.4$ makes the OBM window bias more visible.
 At $T=10^6$, OBM coverage is $91%$ in the weak-mean scenario and $92%$ in
@@ -426,26 +386,11 @@ $P_rho = rho I + (1-rho) P_0$. This keeps the stationary distribution fixed
 but decreases the spectral gap. The LSA problem generator and the RR pair
 $(0.20,0.10)$ are otherwise unchanged.
 
-#table(
-  columns: (1.05fr, 0.55fr, 0.75fr, 0.75fr, 0.85fr, 0.85fr, 0.75fr),
-  inset: 4pt,
-  [*Scenario*], [*gap*], [*$T$*], [*L2*], [*Oracle*], [*OBM-RR*],
-  [*RR W/orcl*],
-  [baseline], [$0.813$], [$10^5$], [$9.39$], [$95.0%$], [$95.0%$], [$0.991$],
-  [baseline], [$0.813$], [$10^6$], [$2.97$], [$95.0%$], [$95.0%$], [$1.001$],
-  [$rho=0.5$], [$0.426$], [$10^5$], [$16.35$], [$95.0%$], [$95.0%$], [$0.989$],
-  [$rho=0.5$], [$0.426$], [$10^6$], [$5.41$], [$94.0%$], [$94.0%$], [$0.996$],
-  [$rho=0.8$], [$0.171$], [$10^5$], [$32.48$], [$92.0%$], [$92.0%$], [$0.999$],
-  [$rho=0.8$], [$0.171$], [$10^6$], [$18.19$], [$76.5%$], [$76.5%$], [$1.005$],
-  [$rho=0.95$], [$0.043$], [$10^5$], [$124.79$], [$77.0%$], [$80.0%$], [$1.055$],
-  [$rho=0.95$], [$0.043$], [$10^6$], [$111.76$], [$6.5%$], [$7.0%$], [$1.058$],
-)
-
-The table reports the OBM-RR row with $eta=0.5$, where variance estimation is
-already close to oracle in the non-slow-mixing experiments. For moderate
-slowdown, $rho=0.5$, the oracle and OBM-RR rows remain near nominal. The
-intervals become wider because the long-run variance is larger, but the
-qualitative behavior is unchanged.
+The right panel of @fig:variance-mixing-diagnostics reports the OBM-RR row
+with $eta=0.5$, where variance estimation is already close to oracle in the
+non-slow-mixing experiments. For moderate slowdown, $rho=0.5$, the oracle and
+OBM-RR rows remain near nominal. The intervals become wider because the
+long-run variance is larger, but the qualitative behavior is unchanged.
 
 For slower chains, the failure mode changes. At $rho=0.8$ and $T=10^6$,
 OBM-RR has essentially oracle width, but both oracle and OBM-RR coverage are

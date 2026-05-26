@@ -119,6 +119,16 @@ width/oracle near `1.005`. For `rho=0.95`, oracle coverage collapses to
 `6.5%` at `T=1e6`. This is not an OBM/lugsail problem; the center or normal
 approximation fails relative to the shrinking `T^{-1/2}` interval.
 
+Final experiment-section polish now uses two figures instead of additional
+large experiment runs:
+
+- `figures/experiments/main_methods_comparison.svg`;
+- `figures/experiments/variance_and_mixing_diagnostics.svg`.
+
+Large tables for block-size, conditioning/noise, and mixing stress are kept
+in the reports/CSV files; the thesis chapter now contains compact narrative
+plus figures.
+
 ## Изначальная проблема старой версии
 
 До правки глава была похожа на research log:
@@ -537,11 +547,11 @@ mostly additional computations and final PDF layout polish.
 
 ### Figures to add later
 
-- [ ] Coverage boxplot across problems for main methods.
-- [ ] L2 error boxplot across problems for main methods.
-- [ ] OBM vs OBM-RR relative bias curve as a function of block size.
-- [ ] OBM vs OBM-RR MSE curve as a function of block size.
-- [ ] Optional: CI width vs coverage scatter plot for the main methods.
+- [x] Main methods L2/coverage comparison figure.
+- [x] OBM vs OBM-RR block-size coverage/bias figure.
+- [x] Mixing stress oracle vs OBM-RR coverage figure.
+- [ ] Optional later: coverage boxplot across problems for main methods.
+- [ ] Optional later: OBM vs OBM-RR MSE curve as a function of block size.
 
 ### Additional computations
 
@@ -571,6 +581,7 @@ mostly additional computations and final PDF layout polish.
   completed theory-aligned RR sweep.
 - [x] Move any remaining uncomputed diagnostics to a short `Future work`
   paragraph.
+- [x] Stop new large experiment runs and switch to figure/layout polish.
 - [ ] Make theorem/experiment notation consistent: `n`, `T`, `m`, `b`,
   `n_0`, `alpha`.
 - [x] Rebuild `main.typ`.
@@ -578,8 +589,11 @@ mostly additional computations and final PDF layout polish.
 
 ## Next recommended experiments
 
+No further large experiment is needed for the current thesis draft. The next
+items are future-work candidates, not required computations for the chapter:
+
 1. **Mixing-aware tuning.** The mixing stress test showed oracle undercoverage
-   for slow chains; next vary horizon, burn-in, and stepsize against the lazy
+   for slow chains; vary horizon, burn-in, and stepsize against the lazy
    parameter or spectral gap.
 2. **Burn-in and initialization sweep.** Vary `n_0`, `theta_0`, and the
    initial law of `Z_0` to connect the experiments to the deterministic-start
