@@ -66,6 +66,13 @@
   `code/results/stress/rr_conditioning_noise_T100k_1M_pair0p20_0p10_w24.log`;
 - thesis section: `src/experiments.typ`, subsection
   `Conditioning and noise stress test`;
+- report: `reports/2026-05-26_rr_mixing_stress.md`;
+- raw outputs:
+  `code/results/stress/rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24.csv`,
+  `code/results/stress/rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24_summary.csv`,
+  `code/results/stress/rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24.log`;
+- thesis section: `src/experiments.typ`, subsection
+  `Mixing-rate stress test`;
 - commits:
   `853950a Add theory-aligned RR alpha sweep report`,
   `c400524 Add theory-aligned RR sweep to experiments chapter`,
@@ -104,6 +111,13 @@ message under moderate changes of the LSA generator. Oracle coverage remains
 At `eta=0.5`, OBM-RR has `95%` median coverage in all scenarios and horizons.
 At `eta=0.4`, weaker mean contraction exposes larger OBM negative bias, and
 lugsail corrects most of it.
+
+Mixing-rate stress test gives the first clear finite-sample failure mode.
+For `rho=0.5`, oracle and OBM-RR remain near nominal. For `rho=0.8`,
+coverage at `T=1e6` drops to `76.5%` even with oracle variance and OBM-RR
+width/oracle near `1.005`. For `rho=0.95`, oracle coverage collapses to
+`6.5%` at `T=1e6`. This is not an OBM/lugsail problem; the center or normal
+approximation fails relative to the shrinking `T^{-1/2}` interval.
 
 ## Изначальная проблема старой версии
 
@@ -429,13 +443,13 @@ $$
 
 ### P2. Stress tests
 
-Статус: частично выполнено. Conditioning/noise stress test completed for
-pair `(0.20, 0.10)` with `T in {1e5, 1e6}` and
+Статус: частично выполнено. Conditioning/noise and mixing-rate stress tests
+completed for pair `(0.20, 0.10)` with `T in {1e5, 1e6}` and
 `eta in {0.4,0.5,0.6}`.
 
 Варьировать:
 
-- [ ] mixing rate of the Markov chain;
+- [x] mixing rate of the Markov chain;
 - [x] minimum real part / spectral gap of $\bar A$;
 - [x] noise amplitude;
 - [ ] dimension $d$.
@@ -447,6 +461,12 @@ stability issues.
 increases L2/width scale and OBM window bias, but tuned OBM-RR (`eta=0.5`)
 recovers near-oracle width and `95%` coverage. Raw results and interpretation
 are in `reports/2026-05-26_rr_conditioning_noise_stress.md`.
+
+Итог mixing-rate stress test: moderate slowdown (`rho=0.5`) is OK, but strong
+slow mixing (`rho=0.8` and especially `rho=0.95`) breaks oracle coverage.
+Therefore next experiments should tune horizon/burn-in/stepsize as functions
+of mixing time rather than only changing the variance estimator. Raw results
+and interpretation are in `reports/2026-05-26_rr_mixing_stress.md`.
 
 ## Первичный порядок правок
 
@@ -539,7 +559,7 @@ mostly additional computations and final PDF layout polish.
 - [x] Track negative or clamped lugsail estimates.
 - [ ] Run burn-in sweep over `n_0`.
 - [ ] Run initialization sweep over `theta_0` and initial law of `Z_0`.
-- [ ] Run stress tests for slower mixing chains.
+- [x] Run stress tests for slower mixing chains.
 - [x] Run stress tests for worse conditioning of `Abar`.
 - [x] Run stress tests for larger noise amplitude.
 - [ ] Check several random scalar directions per problem.
@@ -558,9 +578,9 @@ mostly additional computations and final PDF layout polish.
 
 ## Next recommended experiments
 
-1. **Mixing-rate stress test.** Conditioning/noise stress is done; the next
-   stress axis is to modify the Markov-chain generator and vary the mixing
-   rate directly.
+1. **Mixing-aware tuning.** The mixing stress test showed oracle undercoverage
+   for slow chains; next vary horizon, burn-in, and stepsize against the lazy
+   parameter or spectral gap.
 2. **Burn-in and initialization sweep.** Vary `n_0`, `theta_0`, and the
    initial law of `Z_0` to connect the experiments to the deterministic-start
    transfer bounds.

@@ -1,0 +1,272 @@
+Tue May 26 08:55:57 PM UTC 2026
+RR mixing stress sweep: 100 problems x 100 traj, T=[100000, 1000000], workers=24
+  RR alphas: (0.2, 0.1)
+  bn_exps: [0.4, 0.5, 0.6], lam=2.0
+  Problem gen: eig=[0.25,0.6], noise=0.35
+  Direction: random
+  Scenarios:
+    baseline: lazy_prob=0.0
+    lazy_0p50: lazy_prob=0.5
+    lazy_0p80: lazy_prob=0.8
+    lazy_0p95: lazy_prob=0.95
+
+
+Scenario baseline: lazy_prob=0.0
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    baseline T=100000 [1/100] last oracle cov=98% | 9s elapsed, ~880s left
+    baseline T=100000 [5/100] last oracle cov=94% | 10s elapsed, ~182s left
+    baseline T=100000 [10/100] last oracle cov=95% | 10s elapsed, ~89s left
+    baseline T=100000 [15/100] last oracle cov=98% | 10s elapsed, ~57s left
+    baseline T=100000 [20/100] last oracle cov=95% | 10s elapsed, ~41s left
+    baseline T=100000 [25/100] last oracle cov=99% | 18s elapsed, ~55s left
+    baseline T=100000 [30/100] last oracle cov=96% | 19s elapsed, ~44s left
+    baseline T=100000 [35/100] last oracle cov=93% | 20s elapsed, ~36s left
+    baseline T=100000 [40/100] last oracle cov=95% | 20s elapsed, ~30s left
+    baseline T=100000 [45/100] last oracle cov=95% | 20s elapsed, ~25s left
+    baseline T=100000 [50/100] last oracle cov=86% | 28s elapsed, ~28s left
+    baseline T=100000 [55/100] last oracle cov=97% | 28s elapsed, ~23s left
+    baseline T=100000 [60/100] last oracle cov=93% | 29s elapsed, ~20s left
+    baseline T=100000 [65/100] last oracle cov=95% | 30s elapsed, ~16s left
+    baseline T=100000 [70/100] last oracle cov=98% | 30s elapsed, ~13s left
+    baseline T=100000 [75/100] last oracle cov=95% | 37s elapsed, ~12s left
+    baseline T=100000 [80/100] last oracle cov=96% | 38s elapsed, ~9s left
+    baseline T=100000 [85/100] last oracle cov=97% | 39s elapsed, ~7s left
+    baseline T=100000 [90/100] last oracle cov=94% | 39s elapsed, ~4s left
+    baseline T=100000 [95/100] last oracle cov=93% | 40s elapsed, ~2s left
+    baseline T=100000 [100/100] last oracle cov=91% | 45s elapsed, ~0s left
+  Finished baseline T=100000 in 45s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    baseline T=1000000 [1/100] last oracle cov=90% | 95s elapsed, ~9409s left
+    baseline T=1000000 [5/100] last oracle cov=97% | 95s elapsed, ~1811s left
+    baseline T=1000000 [10/100] last oracle cov=94% | 98s elapsed, ~882s left
+    baseline T=1000000 [15/100] last oracle cov=96% | 100s elapsed, ~565s left
+    baseline T=1000000 [20/100] last oracle cov=95% | 100s elapsed, ~400s left
+    baseline T=1000000 [25/100] last oracle cov=96% | 189s elapsed, ~568s left
+    baseline T=1000000 [30/100] last oracle cov=87% | 190s elapsed, ~443s left
+    baseline T=1000000 [35/100] last oracle cov=93% | 197s elapsed, ~367s left
+    baseline T=1000000 [40/100] last oracle cov=96% | 198s elapsed, ~297s left
+    baseline T=1000000 [45/100] last oracle cov=95% | 199s elapsed, ~243s left
+    baseline T=1000000 [50/100] last oracle cov=99% | 284s elapsed, ~284s left
+    baseline T=1000000 [55/100] last oracle cov=95% | 285s elapsed, ~233s left
+    baseline T=1000000 [60/100] last oracle cov=97% | 296s elapsed, ~197s left
+    baseline T=1000000 [65/100] last oracle cov=93% | 297s elapsed, ~160s left
+    baseline T=1000000 [70/100] last oracle cov=94% | 298s elapsed, ~128s left
+    baseline T=1000000 [75/100] last oracle cov=95% | 379s elapsed, ~126s left
+    baseline T=1000000 [80/100] last oracle cov=96% | 380s elapsed, ~95s left
+    baseline T=1000000 [85/100] last oracle cov=94% | 393s elapsed, ~69s left
+    baseline T=1000000 [90/100] last oracle cov=97% | 394s elapsed, ~44s left
+    baseline T=1000000 [95/100] last oracle cov=93% | 397s elapsed, ~21s left
+    baseline T=1000000 [100/100] last oracle cov=94% | 457s elapsed, ~0s left
+  Finished baseline T=1000000 in 457s
+
+Scenario lazy_0p50: lazy_prob=0.5
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    lazy_0p50 T=100000 [1/100] last oracle cov=95% | 8s elapsed, ~841s left
+    lazy_0p50 T=100000 [5/100] last oracle cov=96% | 9s elapsed, ~174s left
+    lazy_0p50 T=100000 [10/100] last oracle cov=91% | 10s elapsed, ~90s left
+    lazy_0p50 T=100000 [15/100] last oracle cov=94% | 10s elapsed, ~57s left
+    lazy_0p50 T=100000 [20/100] last oracle cov=94% | 10s elapsed, ~41s left
+    lazy_0p50 T=100000 [25/100] last oracle cov=95% | 18s elapsed, ~53s left
+    lazy_0p50 T=100000 [30/100] last oracle cov=91% | 18s elapsed, ~43s left
+    lazy_0p50 T=100000 [35/100] last oracle cov=94% | 20s elapsed, ~37s left
+    lazy_0p50 T=100000 [40/100] last oracle cov=94% | 20s elapsed, ~30s left
+    lazy_0p50 T=100000 [45/100] last oracle cov=93% | 20s elapsed, ~25s left
+    lazy_0p50 T=100000 [50/100] last oracle cov=93% | 27s elapsed, ~27s left
+    lazy_0p50 T=100000 [55/100] last oracle cov=95% | 28s elapsed, ~23s left
+    lazy_0p50 T=100000 [60/100] last oracle cov=95% | 29s elapsed, ~20s left
+    lazy_0p50 T=100000 [65/100] last oracle cov=99% | 30s elapsed, ~16s left
+    lazy_0p50 T=100000 [70/100] last oracle cov=92% | 30s elapsed, ~13s left
+    lazy_0p50 T=100000 [75/100] last oracle cov=98% | 36s elapsed, ~12s left
+    lazy_0p50 T=100000 [80/100] last oracle cov=97% | 37s elapsed, ~9s left
+    lazy_0p50 T=100000 [85/100] last oracle cov=93% | 39s elapsed, ~7s left
+    lazy_0p50 T=100000 [90/100] last oracle cov=90% | 39s elapsed, ~4s left
+    lazy_0p50 T=100000 [95/100] last oracle cov=97% | 40s elapsed, ~2s left
+    lazy_0p50 T=100000 [100/100] last oracle cov=95% | 44s elapsed, ~0s left
+  Finished lazy_0p50 T=100000 in 44s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    lazy_0p50 T=1000000 [1/100] last oracle cov=95% | 93s elapsed, ~9225s left
+    lazy_0p50 T=1000000 [5/100] last oracle cov=98% | 94s elapsed, ~1787s left
+    lazy_0p50 T=1000000 [10/100] last oracle cov=94% | 95s elapsed, ~857s left
+    lazy_0p50 T=1000000 [15/100] last oracle cov=94% | 96s elapsed, ~546s left
+    lazy_0p50 T=1000000 [20/100] last oracle cov=98% | 97s elapsed, ~387s left
+    lazy_0p50 T=1000000 [25/100] last oracle cov=89% | 187s elapsed, ~560s left
+    lazy_0p50 T=1000000 [30/100] last oracle cov=97% | 189s elapsed, ~440s left
+    lazy_0p50 T=1000000 [35/100] last oracle cov=99% | 189s elapsed, ~351s left
+    lazy_0p50 T=1000000 [40/100] last oracle cov=96% | 192s elapsed, ~288s left
+    lazy_0p50 T=1000000 [45/100] last oracle cov=95% | 192s elapsed, ~235s left
+    lazy_0p50 T=1000000 [50/100] last oracle cov=95% | 280s elapsed, ~280s left
+    lazy_0p50 T=1000000 [55/100] last oracle cov=96% | 281s elapsed, ~230s left
+    lazy_0p50 T=1000000 [60/100] last oracle cov=94% | 286s elapsed, ~191s left
+    lazy_0p50 T=1000000 [65/100] last oracle cov=95% | 287s elapsed, ~155s left
+    lazy_0p50 T=1000000 [70/100] last oracle cov=89% | 288s elapsed, ~123s left
+    lazy_0p50 T=1000000 [75/100] last oracle cov=94% | 372s elapsed, ~124s left
+    lazy_0p50 T=1000000 [80/100] last oracle cov=95% | 374s elapsed, ~93s left
+    lazy_0p50 T=1000000 [85/100] last oracle cov=96% | 381s elapsed, ~67s left
+    lazy_0p50 T=1000000 [90/100] last oracle cov=92% | 382s elapsed, ~42s left
+    lazy_0p50 T=1000000 [95/100] last oracle cov=94% | 384s elapsed, ~20s left
+    lazy_0p50 T=1000000 [100/100] last oracle cov=94% | 447s elapsed, ~0s left
+  Finished lazy_0p50 T=1000000 in 447s
+
+Scenario lazy_0p80: lazy_prob=0.8
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    lazy_0p80 T=100000 [1/100] last oracle cov=88% | 8s elapsed, ~774s left
+    lazy_0p80 T=100000 [5/100] last oracle cov=92% | 11s elapsed, ~200s left
+    lazy_0p80 T=100000 [10/100] last oracle cov=80% | 11s elapsed, ~96s left
+    lazy_0p80 T=100000 [15/100] last oracle cov=91% | 11s elapsed, ~61s left
+    lazy_0p80 T=100000 [20/100] last oracle cov=95% | 11s elapsed, ~44s left
+    lazy_0p80 T=100000 [25/100] last oracle cov=95% | 16s elapsed, ~48s left
+    lazy_0p80 T=100000 [30/100] last oracle cov=87% | 21s elapsed, ~49s left
+    lazy_0p80 T=100000 [35/100] last oracle cov=97% | 21s elapsed, ~39s left
+    lazy_0p80 T=100000 [40/100] last oracle cov=95% | 21s elapsed, ~32s left
+    lazy_0p80 T=100000 [45/100] last oracle cov=94% | 21s elapsed, ~26s left
+    lazy_0p80 T=100000 [50/100] last oracle cov=88% | 24s elapsed, ~24s left
+    lazy_0p80 T=100000 [55/100] last oracle cov=90% | 30s elapsed, ~25s left
+    lazy_0p80 T=100000 [60/100] last oracle cov=88% | 31s elapsed, ~21s left
+    lazy_0p80 T=100000 [65/100] last oracle cov=88% | 31s elapsed, ~17s left
+    lazy_0p80 T=100000 [70/100] last oracle cov=92% | 32s elapsed, ~14s left
+    lazy_0p80 T=100000 [75/100] last oracle cov=94% | 33s elapsed, ~11s left
+    lazy_0p80 T=100000 [80/100] last oracle cov=94% | 40s elapsed, ~10s left
+    lazy_0p80 T=100000 [85/100] last oracle cov=89% | 41s elapsed, ~7s left
+    lazy_0p80 T=100000 [90/100] last oracle cov=92% | 41s elapsed, ~5s left
+    lazy_0p80 T=100000 [95/100] last oracle cov=91% | 42s elapsed, ~2s left
+    lazy_0p80 T=100000 [100/100] last oracle cov=88% | 42s elapsed, ~0s left
+  Finished lazy_0p80 T=100000 in 42s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    lazy_0p80 T=1000000 [1/100] last oracle cov=92% | 93s elapsed, ~9243s left
+    lazy_0p80 T=1000000 [5/100] last oracle cov=71% | 94s elapsed, ~1793s left
+    lazy_0p80 T=1000000 [10/100] last oracle cov=93% | 96s elapsed, ~862s left
+    lazy_0p80 T=1000000 [15/100] last oracle cov=94% | 97s elapsed, ~549s left
+    lazy_0p80 T=1000000 [20/100] last oracle cov=20% | 97s elapsed, ~389s left
+    lazy_0p80 T=1000000 [25/100] last oracle cov=63% | 191s elapsed, ~572s left
+    lazy_0p80 T=1000000 [30/100] last oracle cov=91% | 192s elapsed, ~447s left
+    lazy_0p80 T=1000000 [35/100] last oracle cov=83% | 193s elapsed, ~359s left
+    lazy_0p80 T=1000000 [40/100] last oracle cov=93% | 194s elapsed, ~291s left
+    lazy_0p80 T=1000000 [45/100] last oracle cov=95% | 195s elapsed, ~238s left
+    lazy_0p80 T=1000000 [50/100] last oracle cov=47% | 287s elapsed, ~287s left
+    lazy_0p80 T=1000000 [55/100] last oracle cov=94% | 288s elapsed, ~236s left
+    lazy_0p80 T=1000000 [60/100] last oracle cov=47% | 290s elapsed, ~193s left
+    lazy_0p80 T=1000000 [65/100] last oracle cov=41% | 290s elapsed, ~156s left
+    lazy_0p80 T=1000000 [70/100] last oracle cov=96% | 293s elapsed, ~125s left
+    lazy_0p80 T=1000000 [75/100] last oracle cov=19% | 383s elapsed, ~128s left
+    lazy_0p80 T=1000000 [80/100] last oracle cov=91% | 385s elapsed, ~96s left
+    lazy_0p80 T=1000000 [85/100] last oracle cov=6% | 386s elapsed, ~68s left
+    lazy_0p80 T=1000000 [90/100] last oracle cov=89% | 387s elapsed, ~43s left
+    lazy_0p80 T=1000000 [95/100] last oracle cov=15% | 399s elapsed, ~21s left
+    lazy_0p80 T=1000000 [100/100] last oracle cov=79% | 463s elapsed, ~0s left
+  Finished lazy_0p80 T=1000000 in 463s
+
+Scenario lazy_0p95: lazy_prob=0.95
+  T=100000: K=31, burn_in=1000, b_grid=[(0.4, 100), (0.5, 316), (0.6, 999)]
+    lazy_0p95 T=100000 [1/100] last oracle cov=91% | 8s elapsed, ~795s left
+    lazy_0p95 T=100000 [5/100] last oracle cov=85% | 9s elapsed, ~171s left
+    lazy_0p95 T=100000 [10/100] last oracle cov=95% | 10s elapsed, ~92s left
+    lazy_0p95 T=100000 [15/100] last oracle cov=91% | 10s elapsed, ~59s left
+    lazy_0p95 T=100000 [20/100] last oracle cov=83% | 10s elapsed, ~42s left
+    lazy_0p95 T=100000 [25/100] last oracle cov=87% | 17s elapsed, ~50s left
+    lazy_0p95 T=100000 [30/100] last oracle cov=92% | 18s elapsed, ~42s left
+    lazy_0p95 T=100000 [35/100] last oracle cov=77% | 20s elapsed, ~38s left
+    lazy_0p95 T=100000 [40/100] last oracle cov=64% | 20s elapsed, ~30s left
+    lazy_0p95 T=100000 [45/100] last oracle cov=55% | 21s elapsed, ~25s left
+    lazy_0p95 T=100000 [50/100] last oracle cov=15% | 26s elapsed, ~26s left
+    lazy_0p95 T=100000 [55/100] last oracle cov=91% | 27s elapsed, ~22s left
+    lazy_0p95 T=100000 [60/100] last oracle cov=90% | 30s elapsed, ~20s left
+    lazy_0p95 T=100000 [65/100] last oracle cov=76% | 30s elapsed, ~16s left
+    lazy_0p95 T=100000 [70/100] last oracle cov=30% | 30s elapsed, ~13s left
+    lazy_0p95 T=100000 [75/100] last oracle cov=33% | 35s elapsed, ~12s left
+    lazy_0p95 T=100000 [80/100] last oracle cov=7% | 38s elapsed, ~9s left
+    lazy_0p95 T=100000 [85/100] last oracle cov=8% | 39s elapsed, ~7s left
+    lazy_0p95 T=100000 [90/100] last oracle cov=64% | 40s elapsed, ~4s left
+    lazy_0p95 T=100000 [95/100] last oracle cov=1% | 41s elapsed, ~2s left
+    lazy_0p95 T=100000 [100/100] last oracle cov=88% | 44s elapsed, ~0s left
+  Finished lazy_0p95 T=100000 in 44s
+  T=1000000: K=63, burn_in=1000, b_grid=[(0.4, 251), (0.5, 1000), (0.6, 3981)]
+    lazy_0p95 T=1000000 [1/100] last oracle cov=0% | 87s elapsed, ~8604s left
+    lazy_0p95 T=1000000 [5/100] last oracle cov=0% | 93s elapsed, ~1767s left
+    lazy_0p95 T=1000000 [10/100] last oracle cov=0% | 94s elapsed, ~850s left
+    lazy_0p95 T=1000000 [15/100] last oracle cov=10% | 98s elapsed, ~555s left
+    lazy_0p95 T=1000000 [20/100] last oracle cov=0% | 98s elapsed, ~394s left
+    lazy_0p95 T=1000000 [25/100] last oracle cov=31% | 178s elapsed, ~535s left
+    lazy_0p95 T=1000000 [30/100] last oracle cov=77% | 184s elapsed, ~429s left
+    lazy_0p95 T=1000000 [35/100] last oracle cov=11% | 187s elapsed, ~347s left
+    lazy_0p95 T=1000000 [40/100] last oracle cov=0% | 195s elapsed, ~292s left
+    lazy_0p95 T=1000000 [45/100] last oracle cov=0% | 195s elapsed, ~238s left
+    lazy_0p95 T=1000000 [50/100] last oracle cov=0% | 271s elapsed, ~271s left
+    lazy_0p95 T=1000000 [55/100] last oracle cov=45% | 276s elapsed, ~226s left
+    lazy_0p95 T=1000000 [60/100] last oracle cov=91% | 289s elapsed, ~193s left
+    lazy_0p95 T=1000000 [65/100] last oracle cov=58% | 290s elapsed, ~156s left
+    lazy_0p95 T=1000000 [70/100] last oracle cov=16% | 291s elapsed, ~125s left
+    lazy_0p95 T=1000000 [75/100] last oracle cov=0% | 364s elapsed, ~121s left
+    lazy_0p95 T=1000000 [80/100] last oracle cov=0% | 370s elapsed, ~92s left
+    lazy_0p95 T=1000000 [85/100] last oracle cov=0% | 385s elapsed, ~68s left
+    lazy_0p95 T=1000000 [90/100] last oracle cov=0% | 387s elapsed, ~43s left
+    lazy_0p95 T=1000000 [95/100] last oracle cov=4% | 387s elapsed, ~20s left
+    lazy_0p95 T=1000000 [100/100] last oracle cov=59% | 443s elapsed, ~0s left
+  Finished lazy_0p95 T=1000000 in 443s
+
+================================================================================================================================
+RESULTS (100 problems, T=[100000, 1000000], 100 traj) in 1985s (33.1min)
+Median over problems. Width and L2 are x 1e-3.
+================================================================================================================================
+scenario      lazy         T   eta      est       L2    Width  Cov med   W/orcl      bias    neg%      gap
+----------------------------------------------------------------------------------------------------------
+baseline      0.00    100000   0.4      OBM     9.39    14.44     89.0    0.837    -0.298    0.00    0.813
+baseline      0.00    100000   0.4   OBM_RR     9.39    17.12     95.0    0.993    -0.010    0.00    0.813
+baseline      0.00    100000   0.5      OBM     9.39    16.35     93.5    0.948    -0.097    0.00    0.813
+baseline      0.00    100000   0.5   OBM_RR     9.39    17.09     95.0    0.991    -0.005    0.00    0.813
+baseline      0.00    100000   0.6      OBM     9.39    16.87     94.0    0.978    -0.039    0.00    0.813
+baseline      0.00    100000   0.6   OBM_RR     9.39    16.76     94.0    0.972    -0.029    0.00    0.813
+baseline      0.00    100000     -   ORACLE     9.39    17.25     95.0    1.000     0.000    0.00    0.813
+baseline      0.00   1000000   0.4      OBM     2.97     5.10     93.0    0.940    -0.121    0.00    0.813
+baseline      0.00   1000000   0.4   OBM_RR     2.97     5.44     95.0    1.002     0.002    0.00    0.813
+baseline      0.00   1000000   0.5      OBM     2.97     5.36     95.0    0.987    -0.028    0.00    0.813
+baseline      0.00   1000000   0.5   OBM_RR     2.97     5.43     95.0    1.001    -0.001    0.00    0.813
+baseline      0.00   1000000   0.6      OBM     2.97     5.42     95.0    0.998    -0.010    0.00    0.813
+baseline      0.00   1000000   0.6   OBM_RR     2.97     5.39     95.0    0.993    -0.011    0.00    0.813
+baseline      0.00   1000000     -   ORACLE     2.97     5.43     95.0    1.000     0.000    0.00    0.813
+lazy_0p50     0.50    100000   0.4      OBM    16.35    25.40     89.0    0.846    -0.295    0.00    0.426
+lazy_0p50     0.50    100000   0.4   OBM_RR    16.35    29.88     95.0    0.995    -0.006    0.00    0.426
+lazy_0p50     0.50    100000   0.5      OBM    16.35    28.57     94.0    0.951    -0.093    0.00    0.426
+lazy_0p50     0.50    100000   0.5   OBM_RR    16.35    29.69     95.0    0.989     0.002    0.00    0.426
+lazy_0p50     0.50    100000   0.6      OBM    16.35    29.29     94.0    0.975    -0.030    0.00    0.426
+lazy_0p50     0.50    100000   0.6   OBM_RR    16.35    29.14     94.0    0.971    -0.018    0.00    0.426
+lazy_0p50     0.50    100000     -   ORACLE    16.35    30.03     95.0    1.000     0.000    0.00    0.426
+lazy_0p50     0.50   1000000   0.4      OBM     5.41     8.90     92.0    0.941    -0.113    0.00    0.426
+lazy_0p50     0.50   1000000   0.4   OBM_RR     5.41     9.46     94.0    1.001     0.009    0.00    0.426
+lazy_0p50     0.50   1000000   0.5      OBM     5.41     9.33     94.0    0.987    -0.022    0.00    0.426
+lazy_0p50     0.50   1000000   0.5   OBM_RR     5.41     9.41     94.0    0.996     0.007    0.00    0.426
+lazy_0p50     0.50   1000000   0.6      OBM     5.41     9.37     94.0    0.991    -0.002    0.00    0.426
+lazy_0p50     0.50   1000000   0.6   OBM_RR     5.41     9.32     94.0    0.986    -0.005    0.00    0.426
+lazy_0p50     0.50   1000000     -   ORACLE     5.41     9.45     94.0    1.000     0.000    0.00    0.426
+lazy_0p80     0.80    100000   0.4      OBM    32.48    43.93     86.5    0.848    -0.280    0.00    0.171
+lazy_0p80     0.80    100000   0.4   OBM_RR    32.48    51.84     92.0    1.001     0.016    0.00    0.171
+lazy_0p80     0.80    100000   0.5      OBM    32.48    49.47     91.0    0.955    -0.075    0.00    0.171
+lazy_0p80     0.80    100000   0.5   OBM_RR    32.48    51.75     92.0    0.999     0.022    0.00    0.171
+lazy_0p80     0.80    100000   0.6      OBM    32.48    50.98     92.0    0.985    -0.011    0.00    0.171
+lazy_0p80     0.80    100000   0.6   OBM_RR    32.48    50.96     92.0    0.984     0.004    0.00    0.171
+lazy_0p80     0.80    100000     -   ORACLE    32.48    51.78     92.0    1.000     0.000    0.00    0.171
+lazy_0p80     0.80   1000000   0.4      OBM    18.19    15.45     70.5    0.948    -0.099    0.00    0.171
+lazy_0p80     0.80   1000000   0.4   OBM_RR    18.19    16.41     76.5    1.007     0.030    0.00    0.171
+lazy_0p80     0.80   1000000   0.5      OBM    18.19    16.19     74.5    0.993    -0.002    0.00    0.171
+lazy_0p80     0.80   1000000   0.5   OBM_RR    18.19    16.37     76.5    1.005     0.029    0.00    0.171
+lazy_0p80     0.80   1000000   0.6      OBM    18.19    16.34     76.0    1.002     0.019    0.00    0.171
+lazy_0p80     0.80   1000000   0.6   OBM_RR    18.19    16.28     74.5    0.999     0.022    0.00    0.171
+lazy_0p80     0.80   1000000     -   ORACLE    18.19    16.30     76.5    1.000     0.000    0.00    0.171
+lazy_0p95     0.95    100000   0.4      OBM   124.79    89.69     64.0    0.835    -0.279    0.00    0.043
+lazy_0p95     0.95    100000   0.4   OBM_RR   124.79   112.51     78.0    1.047     0.106    0.00    0.043
+lazy_0p95     0.95    100000   0.5      OBM   124.79   106.31     75.5    0.989    -0.011    0.00    0.043
+lazy_0p95     0.95    100000   0.5   OBM_RR   124.79   113.39     80.0    1.055     0.124    0.00    0.043
+lazy_0p95     0.95    100000   0.6      OBM   124.79   111.23     78.5    1.035     0.081    0.00    0.043
+lazy_0p95     0.95    100000   0.6   OBM_RR   124.79   111.81     77.0    1.041     0.100    0.00    0.043
+lazy_0p95     0.95    100000     -   ORACLE   124.79   107.45     77.0    1.000     0.000    0.00    0.043
+lazy_0p95     0.95   1000000   0.4      OBM   111.76    32.93      4.0    0.973    -0.045    0.00    0.043
+lazy_0p95     0.95   1000000   0.4   OBM_RR   111.76    35.80      7.0    1.058     0.140    0.00    0.043
+lazy_0p95     0.95   1000000   0.5      OBM   111.76    35.15      7.0    1.039     0.091    0.00    0.043
+lazy_0p95     0.95   1000000   0.5   OBM_RR   111.76    35.78      7.0    1.058     0.137    0.00    0.043
+lazy_0p95     0.95   1000000   0.6      OBM   111.76    35.63      7.0    1.053     0.124    0.00    0.043
+lazy_0p95     0.95   1000000   0.6   OBM_RR   111.76    35.62      7.0    1.053     0.121    0.00    0.043
+lazy_0p95     0.95   1000000     -   ORACLE   111.76    33.82      6.5    1.000     0.000    0.00    0.043
+
+Saved per-problem rows to results/stress/rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24.csv
+Saved summary to          results/stress/rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24_summary.csv
+Tue May 26 09:29:03 PM UTC 2026
+DONE

@@ -417,6 +417,47 @@ in the weak-plus-noise scenario. This supports the same interpretation as the
 block-size sweep: lugsail helps when OBM is too narrow because of negative
 Bartlett-window bias, but the useful block-size range must still be checked.
 
+== Mixing-rate stress test
+
+The report `reports/2026-05-26_rr_mixing_stress.md` changes the
+Markov-chain dependence directly. Starting from the same dense random
+transition matrix $P_0$, the experiment uses the lazy mixture
+$P_rho = rho I + (1-rho) P_0$. This keeps the stationary distribution fixed
+but decreases the spectral gap. The LSA problem generator and the RR pair
+$(0.20,0.10)$ are otherwise unchanged.
+
+#table(
+  columns: (1.05fr, 0.55fr, 0.75fr, 0.75fr, 0.85fr, 0.85fr, 0.75fr),
+  inset: 4pt,
+  [*Scenario*], [*gap*], [*$T$*], [*L2*], [*Oracle*], [*OBM-RR*],
+  [*RR W/orcl*],
+  [baseline], [$0.813$], [$10^5$], [$9.39$], [$95.0%$], [$95.0%$], [$0.991$],
+  [baseline], [$0.813$], [$10^6$], [$2.97$], [$95.0%$], [$95.0%$], [$1.001$],
+  [$rho=0.5$], [$0.426$], [$10^5$], [$16.35$], [$95.0%$], [$95.0%$], [$0.989$],
+  [$rho=0.5$], [$0.426$], [$10^6$], [$5.41$], [$94.0%$], [$94.0%$], [$0.996$],
+  [$rho=0.8$], [$0.171$], [$10^5$], [$32.48$], [$92.0%$], [$92.0%$], [$0.999$],
+  [$rho=0.8$], [$0.171$], [$10^6$], [$18.19$], [$76.5%$], [$76.5%$], [$1.005$],
+  [$rho=0.95$], [$0.043$], [$10^5$], [$124.79$], [$77.0%$], [$80.0%$], [$1.055$],
+  [$rho=0.95$], [$0.043$], [$10^6$], [$111.76$], [$6.5%$], [$7.0%$], [$1.058$],
+)
+
+The table reports the OBM-RR row with $eta=0.5$, where variance estimation is
+already close to oracle in the non-slow-mixing experiments. For moderate
+slowdown, $rho=0.5$, the oracle and OBM-RR rows remain near nominal. The
+intervals become wider because the long-run variance is larger, but the
+qualitative behavior is unchanged.
+
+For slower chains, the failure mode changes. At $rho=0.8$ and $T=10^6$,
+OBM-RR has essentially oracle width, but both oracle and OBM-RR coverage are
+only $76.5%$. At $rho=0.95$, the oracle row itself collapses: coverage is
+$77.0%$ at $T=10^5$ and $6.5%$ at $T=10^6$. Increasing $T$ reduces the
+oracle CI width from $107.45 dot 10^(-3)$ to $33.82 dot 10^(-3)$, while the
+median L2 error only decreases from $124.79 dot 10^(-3)$ to
+$111.76 dot 10^(-3)$. Thus the problem is no longer variance estimation.
+The center or finite-sample normal approximation is failing relative to the
+$T^(-1/2)$ interval width. This experiment shows why the dependence on
+$t_"mix"$ in the theory is practically important.
+
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
@@ -460,10 +501,10 @@ variance-estimation accuracy, and robustness to problem conditioning.
   [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
    deterministic-start transfer and the practical size of the
    $(alpha a)^(-1) log^2 n$ burn-in window.],
-  [Mixing-rate stress test],
-  [The conditioning and matrix-noise stress test above keeps the same random
-   transition-matrix generator. A separate sweep should vary the Markov-chain
-   mixing rate directly and check the theorem's dependence on $t_"mix"$.],
+  [Mixing-aware tuning],
+  [The mixing-rate stress test shows that strong slow mixing breaks oracle
+   coverage. Additional runs should vary horizon, burn-in, and stepsize as
+   functions of the spectral gap or $t_"mix"$.],
   [Matrix covariance diagnostics],
   [The present coverage results are scalar random-direction diagnostics.
    Additional runs should check several directions and the full estimated
@@ -473,8 +514,7 @@ variance-estimation accuracy, and robustness to problem conditioning.
 
 The theory-aligned stepsize sweep has now been completed for three adjacent
 pairs, the oracle $T$-sweep and block-size coverage sweep have been completed
-for the largest adjacent pair, and a conditioning/noise stress test has been
-completed for the same pair. The most important remaining diagnostics are
-therefore direct mixing-rate sweeps and matrix-valued covariance checks: the
-current evidence is still scalar-directional and uses one transition-matrix
-generator.
+for the largest adjacent pair, and conditioning/noise and mixing-rate stress
+tests have been completed for the same pair. The most important remaining
+diagnostics are therefore mixing-aware tuning and matrix-valued covariance
+checks: the current evidence is still scalar-directional.
