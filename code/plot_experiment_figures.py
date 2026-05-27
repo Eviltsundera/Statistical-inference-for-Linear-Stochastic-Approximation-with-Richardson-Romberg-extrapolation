@@ -61,7 +61,7 @@ def main_methods_figure():
         ('dim_0.2', r'$0.2/\sqrt{k}$'),
         ('PR_OBM', 'PR + OBM'),
         ('RR_OBM', 'RR + OBM'),
-        ('RR_OBM_RR', 'RR + OBM-RR'),
+        ('RR_OBM_RR', 'RR + OBM-LW'),
     ]
     sub = (
         df.set_index('method')
@@ -122,7 +122,7 @@ def blocksize_mixing_figure():
     axes[0].plot(obm['eta'], obm['coverage_median_pct'], marker='o',
                  color=COLORS['gray'], label='OBM coverage')
     axes[0].plot(obm_rr['eta'], obm_rr['coverage_median_pct'], marker='o',
-                 color=COLORS['green'], label='OBM-RR coverage')
+                 color=COLORS['green'], label='OBM-LW coverage')
     axes[0].axhline(95, color=COLORS['red'], linestyle='--', linewidth=1.0)
     axes[0].set_xlabel(r'block exponent $\eta$')
     axes[0].set_ylabel('median coverage, %')
@@ -135,7 +135,7 @@ def blocksize_mixing_figure():
                  label='OBM bias')
     ax_bias.plot(obm_rr['eta'], obm_rr['rel_bias_raw_median'], linestyle=':',
                  marker='s', color=COLORS['green'], alpha=0.75,
-                 label='OBM-RR bias')
+                 label='OBM-LW bias')
     ax_bias.axhline(0, color='#9ca3af', linewidth=0.8)
     ax_bias.set_ylabel('median variance bias')
     ax_bias.set_ylim(-0.75, 0.2)
@@ -152,7 +152,7 @@ def blocksize_mixing_figure():
                  color=COLORS['blue'], label='oracle variance')
     axes[1].plot(rr['spectral_gap_median'],
                  rr['coverage_median_pct'], marker='o',
-                 color=COLORS['orange'], label=r'OBM-RR, $\eta=0.5$')
+                 color=COLORS['orange'], label=r'OBM-LW, $\eta=0.5$')
     axes[1].axhline(95, color=COLORS['red'], linestyle='--', linewidth=1.0)
     axes[1].invert_xaxis()
     axes[1].set_xlabel('median spectral gap')

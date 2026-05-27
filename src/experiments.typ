@@ -71,8 +71,9 @@ variance.
   [Polyak--Ruppert averaging with OBM long-run variance estimation.],
   [RR + OBM],
   [RR point estimator with OBM long-run variance estimation.],
-  [RR + OBM-RR],
-  [RR point estimator with lugsail/OBM-RR long-run variance estimation.],
+  [RR + OBM-LW],
+  [RR point estimator with OBM long-run variance estimation using a lugsail
+   window.],
 )
 
 The main comparison reports three metrics. The L2 error is the Euclidean norm
@@ -123,20 +124,21 @@ OBM estimator can be too narrow.
 
 Lugsail windows are designed to reduce this leading window bias of the
 variance estimator (Vats and Flegal, 2022). In the implementation used here,
-the lugsail version is the block-size Richardson--Romberg combination
+the lugsail-window OBM estimator, abbreviated OBM-LW, is
 $
-hat(sigma)_(op("OBM-RR"))^2(b, lambda)
+hat(sigma)_(op("OBM-LW"))^2(b, lambda)
   = frac(lambda, lambda - 1) hat(sigma)_(op("OBM"))^2(lambda b)
     - frac(1, lambda - 1) hat(sigma)_(op("OBM"))^2(b),
 quad lambda > 1.
-$ <eq:obm-rr-estimator>
+$ <eq:obm-lw-estimator>
 For the Bartlett kernel, $lambda=2$ cancels the leading $1 slash b$ bias term.
 This correction is conceptually separate from Richardson--Romberg
 extrapolation in the stepsize. RR in $alpha$ targets the stochastic
 approximation bias of the point estimator
-$overline(theta)^(("RR", alpha))$; lugsail or OBM-RR in $b$ targets the window
-bias of the long-run variance estimator. Thus the two Richardson--Romberg
-uses operate on different quantities and are not substitutes for each other.
+$overline(theta)^(("RR", alpha))$; the lugsail window in $b$ targets the
+window bias of the long-run variance estimator. Thus stepsize extrapolation
+and lugsail-window variance estimation operate on different quantities and
+are not substitutes for each other.
 
 The lugsail estimator is a signed linear combination of two OBM estimators.
 Consequently, in finite samples the scalar estimate can be negative, and the
@@ -178,7 +180,7 @@ The main comparison confirms this pattern.
   [Diminishing $0.2 slash sqrt(k)$], [$6.80$], [$10.34$], [$90.0%$],
   [PR + OBM], [$5.35$], [$8.04$], [$92.0%$],
   [RR + OBM], [$4.52$], [$8.23$], [$95.0%$],
-  [RR + OBM-RR], [$4.52$], [$8.22$], [$95.0%$],
+  [RR + OBM-LW], [$4.52$], [$8.22$], [$95.0%$],
 )
 
 #figure(
@@ -196,13 +198,13 @@ coverage gain is not obtained by simply making intervals wider.
 The single constant-stepsize branches undercover because the centers of the
 intervals are biased. This is most visible for $alpha=0.2$, but it remains
 substantial for $alpha=0.02$. Changing the variance estimator cannot repair
-this failure: OBM, MSB, or OBM-RR can adjust the estimated uncertainty around
+this failure: OBM, MSB, or OBM-LW can adjust the estimated uncertainty around
 the center, but they do not move the biased center itself.
 
-In this long-horizon run, OBM-RR/lugsail is essentially neutral. At
+In this long-horizon run, OBM-LW is essentially neutral. At
 $T=10^6$, the OBM window bias is already small enough that the lugsail
 correction does not visibly improve coverage. The remaining differences in
-CI width between RR+OBM and RR+OBM-RR are within the scale of Monte Carlo
+CI width between RR+OBM and RR+OBM-LW are within the scale of Monte Carlo
 variation in this comparison.
 
 == Theory-aligned RR stepsize sweep
@@ -238,12 +240,12 @@ $0.20$, its median coverage deteriorates from $92.0%$ to $67.5%$. After
 Richardson--Romberg extrapolation, however, the median L2 error, CI width,
 and coverage are essentially unchanged across the three adjacent pairs.
 
-The OBM and OBM-RR versions of the RR intervals give the same qualitative
-message. In this sweep, RR+OBM and RR+OBM-RR have median coverage between
+The OBM and OBM-LW versions of the RR intervals give the same qualitative
+message. In this sweep, RR+OBM and RR+OBM-LW have median coverage between
 $94.0%$ and $95.0%$, with width changes below about one percent. Thus this
 experiment reinforces the separation between the two corrections: RR in
-$alpha$ removes the point-estimator bias, while OBM or lugsail in $b$ only
-modifies the estimated long-run variance.
+$alpha$ removes the point-estimator bias, while OBM and OBM-LW in $b$ only
+modify the estimated long-run variance.
 
 == Oracle-variance diagnostic
 
@@ -261,14 +263,14 @@ RR-averaged estimator in every row.
   [RR + batch means], [$2.97$], [$5.38$], [$94.0%$], [$0.990$],
   [RR + oracle variance], [$2.97$], [$5.43$], [$95.0%$], [$1.000$],
   [RR + OBM], [$2.97$], [$5.42$], [$95.0%$], [$0.998$],
-  [RR + OBM-RR], [$2.97$], [$5.39$], [$95.0%$], [$0.993$],
+  [RR + OBM-LW], [$2.97$], [$5.39$], [$95.0%$], [$0.993$],
   [RR + MSB], [$2.97$], [$5.36$], [$95.0%$], [$0.987$],
 )
 
 The oracle interval is nearly indistinguishable from the practical
 variance-estimator intervals. OBM is only about $0.2%$ narrower than the
-oracle interval at the median, and OBM-RR is about $0.7%$ narrower. The
-median coverage remains $95%$ for the oracle, OBM, OBM-RR, and MSB rows.
+oracle interval at the median, and OBM-LW is about $0.7%$ narrower. The
+median coverage remains $95%$ for the oracle, OBM, OBM-LW, and MSB rows.
 Thus, at $T=10^6$, long-run-variance estimation is not the bottleneck for
 the RR confidence intervals. The remaining coverage error is already at the
 scale of Monte Carlo variation across the 100 generated problems.
@@ -284,8 +286,8 @@ center and normal approximation, or from estimating the long-run variance.
 #table(
   columns: (0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr),
   inset: 4pt,
-  [*$T$*], [*Oracle cov.*], [*OBM cov.*], [*OBM-RR cov.*],
-  [*OBM/oracle width*], [*OBM-RR/oracle width*],
+  [*$T$*], [*Oracle cov.*], [*OBM cov.*], [*OBM-LW cov.*],
+  [*OBM/oracle width*], [*OBM-LW/oracle width*],
   [$2 dot 10^4$], [$95.5%$], [$94.0%$], [$93.0%$], [$0.942$], [$0.944$],
   [$5 dot 10^4$], [$95.0%$], [$94.0%$], [$93.0%$], [$0.967$], [$0.958$],
   [$10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.978$], [$0.972$],
@@ -301,7 +303,7 @@ $T=2 dot 10^4$ the OBM interval is about $5.8%$ narrower than the oracle
 interval, and its median coverage is $94.0%$ instead of $95.5%$. This gap
 shrinks monotonically in the width ratio as $T$ grows.
 
-With the default block-size rule $b=floor(T^0.6)$, OBM-RR/lugsail does not
+With the default block-size rule $b=floor(T^0.6)$, OBM-LW does not
 improve coverage over OBM in this sweep. It is neutral at the largest
 horizon and slightly lower at the smaller horizons. Therefore lugsail should
 not be presented as an automatic coverage fix. Rather, together with the
@@ -321,24 +323,24 @@ this grid.
 
 #figure(
   image("../figures/experiments/variance_and_mixing_diagnostics.svg", width: 100%),
-  caption: [Left: block-size sensitivity of OBM and OBM-RR at $T=10^5$.
+  caption: [Left: block-size sensitivity of OBM and OBM-LW at $T=10^5$.
     Right: slow-mixing stress test at $T=10^6$, comparing oracle variance
-    intervals with OBM-RR intervals at $eta=0.5$.],
+    intervals with OBM-LW intervals at $eta=0.5$.],
 ) <fig:variance-mixing-diagnostics>
 
 This sweep resolves the apparent tension between the default-rule coverage
 sweep and the lugsail bias--variance diagnostic. Lugsail improves coverage
 when OBM is still dominated by negative Bartlett-window bias, as shown in
 the left panel of @fig:variance-mixing-diagnostics. For example,
-at $T=2 dot 10^4$ and $eta=0.5$, OBM-RR changes the median relative bias
+at $T=2 dot 10^4$ and $eta=0.5$, OBM-LW changes the median relative bias
 from $-0.222$ to $-0.022$, the width/oracle ratio from $0.878$ to $0.979$,
-and median coverage from $91.5%$ to $95.0%$. At $T=10^5$, OBM-RR with
+and median coverage from $91.5%$ to $95.0%$. At $T=10^5$, OBM-LW with
 $eta=0.4$ or $eta=0.5$ reaches $95.0%$ median coverage, while OBM at the
 same block sizes remains too narrow.
 
 At the production rule $eta=0.6$, OBM is already close to the oracle width
 in this problem class. The lugsail correction is therefore neutral rather
-than beneficial. For very large blocks, however, OBM-RR becomes unstable:
+than beneficial. For very large blocks, however, OBM-LW becomes unstable:
 at $eta=0.8$ the signed lugsail estimate is negative in $14.77%$ of
 trajectory-level estimates at $T=2 dot 10^4$, $6.71%$ at $T=10^5$, and
 $1.74%$ at $T=10^6$. Thus lugsail should be reported together with
@@ -360,12 +362,12 @@ conditioning/noise scenario, which indicates that the RR center and the normal
 approximation remain adequate for these stress levels. Weaker mean
 contraction increases the scale of the problem: at $T=10^6$, the median L2
 error is $6.04 dot 10^(-3)$ in the weak-mean scenario, compared with
-$2.97 dot 10^(-3)$ at baseline. Nevertheless, OBM-RR at $eta=0.5$ stays near
+$2.97 dot 10^(-3)$ at baseline. Nevertheless, OBM-LW at $eta=0.5$ stays near
 the oracle width and has median coverage $95%$.
 
 The smaller block-size row $eta=0.4$ makes the OBM window bias more visible.
 At $T=10^6$, OBM coverage is $91%$ in the weak-mean scenario and $92%$ in
-the weak-plus-noise scenario, while OBM-RR restores $95%$ coverage in both
+the weak-plus-noise scenario, while OBM-LW restores $95%$ coverage in both
 cases. The corresponding raw variance-estimator bias changes from $-0.252$
 to $-0.004$ in the weak-mean scenario and from $-0.208$ to approximately zero
 in the weak-plus-noise scenario. This supports the same interpretation as the
@@ -381,14 +383,14 @@ $P_rho = rho I + (1-rho) P_0$. This keeps the stationary distribution fixed
 but decreases the spectral gap. The LSA problem generator and the RR pair
 $(0.20,0.10)$ are otherwise unchanged.
 
-The right panel of @fig:variance-mixing-diagnostics reports the OBM-RR row
+The right panel of @fig:variance-mixing-diagnostics reports the OBM-LW row
 with $eta=0.5$, where variance estimation is already close to oracle in the
 non-slow-mixing experiments. For moderate slowdown, $rho=0.5$, the oracle and
-OBM-RR rows remain near nominal. The intervals become wider because the
+OBM-LW rows remain near nominal. The intervals become wider because the
 long-run variance is larger, but the qualitative behavior is unchanged.
 
 For slower chains, the failure mode changes. At $rho=0.8$ and $T=10^6$,
-OBM-RR has essentially oracle width, but both oracle and OBM-RR coverage are
+OBM-LW has essentially oracle width, but both oracle and OBM-LW coverage are
 only $76.5%$. At $rho=0.95$, the oracle row itself collapses: coverage is
 $77.0%$ at $T=10^5$ and $6.5%$ at $T=10^6$. Increasing $T$ reduces the
 oracle CI width from $107.45 dot 10^(-3)$ to $33.82 dot 10^(-3)$, while the
@@ -401,14 +403,14 @@ $t_"mix"$ in the theory is practically important.
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
-estimator itself. It compares OBM and OBM-RR over a grid of block sizes and
+estimator itself. It compares OBM and OBM-LW over a grid of block sizes and
 uses the analytic value of $sigma^2(u)$ as ground truth.
 
 In the short-horizon regime, lugsail helps because the raw OBM estimator has
-visible negative Bartlett-window bias. For PR iterates, OBM-RR with
+visible negative Bartlett-window bias. For PR iterates, OBM-LW with
 $lambda=2$ reduces the leading window bias and shifts the useful block-size
 range downward. At $T=10^5$, the best OBM point has relative bias about
-$-2.5%$ and MSE $0.72$, while OBM-RR with $lambda=2$ has relative bias about
+$-2.5%$ and MSE $0.72$, while OBM-LW with $lambda=2$ has relative bias about
 $-0.7%$ and MSE $0.34$. Across $T in {20000, 50000, 100000}$, the observed
 MSE reduction is roughly 40--55%.
 
@@ -420,7 +422,7 @@ approximation bias component.
 
 These experiments support the following interpretation. Step-size RR is the
 primary tool for improving the center of the confidence interval. OBM is the
-baseline practical estimator of $Sigma_infinity$. Lugsail/OBM-RR is useful
+baseline practical estimator of $Sigma_infinity$. OBM-LW is useful
 when the long-run-variance estimator has visible negative window bias, mainly
 in shorter-horizon or more persistent regimes.
 
