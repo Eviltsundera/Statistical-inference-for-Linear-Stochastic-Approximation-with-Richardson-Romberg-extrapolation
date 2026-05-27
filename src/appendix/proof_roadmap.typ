@@ -1,7 +1,5 @@
 #import "../defs.typ": *
 
-== Contribution map and notation guide
-
 The proof combines existing non-asymptotic tools with RR-specific algebra and
 the deterministic-start transfer developed here. The main proof blocks are:
 
@@ -37,10 +35,10 @@ The theorem-level outputs should be read in the following order:
   [@thm:RR-BE],
   [$S_(n, "stat")^("RR")(u)$ with the finite-window variance
    $sigma_n^("RR")(u)$.],
-  [Stationary balanced triangular-array corollaries],
-  [@cor:RR-BE-working and @cor:RR-BE-sigma],
+  [Stationary balanced triangular-array corollary],
+  [@cor:RR-BE-working],
   [$S_(n, "stat")^("RR")(u)$ at $alpha_n = c n^(-1\/2)$, with either
-   finite-window or asymptotic normalization.],
+   finite-window normalization.],
   [Deterministic-start finite-window transfer],
   [@thm:burn-RR-BE-master],
   [$Xi_(n,n_0)^("bRR")(u)$ after burn-in, still normalized by

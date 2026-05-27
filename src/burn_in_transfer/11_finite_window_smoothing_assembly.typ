@@ -16,32 +16,32 @@ cal(R)_(n,n_0, op("fin"))^("bRR")(u)
      + u^top D_(2,n,n_0)^("bRR")
      + u^top R_(n,n_0, op("fin"))^("mis,RR").
 $ <eq:burn-composite-remainder>
-The terms are controlled by @lem:burn-deterministic-transient,
-@lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
-@thm:burn-misadjustment, respectively.
+// The terms are controlled by @lem:burn-deterministic-transient,
+// @lem:burn-random-initial-product, @lem:burn-poisson-decomp, and
+// @thm:burn-misadjustment, respectively.
 
-For reference, the finite-window assembly uses the following components:
+// For reference, the finite-window assembly uses the following components:
 
-#table(
-  columns: (1.45fr, 2.4fr, 1.8fr),
-  inset: 4pt,
-  [*Component*], [*Input bound*], [*Role in smoothing*],
-  [$D_(op("tr"), n, n_0)^("RR")(u)$],
-  [@eq:burn-RR-transient-bound],
-  [Deterministic transient from $theta_0 - theta^*$.],
-  [$cal(I)_(n,n_0)^("init,RR")(u)$],
-  [@eq:burn-random-init-bound],
-  [Random initial-product discrepancy.],
-  [$u^top D_(2,n,n_0)^("bRR")$],
-  [@eq:burn-D2-bound],
-  [Poisson Abel boundary remainder.],
-  [$u^top R_(n,n_0, op("fin"))^("mis,RR")$],
-  [@eq:burn-mis-bound],
-  [Depth-two RR misadjustment plus startup transfer.],
-  [$u^top M_(n,n_0)^("bRR")$],
-  [@thm:burn-M-BE and @cor:burn-bracket-asymp],
-  [Leading martingale Berry--Esseen term.],
-)
+// #table(
+//   columns: (1.45fr, 2.4fr, 1.8fr),
+//   inset: 4pt,
+//   [*Component*], [*Input bound*], [*Role in smoothing*],
+//   [$D_(op("tr"), n, n_0)^("RR")(u)$],
+//   [@eq:burn-RR-transient-bound],
+//   [Deterministic transient from $theta_0 - theta^*$.],
+//   [$cal(I)_(n,n_0)^("init,RR")(u)$],
+//   [@eq:burn-random-init-bound],
+//   [Random initial-product discrepancy.],
+//   [$u^top D_(2,n,n_0)^("bRR")$],
+//   [@eq:burn-D2-bound],
+//   [Poisson Abel boundary remainder.],
+//   [$u^top R_(n,n_0, op("fin"))^("mis,RR")$],
+//   [@eq:burn-mis-bound],
+//   [Depth-two RR misadjustment plus startup transfer.],
+//   [$u^top M_(n,n_0)^("bRR")$],
+//   [@thm:burn-M-BE and @cor:burn-bracket-asymp],
+//   [Leading martingale Berry--Esseen term.],
+// )
 
 Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
 @eq:burn-mis-bound.
@@ -115,7 +115,7 @@ $
      + frac(e, n),
   $ <eq:burn-RR-BE-master>
   with the composite remainder bounded by @lem:burn-R-bound. The bound is
-  uniform over the initial law $xi = cal(L)(Z_0)$ of the base Markov chain.
+  uniform over $xi = cal(L)(Z_0)$.
 ] <thm:burn-RR-BE-master>
 
 _Proof._ Apply the smoothing inequality @eq:smoothing-Lp to the split

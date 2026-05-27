@@ -75,9 +75,7 @@
 
 #pagebreak()
 
-= Appendix: External Inputs and Local Extensions <sec:imported-inputs>
-
-#include "src/external_inputs.typ"
+#include "src/appendix.typ"
 
 #pagebreak()
 
@@ -86,16 +84,19 @@
 - Bobkov, S. G. and Goetze, F. (1999). Exponential integrability and
   transportation cost related to logarithmic Sobolev inequalities. _Journal of
   Functional Analysis_, 163(1), 1--28.
-- Bolthausen, E. (1982). Exact convergence rates in some martingale central
-  limit theorems. _Annals of Probability_, 10(3), 672--688.
 - Dieuleveut, A., Durmus, A., and Bach, F. (2020). Bridging the gap between
   constant step-size stochastic gradient descent and Markov chains. _Annals of
   Statistics_, 48(3), 1348--1382.
 - Douc, R., Moulines, E., Priouret, P., and Soulier, P. (2018). _Markov
   Chains_. Springer.
-- Fan, X. (2019). Exact rates of convergence in some martingale central limit
-  theorems. _Journal of Mathematical Analysis and Applications_, 469(2),
-  1028--1044. https://doi.org/10.1016/j.jmaa.2018.09.049.
+- Durmus, A., Moulines, E., Naumov, A., and Samsonov, S. (2025). Finite-time
+  high-probability bounds for Polyak--Ruppert averaged iterates of linear
+  stochastic approximation. _Mathematics of Operations Research_, 50(2),
+  935--964.
+- Durmus, A., Moulines, E., Naumov, A., Samsonov, S., Scaman, K., and Wai, H.-T.
+  (2021). Tight high probability bounds for linear stochastic approximation
+  with fixed stepsize. In _Advances in Neural Information Processing Systems_,
+  34, 30063--30074.
 - Flegal, J. M. and Jones, G. L. (2010). Batch means and spectral variance
   estimators in Markov chain Monte Carlo. _Annals of Statistics_, 38(2),
   1034--1070. https://doi.org/10.1214/09-AOS735.

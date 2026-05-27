@@ -4,6 +4,4 @@
 #include "introduction/01_bias_constant_stepsize.typ"
 #include "introduction/02_richardson_romberg.typ"
 #include "introduction/03_problem_statement_goals.typ"
-#include "introduction/04_contribution_map_notation.typ"
 #include "introduction/05_setting_assumptions.typ"
-#include "introduction/06_key_quantities.typ"

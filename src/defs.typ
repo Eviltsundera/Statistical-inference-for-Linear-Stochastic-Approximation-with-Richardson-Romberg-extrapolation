@@ -2,6 +2,7 @@
 // labels after theorem-like blocks can be referenced with @lem:..., @thm:....
 #let theorem-like(name, kind, supplement, body) = figure(
   block(width: 100%, spacing: 0.8em)[
+    #set align(left)
     *#name #context counter(figure.where(kind: kind)).display().* #body
   ],
   kind: kind,

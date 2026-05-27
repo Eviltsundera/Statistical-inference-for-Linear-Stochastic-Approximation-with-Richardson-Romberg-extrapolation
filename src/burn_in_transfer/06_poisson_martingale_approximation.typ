@@ -10,8 +10,8 @@ quad
 || hat(epsilon.alt) ||_infinity
   <= 3 thin t_"mix" thin || epsilon.alt ||_infinity.
 $
-The stationary Poisson identity applies because the coefficients
-$Q_l^("bRR")$ are deterministic.
+// The stationary Poisson identity applies because the coefficients
+// $Q_l^("bRR")$ are deterministic.
 
 #lemma[
   *(Burned-in Poisson martingale decomposition.)*
@@ -47,18 +47,18 @@ $Q_l^("bRR")$ are deterministic.
   $ <eq:burn-D2-bound>
 ] <lem:burn-poisson-decomp>
 
-_Proof._ The martingale-difference property follows from the Markov property:
-$bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)]
-  = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
+// _Proof._ The martingale-difference property follows from the Markov property:
+// $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)]
+//   = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
 
-Substitute the Poisson equation in @eq:burn-W-RR. The $l = 1$ term is kept as a
-left boundary term, and for $l >= 2$ we add and subtract
-$sans(Q) hat(epsilon.alt)(Z_(l - 1))$. Abel summation of the telescope gives
-exactly @eq:burn-poisson-decomp. The right boundary vanishes because
-$Q_(n - 1; n_0, n)^("RR") = 2 alpha I - 2 alpha I = 0$.
+// Substitute the Poisson equation in @eq:burn-W-RR. The $l = 1$ term is kept as a
+// left boundary term, and for $l >= 2$ we add and subtract
+// $sans(Q) hat(epsilon.alt)(Z_(l - 1))$. Abel summation of the telescope gives
+// exactly @eq:burn-poisson-decomp. The right boundary vanishes because
+// $Q_(n - 1; n_0, n)^("RR") = 2 alpha I - 2 alpha I = 0$.
 
-For the sup-norm bound, use
-$|| sans(Q) hat(epsilon.alt) ||_infinity <= || hat(epsilon.alt) ||_infinity$,
-the uniform weight bound $|| Q_l^("bRR") || <= C_("burn,Q")$ from
-@eq:burn-post-weight-error and @eq:burn-pre-weight-size, and the total-variation
-estimate @eq:burn-weight-variation. $square$
+// For the sup-norm bound, use
+// $|| sans(Q) hat(epsilon.alt) ||_infinity <= || hat(epsilon.alt) ||_infinity$,
+// the uniform weight bound $|| Q_l^("bRR") || <= C_("burn,Q")$ from
+// @eq:burn-post-weight-error and @eq:burn-pre-weight-size, and the total-variation
+// estimate @eq:burn-weight-variation. $square$

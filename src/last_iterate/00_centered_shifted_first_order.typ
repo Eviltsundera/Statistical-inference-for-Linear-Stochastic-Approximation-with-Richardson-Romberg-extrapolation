@@ -2,38 +2,34 @@
 
 == Centered Bound for the Shifted First-Order Perturbation
 
-This chapter is partly preliminary. The last-iterate RR discussion at the end
-is motivational and is not used in the final Berry--Esseen assembly; the
-downstream input retained by Chapter 4 is the centered shifted
-first-order bound proved below. The proof uses the deterministic-product
-perturbation expansion from Samsonov et al. (2025, Proposition 9), specialized
-to the constant-stepsize setting, and isolates the future-centered bilinear
-concentration input used in that argument.
+// This chapter is partly preliminary. The last-iterate RR discussion at the end
+// is motivational and is not used in the final Berry--Esseen assembly; the
+// downstream input retained by Chapter 4 is the centered shifted
+// first-order bound proved below. The proof uses the deterministic-product
+// perturbation expansion from Samsonov et al. (2025, Proposition 9), specialized
+// to the constant-stepsize setting, and isolates the future-centered bilinear
+// concentration input used in that argument.
 
 Let
 $
 B = I - alpha overline(A).
 $
-Throughout this section we assume $0 < alpha <= alpha_infinity$, so that
+Assume throughout that $0 < alpha <= alpha_infinity$. Then
 $
 ||B^m||_Q <= (1 - alpha a)^(m slash 2),
 quad m >= 0.
 $
-When the shifted estimate is transferred back from $T_n^((1, alpha))$ to
-$J_n^((1, alpha))$, we also use the elementary inverse-admissibility ceiling
+Set also
 $
 alpha_("inv") := frac(1, 2 || overline(A) ||).
 $
-Indeed, if $w <= alpha_("inv")$, then the Neumann series gives
+If $w <= alpha_("inv")$, the Neumann series gives
 $|| (I - w overline(A))^(-1) || <= 2$.
-The single-stepsize estimates below are stated for $alpha$. Whenever the
-Richardson--Romberg combination is formed, the same estimates are applied at
-both $w = alpha$ and $w = 2 alpha$; the local assumptions are then
+In Richardson--Romberg applications the single-stepsize estimates are applied
+at $w in {alpha, 2 alpha}$, so the local assumptions are
 $2 alpha <= alpha_infinity$ and $2 alpha <= alpha_("inv")$.
-All constants denoted by $C$ may depend on fixed problem parameters, including
-fixed powers of $a^(-1)$, but not on $alpha$, $n$, $p$, or $q$. Dependence on
-the displayed variables, and in particular on $t_"mix"$ when it is tracked in
-the rate, is written explicitly.
+Constants denoted by $C$ may depend on fixed problem parameters, but not on
+$alpha$, $n$, $p$, or $q$.
 
 The deterministic-product components are defined by
 $
@@ -60,24 +56,21 @@ $
 J_n^((1, alpha))
 &= - alpha sum_(j=1)^n
       B^(n-j) tilde(A)(Z_j) J_(j-1)^((0, alpha)) \
-&= alpha^2 sum_(1 <= k < j <= n)
-      B^(n-j) tilde(A)(Z_j) B^(j-1-k) epsilon.alt(Z_k) \
+// &= alpha^2 sum_(1 <= k < j <= n)
+//       B^(n-j) tilde(A)(Z_j) B^(j-1-k) epsilon.alt(Z_k) \
 &= alpha^2 sum_(k=1)^(n-1) sum_(r=1)^(n-k)
       B^(n-k-r) tilde(A)(Z_(k+r)) B^(r-1) epsilon.alt(Z_k).
 $
-The sign in the second line is positive because
-$J_(j-1)^((0, alpha))$ already contains the minus sign.
+// The sign in the second line is positive because
+// $J_(j-1)^((0, alpha))$ already contains the minus sign.
 
-The last display is for $J_n^((1, alpha))$ itself. The last-iteration
-estimate below operates on a *shifted* version, obtained by inserting one
-additional left factor $B$ into the recursion:
+Use the shifted version
 $
 S_n
   = sum_(t=0)^(n-1)
       B^(n-t) tilde(A)(Z_(t+1)) J_t^((0, alpha)).
 $
-Reindexing $j = t + 1$ rewrites $S_n$ in the same form as $J_n^((1, alpha))$
-but with one extra power of $B$:
+Then
 $
 S_n
   = sum_(j=1)^n B^(n-j+1) tilde(A)(Z_j) J_(j-1)^((0, alpha))
@@ -87,14 +80,12 @@ Thus the corresponding shifted first-order contribution is
 $
 T_n^((1, alpha)) = - alpha S_n = B thin J_n^((1, alpha)),
 $
-i.e. $T_n^((1, alpha))$ is exactly $J_n^((1, alpha))$ pre-multiplied by one
-additional $B$. Transferring a bound from $T_n^((1, alpha))$ back to
-$J_n^((1, alpha))$ therefore requires a local inverse bound on
-$B^(-1) = (I - alpha overline(A))^(-1)$; this inverse-bound step is used
-explicitly when the shifted estimate is applied below.
+so passing from $T_n^((1, alpha))$ back to $J_n^((1, alpha))$ uses the local
+bound on $B^(-1)$.
 
 #lemma[
-  *(Imported future-centered bilinear estimate.)*
+  *(Samsonov et al., 2025,
+  Appendix D.2, Proposition 9)*
   Assume UGE 1 and stationarity. Let $cal(F)_k = sigma(Z_0, dots, Z_k)$.
   For $1 <= k <= n - 1$ and $1 <= l <= n - k$, let
   $g_(k,l) : cal(Z) -> bb(R)^d$ be deterministic functions satisfying
@@ -108,17 +99,13 @@ explicitly when the shifted estimate is applied below.
           sum_(l=1)^(n-k) g_(k,l)(Z_(k+l))^top xi_k
           thin | thin cal(F)_k
         ])
-    } ||_(L_p) \
+    } ||_(L_p)
   &quad <= C p^(3 slash 2) t_"mix"^(1 slash 2) M_xi
      lr((sum_(k=1)^(n-1) sum_(l=1)^(n-k) beta_(k,l)^2))^(1 slash 2).
   $
-  This is the scalar, constant-stepsize specialization of the
-  block-decomposition and Berbee-coupling estimate used in Samsonov et al.
-  (2025, Appendix D.2, Proposition 9; see in particular their Lemma 11 and the
-  treatment of the coupled term $T_(21) + T_(22)$). The centering in the
-  display is the conditional centering with respect to $cal(F)_k$; no
-  stationary-centering inequality is applied to a future chain started from
-  $Z_k$.
+  // This is the scalar, constant-stepsize form extracted from Samsonov et al.
+  // (2025, Appendix D.2, Proposition 9). The centering is conditional with
+  // respect to $cal(F)_k$.
 ] <lem:future-centered-bilinear-input>
 
 #lemma[
@@ -132,13 +119,13 @@ explicitly when the shifted estimate is applied below.
       (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
         + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
   $
-  Consequently,
-  $
-  ||u^top (T_n^((1, alpha)) - bb(E)T_n^((1, alpha)))||_(L_p)
-    <= C alpha ||u|| thin ||epsilon.alt||_infinity
-      (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
-        + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
-  $
+  // Consequently,
+  // $
+  // ||u^top (T_n^((1, alpha)) - bb(E)T_n^((1, alpha)))||_(L_p)
+  //   <= C alpha ||u|| thin ||epsilon.alt||_infinity
+  //     (p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
+  //       + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a))).
+  // $
 ] <lem:last-shifted-first-order>
 
 _Proof._ Since $J_0^((0, alpha)) = 0$, the term $t = 0$ in $S_n$ vanishes.
@@ -146,7 +133,7 @@ Substituting the explicit formula for $J_t^((0, alpha))$ gives
 $
 S_n
 &= - alpha sum_(t=1)^(n-1) sum_(k=1)^t
-    B^(n-t) tilde(A)(Z_(t+1)) B^(t-k) epsilon.alt(Z_k) \
+    B^(n-t) tilde(A)(Z_(t+1)) B^(t-k) epsilon.alt(Z_k)
 &= - alpha sum_(k=1)^(n-1)
     H_(k+1)^((w)) epsilon.alt(Z_k),
 $
@@ -156,7 +143,7 @@ H_(k+1)^((w))
   = sum_(l=1)^(n-k)
       B^(n-k-l+1) tilde(A)(Z_(k+l)) B^(l-1).
 $
-The kernel $H_(k+1)^((w))$ acts on the past noise $epsilon.alt(Z_k)$ through future states $Z_(k+l)$, so $H_(k+1)^((w)) epsilon.alt(Z_k)$ is a future-weighted bilinear functional of the trajectory.
+// The kernel is future-dependent relative to $epsilon.alt(Z_k)$.
 
 Define
 $
@@ -183,23 +170,12 @@ quad
 v_k^((w, epsilon))(z)
   = v_k^((w))(z) epsilon.alt(z).
 $
-Here $sans(Q)$ denotes the one-step Markov transition kernel of $(Z_k)_(k>=1)$,
-acting on bounded matrix-valued functions by integration against the
-conditional law:
-$
-(sans(Q) tilde(A))(z)
-  = integral tilde(A)(u) thin sans(Q)(z, thin d u)
-  = bb(E) lr([tilde(A)(Z_(k+1)) | Z_k = z]),
-$
-and $sans(Q)^l$ is its $l$-fold iterate, the $l$-step kernel
-$sans(Q)^l (z, thin d u) = bb(P)(Z_(k+l) in d u | Z_k = z)$, so that
+Here $sans(Q)$ is the Markov transition kernel, so
 $
 (sans(Q)^l tilde(A))(z)
   = integral tilde(A)(u) thin sans(Q)^l (z, thin d u)
   = bb(E) lr([tilde(A)(Z_(k+l)) | Z_k = z]).
 $
-In particular $(sans(Q)^l tilde(A))(z) -> pi(tilde(A)) = 0$ at the geometric
-rate dictated by UGE, which is the only fact about $sans(Q)^l$ used below.
 
 Under stationarity,
 $mu_k^((w)) = pi(v_k^((w, epsilon)))$. Therefore
@@ -220,55 +196,48 @@ U_R
       {v_k^((w, epsilon))(Z_k)
        - pi(v_k^((w, epsilon)))}.
 $
-This decomposition splits the centered statistic into two structurally different parts: $U_R$ is an ordinary centered additive functional of the original Markov chain, while $U_M$ is a future-centered bilinear term — the conditional expectation given $cal(F)_k$ vanishes summand-wise, but the summands are not forward martingale differences. We bound each piece separately.
+// We bound $U_R$ and $U_M$ separately.
 
-Fix a deterministic direction $u$. The case $u = 0$ is trivial. By homogeneity,
-it is enough to prove the estimate for $||u|| = 1$; the general statement
-follows by multiplying the right-hand side by $||u||$.
+Fix a deterministic direction $u$, $||u|| = 1$; the general statement
+follows by multiplying by $||u||$.
 
-_Step 1: bound on $u^top U_R$._ Because $pi(tilde(A)) = 0$, applying $sans(Q)^l$ followed by integration against $pi$ replaces $tilde(A)$ by its $l$-step propagation away from stationarity. UGE then gives the geometric Dobrushin bound
+For $U_R$, since $pi(tilde(A)) = 0$, UGE gives
 $
 ||(sans(Q)^l tilde(A))(z)||
   = lr(|| integral tilde(A)(y) {sans(Q)^l (z, thin d y) - pi(d y)} ||)
   <= 2 C_A Delta(sans(Q)^l)
   <= 2 C_A (1 slash 4)^(floor(l slash t_"mix")).
 $
-Inserting this into $v_k^((w))$ and factoring out the slow rate $(1 - alpha a)^((n-k) slash 2)$ from the two $B$-powers, the inner sum becomes a fast-decaying $l$-series:
+Hence
 $
 ||v_k^((w))||_infinity
 &<= C sum_(l=1)^(n-k)
     (1 - alpha a)^((n-k-l+1) slash 2)
     Delta(sans(Q)^l)
-    (1 - alpha a)^((l-1) slash 2)
-  &&"(triangle + Lyapunov)" \
-&<= C (1 - alpha a)^((n-k) slash 2)
-    sum_(l=1)^infinity (1 slash 4)^(floor(l slash t_"mix"))
-  &&"(extend to" l = infinity") " \
-&<= C t_"mix" (1 - alpha a)^((n-k) slash 2)
-  &&"(geometric block sum)".
+    (1 - alpha a)^((l-1) slash 2) 
+// &<= C (1 - alpha a)^((n-k) slash 2)
+//     sum_(l=1)^infinity (1 slash 4)^(floor(l slash t_"mix")) \
+&<= C t_"mix" (1 - alpha a)^((n-k) slash 2).
 $
-Multiplying by $||epsilon.alt||_infinity$ gives
+Thus
 $
 ||v_k^((w, epsilon))||_infinity
   <= C t_"mix" ||epsilon.alt||_infinity
       (1 - alpha a)^((n-k) slash 2).
 $
-The functions $v_k^((w, epsilon))(Z_k) - pi(v_k^((w, epsilon)))$ are centered under $pi$ and uniformly bounded by the previous display. Applying the Markov concentration input in the form
-$C sqrt(p thin t_"mix" thin sum_k c_k^2)$ gives
+Applying Markov concentration to the centered functions
+$v_k^((w, epsilon)) - pi(v_k^((w, epsilon)))$ gives
 $
 ||u^top U_R||_(L_p)
 &<= C p^(1 slash 2) t_"mix"^(1 slash 2)
     lr((sum_(k=1)^(n-1) ||v_k^((w, epsilon))||_infinity^2))^(1 slash 2)
-  &&"(Markov concentration)" \
-&<= C p^(1 slash 2) t_"mix"^(3 slash 2) ||epsilon.alt||_infinity
-    lr((sum_(k=1)^(n-1) (1 - alpha a)^(n-k)))^(1 slash 2)
-  &&"(plug previous bound)" \
+// &<= C p^(1 slash 2) t_"mix"^(3 slash 2) ||epsilon.alt||_infinity
+//     lr((sum_(k=1)^(n-1) (1 - alpha a)^(n-k)))^(1 slash 2) \
 &<= C p^(1 slash 2) t_"mix"^(3 slash 2)
-    ||epsilon.alt||_infinity frac(1, sqrt(alpha a))
-  &&"(geometric series)".
+    ||epsilon.alt||_infinity frac(1, sqrt(alpha a)).
 $
 
-_Step 2: bound on $u^top U_M$._ Unfold the projected matrix kernel through
+For $U_M$, unfold the projected matrix kernel through
 $(H_(k+1)^((w)))^top u$:
 $
 (H_(k+1)^((w)))^top u
@@ -277,19 +246,18 @@ quad
 g_(k,l)(z)
   = (B^(l-1))^top thin tilde(A)(z)^top thin (B^(n-k-l+1))^top u.
 $
-Each $g_(k,l)$ is centered under $pi$ (since $pi(tilde(A)) = 0$), and the two $B$-powers give the uniform bound
+Each $g_(k,l)$ is centered under $pi$, and
 $
 ||g_(k,l)||_infinity
   <= C (1 - alpha a)^((n-k) slash 2),
 $
-which is independent of $l$. Squaring and summing over $l$ produces only linear growth in $n - k$:
 $
 sum_(l=1)^(n-k) ||g_(k,l)||_infinity^2
   <= C (n-k)(1 - alpha a)^(n-k).
 $
-Note the contrast with the $U_R$ analysis: there, UGE folded the $l$-sum into a single $t_"mix"$ factor, whereas here the same $l$-independent bound is applied $(n-k)$ times — the price of conditional centering being weaker than $pi$-centering.
+// Unlike $U_R$, the conditional-centering estimate keeps the factor $n-k$.
 
-The conditional expectation in the imported future-centered estimate is exactly
+The conditional expectation in the future-centered estimate is exactly
 $
 bb(E) lr([
   sum_(l=1)^(n-k) g_(k,l)(Z_(k+l))^top epsilon.alt(Z_k)
@@ -297,29 +265,29 @@ bb(E) lr([
 ])
   = u^top v_k^((w, epsilon))(Z_k).
 $
-Therefore the whole future-centered sum $u^top U_M$ can be bounded in one step
-by applying the imported estimate with
+Apply that estimate with
 $xi_k = epsilon.alt(Z_k)$ and
 $beta_(k,l) = C (1 - alpha a)^((n-k) slash 2)$:
 $
 ||u^top U_M||_(L_p)
 &<= C p^(3 slash 2) t_"mix"^(1 slash 2) ||epsilon.alt||_infinity
     lr((sum_(k=1)^(n-1) sum_(l=1)^(n-k)
-      (1 - alpha a)^(n-k)))^(1 slash 2) \
-&= C p^(3 slash 2) t_"mix"^(1 slash 2) ||epsilon.alt||_infinity
-    lr((sum_(k=1)^(n-1) (n-k)(1 - alpha a)^(n-k)))^(1 slash 2) \
+      (1 - alpha a)^(n-k)))^(1 slash 2)
+// &= C p^(3 slash 2) t_"mix"^(1 slash 2) ||epsilon.alt||_infinity
+//     lr((sum_(k=1)^(n-1) (n-k)(1 - alpha a)^(n-k)))^(1 slash 2) \
 &<= C p^(3 slash 2) t_"mix"^(1 slash 2)
-    ||epsilon.alt||_infinity frac(1, alpha a)
-  &&"(use" sum_m m thin r^m <= C (1-r)^(-2), thin r = 1 - alpha a ")".
+    ||epsilon.alt||_infinity frac(1, alpha a).
 $
-The extra factor $1 slash sqrt(alpha a)$ relative to $U_R$ is precisely the cost of using conditional rather than stationary centering.
+// The additional factor compared with $U_R$ comes from the conditional
+// centering estimate.
 
-_Step 3: assembly._ Combining the two pieces via $S_n - bb(E)S_n = -alpha (U_M + U_R)$ and the triangle inequality,
+// Finally, since $S_n - bb(E)S_n = -alpha (U_M + U_R)$,
 $
 ||u^top (S_n - bb(E)S_n)||_(L_p)
-&<= alpha thin (||u^top U_M||_(L_p) + ||u^top U_R||_(L_p)) \
+&<= alpha thin (||u^top U_M||_(L_p) + ||u^top U_R||_(L_p))
 &<= C ||epsilon.alt||_infinity
   lr((p^(3 slash 2) t_"mix"^(1 slash 2) frac(1, a)
     + p^(1 slash 2) t_"mix"^(3 slash 2) sqrt(frac(alpha, a)))).
 $
-The first term (from $U_M$) is the leading contribution for small $alpha$; the second (from $U_R$) carries the heavier $t_"mix"$ dependence but vanishes as $alpha -> 0$. Restoring the factor $||u||$ and multiplying by $alpha$ gives the asserted bound for $T_n^((1, alpha)) = -alpha S_n$. #h(1fr) $square$
+// Restoring $||u||$ and using $T_n^((1, alpha)) = -alpha S_n$ proves the
+// second display. #h(1fr) $square$

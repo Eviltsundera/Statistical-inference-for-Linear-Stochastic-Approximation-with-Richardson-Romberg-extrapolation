@@ -1,12 +1,12 @@
-#import "defs.typ": *
+#import "../defs.typ": *
 
 == Direct Imported Working Forms <sec:external-direct-inputs>
 
 This appendix records the external statements in the exact working forms used
 in the thesis. Items explicitly marked as direct citations are imported from
-the cited papers after the sign convention conversion described in
-@sec:admissibility-thresholds. Items marked as local extensions are proved in
-the main text and should not be read as separate external theorems.
+the cited papers after translating to the sign convention of this thesis.
+Items marked as local extensions are proved in the main text and should not be
+read as separate external theorems.
 
 #lemma[
   *(Direct citation: Levin et al. (2025, Lemma 11) -- Markov concentration.)*
@@ -17,29 +17,30 @@ the main text and should not be read as separate external theorems.
   $
   || sum_(i=1)^N g_i(Z_i) ||_(L_p(xi))
     <= C_("MC") sqrt(p thin t_"mix" thin sum_(i=1)^N c_i^2).
-  $ <eq:imported-markov-conc>
+  $ <eq:external-markov-conc>
   This is the scalar time-inhomogeneous consequence used in the
   predictable-variation estimates and in the preliminary last-iterate bounds.
-] <lem:imported-markov-concentration>
+] <lem:external-markov-concentration>
 
 #lemma[
-  *(Direct citation: Samsonov et al. (2025, Lemma 21) -- Bolthausen--Fan
-  martingale Berry--Esseen.)*
-  For scalar martingale differences $X_l$ with $|X_l| <= kappa$, partial sum
-  $S_N = sum_l X_l$, predictable variation
-  $V_N^2 = sum_l bb(E)[X_l^2 | cal(F)_(l - 1)]$, and deterministic scale
-  $s_N^2 > 0$, for every $p >= 1$,
+  *(Direct citation: Samsonov et al. (2025, Lemma 21) -- martingale
+  Berry--Esseen.)*
+  Let $(X_l, cal(F)_l)_(l = 1)^N$ be scalar martingale differences such that
+  $|X_l| <= kappa$ almost surely. Define
+  $S_N := sum_(l = 1)^N X_l$ and
+  $V_N^2 := sum_(l = 1)^N bb(E)[X_l^2 | cal(F)_(l - 1)]$.
+  Then, for every deterministic scale $v_N^2 > 0$ and every $p >= 1$,
   $
-  d_K(S_N slash s_N, cal(N)(0,1))
-    &<= L_B(kappa) frac((2 N + 1) log(2 N + 1), s_N^3) \
-    &quad + C_1 sqrt(p) s_N^(- 2 p slash (2 p + 1))
-         (bb(E)|V_N^2 - s_N^2|^p)^(1 slash (2 p + 1)) \
-    &quad + C_2 p s_N^(- 2 p slash (2 p + 1))
+  d_K lr((S_N slash v_N, cal(N)(0, 1)))
+    &<= L_B(kappa) frac((2 N + 1) log(2 N + 1), v_N^3)
+      + C_1 sqrt(p) v_N^(- 2 p slash (2 p + 1))
+         (bb(E)|V_N^2 - v_N^2|^p)^(1 slash (2 p + 1)) \
+    &quad + C_2 p v_N^(- 2 p slash (2 p + 1))
          kappa^(2 p slash (2 p + 1)).
-  $ <eq:imported-bolthausen-fan>
+  $ <eq:external-martingale-be>
   Here $L_B(kappa) < infinity$ and $C_1, C_2$ are the constants in that
   martingale theorem.
-] <lem:imported-bolthausen-fan>
+] <lem:external-martingale-be>
 
 #lemma[
   *(Direct citation: Levin et al. (2025, Proposition 2) -- stationary bias of
@@ -97,6 +98,25 @@ the main text and should not be read as separate external theorems.
   uniformly in $n$, with $D_J$ depending only on
   $C_A, kappa_Q, || overline(A)^(-1) ||, || epsilon.alt ||_infinity$.
 ] <lem:levin-prop-8>
+
+#lemma[
+  *(Direct citation/extraction: Durmus et al. (2025, Proposition 7) --
+  random-product stability.)*
+  Under the stability and bounded-noise assumptions of the depth-two setup,
+  there are product-stability ceilings $alpha_("prod")(r)$, $r >= 2$, and
+  constants $C_("prod") < infinity$, $c_("prod") > 0$, independent of
+  $p,w,s,k$, such that, for $p >= 2$, $w <= alpha_("prod")(p)$, every
+  $0 <= s <= k$, and every deterministic vector $v$,
+  $
+  bb(E)^(frac(1, p)) lr([
+    || Gamma_(s + 1:k)^((w)) v ||^p | Z_s
+  ])
+    <= C_("prod") exp(- frac(c_("prod") w a (k - s), p)) ||v||.
+  $ <eq:product-stability-input>
+  This is the constant-step deterministic-vector form used in Levin et al.
+  (2025, Appendix D.1, Proposition 9); the displayed exponent is weaker than
+  the source bound and is sufficient for the burn-in transfer.
+] <lem:product-stability-input>
 
 #lemma[
   *(Direct citation: Levin et al. (2025, Proposition 9) -- one-trajectory
@@ -163,12 +183,14 @@ the main text and should not be read as separate external theorems.
 
 == Local Extensions Used in This Thesis <sec:external-local-extensions>
 
-The burn-in transfer also uses one technical input:
+The burn-in transfer also uses one product-stability input and two local
+consequences:
 
-- @lem:burn-product-stability records deterministic and conditional
-  product-stability estimates for the random linear products. Its conditional
-  display @eq:burn-product-stability-conditional is the only product-stability
-  form used at random coupling times; @eq:burn-product-stability is the
+- @lem:burn-product-stability derives the conditional/adapted-vector version
+  needed in this thesis from the deterministic-vector estimate
+  @lem:product-stability-input. Its conditional display
+  @eq:burn-product-stability-conditional is the only product-stability form used
+  at random coupling times; @eq:burn-product-stability-strong gives the
   deterministic-time corollary used for finite-past and initial-product
   estimates.
 

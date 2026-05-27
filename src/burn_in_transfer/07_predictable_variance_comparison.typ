@@ -9,8 +9,8 @@ cal(V)_(epsilon.alt)(z)
    - (sans(Q) hat(epsilon.alt))(z)
      thin (sans(Q) hat(epsilon.alt))(z)^top.
 $ <eq:burn-bar-eps-def>
-This is the same matrix-valued conditional covariance function as in the
-stationary chapter; it is not the vector noise $epsilon.alt$.
+// This is the same matrix-valued conditional covariance function as in the
+// stationary chapter; it is not the vector noise $epsilon.alt$.
 By the Poisson covariance identity @lem:poisson-covariance-identity,
 $pi(cal(V)_(epsilon.alt)) = Sigma$ and
 $
@@ -62,9 +62,8 @@ u^top chevron.l M^("bRR") chevron.r_(n,n_0) u
   - m thin sigma_(n,n_0)^(2, "bRR")(u)
   = sum_(l = 2)^(n - 1) g_l(Z_(l - 1)).
 $
-The scalar Markov concentration lemma used in the stationary chapter is valid
-for arbitrary initial law in the form @eq:imported-markov-conc. Applied to the
-time-inhomogeneous centered functions $g_l$ with
+Apply @eq:external-markov-conc to the time-inhomogeneous centered functions
+$g_l$ with
 $
 c_l := 36 thin C_("burn,Q")^2 thin || u ||^2
   thin t_"mix"^2 thin || epsilon.alt ||_infinity^2,
@@ -99,8 +98,8 @@ $
 m thin |sigma_(n,n_0)^(2, "bRR")(u) - sigma^2(u)|
   <= frac(C_("burn,3") || u ||^2, alpha a).
 $
-The concentration sum still runs over the ambient indices $2, dots, n - 1$,
-including pre-burn-in weights, which is why the display keeps
-$sqrt(p thin n)$. In the final theorem this is converted to the effective
-window scale using $m >= n slash 2$.
-$square$
+// The concentration sum still runs over the ambient indices $2, dots, n - 1$,
+// including pre-burn-in weights, which is why the display keeps
+// $sqrt(p thin n)$. In the final theorem this is converted to the effective
+// window scale using $m >= n slash 2$.
+// $square$

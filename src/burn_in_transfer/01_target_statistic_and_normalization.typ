@@ -15,9 +15,9 @@ overline(theta)_(n,n_0)^(("RR", alpha))
      - overline(theta)_(n,n_0)^((2 alpha)).
 $ <eq:burn-rr-average>
 Both stepsizes are run from the same deterministic initial point $theta_0$ and
-on the same Markov trajectory. This coupling is part of the RR statistic; if
-the two levels use different paths, the deterministic-weight decomposition
-below is a different object.
+on the same Markov trajectory.
+// This coupling is part of the RR statistic; if the two levels use different
+// paths, the deterministic-weight decomposition below is a different object.
 
 The finite-start burned-in vector statistic is
 $
@@ -34,8 +34,8 @@ T_(n,n_0)^("RR")(u)
       overline(theta)_(n,n_0)^(("RR", alpha)) - theta^*
     )).
 $ <eq:burn-target>
-The stationary augmented-chain statistic from the previous chapter is used only
-as a comparison object after the startup transfer.
+// The stationary augmented-chain statistic from the previous chapter is used
+// only as a comparison object after the startup transfer.
 
 There are two normalizations. The finite-window normalization is
 $
@@ -54,6 +54,7 @@ Xi_(n,n_0)^("asy,RR")(u)
   := frac(T_(n,n_0)^("RR")(u), sigma(u)).
 $ <eq:burn-asymptotic-normalization>
 We first control $Xi_(n,n_0)^("bRR")(u)$ and then pass to
-$Xi_(n,n_0)^("asy,RR")(u)$. A final corollary converts the $sqrt(m)$ statistic
-to the final $sqrt(n)$ statistic when the burn-in is at the mixing scale, of
-order $alpha^(-1)$ times logarithmic factors.
+$Xi_(n,n_0)^("asy,RR")(u)$.
+// A final corollary converts the $sqrt(m)$ statistic to the final $sqrt(n)$
+// statistic when the burn-in is at the mixing scale, of order $alpha^(-1)$
+// times logarithmic factors.

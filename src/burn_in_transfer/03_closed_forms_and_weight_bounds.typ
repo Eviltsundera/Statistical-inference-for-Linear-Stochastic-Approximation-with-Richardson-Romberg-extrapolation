@@ -16,9 +16,9 @@ Q_(l; n_0, n)^((w))
   = w sum_(k = n_0)^(n - 1) B_w^(k - l)
   = overline(A)^(-1) lr((B_w^(n_0 - l) - B_w^(n - l))).
 $ <eq:burn-Q-pre-form>
-Thus only the post-burn-in weights are close to the asymptotic kernel
-$overline(A)^(-1)$. The pre-burn-in weights are instead exponentially small as
-one moves backward from $n_0$. Empty sums below are interpreted as zero.
+Only the post-burn-in weights are compared with $overline(A)^(-1)$.
+// The pre-burn-in weights are exponentially small as one moves backward from
+// $n_0$. Empty sums below are interpreted as zero.
 
 #lemma[
   *(Burned-in RR weight bounds.)*
@@ -96,11 +96,10 @@ $
 || B_alpha^s - B_(2 alpha)^s ||
   <= alpha tilde(C)_A thin s thin rho_alpha^(s - 1).
 $ <eq:burn-power-difference>
-The left-factored form is legitimate because $B_alpha$ and $B_(2 alpha)$ are
-polynomials in the same matrix $overline(A)$, hence commute with each other
-and with $overline(A)$.
-Thus the post-burn-in contribution is bounded by a constant times
-$a^(-2)$, as in the full-window proof.
+// The left-factored form is legitimate because $B_alpha$ and $B_(2 alpha)$ are
+// polynomials in the same matrix $overline(A)$, hence commute with each other
+// and with $overline(A)$.
+The post-burn-in contribution is $O(a^(-2))$, as in the full-window proof.
 
 For $l, l + 1 < n_0$, put $s := n_0 - l - 1$. The pre-burn-in closed form gives
 $
@@ -110,9 +109,8 @@ Q_(l + 1; n_0, n)^("RR") - Q_(l; n_0, n)^("RR")
       - B_alpha^(s + m) + B_(2 alpha)^(s + m)
     )).
 $
-Here $s >= 1$. Applying @eq:burn-power-difference to the powers $s$ and
-$s + m$ and summing over $s >= 1$ again gives a constant times $a^(-2)$. If
-the boundary
+Applying @eq:burn-power-difference to the powers $s$ and $s + m$ and summing
+over $s >= 1$ gives $O(a^(-2))$. If the boundary
 $l = n_0 - 1$ exists, then
 $
 Q_(n_0; n_0, n)^("RR") - Q_(n_0 - 1; n_0, n)^("RR")

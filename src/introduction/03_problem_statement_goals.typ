@@ -6,8 +6,8 @@ The high-order moment bounds for the PR-averaged RR iterate
 $overline(theta)_n^((alpha, "RR"))$ established in Levin et al. (2025) show
 that the leading error term scales as
 $sqrt("Tr" Sigma_epsilon.alt^(("M"))) dot n^(-1\/2)$, where
-$Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance defined below in
-the key quantities subsection. This is the usual parametric $n^(-1\/2)$
+$Sigma_epsilon.alt^(("M"))$ is the Markovian noise covariance recorded in
+@sec:key-quantities. This is the usual parametric $n^(-1\/2)$
 benchmark for averaged LSA; this thesis does not prove a separate
 Hájek--Le Cam or minimax lower bound.
 Berry--Esseen type bounds and bootstrap inference procedures for the
@@ -37,10 +37,76 @@ Concretely, we establish:
 
 + A stationary full-window augmented-chain Berry--Esseen assembly for scalar
   RR statistics, including the martingale approximation, predictable-variance
-  comparison, Poisson remainder, and stationary RR misadjustment.
-+ A balanced triangular-array specialization, in particular for
-  $alpha_n = c n^(-1\/2)$, which identifies $Sigma_infinity$ as the covariance
-  target and gives the resulting stationary $n_0 = 0$ CLT interpretation.
+  comparison, Poisson remainder, and stationary RR misadjustment. The
+  controlled comparison statistic is
+  $
+  S_(n, "stat")^("RR")(u)
+    = - frac(u^top M_n^("RR"), sqrt(n))
+      + u^top cal(R)_(n, "stat")^("RR"),
+  quad
+  cal(R)_(n, "stat")^("RR")
+    = D_(2,n)^("RR") + R_n^("mis,RR").
+  $
+  Its finite-window variance proxy is
+  $
+  sigma_n^(2, "RR")(u)
+    = u^top lr((
+        frac(1, n) sum_(l=2)^(n-1)
+          cal(Q)_l^("RR") Sigma_epsilon.alt^(("M"))
+          (cal(Q)_l^("RR"))^top
+      )) u,
+  $
+  and the theorem has the schematic form
+  $
+  d_K lr((
+    frac(S_(n, "stat")^("RR")(u), sigma_n^("RR")(u)),
+    cal(N)(0,1)
+  ))
+    <= frac("polylog"(n), n^(1\/4))
+       + frac(||u^top cal(R)_(n, "stat")^("RR")||_(L_p),
+              sigma_n^("RR")(u)).
+  $
+  In the balanced triangular-array specialization $alpha_n = c n^(-1\/2)$,
+  the same stationary theorem identifies
+  $
+  Sigma_infinity
+    = overline(A)^(-1) Sigma_epsilon.alt^(("M")) overline(A)^(-top),
+  quad
+  sigma^2(u) = u^top Sigma_infinity u,
+  $
+  as the covariance target and gives, for every fixed non-degenerate direction
+  $u$, the stationary $n_0 = 0$ CLT interpretation
+  $
+  d_K lr((
+    frac(S_(n, "stat")^("RR")(u), sigma(u)),
+    cal(N)(0,1)
+  ))
+    <= C(u,c) frac("polylog"(n), n^(1\/4)).
+  $
 + A deterministic-start transfer theorem under mixing-scale burn-in conditions
   with logarithmic factors, yielding the corresponding balanced-scale bound for
-  the main burned-in statistic.
+  the main burned-in statistic. Writing $m = n - n_0$ and
+  $
+  overline(theta)_(n,n_0)^(("RR", alpha))
+    = 2 overline(theta)_(n,n_0)^((alpha))
+      - overline(theta)_(n,n_0)^((2 alpha)),
+  quad
+  T_(n,n_0)^("RR")(u)
+    = sqrt(m) thin u^top lr((
+        overline(theta)_(n,n_0)^(("RR", alpha)) - theta^*
+      )),
+  $
+  the transfer gives
+  $
+  d_K lr((
+    frac(T_(n,n_0)^("RR")(u), sigma(u)),
+    cal(N)(0,1)
+  ))
+    <= C(u,c,theta_0) frac("polylog"(n), n^(1\/4))
+  $
+  at $alpha = c n^(-1\/2)$ when
+  $
+  n_0 asymp (alpha a)^(-1) log^2 n.
+  $
+  Under the same burn-in window, the final $sqrt(n)$ statistic satisfies the
+  same polynomial rate up to logarithmic factors.

@@ -21,8 +21,9 @@ R_(m, op("aug"))^("mis,RR")
     ))
 $ <eq:burn-mis-aug-def>
 be the stationary augmented-chain depth-two misadjustment over a window of
-length $m$. By stationarity, the same distribution is obtained if the sum in
-@eq:burn-mis-aug-def is taken over $j = n_0, dots, n - 1$.
+length $m$.
+// By stationarity, the same distribution is obtained if the sum in
+// @eq:burn-mis-aug-def is taken over $j = n_0, dots, n - 1$.
 
 #theorem[
   *(Burned-in PR-averaged RR misadjustment bound.)*
@@ -77,10 +78,9 @@ $
 $
 By stationarity,
 $|| tilde(R)_(n,n_0, op("aug"))^("mis,RR") ||_(L_p)
-  = || R_(m, op("aug"))^("mis,RR") ||_(L_p)$, and the latter is exactly the
-stationary augmented-chain misadjustment bound @thm:misadjustment with $n$
-replaced by $m$. The second term is @lem:burn-startup-transfer. Combining the
-two estimates gives @eq:burn-mis-bound. $square$
+  = || R_(m, op("aug"))^("mis,RR") ||_(L_p)$.
+Apply @thm:misadjustment with $n$ replaced by $m$ and
+@lem:burn-startup-transfer. $square$
 
 #corollary[
   *(Balanced-scale burned-in misadjustment rate.)*
@@ -98,8 +98,7 @@ two estimates gives @eq:burn-mis-bound. $square$
   $ <eq:burn-mis-rate>
 ] <cor:burn-misadjustment-rate>
 
-_Proof._ The stationary part of @eq:burn-mis-bound is the bound of
-@cor:misadjustment-rate with $n$ replaced by $m$, and $m >= n slash 2$ keeps
-the rate unchanged. The startup term is controlled by
-@cor:burn-log-startup and is
-$"polylog"(n) thin n^(-1 slash 4 - beta)$ at this scale. $square$
+_Proof._ Apply @cor:misadjustment-rate with $n$ replaced by $m$, use
+$m >= n slash 2$, and control the startup term by @cor:burn-log-startup.
+$square$
+// The startup term is $"polylog"(n) thin n^(-1 slash 4 - beta)$ at this scale.

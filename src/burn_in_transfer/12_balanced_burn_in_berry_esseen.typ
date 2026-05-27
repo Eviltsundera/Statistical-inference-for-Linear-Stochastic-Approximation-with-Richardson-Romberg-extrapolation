@@ -2,9 +2,9 @@
 
 == Balanced Burn-in Berry--Esseen Bound
 
-The finite-window bound uses $sigma_(n,n_0)^("bRR")(u)$. The final inference
-statement uses $sigma(u)$, via the following burned-in analogue of
-@cor:RR-BE-sigma.
+The final inference statement uses $sigma(u)$ instead of
+$sigma_(n,n_0)^("bRR")(u)$.
+// The following lemma is the burned-in analogue of @cor:RR-BE-sigma.
 
 #lemma[
   *(Burned-in normalization transfer.)*
@@ -58,7 +58,7 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   *(Balanced-scale deterministic-start burned-in PR-averaged RR Berry--Esseen bound.)*
   Assume Assumptions 1--3 from @sec:assumptions. Assume also the Lyapunov
   contraction @eq:contraction for the two step sizes used below and the
-  external inputs and local extensions summarized in @sec:imported-inputs.
+  external inputs and local extensions summarized in @sec:external-inputs.
   Fix $c > 0$ and set
   $
   alpha := c thin n^(-1 slash 2),
@@ -99,34 +99,28 @@ $sigma_(n,n_0)^("bRR")(u) + sigma(u) >= sigma(u)$. $square$
   $ <eq:burn-final-asymptotic>
 ] <thm:burn-final-balanced>
 
-_Proof._ Apply the finite-window assembly theorem @thm:burn-RR-BE-master. Since
-$m >= n slash 2$, polynomial prefactors in $n$ may be written on the $m$ scale
-up to universal constants; for instance $sqrt(n) slash m <= sqrt(2) slash
-sqrt(m)$. In particular, the martingale terms satisfy
+_Proof._ Apply @thm:burn-RR-BE-master. Since $m >= n slash 2$, the martingale
+terms satisfy
 $
 frac(log^(3 slash 4) n, m^(1 slash 4))
   + frac(log n, sqrt(m))
   <= C thin frac("polylog"(n), n^(1 slash 4)).
 $
-It remains to bound the composite remainder in @lem:burn-R-bound. The first
-condition in @eq:burn-final-log-conditions is @eq:burn-log-condition with
-$beta = 1$; by @cor:burn-log-transient and
-$alpha = c n^(-1 slash 2)$, $m >= n slash 2$, the deterministic transient is
-$O(n^(-1))$. The second condition is @eq:burn-log-init-condition with
-$beta = 1$, so @cor:burn-log-initial-product makes the random initial-product
-term $O("polylog"(n) n^(-1))$. The Poisson Abel remainder is
-$O(m^(-1 slash 2))$. The third condition in @eq:burn-final-log-conditions is
-the startup condition @eq:burn-log-startup-condition with $beta = 1$, so
-@cor:burn-misadjustment-rate gives
+The composite remainder in @lem:burn-R-bound is controlled by
+@cor:burn-log-transient, @cor:burn-log-initial-product, @eq:burn-D2-bound, and
+@cor:burn-misadjustment-rate. In particular,
 $
 || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
   <= C thin "polylog"(n) thin n^(-1 slash 4).
 $
-Together with
-$sigma_(n,n_0)^("bRR")(u) >= sigma(u) slash sqrt(2)$, this makes the smoothing
-remainder in @eq:burn-RR-BE-master of order
-$"polylog"(n) n^(-1 slash 4)$. The smoothing tail $e slash n$ is lower order,
-so @eq:burn-final-finite-window follows.
+Together with $sigma_(n,n_0)^("bRR")(u) >= sigma(u) slash sqrt(2)$, the
+smoothing remainder is $O("polylog"(n) n^(-1 slash 4))$, and
+@eq:burn-final-finite-window follows.
+// The first condition in @eq:burn-final-log-conditions is
+// @eq:burn-log-condition with $beta = 1$, the second is
+// @eq:burn-log-init-condition with $beta = 1$, and the third is
+// @eq:burn-log-startup-condition with $beta = 1$. The Poisson Abel remainder is
+// $O(m^(-1 slash 2))$, and the smoothing tail $e slash n$ is lower order.
 
 For the asymptotic normalization, write
 $
@@ -138,27 +132,28 @@ $
 frac(C thin ||u||^2, m thin alpha thin a thin sigma^2(u))
   = O(n^(-1 slash 2)),
 $
-because $m >= n slash 2$ and $alpha = c n^(-1 slash 2)$. This is absorbed
-into the balanced finite-window rate, proving @eq:burn-final-asymptotic.
+which is absorbed into the balanced finite-window rate.
+// Here $m >= n slash 2$ and $alpha = c n^(-1 slash 2)$.
 $square$
 
-The admissible burn-in regime @eq:admissible-burn-regime collects the
-finite-$n$ admissibility requirements. The inequality
-$2 alpha <= alpha_("burn")(p,q)$ enforces the Lyapunov small-step ceiling, the
-local inverse ceiling, the Levin depth-two admissibility threshold, the
-random-product stability estimate
-@lem:burn-product-stability, and the full-state startup contraction
-@lem:burn-full-startup. Since
-$alpha = c n^(-1 slash 2)$ and $m >= n slash 2$, the elementary step-size
-constraints and @eq:burn-variance-lb-condition hold automatically for all
-sufficiently large $n$. The remaining non-elementary large-$n$ requirement is
+The remaining non-elementary large-$n$ requirement is
 $
 2 c n^(-1 slash 2)
   <= alpha_("burn")(p,q),
 $ <eq:burn-final-levin-eventual>
-with $p,q$ as in the theorem. Under this Levin/startup admissibility condition,
-the large-$n$ reading of the theorem keeps only $m >= n slash 2$ and the
-burn-in lower bounds in @eq:burn-final-log-conditions.
+with $p,q$ as in the theorem.
+// The admissible burn-in regime @eq:admissible-burn-regime collects the
+// finite-$n$ admissibility requirements. The inequality
+// $2 alpha <= alpha_("burn")(p,q)$ enforces the Lyapunov small-step ceiling, the
+// local inverse ceiling, the Levin depth-two admissibility threshold, the
+// random-product stability estimate @lem:burn-product-stability, and the
+// full-state startup contraction @lem:burn-full-startup. Since
+// $alpha = c n^(-1 slash 2)$ and $m >= n slash 2$, the elementary step-size
+// constraints and @eq:burn-variance-lb-condition hold automatically for all
+// sufficiently large $n$.
+// Under this Levin/startup admissibility condition, the large-$n$ reading of the
+// theorem keeps only $m >= n slash 2$ and the burn-in lower bounds in
+// @eq:burn-final-log-conditions.
 
 #corollary[
   *($sqrt(n)$-normalization for the burned-in RR statistic.)*
@@ -185,9 +180,9 @@ burn-in lower bounds in @eq:burn-final-log-conditions.
   $
   n_0 >= C_- thin (alpha a)^(-1) log^2 n
   $
-  with any fixed $C_-$ large enough. At the balanced scale
-  $alpha = c n^(-1 slash 2)$ this is
-  $n_0 = O(n^(1 slash 2) log^2 n)$, not a purely logarithmic burn-in in $n$.
+  with any fixed $C_-$ large enough.
+  // At the balanced scale $alpha = c n^(-1 slash 2)$ this is
+  // $n_0 = O(n^(1 slash 2) log^2 n)$, not a purely logarithmic burn-in in $n$.
   If, in addition, the burn-in window stays in the same mixing-scale window
   with logarithmic-square factor,
   $
@@ -228,8 +223,8 @@ $
 which is lower order and is absorbed into the same balanced-scale rate.
 $square$
 
-The lower side of @eq:burn-log-window is the logarithmic-square mixing-scale
-burn-in needed by the current $L_p$ startup contraction; the upper side keeps
-the $sqrt(n slash m)$ rescaling lower order. At
-$alpha = c n^(-1 slash 2)$ this window has order
-$n^(1 slash 2) log^2 n$.
+// The lower side of @eq:burn-log-window is the logarithmic-square mixing-scale
+// burn-in needed by the current $L_p$ startup contraction; the upper side keeps
+// the $sqrt(n slash m)$ rescaling lower order. At
+// $alpha = c n^(-1 slash 2)$ this window has order
+// $n^(1 slash 2) log^2 n$.

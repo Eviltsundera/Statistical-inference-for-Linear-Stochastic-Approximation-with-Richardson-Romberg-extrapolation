@@ -15,11 +15,16 @@
   with $C_1 = 9 C_Q^2$ and $C_2 = 32 tilde(C)_A$.
 ] <cor:RR-weight-summed>
 
-_Proof._ For the first sum apply (i) and the geometric series $sum_(k >= 1) (1 - alpha a)^k <= 1 / (alpha a)$. For the second, apply (ii) and
-$
-sum_(k >= 2) (k - 1) thin (1 - alpha a)^((k - 2) slash 2)
-  = sum_(m >= 0) (m + 1) (1 - alpha a)^(m slash 2)
-  <= frac(1, (1 - sqrt(1 - alpha a))^2)
-  <= frac(4, (alpha a)^2),
-$
-where the last step uses $1 - sqrt(1 - alpha a) >= alpha a / 2$ for $alpha a <= 1 slash 2$. Multiplying by $2 tilde(C)_A alpha^2$ gives the claim, up to the stated universal constant. $square$
+// _Proof._ Apply the pointwise bounds and the geometric sums
+// $sum_(k >= 1) (1 - alpha a)^k <= 1 / (alpha a)$ and
+// $
+// sum_(k >= 2) (k - 1) thin (1 - alpha a)^((k - 2) slash 2)
+//   = sum_(m >= 0) (m + 1) (1 - alpha a)^(m slash 2)
+//   <= frac(1, (1 - sqrt(1 - alpha a))^2)
+//   <= frac(4, (alpha a)^2),
+// $
+// Multiplying by $2 tilde(C)_A alpha^2$ gives the claim.
+// The last displayed step uses
+// $1 - sqrt(1 - alpha a) >= alpha a / 2$ for $alpha a <= 1 slash 2$.
+// $square$
+#pagebreak()

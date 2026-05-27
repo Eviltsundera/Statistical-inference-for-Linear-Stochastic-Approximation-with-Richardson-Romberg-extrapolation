@@ -81,76 +81,94 @@ $square$
              alpha a sqrt(m)) n^(-beta).
   $ <eq:burn-log-transient-bound>
   In particular, at the balanced scale $alpha = c n^(-1 slash 2)$ and
-  $m >= n slash 2$, this is $O(n^(-beta))$. Taking $beta = 1$ makes the
-  deterministic transient negligible relative to the stationary
-  $n^(-1 slash 4)$ Berry--Esseen rate.
+  $m >= n slash 2$, this is $O(n^(-beta))$.
+  // Taking $beta = 1$ makes the deterministic transient negligible relative to
+  // the stationary $n^(-1 slash 4)$ Berry--Esseen rate.
 ] <cor:burn-log-transient>
 
-_Proof._ The elementary inequality
-$(1 - alpha a)^(n_0 slash 2) <= exp(-alpha a n_0 slash 2)$ and
-@eq:burn-log-condition imply
-$(1 - alpha a)^(n_0 slash 2) <= n^(-beta)$. Substitute this into
-@eq:burn-RR-transient-bound. If $alpha = c n^(-1 slash 2)$ and $m >= n slash 2$,
-then $(alpha sqrt(m))^(-1) <= sqrt(2) slash c$, so the displayed
-$O(n^(-beta))$ bound follows. $square$
+// _Proof._ The elementary inequality
+// $(1 - alpha a)^(n_0 slash 2) <= exp(-alpha a n_0 slash 2)$ and
+// @eq:burn-log-condition imply
+// $(1 - alpha a)^(n_0 slash 2) <= n^(-beta)$. Substitute this into
+// @eq:burn-RR-transient-bound. If $alpha = c n^(-1 slash 2)$ and $m >= n slash 2$,
+// then $(alpha sqrt(m))^(-1) <= sqrt(2) slash c$, so the displayed
+// $O(n^(-beta))$ bound follows. $square$
 
-The deterministic transient is not the full initial-condition contribution:
-the exact recursion contains the random product
-$Gamma_(1:k)^((w)) := product_(j = 1)^k (I - w A(Z_j))$. The difference
-between this product and $B_w^k$ is another finite-start term. We use the
-following product-stability input, recorded here in the exact deterministic
-and conditional forms needed later. Let $alpha_("st")(p)$ be the local
-threshold defined in @eq:startup-local-threshold; the startup section below
-uses the same threshold.
+The exact recursion also contains the random product
+$Gamma_(1:k)^((w)) := product_(j = 1)^k (I - w A(Z_j))$.
+// The deterministic transient is therefore not the full initial-condition
+// contribution: the difference between this product and $B_w^k$ is another
+// finite-start term. We record the product-stability input in the exact
+// deterministic and conditional forms needed later.
 
 #lemma[
-  *(Technical input: deterministic and conditional product stability.)*
-  Under the stability and bounded-noise assumptions of the depth-two setup,
-  there are product-stability ceilings $alpha_("prod")(r)$, $r >= 2$, and
-  constants $C_("prod") < infinity$ and $c_("prod") > 0$, independent of
-  $p,w,s,k$ and of the current base-chain state, with the following property.
-  If $p >= 2$, $2 alpha <= alpha_("st")(p)$, and $w in {alpha, 2 alpha}$, then
-  the product estimates below hold for every $0 <= s <= k$. The empty product
-  is $Gamma_(k + 1:k)^((w)) = I$.
-
-  First, for every deterministic vector $v$ and uniformly over the current
-  base-chain state at time $s$,
+  *(Product stability and its conditional form.)*
+  Assume @lem:product-stability-input. If $p >= 2$,
+  $2 alpha <= alpha_("st")(p)$, $w in {alpha, 2 alpha}$, and $0 <= s <= k$,
+  then for every deterministic vector $v$,
   $
-  bb(E)^(1 slash p) lr([
-    || Gamma_(s + 1:k)^((w)) v ||^p mid Z_s
+  bb(E)^(frac(1, p)) lr([
+    || Gamma_(s + 1:k)^((w)) v ||^p | Z_s
   ])
-    <= C_("prod") exp(-c_("prod") w a (k - s) slash p) ||v||.
+    <= C_("prod") exp(- frac(c_("prod") w a (k - s), p)) ||v||.
+  $ <eq:burn-product-stability-deterministic>
+  The empty product is $Gamma_(k + 1:k)^((w)) = I$. Moreover, on any coupling
+  extension with a joint filtration $(cal(G)_r)$ such that the future product,
+  conditionally on $cal(G)_s$, has the base-chain law started from $Z_s$, every
+  $cal(G)_s$-measurable vector $W_s$ satisfies
   $
-  Equivalently, on any coupling extension with a joint filtration
-  $(cal(G)_r)$ and a $cal(G)_s$-measurable vector $W_s$ to which the future
-  product is adapted,
-  $
-  bb(E)^(1 slash p) lr([
-    || Gamma_(s + 1:k)^((w)) W_s ||^p mid cal(G)_s
+  bb(E)^(frac(1, p)) lr([
+    || Gamma_(s + 1:k)^((w)) W_s ||^p | cal(G)_s
   ])
-    <= C_("prod") exp(-c_("prod") w a (k - s) slash p) || W_s ||.
+    <= C_("prod") exp(- frac(c_("prod") w a (k - s), p)) || W_s ||.
   $ <eq:burn-product-stability-conditional>
-  Consequently, for every such $cal(G)_s$-measurable vector $V_s$,
+  Consequently,
   $
   || Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
-    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
+    <= C_("prod") exp(- frac(c_("prod") w a (k - s), p))
        || V_s ||_(L_p)
-    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
-       || V_s ||_(L_(2p)).
+    <= C_("prod") exp(- frac(c_("prod") w a (k - s), p))
+       || V_s ||_(L_(2p))
   $ <eq:burn-product-stability-strong>
-  In particular, with the natural base-chain filtration,
-  $
-  || Gamma_(s + 1:k)^((w)) V_s ||_(L_p)
-    <= C_("prod") exp(-c_("prod") w a (k - s) slash p)
-       || V_s ||_(L_(2p)).
-  $ <eq:burn-product-stability>
 ] <lem:burn-product-stability>
 
-This lemma is treated as a technical input of the burn-in transfer. The thesis
-does not use any unrecorded intermediate version of product stability: the
-conditional display @eq:burn-product-stability-conditional is the form invoked
-at random coupling times, and @eq:burn-product-stability is its unconditional
-corollary for deterministic times.
+_Proof._ Fix $s <= k$. The adapted-product assumption gives
+$
+cal(L) lr(( Gamma_(s + 1:k)^((w)) | cal(G)_s ))
+  = cal(L) lr(( Gamma_(s + 1:k)^((w)) | Z_s )).
+$
+Set
+$
+Phi_s(v)
+  := bb(E)^(frac(1, p)) lr([
+    || Gamma_(s + 1:k)^((w)) v ||^p | Z_s
+  ]).
+$
+Hence, for $cal(G)_s$-measurable $W_s$,
+$
+&bb(E)^(frac(1, p)) lr([
+  || Gamma_(s + 1:k)^((w)) W_s ||^p | cal(G)_s
+])
+&quad = Phi_s(W_s)
+&quad <= C_("prod") exp(- frac(c_("prod") w a (k - s), p)) ||W_s||,
+$
+where the last step is @eq:burn-product-stability-deterministic. This is
+@eq:burn-product-stability-conditional; the case $s = k$ follows after taking
+$C_("prod") >= 1$.
+
+For $V_s in L_(2p)$,
+$
+|| Gamma_(s + 1:k)^((w)) V_s ||_(L_p)^p
+  &= bb(E) bb(E) lr([
+      || Gamma_(s + 1:k)^((w)) V_s ||^p | cal(G)_s
+    ])
+  &<= C_("prod")^p exp(-c_("prod") w a (k - s))
+      bb(E)||V_s||^p.
+$
+Taking $p$-th roots and using $||V_s||_(L_p) <= ||V_s||_(L_(2p))$ gives
+@eq:burn-product-stability-strong. The natural-filtration case corresponds to
+$cal(G)_s = sigma(lr({Z_r : r <= s}))$.
+$square$
 
 Define the accumulated RR random initial-product discrepancy by
 $
@@ -165,9 +183,9 @@ where the empty product at $k = 0$ is the identity.
 
 #lemma[
   *(Burned-in random initial-product transient.)*
-  Assume the hypotheses of @lem:burn-product-stability,
-  $0 < alpha$, $2 alpha <= alpha_infinity$, $alpha a <= 1 slash 4$, and
-  the Lyapunov contraction @eq:contraction. Then, for every $p >= 2$,
+  Let $p >= 2$. Assume $0 < alpha$, $2 alpha <= alpha_("st")(p)$,
+  $2 alpha <= alpha_infinity$, $alpha a <= 1 slash 4$, and the Lyapunov
+  contraction @eq:contraction. Then
   $
   || cal(I)_(n,n_0)^("init,RR")(u) ||_(L_p)
     <= frac(C_("init,RR") ||u|| ||theta_0 - theta^*|| p,
@@ -182,7 +200,7 @@ _Proof._ Let $e_0 := theta_0 - theta^*$. By @lem:burn-product-stability with
 $s = 0$ and $V_0 = e_0$,
 $
 || Gamma_(1:k)^((w)) e_0 ||_(L_p)
-  <= C_("prod") exp(-c_("prod") w a k slash p) ||e_0||.
+  <= C_("prod") exp(- frac(c_("prod") w a k, p)) ||e_0||.
 $
 The deterministic Lyapunov contraction gives
 $
@@ -224,6 +242,6 @@ $1 - exp(-c_("init") alpha a slash p) >= C^(-1) alpha a slash p$, which gives
   $"polylog"(n) thin n^(-beta)$.
 ] <cor:burn-log-initial-product>
 
-_Proof._ Substitute @eq:burn-log-init-condition into
-@eq:burn-random-init-bound. At the balanced scale,
-$(alpha sqrt(m))^(-1) = O(1)$, so the remaining factor is logarithmic. $square$
+// _Proof._ Substitute @eq:burn-log-init-condition into
+// @eq:burn-random-init-bound. At the balanced scale,
+// $(alpha sqrt(m))^(-1) = O(1)$, so the remaining factor is logarithmic. $square$

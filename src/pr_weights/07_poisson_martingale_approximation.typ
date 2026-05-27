@@ -2,26 +2,25 @@
 
 == Poisson Martingale Approximation
 
-The variance comparison of the previous section identifies the limiting
-covariance of $W^("RR")$, but it does not by itself produce a martingale.
-This subsection converts $W^("RR")$ into a martingale plus a quantitatively
-small remainder via the Poisson equation for the Markov chain ${Z_l}$. The
-deterministic kernel bounds of Sections 4.3--4.4 enter once and for all in
-the boundary/Abel control of the remainder.
+We convert $W^("RR")$ into a martingale plus an Abel remainder via the
+Poisson equation.
+// The variance comparison of the previous section identifies the limiting
+// covariance of $W^("RR")$, but it does not by itself produce a martingale. The
+// deterministic kernel bounds of Sections 4.3--4.4 enter once and for all in
+// the boundary/Abel control of the remainder.
 
-*Poisson kernel.* Let $sans(Q)$ denote the one-step Markov transition kernel
-of $(Z_k)_(k >= 0)$, acting on bounded measurable functions $f : Z -> bb(R)^d$ by
+*Poisson kernel.* Let $sans(Q)$ be the one-step transition kernel:
 $
 (sans(Q) f)(z) = bb(E) lr([f(Z_(k + 1)) | Z_k = z]).
 $
-Under UGE 1 with mixing time $t_"mix"$, the geometric Dobrushin bound
+Under UGE 1,
 $|| sans(Q)^k epsilon.alt ||_infinity <= 2 || epsilon.alt ||_infinity (1 slash 4)^(floor(k slash t_"mix"))$
 (valid for centered $epsilon.alt$, $pi(epsilon.alt) = 0$) makes the Poisson
 series
 $
 hat(epsilon.alt) := sum_(k = 0)^infinity sans(Q)^k epsilon.alt
 $
-absolutely convergent in sup-norm, with
+absolutely convergent in sup-norm:
 $
 || hat(epsilon.alt) ||_infinity
   <= 2 || epsilon.alt ||_infinity sum_(k = 0)^infinity (1 slash 4)^(floor(k slash t_"mix"))
@@ -30,31 +29,33 @@ quad
 || sans(Q) hat(epsilon.alt) ||_infinity
   <= || hat(epsilon.alt) ||_infinity,
 $
-the second inequality because $sans(Q)$ is a Markov kernel and contracts
-the sup-norm. By construction $hat(epsilon.alt)$ solves the *Poisson equation*
+and $hat(epsilon.alt)$ solves
+// The second inequality uses that $sans(Q)$ is a Markov kernel and contracts
+// the sup-norm.
 $
 hat(epsilon.alt) - sans(Q) hat(epsilon.alt) = epsilon.alt.
 $ <eq:poisson-eq>
 
-*Conditional centering.* Let $cal(F)_l := sigma(Z_0, dots, Z_l)$. Substituting
-@eq:poisson-eq into the noise sample and adding and subtracting the
-conditional mean,
+*Conditional centering.* Let $cal(F)_l := sigma(Z_0, dots, Z_l)$. For $l >= 2$,
 $
 epsilon.alt(Z_l)
-  = underbrace([hat(epsilon.alt)(Z_l) - sans(Q) hat(epsilon.alt)(Z_(l - 1))], "martingale increment")
-  + underbrace([sans(Q) hat(epsilon.alt)(Z_(l - 1)) - sans(Q) hat(epsilon.alt)(Z_l)], "telescope"),
+  = m_l + t_l,
 quad l >= 2,
 $
-where the first bracket is centered conditionally on $cal(F)_(l - 1)$ since
-the Markov property gives $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)] = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
-The $l = 1$ term is kept as the left boundary of the Abel transform rather than
-included in $M_n^("RR")$; we treat it directly via @eq:poisson-eq as
-$epsilon.alt(Z_1) = hat(epsilon.alt)(Z_1) - sans(Q) hat(epsilon.alt)(Z_1)$.
-The decomposition therefore separates $W^("RR")$ into a martingale piece and
-a deterministic-coefficient telescope; Abel summation against the kernel
-sequence ${cal(Q)_l^("RR")}$ converts the telescope into boundary terms plus
-a sum against the discrete derivative $cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")$,
-which is exactly the object bounded in the Corollary of Section 4.4.
+where
+$
+m_l := hat(epsilon.alt)(Z_l) - sans(Q) hat(epsilon.alt)(Z_(l - 1)),
+quad
+t_l := sans(Q) hat(epsilon.alt)(Z_(l - 1)) - sans(Q) hat(epsilon.alt)(Z_l),
+quad l >= 2,
+$
+and $m_l$ is centered conditionally on $cal(F)_(l - 1)$.
+// The Markov property gives
+// $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)]
+//   = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
+// The $l = 1$ term is kept as the left Abel boundary rather than included in
+// $M_n^("RR")$. Abel summation then leaves the discrete derivative
+// $cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")$, bounded in Section 4.4.
 
 #lemma[
   *(Stationary Poisson martingale decomposition.)*
@@ -71,7 +72,7 @@ which is exactly the object bounded in the Corollary of Section 4.4.
   W^("RR")
     = -frac(1, sqrt(n)) M_n^("RR") + D_(2, n)^("RR"),
   $ <eq:poisson-decomp>
-  with the *Poisson boundary/Abel remainder*
+  with the *Abel remainder*
   $
   D_(2, n)^("RR")
     := -frac(1, sqrt(n)) lr([
@@ -80,8 +81,10 @@ which is exactly the object bounded in the Corollary of Section 4.4.
             (cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")) thin sans(Q) hat(epsilon.alt)(Z_l)
       ]).
   $
-  (The right boundary $cal(Q)_(n - 1)^("RR") thin sans(Q) hat(epsilon.alt)(Z_(n - 1))$
-  vanishes identically because $cal(Q)_(n - 1)^("RR") = 0$.) Moreover, with
+  Moreover, with
+  // The right boundary
+  // $cal(Q)_(n - 1)^("RR") thin sans(Q) hat(epsilon.alt)(Z_(n - 1))$
+  // vanishes identically because $cal(Q)_(n - 1)^("RR") = 0$.
   $C_(cal(Q)) := || overline(A)^(-1) || + 3 C_Q$ a uniform bound on
   $|| cal(Q)_l^("RR") ||$, and $C_2$ the constant from the Corollary of
   Section 4.4,
@@ -99,18 +102,18 @@ which is exactly the object bounded in the Corollary of Section 4.4.
   and $|| overline(A) ||$.
 ] <lem:poisson-martingale-decomp>
 
-_Proof._ The increments $Delta M_l^("RR")$ are $cal(F)_l$-martingale
-differences because $cal(Q)_l^("RR")$ is deterministic and the Markov property
-gives $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)] = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
+_Proof._ The increments are martingale differences by the Markov property.
+// Here $cal(Q)_l^("RR")$ is deterministic and
+// $bb(E)[hat(epsilon.alt)(Z_l) | cal(F)_(l - 1)]
+//   = sans(Q) hat(epsilon.alt)(Z_(l - 1))$.
 
-For the decomposition, substitute @eq:poisson-eq into the definition in @eq:W-RR:
+Substitute @eq:poisson-eq into @eq:W-RR:
 $
 W^("RR")
   = -frac(1, sqrt(n)) sum_(l = 1)^(n - 1)
     cal(Q)_l^("RR") thin (hat(epsilon.alt)(Z_l) - sans(Q) hat(epsilon.alt)(Z_l)).
 $
-Peel off $l = 1$ and apply the conditional-centering identity above to the
-remaining $l in {2, dots, n - 1}$:
+Peel off $l = 1$:
 $
 W^("RR")
   = -frac(1, sqrt(n)) cal(Q)_1^("RR") thin hat(epsilon.alt)(Z_1)
@@ -119,7 +122,7 @@ W^("RR")
     - frac(1, sqrt(n)) sum_(l = 2)^(n - 1)
       cal(Q)_l^("RR") thin (sans(Q) hat(epsilon.alt)(Z_(l - 1)) - sans(Q) hat(epsilon.alt)(Z_l)).
 $
-Set $g_l := sans(Q) hat(epsilon.alt)(Z_l)$ and Abel-sum the last sum:
+Set $g_l := sans(Q) hat(epsilon.alt)(Z_l)$. Abel summation gives
 $
 sum_(l = 2)^(n - 1) cal(Q)_l^("RR") (g_(l - 1) - g_l)
   = cal(Q)_2^("RR") thin g_1
@@ -127,10 +130,7 @@ sum_(l = 2)^(n - 1) cal(Q)_l^("RR") (g_(l - 1) - g_l)
     + sum_(l = 2)^(n - 2)
       (cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")) thin g_l.
 $
-Adding the contribution $cal(Q)_1^("RR") thin g_1$ from the peeled $l = 1$
-term combines with $-cal(Q)_2^("RR") thin g_1$ to yield
-$-(cal(Q)_2^("RR") - cal(Q)_1^("RR")) thin g_1$, which folds the boundary
-$l = 1$ summand back into the discrete-derivative sum:
+The boundary terms combine as
 $
 &-cal(Q)_1^("RR") thin hat(epsilon.alt)(Z_1)
 + cal(Q)_1^("RR") thin g_1
@@ -143,17 +143,15 @@ $
           (cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR")) thin g_l
        + cal(Q)_(n - 1)^("RR") thin g_(n - 1).
 $
-The rightmost boundary $cal(Q)_(n - 1)^("RR") thin g_(n - 1)$ vanishes because
-$cal(Q)_(n - 1)^("RR") = 2 alpha I - 2 alpha I = 0$ identically (from
-$Q_(n - 1)^((alpha)) = alpha I$ and $Q_(n - 1)^((2 alpha)) = 2 alpha I$).
-Multiplying by $1 slash sqrt(n)$ and absorbing the sign into $D_(2, n)^("RR")$
-produces exactly the stated formula.
+The rightmost boundary vanishes because
+$cal(Q)_(n - 1)^("RR") = 2 alpha I - 2 alpha I = 0$. This gives the stated
+formula.
+// This uses $Q_(n - 1)^((alpha)) = alpha I$ and
+// $Q_(n - 1)^((2 alpha)) = 2 alpha I$; the sign is absorbed into
+// $D_(2, n)^("RR")$.
 
-For the sup-norm bound @eq:D2-bound, use $|| g_l ||_infinity <= || hat(epsilon.alt) ||_infinity <= 3 t_"mix" || epsilon.alt ||_infinity$,
-the uniform bound $|| cal(Q)_1^("RR") || <= C_(cal(Q))$ on the left boundary,
-and the summed-total-variation bound
-$sum_(l = 1)^(n - 2) || cal(Q)_(l + 1)^("RR") - cal(Q)_l^("RR") || <= C_2 slash a^2$
-on the Abel sum:
+For @eq:D2-bound, use the sup-norm Poisson bound, the uniform weight bound, and
+the summed-total-variation bound:
 $
 || sqrt(n) thin D_(2, n)^("RR") ||
   <= 3 t_"mix" || epsilon.alt ||_infinity (C_(cal(Q)) + C_2 slash a^2).
