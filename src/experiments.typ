@@ -154,10 +154,9 @@ inference such as Singh, Shukla, and Vats (2025).
 
 == Main comparison
 
-The numerical values in this subsection are taken from the completed report
-`reports/2026-04-23_main_comparison.md`. The table is a compact summary of
-the main methods; the report also records additional methods, coverage
-percentiles, problem diagnostics, and raw output locations.
+The table below gives a compact summary of the completed main comparison
+run. The entries are medians over the 100 generated problems and focus on
+the methods most directly relevant to the thesis message.
 
 The expected behavior is as follows. A single large constant stepsize should
 produce short intervals but can leave substantial steady-state bias. A single
@@ -167,8 +166,7 @@ stepsize bias while keeping the long-run variance target essentially the
 same. Therefore the desirable empirical signature is lower L2 error and
 near-nominal coverage without a major increase in interval width.
 
-The main comparison confirms this pattern. The entries are medians over the
-100 generated problems.
+The main comparison confirms this pattern.
 
 #table(
   columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr),
@@ -210,9 +208,9 @@ variation in this comparison.
 == Theory-aligned RR stepsize sweep
 
 The main comparison above uses the wide practical pair
-$alpha in {0.2, 0.02}$. A separate sweep, recorded in
-`reports/2026-05-26_theory_rr_alpha_sweep.md`, repeats the comparison for
-the adjacent two-level pairs $(2 alpha, alpha)$ with
+$alpha in {0.2, 0.02}$. To check that the effect is not specific to this
+wide pair, a separate sweep repeats the comparison for the adjacent
+two-level pairs $(2 alpha, alpha)$ with
 $alpha in {0.02, 0.05, 0.10}$. This is the stepsize geometry closest to the
 first-order Richardson--Romberg expansion used in the theory.
 
@@ -242,8 +240,8 @@ and coverage are essentially unchanged across the three adjacent pairs.
 
 The OBM and OBM-RR versions of the RR intervals give the same qualitative
 message. In this sweep, RR+OBM and RR+OBM-RR have median coverage between
-$94.0%$ and $95.0%$, with width changes below about one percent. Thus the
-new run reinforces the separation between the two corrections: RR in
+$94.0%$ and $95.0%$, with width changes below about one percent. Thus this
+experiment reinforces the separation between the two corrections: RR in
 $alpha$ removes the point-estimator bias, while OBM or lugsail in $b$ only
 modifies the estimated long-run variance.
 
@@ -251,9 +249,8 @@ modifies the estimated long-run variance.
 
 The theory-aligned sweep still uses estimated long-run variances. To separate
 variance-estimation error from point-estimator bias and normal-approximation
-error, the report `reports/2026-05-26_oracle_variance_rr.md` repeats the
-largest adjacent-pair experiment, $(0.20, 0.10)$, with an oracle interval
-based on the analytic finite-state value
+error, we repeat the largest adjacent-pair experiment, $(0.20, 0.10)$, with
+an oracle interval based on the analytic finite-state value
 $sigma^2(u)=u^top Sigma_infinity u$. The interval center is the same
 RR-averaged estimator in every row.
 
@@ -278,8 +275,7 @@ scale of Monte Carlo variation across the 100 generated problems.
 
 == Coverage over trajectory length
 
-The report `reports/2026-05-26_rr_coverage_T_sweep.md` repeats the
-oracle-variance comparison over
+We next repeat the oracle-variance comparison over
 $T in {2 dot 10^4, 5 dot 10^4, 10^5, 3 dot 10^5, 10^6}$, using the same
 RR pair $(0.20,0.10)$ and the same problem seeds across horizons. The goal
 is to identify whether undercoverage at shorter horizons comes from the RR
@@ -315,14 +311,13 @@ the block-size regime.
 
 == Block-size sweep for coverage
 
-To test this block-size dependence directly, the report
-`reports/2026-05-26_rr_blocksize_coverage.md` repeats the RR coverage
+To test this block-size dependence directly, we repeat the RR coverage
 experiment for
 $b = floor(T^eta)$, $eta in {0.3,0.4,0.5,0.6,0.7,0.8}$, and
 $T in {2 dot 10^4, 10^5, 10^6}$. The RR center is fixed at the adjacent pair
 $(0.20,0.10)$, so the differences across rows are caused by the
-long-run variance estimator. The full grid is reported in the CSV file and in
-the report; here we plot the most informative slice.
+long-run variance estimator. The figure plots the most informative slice of
+this grid.
 
 #figure(
   image("../figures/experiments/variance_and_mixing_diagnostics.svg", width: 100%),
@@ -352,10 +347,10 @@ width.
 
 == Conditioning and noise stress test
 
-The report `reports/2026-05-26_rr_conditioning_noise_stress.md` checks
-whether the block-size conclusion survives moderate changes in the problem
-generator. The run keeps the same RR pair $(0.20,0.10)$ and the same random
-finite-state Markov-chain generator, but varies the eigenvalue range of
+The conditioning/noise stress test checks whether the block-size conclusion
+survives moderate changes in the problem generator. The run keeps the same
+RR pair $(0.20,0.10)$ and the same random finite-state Markov-chain
+generator, but varies the eigenvalue range of
 $-overline(A)$ and the target norm of the state-dependent matrix noise. Thus
 this is a conditioning and matrix-noise stress test, not yet a mixing-time
 stress test.
@@ -379,9 +374,9 @@ Bartlett-window bias, but the useful block-size range must still be checked.
 
 == Mixing-rate stress test
 
-The report `reports/2026-05-26_rr_mixing_stress.md` changes the
-Markov-chain dependence directly. Starting from the same dense random
-transition matrix $P_0$, the experiment uses the lazy mixture
+The mixing-rate stress test changes the Markov-chain dependence directly.
+Starting from the same dense random transition matrix $P_0$, the experiment
+uses the lazy mixture
 $P_rho = rho I + (1-rho) P_0$. This keeps the stationary distribution fixed
 but decreases the spectral gap. The LSA problem generator and the RR pair
 $(0.20,0.10)$ are otherwise unchanged.
@@ -406,10 +401,8 @@ $t_"mix"$ in the theory is practically important.
 == Lugsail bias--variance diagnostic
 
 A separate lugsail bias--variance experiment isolates the covariance
-estimator itself. The numerical values in this subsection are taken from
-`reports/2026-04-23_lugsail_bias_variance.md`. The experiment compares OBM
-and OBM-RR over a grid of block sizes and uses the analytic value of
-$sigma^2(u)$ as ground truth.
+estimator itself. It compares OBM and OBM-RR over a grid of block sizes and
+uses the analytic value of $sigma^2(u)$ as ground truth.
 
 In the short-horizon regime, lugsail helps because the raw OBM estimator has
 visible negative Bartlett-window bias. For PR iterates, OBM-RR with
@@ -431,12 +424,13 @@ baseline practical estimator of $Sigma_infinity$. Lugsail/OBM-RR is useful
 when the long-run-variance estimator has visible negative window bias, mainly
 in shorter-horizon or more persistent regimes.
 
-== Limitations and planned experimental extensions
+== Limitations and future diagnostics
 
 The current experiments support the qualitative message of the theory, but
 they do not yet cover all diagnostics needed for a complete empirical study.
-The following extensions are planned to separate theorem validation,
-variance-estimation accuracy, and robustness to problem conditioning.
+The following diagnostics would make the empirical study more complete by
+separating theorem validation, variance-estimation accuracy, and robustness
+to problem conditioning.
 
 #table(
   columns: (1.35fr, 2.75fr),
@@ -457,9 +451,9 @@ variance-estimation accuracy, and robustness to problem conditioning.
    corrections.],
 )
 
-The theory-aligned stepsize sweep has now been completed for three adjacent
-pairs, the oracle $T$-sweep and block-size coverage sweep have been completed
-for the largest adjacent pair, and conditioning/noise and mixing-rate stress
-tests have been completed for the same pair. The most important remaining
-diagnostics are therefore mixing-aware tuning and matrix-valued covariance
-checks: the current evidence is still scalar-directional.
+The present experiment set already includes a theory-aligned stepsize sweep
+for three adjacent pairs, an oracle $T$-sweep, a block-size coverage sweep,
+and conditioning/noise and mixing-rate stress tests for the largest adjacent
+pair. The most important remaining diagnostics are therefore mixing-aware
+tuning and matrix-valued covariance checks: the current evidence is still
+scalar-directional.
