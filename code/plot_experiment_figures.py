@@ -100,7 +100,7 @@ def main_methods_figure():
     _save(fig, 'main_methods_comparison.svg')
 
 
-def blocksize_mixing_figure():
+def blocksize_lugsail_figure():
     block = pd.read_csv(
         RESULTS / 'blocksize_coverage'
         / 'rr_blocksize_T20k_100k_1M_pair0p20_0p10_w24_summary.csv'
@@ -109,19 +109,7 @@ def blocksize_mixing_figure():
     obm = block[block['estimator'] == 'OBM'].sort_values('eta')
     obm_rr = block[block['estimator'] == 'OBM_RR'].sort_values('eta')
 
-    mix = pd.read_csv(
-        RESULTS / 'stress'
-        / 'rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24_summary.csv'
-    )
-    mix_eta = mix[(mix['T'] == 1000000) &
-                  ((mix['estimator'] == 'ORACLE') |
-                   ((mix['estimator'] == 'OBM_RR') & (mix['eta'] == 0.5)))]
-
-    fig, axes = plt.subplots(
-        1, 2, figsize=(9.8, 3.25),
-        gridspec_kw={'wspace': 0.48},
-    )
-
+    fig, axes = plt.subplots(1, 2, figsize=(9.2, 3.05), sharex=True)
     axes[0].plot(obm['eta'], obm['coverage_median_pct'], marker='o',
                  color=COLORS['gray'], label='OBM coverage')
     axes[0].plot(obm_rr['eta'], obm_rr['coverage_median_pct'], marker='o',
@@ -129,60 +117,74 @@ def blocksize_mixing_figure():
     axes[0].axhline(95, color=COLORS['red'], linestyle='--', linewidth=1.0)
     axes[0].set_xlabel(r'block exponent $\eta$')
     axes[0].set_ylabel('median coverage, %')
-    axes[0].set_title(r'Block-size sweep, $T=10^5$')
+    axes[0].set_title('Coverage')
     axes[0].set_ylim(70, 100)
     axes[0].legend(frameon=False, loc='lower center')
-    ax_bias = axes[0].twinx()
-    ax_bias.plot(obm['eta'], obm['rel_bias_raw_median'], linestyle=':',
-                 marker='s', color=COLORS['gray'], alpha=0.75,
-                 label='OBM bias')
-    ax_bias.plot(obm_rr['eta'], obm_rr['rel_bias_raw_median'], linestyle=':',
-                 marker='s', color=COLORS['green'], alpha=0.75,
-                 label='OBM-LW bias')
-    ax_bias.axhline(0, color='#9ca3af', linewidth=0.8)
-    ax_bias.set_ylabel('variance bias', labelpad=3)
-    ax_bias.set_ylim(-0.75, 0.2)
-    ax_bias.tick_params(axis='y', labelsize=7, pad=2)
-    ax_bias.grid(False)
 
+    axes[1].plot(obm['eta'], obm['rel_bias_raw_median'], marker='s',
+                 color=COLORS['gray'], label='OBM')
+    axes[1].plot(obm_rr['eta'], obm_rr['rel_bias_raw_median'], marker='s',
+                 color=COLORS['green'], label='OBM-LW')
+    axes[1].axhline(0, color=COLORS['red'], linestyle='--', linewidth=1.0)
+    axes[1].set_xlabel(r'block exponent $\eta$')
+    axes[1].set_ylabel('median relative variance bias')
+    axes[1].set_title('Variance-estimator bias')
+    axes[1].set_ylim(-0.75, 0.12)
+    axes[1].legend(frameon=False, loc='lower left')
+
+    for ax in axes:
+        ax.set_xticks(obm['eta'])
+
+    fig.suptitle(r'Block-size tuning for OBM and OBM-LW, $T=10^5$',
+                 y=1.04, fontsize=11)
+    _save(fig, 'blocksize_lugsail_diagnostics.svg')
+
+
+def mixing_stress_figure():
+    mix = pd.read_csv(
+        RESULTS / 'stress'
+        / 'rr_mixing_lazy_T100k_1M_pair0p20_0p10_w24_summary.csv'
+    )
+    mix_eta = mix[(mix['T'] == 1000000) &
+                  ((mix['estimator'] == 'ORACLE') |
+                   ((mix['estimator'] == 'OBM_RR') & (mix['eta'] == 0.5)))]
     oracle = mix_eta[mix_eta['estimator'] == 'ORACLE'].sort_values(
         'spectral_gap_median', ascending=False
     )
     rr = mix_eta[mix_eta['estimator'] == 'OBM_RR'].sort_values(
         'spectral_gap_median', ascending=False
     )
-    axes[1].plot(oracle['spectral_gap_median'],
-                 oracle['coverage_median_pct'], marker='o',
-                 color=COLORS['blue'], label='oracle variance')
-    axes[1].plot(rr['spectral_gap_median'],
-                 rr['coverage_median_pct'], marker='o',
-                 color=COLORS['orange'], label=r'OBM-LW, $\eta=0.5$')
-    axes[1].axhline(95, color=COLORS['red'], linestyle='--', linewidth=1.0)
-    axes[1].invert_xaxis()
-    axes[1].set_xlabel('median spectral gap')
-    axes[1].set_ylabel('median coverage, %')
-    axes[1].yaxis.tick_right()
-    axes[1].yaxis.set_label_position('right')
-    axes[1].spines['left'].set_visible(False)
-    axes[1].spines['right'].set_visible(True)
-    axes[1].set_title(r'Mixing stress, $T=10^6$')
-    axes[1].set_ylim(0, 105)
-    axes[1].legend(frameon=False, loc='lower left')
+
+    fig, ax = plt.subplots(figsize=(5.2, 3.15))
+    ax.plot(rr['spectral_gap_median'],
+            rr['coverage_median_pct'], marker='o',
+            color=COLORS['orange'], linewidth=1.8,
+            label=r'OBM-LW, $\eta=0.5$')
+    ax.plot(oracle['spectral_gap_median'],
+            oracle['coverage_median_pct'], marker='o', fillstyle='none',
+            markersize=7, linestyle='--', linewidth=1.4,
+            color=COLORS['blue'], label='oracle variance')
+    ax.axhline(95, color=COLORS['red'], linestyle='--', linewidth=1.0)
+    ax.invert_xaxis()
+    ax.set_xlabel('median spectral gap')
+    ax.set_ylabel('median coverage, %')
+    ax.set_title(r'Mixing stress, $T=10^6$')
+    ax.set_ylim(0, 105)
+    ax.legend(frameon=False, loc='lower left')
     for _, row in oracle.iterrows():
         label = row['scenario'].replace('lazy_', '')
-        axes[1].annotate(label, (row['spectral_gap_median'],
-                         row['coverage_median_pct']), textcoords='offset points',
-                         xytext=(3, 5), fontsize=7)
+        ax.annotate(label, (row['spectral_gap_median'],
+                    row['coverage_median_pct']), textcoords='offset points',
+                    xytext=(4, 6), fontsize=7)
 
-    fig.suptitle('Variance-estimator tuning versus slow-mixing failure',
-                 y=1.05, fontsize=11)
-    _save(fig, 'variance_and_mixing_diagnostics.svg')
+    _save(fig, 'mixing_stress_diagnostics.svg')
 
 
 def main():
     _style()
     main_methods_figure()
-    blocksize_mixing_figure()
+    blocksize_lugsail_figure()
+    mixing_stress_figure()
 
 
 if __name__ == '__main__':

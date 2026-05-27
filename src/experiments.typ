@@ -322,16 +322,16 @@ long-run variance estimator. The figure plots the most informative slice of
 this grid.
 
 #figure(
-  image("../figures/experiments/variance_and_mixing_diagnostics.svg", width: 100%),
-  caption: [Left: block-size sensitivity of OBM and OBM-LW at $T=10^5$.
-    Right: slow-mixing stress test at $T=10^6$, comparing oracle variance
-    intervals with OBM-LW intervals at $eta=0.5$.],
-) <fig:variance-mixing-diagnostics>
+  image("../figures/experiments/blocksize_lugsail_diagnostics.svg", width: 100%),
+  caption: [Block-size sensitivity of OBM and OBM-LW at $T=10^5$.
+    The left panel shows median scalar coverage, and the right panel shows
+    median relative bias of the corresponding long-run variance estimator.],
+) <fig:blocksize-lugsail-diagnostics>
 
 This sweep resolves the apparent tension between the default-rule coverage
 sweep and the lugsail bias--variance diagnostic. Lugsail improves coverage
 when OBM is still dominated by negative Bartlett-window bias, as shown in
-the left panel of @fig:variance-mixing-diagnostics. For example,
+@fig:blocksize-lugsail-diagnostics. For example,
 at $T=2 dot 10^4$ and $eta=0.5$, OBM-LW changes the median relative bias
 from $-0.222$ to $-0.022$, the width/oracle ratio from $0.878$ to $0.979$,
 and median coverage from $91.5%$ to $95.0%$. At $T=10^5$, OBM-LW with
@@ -383,11 +383,18 @@ $P_rho = rho I + (1-rho) P_0$. This keeps the stationary distribution fixed
 but decreases the spectral gap. The LSA problem generator and the RR pair
 $(0.20,0.10)$ are otherwise unchanged.
 
-The right panel of @fig:variance-mixing-diagnostics reports the OBM-LW row
-with $eta=0.5$, where variance estimation is already close to oracle in the
-non-slow-mixing experiments. For moderate slowdown, $rho=0.5$, the oracle and
-OBM-LW rows remain near nominal. The intervals become wider because the
-long-run variance is larger, but the qualitative behavior is unchanged.
+#figure(
+  image("../figures/experiments/mixing_stress_diagnostics.svg", width: 70%),
+  caption: [Slow-mixing stress test at $T=10^6$. The figure compares oracle
+    variance intervals with OBM-LW intervals at $eta=0.5$ as the spectral gap
+    decreases.],
+) <fig:mixing-stress-diagnostics>
+
+@fig:mixing-stress-diagnostics reports the OBM-LW row with $eta=0.5$, where
+variance estimation is already close to oracle in the non-slow-mixing
+experiments. For moderate slowdown, $rho=0.5$, the oracle and OBM-LW rows
+remain near nominal. The intervals become wider because the long-run variance
+is larger, but the qualitative behavior is unchanged.
 
 For slower chains, the failure mode changes. At $rho=0.8$ and $T=10^6$,
 OBM-LW has essentially oracle width, but both oracle and OBM-LW coverage are
