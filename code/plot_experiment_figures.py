@@ -117,7 +117,10 @@ def blocksize_mixing_figure():
                   ((mix['estimator'] == 'ORACLE') |
                    ((mix['estimator'] == 'OBM_RR') & (mix['eta'] == 0.5)))]
 
-    fig, axes = plt.subplots(1, 2, figsize=(9.4, 3.15))
+    fig, axes = plt.subplots(
+        1, 2, figsize=(9.8, 3.25),
+        gridspec_kw={'wspace': 0.48},
+    )
 
     axes[0].plot(obm['eta'], obm['coverage_median_pct'], marker='o',
                  color=COLORS['gray'], label='OBM coverage')
@@ -137,8 +140,9 @@ def blocksize_mixing_figure():
                  marker='s', color=COLORS['green'], alpha=0.75,
                  label='OBM-LW bias')
     ax_bias.axhline(0, color='#9ca3af', linewidth=0.8)
-    ax_bias.set_ylabel('median variance bias')
+    ax_bias.set_ylabel('variance bias', labelpad=3)
     ax_bias.set_ylim(-0.75, 0.2)
+    ax_bias.tick_params(axis='y', labelsize=7, pad=2)
     ax_bias.grid(False)
 
     oracle = mix_eta[mix_eta['estimator'] == 'ORACLE'].sort_values(
@@ -157,6 +161,10 @@ def blocksize_mixing_figure():
     axes[1].invert_xaxis()
     axes[1].set_xlabel('median spectral gap')
     axes[1].set_ylabel('median coverage, %')
+    axes[1].yaxis.tick_right()
+    axes[1].yaxis.set_label_position('right')
+    axes[1].spines['left'].set_visible(False)
+    axes[1].spines['right'].set_visible(True)
     axes[1].set_title(r'Mixing stress, $T=10^6$')
     axes[1].set_ylim(0, 105)
     axes[1].legend(frameon=False, loc='lower left')
