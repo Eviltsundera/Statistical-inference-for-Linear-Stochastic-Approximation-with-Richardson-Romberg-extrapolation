@@ -2,18 +2,18 @@
 
 ## Вопрос
 
-Изучить текущий текст диплома и коротко определить, какой в нем основной
-математический результат.
+Изучить текущий текст диплома и выписать главный математический результат.
 
-## Короткий ответ
+## Короткая формулировка
 
-Основной результат диплома -- не просто CLT для обычного PR-усреднения, а
-неасимптотическая нормальная аппроксимация типа Berry--Esseen для скалярных
-проекций burned-in Polyak--Ruppert averaged Richardson--Romberg estimator в
-linear stochastic approximation с марковским шумом.
+Главный результат диплома -- неасимптотическая нормальная аппроксимация типа
+Berry--Esseen для скалярных проекций burned-in Polyak--Ruppert averaged
+Richardson--Romberg estimator в linear stochastic approximation с марковским
+шумом.
 
-В thesis-facing форме результат такой. Для двух связанных постоянных шагов
-$\alpha$ и $2\alpha$ строится RR-среднее
+Если две constant-stepsize траектории с шагами $\alpha$ и $2\alpha$ запускаются
+из одной deterministic initial point $\theta_0$ на одной и той же марковской
+траектории, то RR-среднее задается как
 
 $$
 \bar\theta_{n,n_0}^{\mathrm{RR},\alpha}
@@ -23,22 +23,23 @@ $$
   \bar\theta_{n,n_0}^{(2\alpha)}.
 $$
 
-При стандартных предположениях диплома: uniform geometric ergodicity,
-Hurwitz/stability, bounded centered matrix noise, bounded centered vector
-noise, non-degenerate scalar variance $\sigma^2(u)>0$, и при balanced scale
+При предположениях диплома: uniform geometric ergodicity, Hurwitz/Lyapunov
+stability, bounded centered matrix noise, bounded centered vector noise,
+non-degenerate scalar variance $\sigma^2(u)>0$, admissible small-step
+conditions, и при balanced triangular-array scale
 
 $$
 \alpha = c n^{-1/2},
 $$
 
-после burn-in порядка
+после burn-in в mixing-scale window
 
 $$
 n_0 \asymp (\alpha a)^{-1}\log^2 n
-     = O(n^{1/2}\log^2 n)
+      = O(n^{1/2}\log^2 n)
 $$
 
-доказывается
+доказывается, что для любого фиксированного направления $u$:
 
 $$
 d_K\!\left(
@@ -62,55 +63,80 @@ $$
   \bar A^{-1}\Sigma_\epsilon^{(M)}\bar A^{-T}
 $$
 
-is the Markovian averaged-SA covariance target.
+является марковской long-run covariance target для averaged LSA.
 
-## Что это означает содержательно
+## Где это в дипломе
 
-Richardson--Romberg используется для устранения ведущего $O(\alpha)$
-stationary bias постоянного шага. При выборе $\alpha=c n^{-1/2}$ остаточные
-RR- и startup-члены становятся достаточно малы, чтобы нормальная
-аппроксимация работала на масштабе $\sqrt n$.
+Финальная формальная версия находится в `src/burn_in_transfer/12_balanced_burn_in_berry_esseen.typ`:
 
-Ведущий случайный вклад после Poisson/martingale reduction имеет ту же
-предельную covariance target $\Sigma_\infty$, что и оптимальное PR-усреднение:
-RR меняет bias, но не ухудшает асимптотическую ковариацию.
+- theorem `Balanced-scale deterministic-start burned-in PR-averaged RR Berry--Esseen bound`;
+- corollary `$\sqrt(n)$-normalization for the burned-in RR statistic`.
 
-## Структура доказательства в тексте
+Промежуточная stationary версия находится в
+`src/pr_weights/11_smoothing_assembly.typ`:
 
-1. `src/pr_weights.typ` доказывает stationary augmented-chain
-   Berry--Esseen bound для comparison statistic
-   $S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)$. Это промежуточная теорема, а не
-   конечный deterministic-start result.
+- theorem `Stationary augmented-chain Berry--Esseen assembly for the RR comparison statistic`;
+- corollary `Stationary balanced-scale augmented-chain Berry--Esseen bound`.
 
-2. Там же контролируются RR-веса, variance comparison, Poisson remainder,
-   martingale Berry--Esseen step и stationary RR misadjustment.
+## Содержательный смысл
 
-3. `src/burn_in_transfer.typ` переносит stationary theorem на
-   deterministic start через burn-in: отдельно ограничиваются deterministic
-   transient, random initial product, burned-in weights, startup transfer и
-   finite-window misadjustment.
+Richardson--Romberg extrapolation используется для подавления leading
+constant-stepsize bias. Обычное constant-step PR average имеет bias, который
+может портить confidence intervals на масштабе $\sqrt n$. RR-комбинация
+сравнивает две траектории с шагами $\alpha$ и $2\alpha$ и сокращает leading
+stepsize term.
 
-4. Финальный результат -- Theorem
-   `Balanced-scale burned-in PR-averaged RR Berry--Esseen bound` и следующий
-   corollary with $\sqrt n$ normalization.
+При выборе $\alpha=c n^{-1/2}$ остаточные RR-, misadjustment-, Poisson-,
+startup- и transient-члены контролируются на уровне
+$\mathrm{polylog}(n)n^{-1/4}$. Поэтому итоговая статистика имеет ту же
+ковариационную цель, что и оптимальное PR-усреднение:
 
-## Важные ограничения формулировки
+$$
+\Sigma_\infty
+  =
+  \bar A^{-1}\Sigma_\epsilon^{(M)}\bar A^{-T}.
+$$
 
-- Результат скалярный: для фиксированного направления $u$, а не полный
-  multivariate Berry--Esseen по выпуклым множествам.
-- Это triangular-array statement с $\alpha_n=c n^{-1/2}$, а не fixed-$\alpha$
-  CLT centered exactly at $\theta^\star$.
-- Теорема использует известную/asymptotic нормировку
-  $\sigma(u)=\sqrt{u^\top\Sigma_\infty u}$. Consistency of an empirical
-  covariance estimator is not the main proved theorem here.
-- Стационарная теорема из `src/pr_weights.typ` сама по себе не является
-  практическим deterministic-start theorem; это закрывается отдельной
-  burn-in главой.
+Иными словами, RR меняет центр статистики, уменьшая bias, но не меняет
+асимптотическую covariance target.
 
-## Одной фразой для введения или защиты
+## Доказательная цепочка
 
-Диплом доказывает, что Richardson--Romberg PR-усреднение для constant-step LSA
-с марковским шумом после mixing-scale burn-in имеет нормальную аппроксимацию
-с оптимальной ковариацией $\Sigma_\infty$ и неасимптотической
-Berry--Esseen ошибкой $\mathrm{polylog}(n)n^{-1/4}$ для любых фиксированных
+Доказательство устроено так:
+
+1. Вводится deterministic RR weight kernel и доказываются pointwise,
+   energy и total-variation bounds для PR weights.
+2. Эти оценки дают comparison между finite-window variance proxy и
+   $\Sigma_\infty$.
+3. Markovian noise раскладывается через Poisson equation в martingale part и
+   Abel/boundary remainders.
+4. Для martingale part применяется Berry--Esseen bound с контролем
+   predictable quadratic variation.
+5. RR misadjustment terms ограничиваются через depth-two estimates.
+6. Stationary augmented-chain theorem переносится на deterministic start
+   через burn-in: deterministic transient, initial random products, startup
+   discrepancy и finite-window normalization.
+7. В конце $\sqrt m$-нормировка burned-in window переводится в финальную
+   $\sqrt n$-нормировку.
+
+## Что не является главным доказанным результатом
+
+Результат не является multivariate Berry--Esseen theorem для всех выпуклых
+множеств; он сформулирован для фиксированных scalar projections $u$.
+
+Результат не является fixed-$\alpha$ CLT centered exactly at $\theta^\star$.
+Финальная practical theorem работает в triangular-array режиме
+$\alpha_n=c n^{-1/2}$.
+
+Результат не доказывает non-asymptotic consistency of OBM/lugsail covariance
+estimation along RR-averaged LSA trajectories. OBM and lugsail в дипломе
+используются в экспериментальной части как practical long-run variance
+estimators; их теория оставлена для future work.
+
+## Одна фраза для защиты
+
+Диплом доказывает, что burned-in Richardson--Romberg PR-усреднение для
+constant-stepsize LSA с марковским шумом имеет нормальную аппроксимацию с
+оптимальной ковариационной целью $\Sigma_\infty$ и неасимптотической
+Berry--Esseen ошибкой $\mathrm{polylog}(n)n^{-1/4}$ для фиксированных
 скалярных проекций.

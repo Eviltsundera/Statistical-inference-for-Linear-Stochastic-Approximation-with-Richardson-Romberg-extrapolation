@@ -55,6 +55,13 @@ uv run python run_comparison.py                                      # smoke tes
 uv run python run_comparison.py --n-problems 100 --n-traj 100 --T 1000000
 ```
 
+For remote experiment access from WSL, ordinary `ssh beleriand` may not work.
+Use the Windows OpenSSH client explicitly:
+
+```bash
+/mnt/c/Windows/System32/OpenSSH/ssh.exe beleriand
+```
+
 CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.py`, and in `code/results/` for `run_lugsail_bias_variance.py`.
 
 ### Non-obvious choices to respect

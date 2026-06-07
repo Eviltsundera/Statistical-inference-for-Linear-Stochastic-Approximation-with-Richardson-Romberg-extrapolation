@@ -39,17 +39,18 @@ length $m$.
   $p <= q slash 4$ and $2 alpha <= alpha_("burn")(p,q)$, and every $m >= 2$,
   $
   || R_(n,n_0, op("fin"))^("mis,RR") ||_(L_p)
-    &<= C_("burn,mis") sqrt(m) thin alpha^2 \
-    &quad + C_("burn,mis") (1 + d^(1 slash q)) p^(7 slash 2)
-       t_"mix"^(5 slash 2) sqrt(m) thin alpha^(3 slash 2)
-       log^(3 slash 2)(1 slash (alpha a)) \
-    &quad + C_("burn,mis") p^(3 slash 2) sqrt(alpha) \
-    &quad + C_("burn,mis") p^3 (alpha m)^(-1 slash 2)
-       log^(1 slash 2)(1 slash (alpha a)) \
-    &quad + C_("burn,mis") Phi_+(p, alpha) thin m^(-1 slash 2) \
-    &quad + frac(C_("burn,mis") p thin A_("st")(p,q,alpha),
-                  alpha a sqrt(m))
-       exp(-c_("st") alpha a n_0 slash p).
+    &<= C_("burn,mis") thin lr((
+      sqrt(m) thin alpha^2
+      + (1 + d^(1 slash q)) thin p^(7 slash 2) thin t_"mix"^(5 slash 2)
+        thin sqrt(m) thin alpha^(3 slash 2)
+        thin log^(3 slash 2)(1 slash (alpha a)) \
+    &quad + p^(3 slash 2) thin sqrt(alpha)
+      + p^3 thin (alpha m)^(-1 slash 2)
+        thin log^(1 slash 2)(1 slash (alpha a)) \
+    &quad + Phi_+(p, alpha) thin m^(-1 slash 2)
+      + frac(p thin A_("st")(p,q,alpha), alpha a sqrt(m))
+        thin exp(-c_("st") alpha a n_0 slash p)
+    )).
   $ <eq:burn-mis-bound>
 ] <thm:burn-misadjustment>
 
@@ -98,7 +99,7 @@ Apply @thm:misadjustment with $n$ replaced by $m$ and
   $ <eq:burn-mis-rate>
 ] <cor:burn-misadjustment-rate>
 
-_Proof._ Apply @cor:misadjustment-rate with $n$ replaced by $m$, use
-$m >= n slash 2$, and control the startup term by @cor:burn-log-startup.
-$square$
+// _Proof._ Apply @cor:misadjustment-rate with $n$ replaced by $m$, use
+// $m >= n slash 2$, and control the startup term by @cor:burn-log-startup.
+// $square$
 // The startup term is $"polylog"(n) thin n^(-1 slash 4 - beta)$ at this scale.

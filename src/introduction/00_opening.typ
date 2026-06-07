@@ -2,6 +2,28 @@
 
 // === 1. Introduction ===
 
+The topic of this thesis is statistical inference for Richardson--Romberg
+averaged constant-stepsize linear stochastic approximation with Markovian
+noise. The object of study is the Polyak--Ruppert averaged LSA trajectory,
+while the subject is the distribution of scalar projections of the RR
+estimator and its covariance normalization. The methods used in the work are
+deterministic error decompositions, Lyapunov contraction estimates,
+Markov-chain Poisson equations, martingale Berry--Esseen inequalities,
+Richardson--Romberg weight analysis, and finite-start burn-in transfer. The
+problem is relevant because constant-stepsize stochastic approximation is
+widely used in reinforcement learning and stochastic optimization, but its
+steady-state bias complicates confidence interval construction under
+dependent data. The goal is to obtain a non-asymptotic normal approximation
+for the averaged RR statistic. The main tasks are to identify the leading
+linearized term, control RR weights and misadjustment terms, transfer the
+stationary theorem to deterministic starts, and check the practical behavior
+of the resulting confidence intervals. The main result is a balanced-scale
+Berry--Esseen bound with covariance target $Sigma_infinity$. The thesis is
+organized as follows: the first chapters develop the deterministic and
+stationary proof ingredients, the burn-in chapter transfers the result to
+finite starts, the experiment chapter records numerical diagnostics, and the
+appendices collect key objects and external inputs.
+
 Stochastic approximation (SA) algorithms are a cornerstone of modern computational statistics, optimization, and reinforcement learning.
 Introduced by Robbins and Monro (1951), these iterative procedures provide a principled way to find roots of equations or optimize objectives when only noisy observations are available. A particularly important subclass is the _linear stochastic approximation_ (LSA) algorithm, which arises naturally in temporal-difference (TD) learning, policy evaluation, and stochastic gradient descent for linear models.
 

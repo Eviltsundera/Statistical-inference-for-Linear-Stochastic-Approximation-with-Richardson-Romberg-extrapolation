@@ -1,0 +1,35 @@
+The thesis develops a distributional analysis for Richardson--Romberg
+averaged constant-stepsize linear stochastic approximation under Markovian
+noise. The work starts from the usual LSA recursion and isolates the effect
+of coupling two step sizes, $alpha$ and $2 alpha$, in the Polyak--Ruppert
+average. The main mathematical contribution is a proof strategy that combines
+deterministic RR weight bounds, Poisson martingale reduction for Markovian
+noise, predictable-variance comparison, and explicit control of the
+misadjustment terms.
+
+The stationary part of the analysis gives a Berry--Esseen assembly for scalar
+RR statistics under the augmented-chain convention. At the balanced scale
+$alpha = c n^(-1\/2)$, the result identifies the covariance target
+$Sigma_infinity = overline(A)^(-1) Sigma_epsilon.alt^(("M")) overline(A)^(-top)$
+and gives a non-asymptotic normal approximation up to logarithmic factors.
+The deterministic-start part then transfers the stationary theorem to the
+practical burned-in estimator by controlling deterministic transients,
+initial random products, startup discrepancies, and finite-window
+normalization errors.
+
+The numerical experiments are consistent with the theoretical picture.
+Step-size Richardson--Romberg extrapolation mainly improves the center of the
+confidence interval by reducing constant-stepsize bias, whereas OBM and
+lugsail OBM affect the long-run variance estimate. The experiments also show
+that lugsail corrections should be interpreted as variance-estimator
+bias-reduction tools whose effect depends on the block size and dependence
+regime.
+
+Further work should complete three directions. First, the current scalar
+Berry--Esseen theory should be extended to more explicitly multivariate
+confidence regions. Second, the OBM and lugsail covariance estimators should
+be analyzed non-asymptotically along RR-averaged constant-stepsize LSA
+trajectories. Third, the dependence on the mixing time and the Lyapunov
+contraction constants should be sharpened so that the theory gives more
+direct practical guidance for choosing burn-in lengths, step sizes, and block
+sizes.

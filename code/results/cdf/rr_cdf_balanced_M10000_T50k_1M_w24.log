@@ -1,0 +1,79 @@
+RR empirical CDF experiment
+  n_values=[50000, 100000, 300000, 1000000]
+  n_traj=10000, chunk_size=250, workers=24
+  alpha_n=20.0/sqrt(n), burn_kappa=1.0
+  burn_cap_frac=0.25, start_state=0
+  problem_seed=42, sigma_true=1.65387, a_proxy=0.286191
+  diagnostics={'alpha_warn': 0.2, 'max_a_norm': 0.7076777864338597, 'max_rho': 0.9805805462802905, 'warn_unstable': False, 'warn_assumption': False}
+
+n=50000: alpha=0.0894427, 2alpha=0.178885, n0=4573 (raw=4573), chunks=40
+  n=50000 [1/40] 5s elapsed, ~183s left
+  n=50000 [4/40] 5s elapsed, ~44s left
+  n=50000 [8/40] 5s elapsed, ~21s left
+  n=50000 [12/40] 7s elapsed, ~16s left
+  n=50000 [16/40] 9s elapsed, ~14s left
+  n=50000 [20/40] 9s elapsed, ~9s left
+  n=50000 [24/40] 10s elapsed, ~6s left
+  n=50000 [28/40] 10s elapsed, ~4s left
+  n=50000 [32/40] 10s elapsed, ~3s left
+  n=50000 [36/40] 12s elapsed, ~1s left
+  n=50000 [40/40] 13s elapsed, ~0s left
+Finished n=50000 in 14s
+n=100000: alpha=0.0632456, 2alpha=0.126491, n0=7322 (raw=7322), chunks=40
+  n=100000 [1/40] 9s elapsed, ~364s left
+  n=100000 [4/40] 10s elapsed, ~87s left
+  n=100000 [8/40] 10s elapsed, ~41s left
+  n=100000 [12/40] 11s elapsed, ~26s left
+  n=100000 [16/40] 14s elapsed, ~21s left
+  n=100000 [20/40] 18s elapsed, ~18s left
+  n=100000 [24/40] 19s elapsed, ~12s left
+  n=100000 [28/40] 19s elapsed, ~8s left
+  n=100000 [32/40] 20s elapsed, ~5s left
+  n=100000 [36/40] 22s elapsed, ~2s left
+  n=100000 [40/40] 24s elapsed, ~0s left
+Finished n=100000 in 24s
+n=300000: alpha=0.0365148, 2alpha=0.0730297, n0=15219 (raw=15219), chunks=40
+  n=300000 [1/40] 27s elapsed, ~1048s left
+  n=300000 [4/40] 28s elapsed, ~255s left
+  n=300000 [8/40] 29s elapsed, ~117s left
+  n=300000 [12/40] 33s elapsed, ~77s left
+  n=300000 [16/40] 48s elapsed, ~72s left
+  n=300000 [20/40] 54s elapsed, ~54s left
+  n=300000 [24/40] 55s elapsed, ~37s left
+  n=300000 [28/40] 56s elapsed, ~24s left
+  n=300000 [32/40] 58s elapsed, ~14s left
+  n=300000 [36/40] 63s elapsed, ~7s left
+  n=300000 [40/40] 77s elapsed, ~0s left
+Finished n=300000 in 77s
+n=1000000: alpha=0.02, 2alpha=0.04, n0=33346 (raw=33346), chunks=40
+  n=1000000 [1/40] 95s elapsed, ~3697s left
+  n=1000000 [4/40] 101s elapsed, ~905s left
+  n=1000000 [8/40] 113s elapsed, ~453s left
+  n=1000000 [12/40] 120s elapsed, ~279s left
+  n=1000000 [16/40] 132s elapsed, ~198s left
+  n=1000000 [20/40] 140s elapsed, ~140s left
+  n=1000000 [24/40] 167s elapsed, ~111s left
+  n=1000000 [28/40] 203s elapsed, ~87s left
+  n=1000000 [32/40] 214s elapsed, ~53s left
+  n=1000000 [36/40] 221s elapsed, ~25s left
+  n=1000000 [40/40] 239s elapsed, ~0s left
+Finished n=1000000 in 239s
+
+Summary:
+      n        method    n0    alpha     ks_D  ks_D_minus_dkw    mean_Z    var_Z  coverage_95  q025_error  q975_error
+  50000            RR  4573 0.089443 0.016473        0.002892 -0.000998 1.130490       0.9326   -0.143491    0.130040
+  50000  single_alpha  4573 0.089443 0.187244        0.173663  0.475749 1.131819       0.9096    0.346467    0.606600
+  50000 single_2alpha  4573 0.089443 0.356768        0.343187  0.952496 1.140599       0.8258    0.822035    1.090562
+ 100000            RR  7322 0.063246 0.013714        0.000133  0.000249 1.069083       0.9389   -0.133556    0.061467
+ 100000  single_alpha  7322 0.063246 0.190616        0.177035  0.476386 1.075110       0.9158    0.333513    0.553468
+ 100000 single_2alpha  7322 0.063246 0.364189        0.350608  0.952523 1.086132       0.8343    0.794451    1.041824
+ 300000            RR 15219 0.036515 0.011731        0.000000 -0.004200 1.061132       0.9418   -0.053848    0.075507
+ 300000  single_alpha 15219 0.036515 0.185193        0.171612  0.471613 1.063260       0.9201    0.417288    0.551955
+ 300000 single_2alpha 15219 0.036515 0.357102        0.343521  0.947426 1.068119       0.8321    0.890679    1.039411
+1000000            RR 33346 0.020000 0.006049        0.000000  0.003487 1.017826       0.9481   -0.008386    0.031487
+1000000  single_alpha 33346 0.020000 0.192784        0.179203  0.478898 1.018609       0.9189    0.465859    0.511143
+1000000 single_2alpha 33346 0.020000 0.369942        0.356361  0.954310 1.020847       0.8398    0.934871    0.987309
+
+Saved summary to results/cdf/rr_cdf_balanced_M10000_T50k_1M_summary.csv
+Saved CDF grid to results/cdf/rr_cdf_balanced_M10000_T50k_1M_grid.csv
+Total runtime: 353s

@@ -30,50 +30,59 @@ Markov chain has 10 states and the parameter dimension is $d=5$. The reported
 numbers aggregate 100 independent problems, with 100 Monte Carlo trajectories
 per problem and trajectory length $T=10^6$.
 
-#table(
-  columns: (1.25fr, 2.75fr),
-  inset: 4pt,
-  [*Quantity*], [*Value used in the main comparison*],
-  [Problem class], [Finite-state Markovian linear stochastic approximation],
-  [Number of problems], [$100$ independently generated problems],
-  [Trajectories per problem], [$100$],
-  [Dimension and states], [$d=5$ and 10 Markov states],
-  [Trajectory length], [$T=10^6$],
-  [Problem generation], [`eig_min = 0.25`, `eig_max = 0.60`,
-    `noise_target = 0.35`, `A_norm` cap `1.0`],
-  [Diminishing-stepsize schedule],
-  [$c_0=200$, $k_0=20000$, $gamma=0.65$],
-  [Constant stepsizes for RR],
-  [$alpha in {0.2, 0.02}$],
-  [Projection for confidence intervals],
-  [One random unit direction is sampled for each problem; coverage is reported
-   for this scalar direction, not for the first coordinate.],
+#figure(
+  table(
+    columns: (1.25fr, 2.75fr),
+    inset: 4pt,
+    [*Quantity*], [*Value used in the main comparison*],
+    [Problem class], [Finite-state Markovian linear stochastic approximation],
+    [Number of problems], [$100$ independently generated problems],
+    [Trajectories per problem], [$100$],
+    [Dimension and states], [$d=5$ and 10 Markov states],
+    [Trajectory length], [$T=10^6$],
+    [Problem generation], [`eig_min = 0.25`, `eig_max = 0.60`,
+      `noise_target = 0.35`, `A_norm` cap `1.0`],
+    [Diminishing-stepsize schedule],
+    [$c_0=200$, $k_0=20000$, $gamma=0.65$],
+    [Constant stepsizes for RR],
+    [$alpha in {0.2, 0.02}$],
+    [OBM and OBM-LW block sizes],
+    [$b_n = floor(T^0.6) = 3981$; OBM-LW uses $lambda=2$, hence the
+     two windows $b_n=3981$ and $2 b_n = 7962$.],
+    [Projection for confidence intervals],
+    [One random unit direction is sampled for each problem; coverage is reported
+     for this scalar direction, not for the first coordinate.],
+  ),
+  caption: [Main comparison experiment setup.],
 )
 
 The methods compared in the main table differ in two ways: the estimator used
 for the center of the interval and the estimator used for the long-run
 variance.
 
-#table(
-  columns: (1.35fr, 2.65fr),
-  inset: 4pt,
-  [*Method*], [*Description*],
-  [$alpha=0.2$ constant],
-  [Constant-stepsize averaged LSA with the larger stepsize branch.],
-  [$alpha=0.02$ constant],
-  [Constant-stepsize averaged LSA with the smaller stepsize branch.],
-  [RR constant stepsizes],
-  [Richardson--Romberg combination of the two constant-stepsize averages,
-   using $alpha in {0.2, 0.02}$.],
-  [Diminishing $0.2 slash sqrt(k)$],
-  [Classical diminishing-stepsize baseline with $alpha_k = 0.2 slash sqrt(k)$.],
-  [PR + OBM],
-  [Polyak--Ruppert averaging with OBM long-run variance estimation.],
-  [RR + OBM],
-  [RR point estimator with OBM long-run variance estimation.],
-  [RR + OBM-LW],
-  [RR point estimator with OBM long-run variance estimation using a lugsail
-   window.],
+#figure(
+  table(
+    columns: (1.35fr, 2.65fr),
+    inset: 4pt,
+    [*Method*], [*Description*],
+    [$alpha=0.2$ constant],
+    [Constant-stepsize averaged LSA with the larger stepsize branch.],
+    [$alpha=0.02$ constant],
+    [Constant-stepsize averaged LSA with the smaller stepsize branch.],
+    [RR constant stepsizes],
+    [Richardson--Romberg combination of the two constant-stepsize averages,
+     using $alpha in {0.2, 0.02}$.],
+    [Diminishing $0.2 slash sqrt(k)$],
+    [Classical diminishing-stepsize baseline with $alpha_k = 0.2 slash sqrt(k)$.],
+    [PR + OBM],
+    [Polyak--Ruppert averaging with OBM long-run variance estimation.],
+    [RR + OBM],
+    [RR point estimator with OBM long-run variance estimation.],
+    [RR + OBM-LW],
+    [RR point estimator with OBM long-run variance estimation using a lugsail
+     window.],
+  ),
+  caption: [Methods compared in the main experiment.],
 )
 
 The main comparison reports three metrics. The L2 error is the Euclidean norm
@@ -170,17 +179,20 @@ near-nominal coverage without a major increase in interval width.
 
 The main comparison confirms this pattern.
 
-#table(
-  columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr),
-  inset: 4pt,
-  [*Method*], [*L2*], [*CI width*], [*Coverage*],
-  [$alpha=0.2$ constant], [$26.67$], [$8.36$], [$0.5%$],
-  [$alpha=0.02$ constant], [$13.93$], [$8.27$], [$40.5%$],
-  [RR constant stepsizes], [$4.52$], [$8.22$], [$94.0%$],
-  [Diminishing $0.2 slash sqrt(k)$], [$6.80$], [$10.34$], [$90.0%$],
-  [PR + OBM], [$5.35$], [$8.04$], [$92.0%$],
-  [RR + OBM], [$4.52$], [$8.23$], [$95.0%$],
-  [RR + OBM-LW], [$4.52$], [$8.22$], [$95.0%$],
+#figure(
+  table(
+    columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr),
+    inset: 4pt,
+    [*Method*], [*L2*], [*CI width*], [*Coverage*],
+    [$alpha=0.2$ constant], [$26.67$], [$8.36$], [$0.5%$],
+    [$alpha=0.02$ constant], [$13.93$], [$8.27$], [$40.5%$],
+    [RR constant stepsizes], [$4.52$], [$8.22$], [$94.0%$],
+    [Diminishing $0.2 slash sqrt(k)$], [$6.80$], [$10.34$], [$90.0%$],
+    [PR + OBM], [$5.35$], [$8.04$], [$92.0%$],
+    [RR + OBM], [$4.52$], [$8.23$], [$95.0%$],
+    [RR + OBM-LW], [$4.52$], [$8.22$], [$95.0%$],
+  ),
+  caption: [Main comparison results at $T=10^6$.],
 )
 
 #figure(
@@ -222,16 +234,19 @@ states, and a random scalar projection direction per problem. The same
 problem seeds are used across the three rows. The table reports medians over
 problems; L2 errors and CI widths are again in units of $10^(-3)$.
 
-#table(
-  columns: (1.15fr, 1.65fr, 0.8fr, 0.8fr, 0.8fr),
-  inset: 4pt,
-  [*RR pair*], [*Single-alpha coverage*], [*RR L2*], [*RR width*], [*RR coverage*],
-  [$(0.04, 0.02)$], [$0.04$: $92.0%$; $0.02$: $94.0%$],
-  [$2.97$], [$5.36$], [$94.0%$],
-  [$(0.10, 0.05)$], [$0.10$: $86.0%$; $0.05$: $91.5%$],
-  [$2.97$], [$5.37$], [$94.0%$],
-  [$(0.20, 0.10)$], [$0.20$: $67.5%$; $0.10$: $86.0%$],
-  [$2.97$], [$5.38$], [$94.0%$],
+#figure(
+  table(
+    columns: (1.15fr, 1.65fr, 0.8fr, 0.8fr, 0.8fr),
+    inset: 4pt,
+    [*RR pair*], [*Single-alpha coverage*], [*RR L2*], [*RR width*], [*RR coverage*],
+    [$(0.04, 0.02)$], [$0.04$: $92.0%$; $0.02$: $94.0%$],
+    [$2.97$], [$5.36$], [$94.0%$],
+    [$(0.10, 0.05)$], [$0.10$: $86.0%$; $0.05$: $91.5%$],
+    [$2.97$], [$5.37$], [$94.0%$],
+    [$(0.20, 0.10)$], [$0.20$: $67.5%$; $0.10$: $86.0%$],
+    [$2.97$], [$5.38$], [$94.0%$],
+  ),
+  caption: [Theory-aligned adjacent RR stepsize sweep.],
 )
 
 The sweep shows that the RR gain is not an artifact of one particular
@@ -256,15 +271,18 @@ an oracle interval based on the analytic finite-state value
 $sigma^2(u)=u^top Sigma_infinity u$. The interval center is the same
 RR-averaged estimator in every row.
 
-#table(
-  columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr, 0.8fr),
-  inset: 4pt,
-  [*Method*], [*L2*], [*CI width*], [*Coverage*], [*Width/oracle*],
-  [RR + batch means], [$2.97$], [$5.38$], [$94.0%$], [$0.990$],
-  [RR + oracle variance], [$2.97$], [$5.43$], [$95.0%$], [$1.000$],
-  [RR + OBM], [$2.97$], [$5.42$], [$95.0%$], [$0.998$],
-  [RR + OBM-LW], [$2.97$], [$5.39$], [$95.0%$], [$0.993$],
-  [RR + MSB], [$2.97$], [$5.36$], [$95.0%$], [$0.987$],
+#figure(
+  table(
+    columns: (1.7fr, 0.8fr, 0.8fr, 0.8fr, 0.8fr),
+    inset: 4pt,
+    [*Method*], [*L2*], [*CI width*], [*Coverage*], [*Width/oracle*],
+    [RR + batch means], [$2.97$], [$5.38$], [$94.0%$], [$0.990$],
+    [RR + oracle variance], [$2.97$], [$5.43$], [$95.0%$], [$1.000$],
+    [RR + OBM], [$2.97$], [$5.42$], [$95.0%$], [$0.998$],
+    [RR + OBM-LW], [$2.97$], [$5.39$], [$95.0%$], [$0.993$],
+    [RR + MSB], [$2.97$], [$5.36$], [$95.0%$], [$0.987$],
+  ),
+  caption: [Oracle-variance diagnostic for the $(0.20, 0.10)$ RR pair.],
 )
 
 The oracle interval is nearly indistinguishable from the practical
@@ -283,16 +301,19 @@ RR pair $(0.20,0.10)$ and the same problem seeds across horizons. The goal
 is to identify whether undercoverage at shorter horizons comes from the RR
 center and normal approximation, or from estimating the long-run variance.
 
-#table(
-  columns: (0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr),
-  inset: 4pt,
-  [*$T$*], [*Oracle cov.*], [*OBM cov.*], [*OBM-LW cov.*],
-  [*OBM/oracle width*], [*OBM-LW/oracle width*],
-  [$2 dot 10^4$], [$95.5%$], [$94.0%$], [$93.0%$], [$0.942$], [$0.944$],
-  [$5 dot 10^4$], [$95.0%$], [$94.0%$], [$93.0%$], [$0.967$], [$0.958$],
-  [$10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.978$], [$0.972$],
-  [$3 dot 10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.989$], [$0.989$],
-  [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$], [$0.998$], [$0.993$],
+#figure(
+  table(
+    columns: (0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr, 0.9fr),
+    inset: 4pt,
+    [*$T$*], [*Oracle cov.*], [*OBM cov.*], [*OBM-LW cov.*],
+    [*OBM/oracle width*], [*OBM-LW/oracle width*],
+    [$2 dot 10^4$], [$95.5%$], [$94.0%$], [$93.0%$], [$0.942$], [$0.944$],
+    [$5 dot 10^4$], [$95.0%$], [$94.0%$], [$93.0%$], [$0.967$], [$0.958$],
+    [$10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.978$], [$0.972$],
+    [$3 dot 10^5$], [$95.0%$], [$94.0%$], [$94.0%$], [$0.989$], [$0.989$],
+    [$10^6$], [$95.0%$], [$95.0%$], [$95.0%$], [$0.998$], [$0.993$],
+  ),
+  caption: [Oracle and data-driven coverage over trajectory length.],
 )
 
 The oracle coverage is already close to the nominal level at all horizons.
@@ -374,6 +395,7 @@ in the weak-plus-noise scenario. This supports the same interpretation as the
 block-size sweep: lugsail helps when OBM is too narrow because of negative
 Bartlett-window bias, but the useful block-size range must still be checked.
 
+/*
 == Mixing-rate stress test
 
 The mixing-rate stress test changes the Markov-chain dependence directly.
@@ -406,6 +428,7 @@ $111.76 dot 10^(-3)$. Thus the problem is no longer variance estimation.
 The center or finite-sample normal approximation is failing relative to the
 $T^(-1/2)$ interval width. This experiment shows why the dependence on
 $t_"mix"$ in the theory is practically important.
+*/
 
 == Lugsail bias--variance diagnostic
 
@@ -441,28 +464,36 @@ The following diagnostics would make the empirical study more complete by
 separating theorem validation, variance-estimation accuracy, and robustness
 to problem conditioning.
 
-#table(
-  columns: (1.35fr, 2.75fr),
-  inset: 4pt,
-  [*Extension*], [*Purpose*],
-  [Burn-in and initialization sweep],
-  [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
-   deterministic-start transfer and the practical size of the
-   $(alpha a)^(-1) log^2 n$ burn-in window.],
-  [Mixing-aware tuning],
-  [The mixing-rate stress test shows that strong slow mixing breaks oracle
-   coverage. Additional runs should vary horizon, burn-in, and stepsize as
-   functions of the spectral gap or $t_"mix"$.],
-  [Matrix covariance diagnostics],
-  [The present coverage results are scalar random-direction diagnostics.
-   Additional runs should check several directions and the full estimated
-   covariance matrix, including positive-semidefiniteness of lugsail
-   corrections.],
+#figure(
+  table(
+    columns: (1.35fr, 2.75fr),
+    inset: 4pt,
+    [*Extension*], [*Purpose*],
+    [Burn-in and initialization sweep],
+    [Varying $n_0$, $theta_0$, and the initial law of $Z_0$ would test the
+     deterministic-start transfer and the practical size of the
+     $(alpha a)^(-1) log^2 n$ burn-in window.],
+    [Mixing-aware tuning],
+    [Additional runs should vary horizon, burn-in, and stepsize as functions of
+     the spectral gap or $t_"mix"$ to check how slow mixing affects oracle and
+     data-driven coverage.],
+    [OBM and OBM-LW theory and tuning],
+    [A separate study should analyze OBM and lugsail-window OBM along
+     RR-averaged constant-stepsize LSA trajectories, including non-asymptotic
+     window-bias bounds, block-size selection, and the regimes where the
+     signed OBM-LW correction improves or destabilizes coverage.],
+    [Matrix covariance diagnostics],
+    [The present coverage results are scalar random-direction diagnostics.
+     Additional runs should check several directions and the full estimated
+     covariance matrix, including positive-semidefiniteness of lugsail
+     corrections.],
+  ),
+  caption: [Suggested extensions for the empirical study.],
 )
 
 The present experiment set already includes a theory-aligned stepsize sweep
 for three adjacent pairs, an oracle $T$-sweep, a block-size coverage sweep,
-and conditioning/noise and mixing-rate stress tests for the largest adjacent
-pair. The most important remaining diagnostics are therefore mixing-aware
-tuning and matrix-valued covariance checks: the current evidence is still
+and conditioning/noise stress tests for the largest adjacent pair. The most
+important remaining diagnostics are therefore mixing-aware tuning and
+matrix-valued covariance checks: the current evidence is still
 scalar-directional.

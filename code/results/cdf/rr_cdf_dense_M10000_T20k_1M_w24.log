@@ -1,0 +1,192 @@
+RR empirical CDF experiment
+  n_values=[20000, 30000, 50000, 75000, 100000, 150000, 200000, 300000, 500000, 750000, 1000000]
+  n_traj=10000, chunk_size=250, workers=24
+  alpha_n=20.0/sqrt(n), burn_kappa=1.0
+  burn_cap_frac=0.25, start_state=0
+  problem_seed=42, sigma_true=1.65387, a_proxy=0.286191
+  diagnostics={'alpha_warn': 0.2, 'max_a_norm': 0.7076777864338597, 'max_rho': 0.9805805462802905, 'warn_unstable': False, 'warn_assumption': False}
+
+n=20000: alpha=0.141421, 2alpha=0.282843, n0=2423 (raw=2423), chunks=40
+  n=20000 [1/40] 2s elapsed, ~73s left
+  n=20000 [4/40] 2s elapsed, ~17s left
+  n=20000 [8/40] 2s elapsed, ~8s left
+  n=20000 [12/40] 2s elapsed, ~5s left
+  n=20000 [16/40] 3s elapsed, ~4s left
+  n=20000 [20/40] 3s elapsed, ~3s left
+  n=20000 [24/40] 4s elapsed, ~2s left
+  n=20000 [28/40] 4s elapsed, ~2s left
+  n=20000 [32/40] 4s elapsed, ~1s left
+  n=20000 [36/40] 4s elapsed, ~0s left
+  n=20000 [40/40] 4s elapsed, ~0s left
+Finished n=20000 in 5s
+n=30000: alpha=0.11547, 2alpha=0.23094, n0=3215 (raw=3215), chunks=40
+  n=30000 [1/40] 3s elapsed, ~103s left
+  n=30000 [4/40] 3s elapsed, ~28s left
+  n=30000 [8/40] 3s elapsed, ~14s left
+  n=30000 [12/40] 4s elapsed, ~9s left
+  n=30000 [16/40] 4s elapsed, ~6s left
+  n=30000 [20/40] 5s elapsed, ~5s left
+  n=30000 [24/40] 6s elapsed, ~4s left
+  n=30000 [28/40] 6s elapsed, ~3s left
+  n=30000 [32/40] 6s elapsed, ~2s left
+  n=30000 [36/40] 7s elapsed, ~1s left
+  n=30000 [40/40] 7s elapsed, ~0s left
+Finished n=30000 in 7s
+n=50000: alpha=0.0894427, 2alpha=0.178885, n0=4573 (raw=4573), chunks=40
+  n=50000 [1/40] 5s elapsed, ~176s left
+  n=50000 [4/40] 5s elapsed, ~41s left
+  n=50000 [8/40] 5s elapsed, ~19s left
+  n=50000 [12/40] 5s elapsed, ~12s left
+  n=50000 [16/40] 5s elapsed, ~8s left
+  n=50000 [20/40] 8s elapsed, ~8s left
+  n=50000 [24/40] 9s elapsed, ~6s left
+  n=50000 [28/40] 9s elapsed, ~4s left
+  n=50000 [32/40] 9s elapsed, ~2s left
+  n=50000 [36/40] 10s elapsed, ~1s left
+  n=50000 [40/40] 10s elapsed, ~0s left
+Finished n=50000 in 10s
+n=75000: alpha=0.0730297, 2alpha=0.146059, n0=6028 (raw=6028), chunks=40
+  n=75000 [1/40] 7s elapsed, ~264s left
+  n=75000 [4/40] 7s elapsed, ~62s left
+  n=75000 [8/40] 7s elapsed, ~28s left
+  n=75000 [12/40] 7s elapsed, ~17s left
+  n=75000 [16/40] 8s elapsed, ~12s left
+  n=75000 [20/40] 10s elapsed, ~10s left
+  n=75000 [24/40] 12s elapsed, ~8s left
+  n=75000 [28/40] 14s elapsed, ~6s left
+  n=75000 [32/40] 14s elapsed, ~3s left
+  n=75000 [36/40] 14s elapsed, ~2s left
+  n=75000 [40/40] 16s elapsed, ~0s left
+Finished n=75000 in 16s
+n=100000: alpha=0.0632456, 2alpha=0.126491, n0=7322 (raw=7322), chunks=40
+  n=100000 [1/40] 9s elapsed, ~352s left
+  n=100000 [4/40] 9s elapsed, ~82s left
+  n=100000 [8/40] 9s elapsed, ~38s left
+  n=100000 [12/40] 10s elapsed, ~23s left
+  n=100000 [16/40] 11s elapsed, ~16s left
+  n=100000 [20/40] 11s elapsed, ~11s left
+  n=100000 [24/40] 17s elapsed, ~11s left
+  n=100000 [28/40] 20s elapsed, ~9s left
+  n=100000 [32/40] 20s elapsed, ~5s left
+  n=100000 [36/40] 21s elapsed, ~2s left
+  n=100000 [40/40] 23s elapsed, ~0s left
+Finished n=100000 in 23s
+n=150000: alpha=0.0516398, 2alpha=0.10328, n0=9611 (raw=9611), chunks=40
+  n=150000 [1/40] 29s elapsed, ~1112s left
+  n=150000 [4/40] 35s elapsed, ~319s left
+  n=150000 [8/40] 38s elapsed, ~153s left
+  n=150000 [12/40] 40s elapsed, ~94s left
+  n=150000 [16/40] 43s elapsed, ~65s left
+  n=150000 [20/40] 44s elapsed, ~44s left
+  n=150000 [24/40] 49s elapsed, ~33s left
+  n=150000 [28/40] 77s elapsed, ~33s left
+  n=150000 [32/40] 81s elapsed, ~20s left
+  n=150000 [36/40] 83s elapsed, ~9s left
+  n=150000 [40/40] 94s elapsed, ~0s left
+Finished n=150000 in 94s
+n=200000: alpha=0.0447214, 2alpha=0.0894427, n0=11640 (raw=11640), chunks=40
+  n=200000 [1/40] 53s elapsed, ~2056s left
+  n=200000 [4/40] 62s elapsed, ~555s left
+  n=200000 [8/40] 64s elapsed, ~255s left
+  n=200000 [12/40] 67s elapsed, ~155s left
+  n=200000 [16/40] 67s elapsed, ~101s left
+  n=200000 [20/40] 69s elapsed, ~69s left
+  n=200000 [24/40] 74s elapsed, ~49s left
+  n=200000 [28/40] 123s elapsed, ~53s left
+  n=200000 [32/40] 130s elapsed, ~33s left
+  n=200000 [36/40] 133s elapsed, ~15s left
+  n=200000 [40/40] 136s elapsed, ~0s left
+Finished n=200000 in 136s
+n=300000: alpha=0.0365148, 2alpha=0.0730297, n0=15219 (raw=15219), chunks=40
+  n=300000 [1/40] 80s elapsed, ~3133s left
+  n=300000 [4/40] 94s elapsed, ~843s left
+  n=300000 [8/40] 102s elapsed, ~408s left
+  n=300000 [12/40] 105s elapsed, ~244s left
+  n=300000 [16/40] 107s elapsed, ~160s left
+  n=300000 [20/40] 111s elapsed, ~111s left
+  n=300000 [24/40] 114s elapsed, ~76s left
+  n=300000 [28/40] 193s elapsed, ~83s left
+  n=300000 [32/40] 202s elapsed, ~50s left
+  n=300000 [36/40] 206s elapsed, ~23s left
+  n=300000 [40/40] 226s elapsed, ~0s left
+Finished n=300000 in 226s
+n=500000: alpha=0.0282843, 2alpha=0.0565685, n0=21272 (raw=21272), chunks=40
+  n=500000 [1/40] 160s elapsed, ~6227s left
+  n=500000 [4/40] 171s elapsed, ~1539s left
+  n=500000 [8/40] 176s elapsed, ~705s left
+  n=500000 [12/40] 179s elapsed, ~418s left
+  n=500000 [16/40] 181s elapsed, ~271s left
+  n=500000 [20/40] 184s elapsed, ~184s left
+  n=500000 [24/40] 190s elapsed, ~127s left
+  n=500000 [28/40] 333s elapsed, ~143s left
+  n=500000 [32/40] 347s elapsed, ~87s left
+  n=500000 [36/40] 361s elapsed, ~40s left
+  n=500000 [40/40] 393s elapsed, ~0s left
+Finished n=500000 in 393s
+n=750000: alpha=0.023094, 2alpha=0.046188, n0=27688 (raw=27688), chunks=40
+  n=750000 [1/40] 241s elapsed, ~9395s left
+  n=750000 [4/40] 255s elapsed, ~2294s left
+  n=750000 [8/40] 271s elapsed, ~1086s left
+  n=750000 [12/40] 307s elapsed, ~716s left
+  n=750000 [16/40] 312s elapsed, ~467s left
+  n=750000 [20/40] 316s elapsed, ~316s left
+  n=750000 [24/40] 323s elapsed, ~215s left
+  n=750000 [28/40] 541s elapsed, ~232s left
+  n=750000 [32/40] 557s elapsed, ~139s left
+  n=750000 [36/40] 569s elapsed, ~63s left
+  n=750000 [40/40] 597s elapsed, ~0s left
+Finished n=750000 in 598s
+n=1000000: alpha=0.02, 2alpha=0.04, n0=33346 (raw=33346), chunks=40
+  n=1000000 [1/40] 304s elapsed, ~11870s left
+  n=1000000 [4/40] 359s elapsed, ~3227s left
+  n=1000000 [8/40] 397s elapsed, ~1587s left
+  n=1000000 [12/40] 403s elapsed, ~940s left
+  n=1000000 [16/40] 416s elapsed, ~624s left
+  n=1000000 [20/40] 418s elapsed, ~418s left
+  n=1000000 [24/40] 438s elapsed, ~292s left
+  n=1000000 [28/40] 709s elapsed, ~304s left
+  n=1000000 [32/40] 774s elapsed, ~194s left
+  n=1000000 [36/40] 787s elapsed, ~87s left
+  n=1000000 [40/40] 797s elapsed, ~0s left
+Finished n=1000000 in 797s
+
+Summary:
+      n        method    n0    alpha     ks_D  ks_D_minus_dkw    mean_Z    var_Z  coverage_95  q025_error  q975_error
+  20000            RR  2423 0.141421 0.021576        0.007995  0.003511 1.149311       0.9346   -0.158021    0.100424
+  20000  single_alpha  2423 0.141421 0.187207        0.173626  0.480904 1.155948       0.9047    0.311197    0.602123
+  20000 single_2alpha  2423 0.141421 0.355674        0.342093  0.958297 1.175092       0.8170    0.772838    1.086558
+  30000            RR  3215 0.115470 0.022015        0.008434 -0.010067 1.145227       0.9348   -0.136765    0.123540
+  30000  single_alpha  3215 0.115470 0.179713        0.166132  0.466458 1.150249       0.9079    0.345316    0.606300
+  30000 single_2alpha  3215 0.115470 0.355439        0.341858  0.942984 1.165203       0.8233    0.794332    1.106132
+  50000            RR  4573 0.089443 0.016090        0.002509  0.004864 1.104354       0.9394   -0.072658    0.104709
+  50000  single_alpha  4573 0.089443 0.186874        0.173293  0.481563 1.105558       0.9066    0.399724    0.580065
+  50000 single_2alpha  4573 0.089443 0.361214        0.347633  0.958263 1.114149       0.8248    0.872309    1.060280
+  75000            RR  6028 0.073030 0.019444        0.005863 -0.020716 1.110675       0.9367   -0.123529    0.057827
+  75000  single_alpha  6028 0.073030 0.179991        0.166410  0.455321 1.113256       0.9117    0.353330    0.548278
+  75000 single_2alpha  6028 0.073030 0.353589        0.340008  0.931359 1.121649       0.8306    0.812533    1.030679
+ 100000            RR  7322 0.063246 0.019937        0.006356 -0.003246 1.103437       0.9411   -0.048614    0.066402
+ 100000  single_alpha  7322 0.063246 0.185407        0.171826  0.473355 1.106600       0.9130    0.415616    0.558858
+ 100000 single_2alpha  7322 0.063246 0.351397        0.337816  0.949956 1.114746       0.8236    0.873187    1.038661
+ 150000            RR  9611 0.051640 0.010693        0.000000 -0.012668 1.051401       0.9455   -0.054423    0.014598
+ 150000  single_alpha  9611 0.051640 0.182351        0.168770  0.463730 1.053464       0.9175    0.420819    0.503940
+ 150000 single_2alpha  9611 0.051640 0.358411        0.344830  0.940127 1.059474       0.8346    0.877095    0.990278
+ 200000            RR 11640 0.044721 0.013499        0.000000 -0.001578 1.079059       0.9428   -0.077770    0.039147
+ 200000  single_alpha 11640 0.044721 0.188111        0.174530  0.474920 1.079178       0.9153    0.399258    0.518071
+ 200000 single_2alpha 11640 0.044721 0.362654        0.349073  0.951417 1.082713       0.8294    0.870347    1.000717
+ 300000            RR 15219 0.036515 0.012004        0.000000  0.006199 1.039825       0.9473   -0.029221    0.032555
+ 300000  single_alpha 15219 0.036515 0.187786        0.174205  0.482346 1.040864       0.9168    0.456392    0.507065
+ 300000 single_2alpha 15219 0.036515 0.362181        0.348600  0.958493 1.044685       0.8342    0.924984    0.970828
+ 500000            RR 21272 0.028284 0.012918        0.000000  0.008417 1.068372       0.9415   -0.082545    0.063279
+ 500000  single_alpha 21272 0.028284 0.193018        0.179437  0.484577 1.070967       0.9160    0.390863    0.540004
+ 500000 single_2alpha 21272 0.028284 0.362007        0.348426  0.960737 1.075622       0.8284    0.853435    1.024276
+ 750000            RR 27688 0.023094 0.011686        0.000000  0.013404 1.048025       0.9437   -0.050736    0.059454
+ 750000  single_alpha 27688 0.023094 0.194339        0.180758  0.489698 1.049164       0.9143    0.427269    0.537002
+ 750000 single_2alpha 27688 0.023094 0.367909        0.354328  0.965992 1.051973       0.8338    0.898629    1.012142
+1000000            RR 33346 0.020000 0.012937        0.000000  0.006042 1.053696       0.9475   -0.016887    0.013261
+1000000  single_alpha 33346 0.020000 0.188558        0.174977  0.481691 1.055584       0.9170    0.447395    0.488134
+1000000 single_2alpha 33346 0.020000 0.362579        0.348998  0.957339 1.058951       0.8296    0.923519    0.969933
+
+Saved summary to results/cdf/rr_cdf_dense_M10000_T20k_1M_summary.csv
+Saved CDF grid to results/cdf/rr_cdf_dense_M10000_T20k_1M_grid.csv
+Saved Z samples to results/cdf/rr_cdf_dense_M10000_T20k_1M_z.csv
+Total runtime: 2312s

@@ -1,13 +1,20 @@
 // Theorem environments. These are implemented as captionless figures so that
 // labels after theorem-like blocks can be referenced with @lem:..., @thm:....
+#let chapter-numbering(..nums) = context numbering("1.1", counter(heading).get().first(), ..nums)
+#let theorem-number(kind) = context numbering(
+  "1.1",
+  counter(heading).get().first(),
+  counter(figure.where(kind: kind)).get().first(),
+)
+
 #let theorem-like(name, kind, supplement, body) = figure(
   block(width: 100%, spacing: 0.8em)[
     #set align(left)
-    *#name #context counter(figure.where(kind: kind)).display().* #body
+    *#name #theorem-number(kind).* #body
   ],
   kind: kind,
   supplement: supplement,
-  numbering: "1.",
+  numbering: chapter-numbering,
   caption: none,
 )
 

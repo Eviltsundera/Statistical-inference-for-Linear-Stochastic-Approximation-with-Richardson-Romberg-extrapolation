@@ -1,6 +1,6 @@
 #import "defs.typ": *
 
-= Appendix: Key Quantities and Basic Objects <sec:key-quantities>
+= Appendix A. Key Quantities and Basic Objects <sec:key-quantities>
 
 #include "appendix/key_quantities.typ"
 
@@ -14,6 +14,6 @@
 
 // #pagebreak()
 
-= Appendix: External Inputs and Local Extensions <sec:external-inputs>
+= Appendix B. External Inputs and Local Extensions <sec:external-inputs>
 
 #include "appendix/external_inputs.typ"

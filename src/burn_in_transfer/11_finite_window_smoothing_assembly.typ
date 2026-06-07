@@ -54,20 +54,22 @@ Let $cal(B)_("mis")(m,n_0,p,q,alpha)$ denote the right-hand side of
   satisfying $p <= q slash 4$ and $2 alpha <= alpha_("burn")(p,q)$,
   $
   || cal(R)_(n,n_0, op("fin"))^("bRR")(u) ||_(L_p)
-    &<= frac(5 sqrt(kappa_Q) || u || || theta_0 - theta^* ||,
-             alpha a sqrt(m))
-        (1 - alpha a)^(n_0 slash 2) \
-    &quad + frac(C_("init,RR") ||u|| ||theta_0 - theta^*|| p,
-             alpha a sqrt(m))
-       exp(-c_("init") alpha a n_0 slash p) \
-    &quad + frac(C_("burn,D2") thin || u ||, sqrt(m))
-     + || u || thin cal(B)_("mis")(m,n_0,p,q,alpha),
+    <= || u || thin lr((
+      cal(B)_("start")(m,n_0,p,alpha)
+      + frac(C_("burn,D2"), sqrt(m))
+      + cal(B)_("mis")(m,n_0,p,q,alpha)
+    )),
   $ <eq:burn-R-bound>
   where
   $
+  cal(B)_("start")(m,n_0,p,alpha)
+    &:= frac(|| theta_0 - theta^* ||, alpha a sqrt(m)) thin lr([
+      5 sqrt(kappa_Q) thin (1 - alpha a)^(n_0 slash 2)
+  + C_("init,RR") thin p thin exp(-c_("init") alpha a n_0 slash p)
+    ]), \
   C_("burn,D2")
-    := 3 thin t_"mix" thin || epsilon.alt ||_infinity
-       thin lr((C_("burn,Q") + frac(C_("burn,V"), a^2))).
+    &:= 3 thin t_"mix" thin || epsilon.alt ||_infinity
+        thin lr((C_("burn,Q") + frac(C_("burn,V"), a^2))).
   $
 ] <lem:burn-R-bound>
 
@@ -108,8 +110,8 @@ $
   $
   d_K lr((Xi_(n,n_0)^("bRR")(u), cal(N)(0, 1)))
     &<= frac(C_("bK,1")(u) thin log^(3 slash 4) n, m^(1 slash 4))
-     + frac(C_("bK,2")(u) thin log n, sqrt(m)) \
-    &quad + frac(e thin
+     + frac(C_("bK,2")(u) thin log n, sqrt(m))
+    + frac(e thin
         || cal(R)_(n,n_0, op("fin"))^("bRR")(u) ||_(L_p),
         sqrt(2 pi) thin sigma_(n,n_0)^("bRR")(u))
      + frac(e, n),

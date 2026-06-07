@@ -109,6 +109,9 @@ Current active proof threads:
 
 - Do not edit `code/` unless the user explicitly asks Codex to do programming
   work.
+- For remote experiment access from WSL, ordinary `ssh beleriand` may not work.
+  Use the Windows OpenSSH client explicitly:
+  `/mnt/c/Windows/System32/OpenSSH/ssh.exe beleriand`.
 - If code must be touched, use `uv` from `code/`:
   `uv sync`, then `uv run python <runner>.py`.
 - Main runners are `run_comparison.py`, `run_bn_sweep.py`, and
