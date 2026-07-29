@@ -55,12 +55,14 @@ uv run python run_comparison.py                                      # smoke tes
 uv run python run_comparison.py --n-problems 100 --n-traj 100 --T 1000000
 ```
 
-For remote experiment access from WSL, ordinary `ssh beleriand` may not work.
-Use the Windows OpenSSH client explicitly:
+### Remote compute: `train-4`
 
-```bash
-/mnt/c/Windows/System32/OpenSSH/ssh.exe beleriand
-```
+Heavy runs go to the `train-4` cloud server; the former `beleriand` host is retired and survives only in dated reports. SSH aliases live in `~/.ssh/config`: `ssh train-4` for scripted / VS Code Remote-SSH access, `ssh train-4-shell` for an interactive zsh that lands in `/home/jovyan/degainanov`.
+
+- Hardware (checked 2026-07-29): `nproc` shows 128 hyperthreads, but the container's cgroup quota caps usable CPU at **96 cores** (`/sys/fs/cgroup/cpu.max = 9600000/100000`); ~1.4 TB RAM, 8× H100. The runners are CPU-bound numpy + `multiprocessing` — GPUs are irrelevant here. The machine is shared — check `uptime` before heavy runs.
+- Setup done 2026-07-29: repo lives at `/home/jovyan/degainanov/study/Statistical-inference-for-Linear-Stochastic-Approximation-with-Richardson-Romberg-extrapolation`, `uv` 0.12 at `~/.local/bin/uv` (managed Python 3.14; system Python is 3.10). Interactive shells have `uv` on PATH via `.zshrc`; scripted `ssh train-4 '...'` needs the full `~/.local/bin/uv` path.
+- The repo was copied from the local machine via tar-over-ssh (not cloned): local was ahead of `origin/main`. To sync later, either repeat the tar copy or push locally and `git pull` on the server — but note the server's GitHub SSH key and `~/.gitconfig` belong to another user (`sofiyabogakovskaya`, shared jovyan account), so never commit or push from train-4.
+- Past beleriand runs used 24 workers (`w24` in result filenames); on train-4 raise `--n-workers` accordingly, but keep the chunked-memory settings below.
 
 CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.py`, and in `code/results/` for `run_lugsail_bias_variance.py`.
 
@@ -85,7 +87,7 @@ CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.
 ## Conventions
 
 - `uv` for Python env (don't use pip/conda directly in `code/`).
-- Reports in `reports/` are dated ISO (`YYYY-MM-DD_<slug>.md`) and link back to the script and raw CSVs that produced them.
+- Reports in `reports/` are dated ISO (`YYYY-MM-DD_<slug>.md`) and link back to the script and raw CSVs that produced them. Result CSVs themselves are NOT committed (policy since 2026-07-29: `code/results/` and `reports/figures/*/*.csv` are gitignored; data lives locally and on train-4) — only reports, figures (PNG), and code go to git.
 - Math notes in `conversations/` should render cleanly in Markdown preview: use `$...$` and `$$...$$` for formulas.
 - Code comments and docstrings mix English and Russian — keep the language the surrounding text uses.
 - Don't commit `tmp/`, `__pycache__/`, or generated `main.pdf` changes unless the user asks.

@@ -8,3 +8,8 @@ __pycache__/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Experiment data stays out of git (kept locally and on train-4);
+# already-tracked June files are unaffected
+code/results/
+reports/figures/*/*.csv

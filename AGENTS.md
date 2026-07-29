@@ -109,9 +109,12 @@ Current active proof threads:
 
 - Do not edit `code/` unless the user explicitly asks Codex to do programming
   work.
-- For remote experiment access from WSL, ordinary `ssh beleriand` may not work.
-  Use the Windows OpenSSH client explicitly:
-  `/mnt/c/Windows/System32/OpenSSH/ssh.exe beleriand`.
+- Remote experiments run on the `train-4` cloud server (ssh aliases
+  `train-4` / `train-4-shell` from `~/.ssh/config`; the interactive shell
+  lands in `/home/jovyan/degainanov`). `nproc` shows 128 hyperthreads but the
+  cgroup quota caps usable CPU at 96 cores; ~1.4 TB RAM, 8x H100 (unused: the
+  runners are CPU-bound). The former `beleriand` host is retired and survives
+  only in dated reports.
 - If code must be touched, use `uv` from `code/`:
   `uv sync`, then `uv run python <runner>.py`.
 - Main runners are `run_comparison.py`, `run_bn_sweep.py`, and
