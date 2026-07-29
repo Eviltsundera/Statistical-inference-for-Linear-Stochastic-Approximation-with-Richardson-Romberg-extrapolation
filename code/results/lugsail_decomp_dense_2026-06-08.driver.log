@@ -1,0 +1,124 @@
+START 2026-06-08T13:53:59+00:00
+==============================================================================
+Single-problem decomposition (OBM and OBM-RR)
+  prob_seed=0  dir_seed=1  traj_seed=2
+  d=5  n_states=10  eig in [0.1,0.6]  noise_target=0.35
+  n_traj=1200  traj_chunk=200
+  PR: c0=200.0 k0=20000.0 gamma=0.65
+  T_list=[10000, 30000, 100000, 300000, 1000000]  lam_list=[2.0, 3.0, 4.0]
+  bn_points=80 in T^[0.15,0.9]
+  sigma^2_inf (analytic) = 5.530043e+00
+==============================================================================
+
+=== T=10000 ===
+  bn_list (67 pts): 5..2000
+  all_b (237 OBM evals): 5..8000
+    chunk   200/1200  (200 traj)    13.1s
+    chunk   400/1200  (200 traj)    15.6s
+    chunk   600/1200  (200 traj)    16.8s
+    chunk   800/1200  (200 traj)    16.7s
+    chunk  1000/1200  (200 traj)    18.3s
+    chunk  1200/1200  (200 traj)    15.8s
+  T=10000 done in 96.4s
+
+=== T=30000 ===
+  bn_list (72 pts): 5..6000
+  all_b (236 OBM evals): 5..24000
+    chunk   200/1200  (200 traj)    43.1s
+    chunk   400/1200  (200 traj)    40.7s
+    chunk   600/1200  (200 traj)    44.6s
+    chunk   800/1200  (200 traj)    52.3s
+    chunk  1000/1200  (200 traj)    44.8s
+    chunk  1200/1200  (200 traj)    40.3s
+  T=30000 done in 265.8s
+
+=== T=100000 ===
+  bn_list (75 pts): 5..20000
+  all_b (268 OBM evals): 5..80000
+    chunk   200/1200  (200 traj)   165.3s
+    chunk   400/1200  (200 traj)   165.8s
+    chunk   600/1200  (200 traj)   204.0s
+    chunk   800/1200  (200 traj)   177.6s
+    chunk  1000/1200  (200 traj)   186.7s
+    chunk  1200/1200  (200 traj)   182.0s
+  T=100000 done in 1081.6s
+
+=== T=300000 ===
+  bn_list (78 pts): 6..60000
+  all_b (296 OBM evals): 6..240000
+    chunk   200/1200  (200 traj)   612.7s
+    chunk   400/1200  (200 traj)   488.7s
+    chunk   600/1200  (200 traj)   492.5s
+    chunk   800/1200  (200 traj)   499.0s
+    chunk  1000/1200  (200 traj)   513.7s
+    chunk  1200/1200  (200 traj)   488.8s
+  T=300000 done in 3095.4s
+
+=== T=1000000 ===
+  bn_list (79 pts): 7..200000
+  all_b (307 OBM evals): 7..800000
+    chunk   200/1200  (200 traj)  2030.1s
+    chunk   400/1200  (200 traj)  1960.0s
+    chunk   600/1200  (200 traj)  1938.5s
+    chunk   800/1200  (200 traj)  1948.1s
+    chunk  1000/1200  (200 traj)  1919.5s
+    chunk  1200/1200  (200 traj)  1912.6s
+  T=1000000 done in 11709.0s
+
+==============================================================================
+BEST-MSE (over swept b) per (T, estimator)
+==============================================================================
+         T         method      b*   b/T^e        bias         var         mse
+------------------------------------------------------------------------------
+     10000            OBM     170   0.558  -6.021e-01   6.596e-01   1.022e+00
+     10000    OBM_RR(λ=2)      35   0.386  -3.570e-01   4.683e-01   5.954e-01
+     10000    OBM_RR(λ=3)      29   0.366  -3.333e-01   5.122e-01   6.228e-01
+     10000    OBM_RR(λ=4)      24   0.345  -3.616e-01   5.187e-01   6.490e-01
+     30000            OBM     286   0.549  -4.175e-01   3.838e-01   5.577e-01
+     30000    OBM_RR(λ=2)      49   0.378  -2.436e-01   2.347e-01   2.939e-01
+     30000    OBM_RR(λ=3)      40   0.358  -2.401e-01   2.514e-01   3.088e-01
+     30000    OBM_RR(λ=4)      36   0.348  -2.106e-01   2.810e-01   3.252e-01
+    100000            OBM     554   0.549  -3.335e-01   2.083e-01   3.194e-01
+    100000    OBM_RR(λ=2)      96   0.396  -1.282e-01   1.371e-01   1.534e-01
+    100000    OBM_RR(λ=3)      77   0.377  -1.388e-01   1.405e-01   1.597e-01
+    100000    OBM_RR(λ=4)      62   0.358  -1.762e-01   1.363e-01   1.673e-01
+    300000            OBM    1141   0.558  -2.757e-01   1.558e-01   2.316e-01
+    300000    OBM_RR(λ=2)     189   0.416  -1.006e-01   9.282e-02   1.029e-01
+    300000    OBM_RR(λ=3)     149   0.397  -1.182e-01   9.427e-02   1.082e-01
+    300000    OBM_RR(λ=4)     132   0.387  -1.092e-01   1.028e-01   1.146e-01
+   1000000            OBM    2905   0.577  -2.364e-01   1.120e-01   1.678e-01
+   1000000    OBM_RR(λ=2)     406   0.435  -1.119e-01   5.853e-02   7.100e-02
+   1000000    OBM_RR(λ=3)     356   0.425  -8.783e-02   6.569e-02   7.335e-02
+   1000000    OBM_RR(λ=4)     312   0.416  -8.745e-02   6.983e-02   7.742e-02
+
+Saved 1484 rows to results/lugsail_decomp_dense_2026-06-08.csv
+PLOT_START 2026-06-08T13:53:59+00:00
+Loaded 1484 rows from results/lugsail_decomp_dense_2026-06-08.csv
+sigma^2_inf = 5.5300e+00
+T values    = [np.int64(10000), np.int64(30000), np.int64(100000), np.int64(300000), np.int64(1000000)]
+estimators  = ['OBM', 'OBM_RR']
+lams        = [np.float64(0.0), np.float64(2.0), np.float64(3.0), np.float64(4.0)]
+  wrote mse_vs_b.png
+
+=== Per-method parametric fits (structural model: MSE = bias^2 + var) ===
+        method        c_lead         c_fs        c_var  sigma_log
+------------------------------------------------------------------
+           OBM           188       -3.159        43.05      0.730
+  wrote mse_fit_OBM.png
+  OBM-RR (λ=2)         934.8      -0.4662        188.4      1.051
+  wrote mse_fit_OBM_RR_lam2.png
+  OBM-RR (λ=3)           618      -0.6279        233.4      1.052
+  wrote mse_fit_OBM_RR_lam3.png
+  OBM-RR (λ=4)         431.8        -0.53          280      1.038
+  wrote mse_fit_OBM_RR_lam4.png
+ANALYZE_START 2026-06-08T13:53:59+00:00
+           label  n_T  eta_hat_bstar  C_hat_bstar  r2_log_bstar  mse_power_kappa  best_x_by_cv  best_cv  best_x_by_slope
+             OBM    5       0.613719     0.533550      0.990249        -0.389780          0.61 0.112210             0.61
+OBM-LW(lambda=2)    5       0.543577     0.202953      0.986691        -0.460124          0.54 0.115600             0.54
+OBM-LW(lambda=3)    5       0.550577     0.153911      0.980253        -0.462312          0.55 0.144790             0.55
+OBM-LW(lambda=4)    5       0.558846     0.120119      0.980289        -0.459593          0.56 0.143315             0.56
+
+Saved ../reports/figures/lugsail_optimal_b_2026-06-08/lugsail_dense_bstar.csv
+Saved ../reports/figures/lugsail_optimal_b_2026-06-08/lugsail_dense_x_scan.csv
+Saved ../reports/figures/lugsail_optimal_b_2026-06-08/lugsail_dense_scaling_summary.csv
+DONE 2026-06-08T13:53:59+00:00
