@@ -1,4 +1,4 @@
-#import "../src/abstracts.typ": english-abstract
+#import "../diploma_typst/src/abstracts.typ": english-abstract
 
 #set document(
   title: "Abstract",

@@ -1,4 +1,4 @@
-#import "../src/abstracts.typ": russian-abstract
+#import "../diploma_typst/src/abstracts.typ": russian-abstract
 
 #set document(
   title: "Аннотация",

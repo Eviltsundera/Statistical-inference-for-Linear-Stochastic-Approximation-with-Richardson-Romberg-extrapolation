@@ -196,7 +196,7 @@ The main comparison confirms this pattern.
 )
 
 #figure(
-  image("../figures/experiments/main_methods_comparison.svg", width: 100%),
+  image("../../figures/experiments/main_methods_comparison.svg", width: 100%),
   caption: [Main comparison at $T=10^6$. The left panel shows median
     Euclidean error and the right panel shows median scalar coverage across
     the same 100 generated problems.],
@@ -343,7 +343,7 @@ long-run variance estimator. The figure plots the most informative slice of
 this grid.
 
 #figure(
-  image("../figures/experiments/blocksize_lugsail_diagnostics.svg", width: 100%),
+  image("../../figures/experiments/blocksize_lugsail_diagnostics.svg", width: 100%),
   caption: [Block-size sensitivity of OBM and OBM-LW at $T=10^5$.
     The left panel shows median scalar coverage, and the right panel shows
     median relative bias of the corresponding long-run variance estimator.],
@@ -406,7 +406,7 @@ but decreases the spectral gap. The LSA problem generator and the RR pair
 $(0.20,0.10)$ are otherwise unchanged.
 
 #figure(
-  image("../figures/experiments/mixing_stress_diagnostics.svg", width: 70%),
+  image("../../figures/experiments/mixing_stress_diagnostics.svg", width: 70%),
   caption: [Slow-mixing stress test at $T=10^6$. The figure compares oracle
     variance intervals with OBM-LW intervals at $eta=0.5$ as the spectral gap
     decreases.],

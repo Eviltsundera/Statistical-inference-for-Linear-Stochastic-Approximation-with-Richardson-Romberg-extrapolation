@@ -5,11 +5,11 @@ rooms:
   keywords:
   - summaries
   - summaries
-- name: src
-  description: Files from src/
+- name: diploma_typst
+  description: Files from diploma_typst/
   keywords:
-  - src
-  - src
+  - diploma_typst
+  - typst
 - name: research
   description: Files from papers/
   keywords:

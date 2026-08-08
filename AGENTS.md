@@ -18,18 +18,19 @@ Polyak-Ruppert averaging, and Richardson-Romberg (RR) extrapolation.
 
 ## Repository Map
 
-- `main.typ` is the thesis entry point.
-- `src/defs.typ` defines theorem-like environments.
-- `src/introduction.typ` states the LSA setting, assumptions, RR motivation,
+- `diploma_typst/main.typ` is the thesis entry point.
+- `diploma_typst/src/defs.typ` defines theorem-like environments.
+- `diploma_typst/src/introduction.typ` states the LSA setting, assumptions,
+  RR motivation,
   and target CLT/Berry-Esseen goals.
-- `src/zeroth_order_rr.typ` contains current constant-stepsize/RR
+- `diploma_typst/src/zeroth_order_rr.typ` contains current constant-stepsize/RR
   decompositions and bounds for the leading `J^(0)` terms.
-- `src/last_iterate.typ` contains the centered bound for the shifted first-
-  order perturbation (last-iteration analysis), its application to the PR-
+- `diploma_typst/src/last_iterate.typ` contains the centered bound for the
+  shifted first-order perturbation (last-iteration analysis), its application to the PR-
   averaged RR misadjustment, and a discussion of why the single-`alpha`
   bound is insufficient.
-- `src/pr_weights.typ` contains the Richardson--Romberg PR weight bounds
-  (pointwise comparison with `Abar^(-1)` and total-variation of successive
+- `diploma_typst/src/pr_weights.typ` contains the Richardson--Romberg PR
+  weight bounds (pointwise comparison with `Abar^(-1)` and total-variation of successive
   differences); this is the active proof thread.
 - `summaries/` contains paper summaries and should be consulted before opening
   PDFs.
@@ -92,10 +93,10 @@ Current active proof threads:
 
 ## Typst And Writing Conventions
 
-- Build the thesis with `typst compile main.typ`; build slides with
-  `typst compile presentation.typ`.
-- Use existing Typst style from `src/*.typ`; import theorem environments from
-  `src/defs.typ`.
+- Build the thesis with `typst compile --root . diploma_typst/main.typ diploma_typst/main.pdf`;
+  build slides with `typst compile --root . diploma_typst/presentation.typ diploma_typst/presentation.pdf`.
+- Use existing Typst style from `diploma_typst/src/*.typ`; import theorem
+  environments from `diploma_typst/src/defs.typ`.
 - Preserve the author's language. Existing files mix English prose with Russian
   comments such as `// ПРОВЕРИТЬ ЕЩЕ РАЗ`; do not silently translate them.
 - Keep notation consistent within the target file. Be especially careful with

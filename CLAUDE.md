@@ -4,23 +4,23 @@ Repository for a Master's thesis on statistical inference (CLT / Berry–Esseen)
 
 The repo has two largely independent halves:
 
-1. **Thesis** — Typst sources at the root (`main.typ`, `src/*.typ`).
+1. **Thesis** — Typst sources under `diploma_typst/` (`diploma_typst/main.typ`, `diploma_typst/src/*.typ`).
 2. **Numerical experiments** — Python package under `code/`, managed with `uv`.
 
 Papers, summaries, research notes, and experiment reports sit in their own top-level directories (`papers/`, `summaries/`, `research/`, `reports/`).
 
 ## Typst thesis
 
-Entry point: `main.typ` (includes `src/introduction.typ`, `src/zeroth_order_rr.typ`, `src/last_iterate.typ`, `src/pr_weights.typ`). Shared theorem/lemma environments live in `src/defs.typ`.
+Entry point: `diploma_typst/main.typ` (includes `diploma_typst/src/introduction.typ`, `diploma_typst/src/zeroth_order_rr.typ`, `diploma_typst/src/last_iterate.typ`, `diploma_typst/src/pr_weights.typ`). Shared theorem/lemma environments live in `diploma_typst/src/defs.typ`.
 
 Build:
 
 ```bash
-typst compile main.typ          # → main.pdf
-typst watch main.typ            # live reload
+typst compile --root . diploma_typst/main.typ diploma_typst/main.pdf
+typst watch --root . diploma_typst/main.typ diploma_typst/main.pdf
 ```
 
-`presentation.typ` / `presentation.pdf` is a slide deck and builds the same way.
+`diploma_typst/presentation.typ` / `diploma_typst/presentation.pdf` is the slide deck. Build it with `typst compile --root . diploma_typst/presentation.typ diploma_typst/presentation.pdf`.
 
 Existing Typst sources mix English prose with Russian inline notes (e.g. `// ПРОВЕРИТЬ ЕЩЕ РАЗ`). Preserve author's language when editing — don't silently translate comments.
 
@@ -90,4 +90,4 @@ CSV outputs land in `code/` (top level) for `run_comparison.py` / `run_bn_sweep.
 - Reports in `reports/` are dated ISO (`YYYY-MM-DD_<slug>.md`) and link back to the script and raw CSVs that produced them. Result CSVs themselves are NOT committed (policy since 2026-07-29: `code/results/` and `reports/figures/*/*.csv` are gitignored; data lives locally and on train-4) — only reports, figures (PNG), and code go to git.
 - Math notes in `conversations/` should render cleanly in Markdown preview: use `$...$` and `$$...$$` for formulas.
 - Code comments and docstrings mix English and Russian — keep the language the surrounding text uses.
-- Don't commit `tmp/`, `__pycache__/`, or generated `main.pdf` changes unless the user asks.
+- Don't commit `tmp/`, `__pycache__/`, or generated `diploma_typst/main.pdf` changes unless the user asks.

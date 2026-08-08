@@ -6,19 +6,19 @@
 
 ## Теория
 
-- Модель и условия: `src/introduction/05_setting_assumptions.typ`.
+- Модель и условия: `diploma_typst/src/introduction/05_setting_assumptions.typ`.
 - Разложение стационарного смещения и точная атрибуция Levin et al.:
-  `src/introduction/01_bias_constant_stepsize.typ` и
-  `src/appendix/external_inputs.typ`.
+  `diploma_typst/src/introduction/01_bias_constant_stepsize.typ` и
+  `diploma_typst/src/appendix/external_inputs.typ`.
 - PR- и RR-веса:
-  `src/pr_weights/02_error_decomposition_and_rr_weight.typ` и
-  `src/pr_weights/03_closed_form_identities.typ`.
+  `diploma_typst/src/pr_weights/02_error_decomposition_and_rr_weight.typ` и
+  `diploma_typst/src/pr_weights/03_closed_form_identities.typ`.
 - Поточечная оценка весов:
-  `src/pr_weights/04_pointwise_bounds.typ`.
+  `diploma_typst/src/pr_weights/04_pointwise_bounds.typ`.
 - Суммированные оценки:
-  `src/pr_weights/05_summed_bounds.typ`.
+  `diploma_typst/src/pr_weights/05_summed_bounds.typ`.
 - Сравнение ковариационной прокси с `Sigma_infinity`:
-  `src/pr_weights/06_variance_comparison.typ`.
+  `diploma_typst/src/pr_weights/06_variance_comparison.typ`.
 
 Полная теорема Берри–Эссеена, depth-two misadjustment и перенос с разогрева в
 статью не включены. Они требуют существенно более длинного доказательства;

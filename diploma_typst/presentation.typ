@@ -593,7 +593,7 @@ projected trajectory $Y_t = u^top theta_t$ is estimated from one dependent run.
     #small[L2 is reported in units of $10^(-3)$; medians over 100 problems.]
   ],
   [
-    #image("figures/experiments/main_methods_comparison.svg", width: 100%)
+    #image("../figures/experiments/main_methods_comparison.svg", width: 100%)
   ],
 )
 
@@ -672,7 +672,7 @@ almost identical:
     signed estimate can turn negative for very large blocks.
   ],
   [
-    #image("figures/experiments/blocksize_lugsail_diagnostics.svg", width: 100%)
+    #image("../figures/experiments/blocksize_lugsail_diagnostics.svg", width: 100%)
   ],
 )
 
