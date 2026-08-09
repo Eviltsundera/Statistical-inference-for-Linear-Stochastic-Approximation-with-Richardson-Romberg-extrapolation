@@ -1,0 +1,82 @@
+\section{\texorpdfstring{Norm Estimate for $H_j^{(n)}$}{Norm Estimate for H}}
+
+To bound $\lVert H_j^{(n)}\rVert$ we use the following standard result.
+
+\begin{lemma}[Lyapunov contraction]
+  \label{lem:lyapunov-contraction-local}
+  Let $-\overline{A}$ be a Hurwitz matrix. Then for any
+  $P=P^\top\succ0$ there exists a unique $Q=Q^\top\succ0$ satisfying
+  \[
+    \overline{A}^\top Q+Q\overline{A}=P.
+  \]
+  Let
+  \[
+    a:=\frac{\lambda_{\min}(P)}{2\lVert Q\rVert},
+    \qquad
+    \kappa_Q:=\frac{\lambda_{\max}(Q)}{\lambda_{\min}(Q)},
+  \]
+  and
+  \[
+    \alpha_\infty
+      :=\min\left\{
+        \frac{\lambda_{\min}(P)}
+             {2\kappa_Q\lVert\overline{A}\rVert_Q^2},
+        \frac{\lVert Q\rVert}{\lambda_{\min}(P)}
+      \right\}.
+  \]
+  Then for all $\alpha\in[0,\alpha_\infty]$,
+  \[
+    \alpha a\leq\frac12,
+    \qquad
+    \lVert I-\alpha\overline{A}\rVert_Q^2\leq1-\alpha a.
+  \]
+\end{lemma}
+
+In the RR estimates below we assume explicitly that $0<\alpha$ and
+$2\alpha\leq\alpha_\infty$. Hence the Lyapunov contraction applies at both
+step sizes $\alpha$ and $2\alpha$.
+
+For $1\leq j\leq n-1$, combine the triangle inequality,
+submultiplicativity, the norm equivalence, and the Lyapunov contraction at step
+sizes $\alpha$ and $2\alpha$:
+\[
+  \begin{aligned}
+    \lVert H_j^{(n)}\rVert
+      &\leq\kappa_Q\sum_{i=1}^{n-j}
+        (1-\alpha a)^{(i-1)/2}
+        (1-2\alpha a)^{(n-j-i)/2} \\
+%     &= \kappa_Q(1-\alpha a)^{(n-j-1)/2}
+%        \sum_{k=0}^{n-j-1}
+%        \left(\frac{1-2\alpha a}{1-\alpha a}\right)^{k/2} \\
+      &\leq\kappa_Q(1-\alpha a)^{(n-j-1)/2}
+        \frac{1}
+        {1-\sqrt{(1-2\alpha a)/(1-\alpha a)}}.
+  \end{aligned}
+\]
+For $\alpha a\leq1/2$ the geometric rate is bounded below by an
+\emph{elementary} inequality: combining
+\[
+  \sqrt{\frac{1-2\alpha a}{1-\alpha a}}
+    \leq\sqrt{1-\alpha a}
+\]
+(since $1-2\alpha a\leq(1-\alpha a)^2$) with
+$1-\sqrt{1-x}\geq x/2$ on $[0,1]$ gives
+\[
+  1-\sqrt{\frac{1-2\alpha a}{1-\alpha a}}
+    \geq\frac{\alpha a}{2},
+  \qquad
+  \frac{1}{1-\sqrt{(1-2\alpha a)/(1-\alpha a)}}
+    \leq\frac{2}{\alpha a}.
+\]
+Defining the chapter-local norm-equivalence constant $K_Q:=\kappa_Q$
+(distinct from the Assumption~2 sup-norm constant $C_A$, which enters
+separately via $\lVert\overline{A}\rVert$ in the next subsection), we arrive
+at the final estimate
+\[
+  \lVert H_j^{(n)}\rVert
+    \leq K_Q(1-\alpha a)^{(n-j-1)/2}\frac{2}{\alpha a}.
+\]
+The kernel decays geometrically in $n-j$ at rate $\sqrt{1-\alpha a}$ but its
+summed weight is of order $1/(\alpha a)$. The next subsection keeps the
+remaining powers of $a$ explicit when this kernel is multiplied by the
+prefactor $\alpha^2$ in $\Delta J_n^{(0,\alpha)}$.

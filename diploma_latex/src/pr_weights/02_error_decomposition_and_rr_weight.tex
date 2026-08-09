@@ -1,0 +1,166 @@
+
+\section{PR-Averaged Error Decomposition and the RR Weight}
+
+We start from the full-window PR weight representation of the RR average.
+% The deterministic weight estimates start from the finite-start representation
+% of \(\sqrt{n} (\overline{\theta}_n^{(\text{RR}, \alpha)} - \theta^*)\) as a
+% noise-weighted sum with a deterministic kernel. The stationary \(n_0 = 0\)
+% Berry--Esseen bound proved below is stated for the augmented-chain assembly
+% built from the same full-window weights.
+
+\textbf{Depth-one expansion.} Unfolding the error recursion of Chapter 1
+gives, for every \(k \ge 1\),
+\begin{equation}
+\begin{aligned}
+\theta_k^{(\alpha)} - \theta^*
+  = -\alpha \sum_{l = 1}^k \Gamma_{l + 1 : k}^{(\alpha)} \varepsilon(Z_l)
+    + \Gamma_{1 : k}^{(\alpha)} (\theta_0 - \theta^*),
+\quad
+\Gamma_{l + 1 : k}^{(\alpha)}
+  \coloneqq \prod_{j = l + 1}^k (I - \alpha A(Z_j)).
+\end{aligned}
+\end{equation}
+Replacing the random products in the noise sum by their deterministic
+counterparts \(B_\alpha^{k - l} \coloneqq (I - \alpha \overline{A})^{k - l}\) and keeping
+the initial-product discrepancy separate yields the \textbf{depth-one decomposition}:
+\begin{equation}
+\begin{aligned}
+R_{k, \operatorname{init}}^{(\alpha)}
+  \coloneqq \left(\Gamma_{1 : k}^{(\alpha)} - B_\alpha^k\right) (\theta_0 - \theta^*),
+\end{aligned}
+\label{eq:init-product-remainder}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\theta_k^{(\alpha)} - \theta^*
+  = -\alpha \sum_{l = 1}^k B_\alpha^{k - l} \varepsilon(Z_l)
+    + B_\alpha^k (\theta_0 - \theta^*)
+    + R_{k, \operatorname{init}}^{(\alpha)}
+    + R_k^{(\alpha)},
+\end{aligned}
+\label{eq:depth-one}
+\end{equation}
+where \(R_k^{(\alpha)} \coloneqq J_k^{(1, \alpha)} + H_k^{(1, \alpha)}\) is the
+first noise-driven misadjustment remainder.
+% The term \(R_{k, \operatorname{init}}^{(\alpha)}\) vanishes when \(\theta_0 = \theta^*\);
+% otherwise it is a finite-start transient and is handled in the burn-in
+% transfer theorem, not by the stationary augmented-chain misadjustment bound.
+% The leading component \(J_k^{(1, \alpha)}\) has a stationary bias of order
+% \(\alpha\), so it is not treated as an \(\alpha^{3 / 2}\) term. The
+% Berry--Esseen proof below controls this noise-driven remainder by refining it
+% to depth two, where \(J^{(2)} + H^{(2)}\) carries the \(\alpha^{3 / 2}\) moment
+% scale. The first sum is the \textbf{depth-zero} term and is the only piece that
+% carries the limiting Gaussian.
+
+\textbf{PR averaging produces \(Q_l^{(\alpha)}\).} Recall the PR average
+\(\overline{\theta}_n^{(\alpha)} = (n - n_0)^{-1} \sum_{k = n_0}^{n - 1} \theta_k^{(\alpha)}\).
+For the stationary result in this chapter, set \(n_0 = 0\). A burned-in average
+uses the different deterministic weight
+\begin{equation}
+\begin{aligned}
+Q_{l,n_0}^{(\alpha)}
+  = \frac{n}{n - n_0} \alpha \sum_{k = \max(n_0, l)}^{n - 1}
+      B_\alpha^{k - l},
+\end{aligned}
+\end{equation}
+when the statistic is normalized as
+\(- n^{-1 / 2} \sum_l Q_{l,n_0}^{(\alpha)} \varepsilon(Z_l)\).
+% The burned-in non-stationary theorem therefore requires separate weight,
+% Poisson, and variance-comparison arguments.
+Subtracting \(\theta^*\), substituting the depth-one decomposition above, and
+exchanging the order of summation in the depth-zero piece,
+\begin{equation}
+\begin{aligned}
+\sum_{k = 0}^{n - 1} \sum_{l = 1}^k B_\alpha^{k - l} \varepsilon(Z_l)
+  = \sum_{l = 1}^{n - 1}
+      \left(\sum_{k = l}^{n - 1} B_\alpha^{k - l}\right)
+      \varepsilon(Z_l),
+\end{aligned}
+\end{equation}
+gives the deterministic PR weight
+\begin{equation}
+\begin{aligned}
+Q_l^{(\alpha)}
+  \coloneqq \alpha \sum_{k = l}^{n - 1} B_\alpha^{k - l}
+   = \alpha \sum_{j = 0}^{n - l - 1} B_\alpha^j.
+\end{aligned}
+\label{eq:Q-definition}
+\end{equation}
+Multiplying by \(\sqrt{n}\) gives
+\begin{equation}
+\begin{aligned}
+\sqrt{n} \, (\overline{\theta}_n^{(\alpha)} - \theta^*) = W^{(\alpha)} + D^{(\alpha)},
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+W^{(\alpha)} \coloneqq -\frac{1}{\sqrt{n}} \sum_{l = 1}^{n - 1} Q_l^{(\alpha)} \, \varepsilon(Z_l),
+\end{aligned}
+\label{eq:W-alpha}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+D^{(\alpha)}
+  \coloneqq D_{\operatorname{tr}}^{(\alpha)}
+     + D_{\operatorname{init}}^{(\alpha)}
+     + D_R^{(\alpha)},
+\quad \\
+D_{\operatorname{tr}}^{(\alpha)}
+  \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1} B_\alpha^k (\theta_0 - \theta^*),
+\quad
+D_{\operatorname{init}}^{(\alpha)}
+  \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1}
+      R_{k, \operatorname{init}}^{(\alpha)},
+\quad
+D_R^{(\alpha)}
+  \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1} R_k^{(\alpha)}.
+\end{aligned}
+\end{equation}
+The RR combination of the noise-driven part is the misadjustment controlled
+below by the Levin depth-two transfer.
+% The first sum is the deterministic initial-condition transient. Under the
+% full-average convention it is only \(O((\sqrt{n} \alpha a)^{-1})\) in general, so
+% it must either be retained explicitly or removed by a centered initialization
+% \(\theta_0 = \theta^*\). The second sum is stochastic but still purely
+% finite-start: it is controlled after burn-in by random-product stability. The
+% third is the source of the leading non-Gaussian correction in the
+% Berry--Esseen rate. Its RR-combination
+% \(2 D_R^{(\alpha)} - D_R^{(2 \alpha)}\) is the \textbf{misadjustment}
+% \(D_1^{\text{mis, RR}}\) controlled below by the Levin depth-two transfer.
+
+\textbf{RR combination produces \(\mathcal{Q}_l^{\text{RR}}\).} By linearity,
+\begin{equation}
+\begin{aligned}
+\sqrt{n} \, (\overline{\theta}_n^{(\text{RR}, \alpha)} - \theta^*)
+  = W^{\text{RR}} + D^{\text{RR}},
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+W^{\text{RR}} \coloneqq 2 W^{(\alpha)} - W^{(2 \alpha)}
+        = -\frac{1}{\sqrt{n}} \sum_{l = 1}^{n - 1} \mathcal{Q}_l^{\text{RR}} \, \varepsilon(Z_l),
+\end{aligned}
+\label{eq:W-RR}
+\end{equation}
+where the \textbf{RR weight} is
+\begin{equation}
+\begin{aligned}
+\mathcal{Q}_l^{\text{RR}} \coloneqq 2 Q_l^{(\alpha)} - Q_l^{(2 \alpha)}.
+\end{aligned}
+\label{eq:Q-RR-definition}
+\end{equation}
+% The RR weight is deterministic because both PR averages use the same chain
+% realization.
+% Since both PR averages share the same noise realization \(\left\{Z_k\right\}\), the bracket
+% \(\mathcal{Q}_l^{\text{RR}}\) is a single deterministic matrix kernel: all the stochastic
+% content of \(W^{\text{RR}}\) now lives in \(\varepsilon(Z_l)\) alone.
+
+% The two required deterministic controls are
+% \(\sum_l \lVert \mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1} \rVert^2\) and
+% \(\sum_l \lVert \mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}} \rVert\).
+% The first controls variance comparison; the second controls the
+% Poisson-equation / Abel-summation remainder. Both quantities are estimated in
+% Sections 4.3--4.4 below. The closed-form identities of Section 4.2 reduce them
+% to elementary operator-norm calculations on \(B_\alpha^m - B_{2 \alpha}^m\).

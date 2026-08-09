@@ -1,0 +1,27 @@
+\section{Richardson--Romberg extrapolation}
+
+To eliminate the leading $O(\alpha)$ bias term, we employ the
+\emph{Richardson--Romberg} (RR) \emph{extrapolation} procedure. Two LSA
+sequences are run \emph{on the same Markov chain trajectory} $\{Z_k\}$ with
+step sizes $\alpha$ and $2\alpha$, and the RR iterate is formed as
+\begin{equation}
+  \overline{\theta}_n^{(\alpha,\mathrm{RR})}
+  =2\overline{\theta}_n^{(\alpha)}
+   -\overline{\theta}_n^{(2\alpha)}.
+  \label{eq:rr-iterate}
+\end{equation}
+Since both sequences share the same noise realization, the leading bias term
+$\alpha\Delta$ cancels, leaving a residual bias of order
+$O(\alpha^{3/2})$ or higher (Levin et al., 2025).
+
+More generally, one can consider the multi-level extrapolation with $M$ step
+sizes $\mathcal{A}=\{\alpha_1,\ldots,\alpha_M\}$ and coefficients
+$\{h_m\}$ determined by the Vandermonde system (Huo et al., 2024):
+\[
+  \sum_{m=1}^M h_m=1,
+  \qquad
+  \sum_{m=1}^M h_m\alpha_m^l=0,
+  \qquad l=1,\ldots,M-1,
+\]
+which cancels successive powers in settings where such a power-series
+expansion is available.

@@ -1,0 +1,102 @@
+
+\section{Burned-in Depth-Two Misadjustment Bound}
+
+Define the finite-start burned-in RR misadjustment by
+\begin{equation}
+R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}}
+  := \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+    \left( 2 R_{k, \operatorname{fin}}^{(\alpha)}
+        - R_{k, \operatorname{fin}}^{(2 \alpha)} \right).
+\label{eq:burn-mis-fin-def}
+\end{equation}
+For comparison, let
+\begin{equation}
+R_{m, \operatorname{aug}}^{\mathrm{mis,RR}}
+  := \frac{1}{\sqrt{m}} \sum_{j = 0}^{m - 1}
+    \left( 2 R_{j, \operatorname{aug}}^{(\alpha)}
+        - R_{j, \operatorname{aug}}^{(2 \alpha)} \right)
+\label{eq:burn-mis-aug-def}
+\end{equation}
+be the stationary augmented-chain depth-two misadjustment over a window of
+length $m$.
+% By stationarity, the same distribution is obtained if the sum in
+% \eqref{eq:burn-mis-aug-def} is taken over $j = n_{0}, \ldots, n - 1$.
+
+\begin{theorem}\label{thm:burn-misadjustment}
+  \textbf{(Burned-in PR-averaged RR misadjustment bound.)}
+  Assume \textbf{UGE 1}, $\pi(\varepsilon) = 0$, $\lVert \varepsilon \rVert_{\infty} < \infty$,
+  and $0 < \alpha$. Set
+  \[
+\Phi_{+}(p, \alpha) := 1 + p^{3 / 2} \, t_{\mathrm{mix}}^{1 / 2} / a
+                   + p^{1 / 2} \, t_{\mathrm{mix}}^{3 / 2} \sqrt{\alpha / a}.
+\]
+  There exists a constant $C_{\mathrm{burn,mis}}$ depending only on the stationary
+  misadjustment constants, the startup-contraction constants, and the problem
+  constants such that, for every $p \ge 2$, every $q \ge 2$ satisfying
+  $p \le q / 4$ and $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$, and every $m \ge 2$,
+  \begin{equation}
+\begin{aligned}
+\lVert R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+    &\le C_{\mathrm{burn,mis}} \, \Bigl( \sqrt{m} \, \alpha^{2}
+      + (1 + d^{1 / q}) \, p^{7 / 2} \, t_{\mathrm{mix}}^{5 / 2}
+        \, \sqrt{m} \, \alpha^{3 / 2}
+        \, \log^{3 / 2}(1 / (\alpha a)) \\
+    &\quad + p^{3 / 2} \, \sqrt{\alpha}
+      + p^{3} \, (\alpha m)^{-1 / 2}
+        \, \log^{1 / 2}(1 / (\alpha a)) \\
+    &\quad + \Phi_{+}(p, \alpha) \, m^{-1 / 2}
+      + \frac{p \, A_{\mathrm{st}}(p,q,\alpha)}{\alpha a \sqrt{m}}
+        \, \exp\left(-c_{\mathrm{st}} \alpha a n_{0} / p\right) \Bigr).
+\end{aligned}
+\label{eq:burn-mis-bound}
+\end{equation}
+\end{theorem}
+
+\begin{proof} Couple the finite-start and stationary augmented-chain remainders as
+in \cref{lem:burn-full-startup}, and define the stationary window on the same
+indices by
+\[
+\tilde{R}_{n,n_{0}, \operatorname{aug}}^{\mathrm{mis,RR}}
+  := \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+    \left( 2 R_{k, \operatorname{aug}}^{(\alpha)}
+        - R_{k, \operatorname{aug}}^{(2 \alpha)} \right).
+\]
+Then, with the notation of \eqref{eq:burn-startup-discrepancy},
+\[
+R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}}
+  = \tilde{R}_{n,n_{0}, \operatorname{aug}}^{\mathrm{mis,RR}}
+    + \mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}}
+\]
+under this coupling. Therefore
+\[
+\lVert R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+  \le \lVert \tilde{R}_{n,n_{0}, \operatorname{aug}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+     + \lVert \mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}} \rVert_{L_{p}}.
+\]
+By stationarity,
+$\lVert \tilde{R}_{n,n_{0}, \operatorname{aug}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+  = \lVert R_{m, \operatorname{aug}}^{\mathrm{mis,RR}} \rVert_{L_{p}}$.
+Apply \cref{thm:misadjustment} with $n$ replaced by $m$ and
+\cref{lem:burn-startup-transfer}. \end{proof}
+
+\begin{corollary}\label{cor:burn-misadjustment-rate}
+  \textbf{(Balanced-scale burned-in misadjustment rate.)}
+  Assume the hypotheses of \cref{thm:burn-misadjustment}. Let
+  $\alpha = c \, n^{-1 / 2}$, $m \ge n / 2$,
+  $p = \max\left\{2, \left\lceil \log n \right\rceil\right\}$, and
+  $q = \max\left\{4 p, \left\lceil \log\left(e \, d\right) \right\rceil, 2\right\}$. If, for some fixed $\beta > 0$,
+  \[
+n_{0} \ge \frac{\beta p}{c_{\mathrm{st}} \alpha a} \log n,
+\]
+  and $n$ is large enough that $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$, then
+  \begin{equation}
+\lVert R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+    \le C_{\mathrm{burn,mis}} \, \mathrm{polylog}(n) \, n^{-1 / 4}.
+\label{eq:burn-mis-rate}
+\end{equation}
+\end{corollary}
+
+% \begin{proof} Apply \cref{cor:misadjustment-rate} with $n$ replaced by $m$, use
+% $m \ge n / 2$, and control the startup term by \cref{cor:burn-log-startup}.
+% \end{proof}
+% The startup term is $\mathrm{polylog}(n) \, n^{-1 / 4 - \beta}$ at this scale.

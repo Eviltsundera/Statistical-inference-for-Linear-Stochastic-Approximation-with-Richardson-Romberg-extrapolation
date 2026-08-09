@@ -1,0 +1,277 @@
+\documentclass[11pt,a4paper,oneside]{report}
+
+\usepackage[a4paper,left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A,T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+  \newcommand{\cyrillicfont}{}
+\else
+  \usepackage{fontspec}
+  \setmainfont{lmroman10-regular.otf}[%
+    BoldFont=lmroman10-bold.otf,%
+    ItalicFont=lmroman10-italic.otf,%
+    BoldItalicFont=lmroman10-bolditalic.otf%
+  ]
+  \newfontfamily\cyrillicfont{DejaVu Serif}[BoldFont={DejaVu Serif Bold}]
+\fi
+\usepackage[russian,english]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{graphicx}
+\usepackage{array,booktabs,tabularx,multirow,adjustbox}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+\graphicspath{{figures/}{../figures/experiments/}}
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+\linespread{1.05}
+\setlength{\emergencystretch}{3em}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\numberwithin{equation}{chapter}
+\captionsetup{labelsep=period}
+\captionsetup[table]{position=top,justification=raggedleft,singlelinecheck=false}
+\captionsetup[figure]{position=bottom,justification=centering}
+\setlist[itemize]{leftmargin=*,label=\textbullet}
+\setlist[enumerate]{leftmargin=*}
+
+\pagestyle{plain}
+
+\input{src/defs}
+\input{src/abstracts}
+
+\hypersetup{
+  pdftitle={Statistical Inference for Linear Stochastic Approximation with Richardson--Romberg Extrapolation},
+  pdfauthor={Gainanov Danil}
+}
+
+\begin{document}
+\selectlanguage{english}
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  {\bfseries\large
+  FEDERAL STATE AUTONOMOUS EDUCATIONAL INSTITUTION FOR\par
+  HIGHER PROFESSIONAL EDUCATION NATIONAL RESEARCH\par
+  UNIVERSITY\par
+  «HIGHER SCHOOL OF ECONOMICS»\par}
+
+  \vspace{0.5em}
+  {\bfseries\itshape Faculty of Computer Science\par}
+
+  \vspace{2em}
+  {\bfseries Gainanov Danil\par}
+
+  \vspace{0.8em}
+  {\bfseries\foreignlanguage{russian}{\cyrillicfont Статистический вывод для линейной
+  стохастической аппроксимации с экстраполяцией
+  Ричардсона--Ромберга}\par}
+
+  \vspace{0.8em}
+  {\bfseries Statistical Inference for Linear Stochastic Approximation with
+  Richardson--Romberg Extrapolation\par}
+
+  \vspace{1em}
+  Qualification paper --- Master of Science Dissertation\par
+  Field of study 01.04.02 «Applied Mathematics and Informatics»\par
+  Program: Modern computer sciences\par
+
+  \vspace{3.2em}
+  \begin{flushright}
+    \begin{minipage}{4.6cm}\centering
+      Supervisor\par\vspace{1em}Levin Ilya
+    \end{minipage}
+
+    \vspace{1.8em}
+    \begin{minipage}{4.6cm}\centering
+      Student\par\vspace{1em}Gainanov Danil
+    \end{minipage}
+  \end{flushright}
+
+  \vfill
+  Moscow, 2026
+\end{titlepage}
+
+\clearpage
+\thispagestyle{empty}
+\begin{center}
+  {\bfseries\large Abstract}
+\end{center}
+\englishabstract
+
+\clearpage
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\tableofcontents
+
+\chapter{Introduction}\label{sec:introduction}
+\input{src/introduction}
+
+\section{Chapter Summary and Results}
+The chapter fixes the statistical problem, the Markovian LSA model, the
+constant-stepsize convention, and the Richardson--Romberg estimator used in
+the rest of the thesis. It also states the main assumptions and explains why
+the target is a non-asymptotic distributional approximation for scalar
+projections of the PR-averaged RR statistic.
+
+\chapter{Zeroth-Order Richardson--Romberg Difference}
+\label{sec:zeroth_order_rr}
+\input{src/zeroth_order_rr}
+
+\section{Chapter Summary and Results}
+The chapter isolates the deterministic-product zeroth-order RR cancellation
+mechanism. The main output is a terminal-iterate decomposition, a geometric
+kernel bound for $H_j^{(n)}$, and a scalar $L^p$ estimate showing the extra
+$\sqrt\alpha$-scale decay of the leading RR difference.
+
+\chapter{Last Iterate Analysis}\label{sec:last_iterate}
+\input{src/last_iterate}
+
+\section{Chapter Summary and Results}
+The chapter proves a centered bound for the shifted first-order perturbation
+and records how it applies to PR-averaged RR misadjustment terms. It also
+identifies the limitation of a single-$\alpha$ estimate, motivating the
+separate RR weight analysis developed in the following chapter.
+
+\chapter{Richardson--Romberg PR Weight Bounds}\label{sec:pr_weights}
+\input{src/pr_weights}
+
+\section{Chapter Summary and Results}
+The chapter derives the closed forms, pointwise estimates, energy bounds, and
+total-variation controls for the PR-averaged RR weights. These bounds feed
+into the Poisson martingale approximation, predictable-variation comparison,
+depth-two misadjustment control, and the stationary Berry--Esseen assembly.
+
+\chapter{Burn-in Transfer for Deterministic Starts}
+\label{sec:burn_in_transfer}
+\input{src/burn_in_transfer}
+
+\section{Chapter Summary and Results}
+The chapter transfers the stationary augmented-chain result to deterministic
+initial conditions. It controls the burned-in deterministic weights,
+transient terms, random initial products, startup discrepancies, and the
+finite-window normalization, culminating in the balanced burn-in
+Berry--Esseen bound.
+
+\chapter{Numerical Experiments}\label{sec:experiments}
+\input{src/experiments}
+
+\section{Chapter Summary and Results}
+The experiments support the theoretical interpretation: step-size
+Richardson--Romberg extrapolation primarily improves the interval center by
+reducing bias, while OBM and lugsail OBM affect the estimated long-run
+variance. The diagnostics also show that the benefit of lugsail correction is
+block-size and dependence-regime dependent.
+
+\chapter{Conclusion}\label{sec:conclusion}
+\input{src/conclusion}
+
+\chapter{References}\label{sec:references}
+\begin{thebibliography}{99}
+\bibitem{BobkovGoetze1999}
+S.~G. Bobkov and F.~Goetze.
+Exponential integrability and transportation cost related to logarithmic
+Sobolev inequalities. \emph{Journal of Functional Analysis}, 163(1):1--28,
+1999.
+
+\bibitem{DieuleveutDurmusBach2020}
+A.~Dieuleveut, A.~Durmus, and F.~Bach.
+Bridging the gap between constant step-size stochastic gradient descent and
+Markov chains. \emph{Annals of Statistics}, 48(3):1348--1382, 2020.
+
+\bibitem{DoucEtAl2018}
+R.~Douc, E.~Moulines, P.~Priouret, and P.~Soulier.
+\emph{Markov Chains}. Springer, 2018.
+
+\bibitem{DurmusEtAl2025}
+A.~Durmus, E.~Moulines, A.~Naumov, and S.~Samsonov.
+Finite-time high-probability bounds for Polyak--Ruppert averaged iterates of
+linear stochastic approximation. \emph{Mathematics of Operations Research},
+50(2):935--964, 2025.
+
+\bibitem{DurmusEtAl2021}
+A.~Durmus, E.~Moulines, A.~Naumov, S.~Samsonov, K.~Scaman, and H.-T. Wai.
+Tight high probability bounds for linear stochastic approximation with fixed
+stepsize. In \emph{Advances in Neural Information Processing Systems},
+volume~34, pages 30063--30074, 2021.
+
+\bibitem{FlegalJones2010}
+J.~M. Flegal and G.~L. Jones.
+Batch means and spectral variance estimators in Markov chain Monte Carlo.
+\emph{Annals of Statistics}, 38(2):1034--1070, 2010.
+\url{https://doi.org/10.1214/09-AOS735}.
+
+\bibitem{HuoChenXie2024}
+D.~Huo, Y.~Chen, and Q.~Xie.
+Effectiveness of constant stepsize in Markovian LSA and statistical inference.
+\emph{Proceedings of the AAAI Conference on Artificial Intelligence},
+38(18):20447--20455, 2024.
+\url{https://doi.org/10.1609/aaai.v38i18.30028}.
+
+\bibitem{LevinNaumovSamsonov2025}
+I.~Levin, A.~Naumov, and S.~Samsonov.
+High-order error bounds for Markovian LSA with Richardson--Romberg
+extrapolation. Extended version, arXiv:2508.05570; conference version in
+\emph{Proceedings of the AAAI Conference on Artificial Intelligence},
+40(43):36696--36704, 2026.
+\url{https://doi.org/10.1609/aaai.v40i43.40994}.
+
+\bibitem{LiuVatsFlegal2022}
+Y.~Liu, D.~Vats, and J.~M. Flegal.
+Batch size selection for variance estimators in MCMC.
+\emph{Statistics and Computing}, 32:28, 2022.
+\url{https://doi.org/10.1007/s11222-022-10080-1}.
+
+\bibitem{NgPerron1996}
+S.~Ng and P.~Perron.
+The exact error in estimating the spectral density at the origin.
+\emph{Journal of Time Series Analysis}, 17(4):379--408, 1996.
+
+\bibitem{Polyak1990}
+B.~T. Polyak.
+New stochastic approximation type procedures.
+\emph{Automation and Remote Control}, 51(7):937--946, 1990.
+
+\bibitem{RobbinsMonro1951}
+H.~Robbins and S.~Monro.
+A stochastic approximation method.
+\emph{Annals of Mathematical Statistics}, 22(3):400--407, 1951.
+
+\bibitem{Ruppert1988}
+D.~Ruppert.
+Efficient estimations from a slowly convergent Robbins--Monro process.
+Technical Report 781, Cornell University Operations Research and Industrial
+Engineering, 1988.
+
+\bibitem{SamsonovEtAl2025}
+S.~Samsonov, M.~Sheshukova, E.~Moulines, and A.~Naumov.
+Statistical inference for linear stochastic approximation with Markovian
+noise. \emph{Advances in Neural Information Processing Systems}, 38, 2025.
+arXiv:2505.19102.
+
+\bibitem{SinghShuklaVats2025}
+R.~Singh, A.~Shukla, and D.~Vats.
+On the utility of equal batch sizes for inference in stochastic gradient
+descent. \emph{Journal of Machine Learning Research}, 26(31):1--49, 2025.
+
+\bibitem{VatsFlegal2022}
+D.~Vats and J.~M. Flegal.
+Lugsail lag windows for estimating time-average covariance matrices.
+\emph{Biometrika}, 109(3):735--750, 2022.
+\url{https://doi.org/10.1093/biomet/asab049}.
+\end{thebibliography}
+
+\clearpage
+\appendix
+\input{src/appendix}
+
+\end{document}
+

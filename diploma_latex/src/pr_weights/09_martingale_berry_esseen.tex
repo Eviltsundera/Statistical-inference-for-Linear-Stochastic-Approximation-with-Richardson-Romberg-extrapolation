@@ -1,0 +1,200 @@
+
+\section{Martingale Berry--Esseen Step}
+
+We apply the martingale Berry--Esseen theorem to the scalar martingale
+\(u^\top M_n^{\text{RR}}\).
+% The Poisson decomposition writes
+% \(W^{\text{RR}} = -n^{-1 / 2} M_n^{\text{RR}} + D_{2, n}^{\text{RR}}\), with
+% \(D_{2, n}^{\text{RR}} = O(n^{-1 / 2})\). The bracket concentration gives
+% \(|u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma_n^{2, \text{RR}}(u)|\)
+% in \(L_p\) at scale \(B(u) \sqrt{p \, n}\).
+
+\textbf{Bounded increments.} For \(X_l \coloneqq u^\top \Delta M_l^{\text{RR}}\),
+\begin{equation}
+\begin{aligned}
+|X_l| \le \varkappa(u),
+\quad
+\varkappa(u) \coloneqq 6 \, t_{\text{mix}} \, C_{\mathcal{Q}} \, \lVert  \varepsilon  \rVert_\infty \, \lVert  u  \rVert.
+\end{aligned}
+\label{eq:M-RR-incr}
+\end{equation}
+The conditional variances sum to
+\begin{equation}
+\begin{aligned}
+V_n^2 \coloneqq \sum_{l = 2}^{n - 1} \sigma_l^2 = u^\top \langle M^{\text{RR}} \rangle_n u.
+\end{aligned}
+\end{equation}
+
+\textbf{Variance lower bound.} Set \(s_n^2 \coloneqq n \, \sigma_n^{2, \text{RR}}(u)\). If
+\begin{equation}
+\begin{aligned}
+n \, \alpha \, a \ge \frac{2 \, C_3 \, \lVert  u  \rVert^2}{\sigma^2(u)}
+\end{aligned}
+\label{eq:variance-lb-condition}
+\end{equation}
+then \(s_n^2 \ge n \sigma^2(u) / 2\).
+% At \(\alpha = c \, n^{-1 / 2}\), \eqref{eq:variance-lb-condition} is satisfied
+% for \(n \ge (2 C_3 \lVert  u  \rVert^2 / (c \, a \, \sigma^2(u)))^2\).
+The trivial upper bound
+\begin{equation}
+\begin{aligned}
+\sigma_n^{2, \text{RR}}(u) \le C_{\mathcal{Q}}^2 \lVert  \Sigma_{\varepsilon}^{(\text{M})}  \rVert \lVert  u  \rVert^2
+\end{aligned}
+\end{equation}
+gives \(s_n^2 \le K^2(u) \, n\) with
+\(K(u) \coloneqq C_{\mathcal{Q}} \, \lVert  \Sigma_{\varepsilon}^{(\text{M})}  \rVert^{1 / 2} \, \lVert  u  \rVert\).
+
+We apply Lemma~\ref{lem:external-martingale-be} to this scalar martingale; the number of
+increments is at most \(n\), and the increment bound is \(\varkappa(u)\).
+
+\begin{theorem}\label{thm:M-RR-BE}
+  \textbf{(Stationary martingale Berry--Esseen bound.)}
+  Assume \textbf{UGE 1}, \(\pi(\varepsilon) = 0\), \(\lVert  \varepsilon  \rVert_\infty < \infty\),
+  \(\sigma^2(u) > 0\), \(0 < \alpha\), and \(2 \alpha \le \alpha_\infty\). There exist
+  constants \(C_{K, 1}(u), C_{K, 2}(u) > 0\) depending only on \(\lVert  u  \rVert\),
+  \(\sigma(u)\), \(C_{\mathcal{Q}}\), \(t_{\text{mix}}\), \(\lVert  \varepsilon  \rVert_\infty\),
+  \(\lVert  \Sigma_{\varepsilon}^{(\text{M})}  \rVert\), and the constants
+  \(L_B(\varkappa(u)), C_1, C_2\) of Lemma~\ref{lem:external-martingale-be}, such that for every
+  \(n \ge 3\) satisfying
+  the variance lower-bound condition \eqref{eq:variance-lb-condition},
+\begin{equation}
+\begin{aligned}
+  d_K \left(
+    \frac{u^\top M_n^{\text{RR}}}{\sqrt{n} \, \sigma_n^{\text{RR}}(u)},
+    \mathcal{N}(0, 1)
+  \right)
+    \le \frac{C_{K, 1}(u) \, \log^{3 / 4} n}{n^{1 / 4}}
+     + \frac{C_{K, 2}(u) \, \log n}{\sqrt{n}}.
+\end{aligned}
+\label{eq:M-RR-BE}
+\end{equation}
+\end{theorem}
+
+\textit{Proof.} Apply Lemma~\ref{lem:external-martingale-be} to
+\((X_l)_{l = 2}^{n - 1}\) with partial sum \(u^\top M_n^{\text{RR}}\),
+deterministic scale \(s_n^2 = n \, \sigma_n^{2, \text{RR}}(u)\), increment bound
+\(\varkappa(u)\), and \(p = \left\lceil \log n \right\rceil\). This martingale array has at most \(n\)
+increments, so the first term in Lemma~\ref{lem:external-martingale-be} is bounded using
+\((2 n + 1) \log(2 n + 1)\).
+% Use \(s_n^2 \in [n \, \sigma^2(u) / 2, \, K^2(u) \, n]\) from the
+% variance lower and upper bounds.
+
+\textbf{Term I.}
+\begin{equation}
+\begin{aligned}
+L_B(\varkappa(u)) \, \frac{(2 n + 1) \log(2 n + 1)}{s_n^3}
+  \le \frac{6 \sqrt{2} \, L_B(\varkappa(u))}{\sigma^3(u)} \, \frac{\log n}{\sqrt{n}}
+  =: \frac{C^{\text{(I)}}(u) \, \log n}{\sqrt{n}}.
+\end{aligned}
+\label{eq:term-I}
+\end{equation}
+
+\textbf{Term III.} With \(a_p \coloneqq 2 p / (2 p + 1)\),
+\begin{equation}
+\begin{aligned}
+s_n^{1 / (2 p + 1)} \le \max(1, K(u))^{1 / (2 p + 1)} \, n^{1 / (2 (2 p + 1))}.
+\end{aligned}
+\end{equation}
+For \(p \ge \log n\),
+\begin{equation}
+\begin{aligned}
+C_2 \, s_n^{- a_p} \, p \, \varkappa(u)^{a_p}
+  \le \sqrt{2} \, e^{3 / 4} \, \frac{C_2 \, \max(1, \varkappa(u))}{\sigma(u)} \, \frac{p}{\sqrt{n}}
+  \le \frac{C^{\text{(III)}}(u) \, \log n}{\sqrt{n}},
+\end{aligned}
+\label{eq:term-III}
+\end{equation}
+% The constant absorbs the bounded powers of \(K(u)\) and \(\varkappa(u)\).
+
+\textbf{Term II.} By bracket concentration,
+\begin{equation}
+\begin{aligned}
+(\mathbb{E} | V_n^2 - s_n^2 |^p)^{1 / p}
+  \le B(u) \, \sqrt{p \, n},
+\quad
+B(u) \coloneqq C_4 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, \lVert  \varepsilon  \rVert_\infty^2 \, t_{\text{mix}}^{5 / 2},
+\end{aligned}
+\label{eq:Bu-def}
+\end{equation}
+The conditional-variance term is bounded by
+\begin{equation}
+\begin{aligned}
+&C_1 \, \sqrt{p} \, s_n^{- a_p} \, (\mathbb{E} | V_n^2 - s_n^2 |^p)^{1 / (2 p + 1)} \\
+&\quad\le C \, C_1 \, \sigma^{-1}(u)
+        \, \max(1, K(u))^{1 / (2 p + 1)}
+        \, \max(1, B(u))^{p / (2 p + 1)} \\
+&\quad \quad \times p^{(3 p + 1) / (2 (2 p + 1))}
+        n^{- p / (2 (2 p + 1))}.
+\end{aligned}
+\label{eq:term-II-1}
+\end{equation}
+
+For \(p = \left\lceil \log n \right\rceil\),
+\(p^{(3 p + 1) / (2 (2 p + 1))} \le C \log^{3 / 4} n\) and
+\(n^{- p / (2 (2 p + 1))} \le C n^{-1 / 4}\). Thus
+% The \(K(u)\)- and \(B(u)\)-factors are absorbed into the direction-dependent
+% constant.
+\begin{equation}
+\begin{aligned}
+\text{Term II}
+  \le \frac{C^{\text{(II)}}(u) \, \log^{3 / 4} n}{n^{1 / 4}}.
+\end{aligned}
+\label{eq:term-II}
+\end{equation}
+
+Adding the three bounds and setting
+\(C_{K, 1}(u) \coloneqq C^{\text{(II)}}(u)\), \(C_{K, 2}(u) \coloneqq C^{\text{(I)}}(u) + C^{\text{(III)}}(u)\)
+proves the martingale Berry--Esseen bound. \(\square\)
+
+\begin{corollary}\label{cor:M-RR-BE-sigma}
+  \textbf{(Stationary martingale asymptotic-normalization bound.)}
+  Under the hypotheses of the previous theorem,
+\begin{equation}
+\begin{aligned}
+  d_K \left(
+    \frac{u^\top M_n^{\text{RR}}}{\sqrt{n} \, \sigma(u)},
+    \mathcal{N}(0, 1)
+  \right)
+    \le \frac{C_{K, 1}(u) \, \log^{3 / 4} n}{n^{1 / 4}}
+     + \frac{C_{K, 2}(u) \, \log n}{\sqrt{n}}
+     + \frac{C_3 \, \lVert  u  \rVert^2}{n \, \alpha \, a \, \sigma^2(u)}.
+\end{aligned}
+\label{eq:M-RR-BE-sigma}
+\end{equation}
+% At \(\alpha = c \, n^{-1 / 2}\) the last term is \(O(n^{-1 / 2})\), hence
+% absorbed into \(C_{K, 2}(u) \, \log n / \sqrt{n}\) up to a constant.
+\end{corollary}
+
+\textit{Proof.} Set \(r \coloneqq \sigma_n^{\text{RR}}(u) / \sigma(u)\) and
+\(W \coloneqq u^\top M_n^{\text{RR}} / (\sqrt{n} \sigma_n^{\text{RR}}(u))\). Then the statistic
+normalised by \(\sigma(u)\) is \(W r\). Under the variance lower-bound condition \eqref{eq:variance-lb-condition},
+\(r \ge 1 / \sqrt{2}\), while the trivial upper bound on
+\(\sigma_n^{2, \text{RR}}(u)\) gives \(r \le r_{\max}(u) < \infty\). On this compact
+interval the standard normal cdf satisfies
+\begin{equation}
+\begin{aligned}
+\sup_x |\Phi(x / r) - \Phi(x)| \le C_\Phi \, |r - 1|,
+\quad
+C_\Phi \coloneqq \sqrt{2} / \sqrt{\pi e}.
+\end{aligned}
+\end{equation}
+Therefore
+\begin{equation}
+\begin{aligned}
+d_K \left(W r, \mathcal{N}(0, 1)\right)
+  \le d_K \left(W, \mathcal{N}(0, 1)\right) + C_\Phi \, |r - 1|.
+\end{aligned}
+\end{equation}
+The variance comparison of Section 4.5 gives
+\begin{equation}
+\begin{aligned}
+|r - 1|
+  = \frac{|\sigma_n^{2, \text{RR}}(u) - \sigma^2(u)|}{\sigma(u) \, (\sigma_n^{\text{RR}}(u) + \sigma(u))}
+  \le \frac{C_3 \, \lVert  u  \rVert^2}{n \, \alpha \, a \, \sigma^2(u)}.
+\end{aligned}
+\end{equation}
+Adding this perturbation to the martingale Berry--Esseen bound proves the
+stated claim after absorbing \(C_\Phi\) into the constants. \(\square\)
+
+% This theorem concerns only the martingale term; the stationary assembly below
+% adds the Poisson remainder and the Levin depth-two misadjustment.

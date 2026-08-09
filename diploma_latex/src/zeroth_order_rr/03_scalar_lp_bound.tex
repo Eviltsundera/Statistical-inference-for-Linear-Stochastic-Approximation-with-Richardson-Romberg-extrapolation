@@ -1,0 +1,102 @@
+\section{\texorpdfstring{Scalar $L^p$ Bound for the Zeroth-Order Term}{Scalar Lp Bound for the Zeroth-Order Term}}
+
+The expression
+\[
+  \Delta J_n^{(0,\alpha)}
+    =-\sum_{j=1}^{n-1}2\alpha^2\overline{A}
+      H_j^{(n)}\varepsilon(Z_j)
+\]
+is a weighted sum of values of the centered noise function $\varepsilon$ along
+the Markov chain. In the Berry--Esseen argument below only fixed scalar
+projections are used, so we state the concentration input in scalar form.
+
+\begin{lemma}[Weighted Markov concentration; Levin et al.\ (2025, Lemma 11)]
+  \label{lem:zeroth-weighted-markov-concentration}
+  Assume \textbf{UGE 1}. Let $\{g_i\}_{i=1}^n$ be a family of measurable
+  functions $g_i\colon\mathsf{Z}\to\mathbb{R}$ such that
+  $c_i=\lVert g_i\rVert_\infty<\infty$ and $\pi(g_i)=0$ for
+  $i\in\{1,\ldots,n\}$. Then, for any initial distribution $\xi$ on
+  $(\mathsf{Z},\mathcal{Z})$, any $n\in\mathbb{N}$, and any $p\geq2$,
+  \begin{equation}
+    \left\lVert\sum_{i=1}^n g_i(Z_i)\right\rVert_{L^p(\xi)}
+      \leq C_{\mathrm{MC}}
+        \sqrt{p\,t_{\mathrm{mix}}\sum_{i=1}^n c_i^2}.
+    \label{eq:zeroth-markov-conc}
+  \end{equation}
+\end{lemma}
+
+% This is the scalar time-inhomogeneous form recorded as the external input
+% Lemma~\ref{lem:external-markov-concentration}; it is quoted here only to keep
+% the preliminary calculation local in notation.
+
+Fix a deterministic direction $u\in\mathbb{R}^d$. We apply the lemma with
+\[
+  g_j^u(z)
+    =-2\alpha^2u^\top\overline{A}H_j^{(n)}\varepsilon(z),
+  \qquad 1\leq j\leq n-1,
+\]
+and $g_n^u=0$. Each $g_j^u$ is centered under $\pi$ since
+$\pi(\varepsilon)=0$, so the centering hypothesis holds. Combining the bound
+$\lVert\overline{A}\rVert\leq C_A$ (Assumption~2) with the previous
+subsection, define the constant
+$K_{A,Q}:=C_AK_Q=C_A\kappa_Q$. Then the per-summand bound is
+\[
+  \lVert g_j^u\rVert_\infty
+%   \leq 2\alpha^2\lVert u\rVert K_{A,Q}
+%     (1-\alpha a)^{(n-j-1)/2}
+%     \frac{2}{\alpha a}\lVert\varepsilon\rVert_\infty
+    \leq
+    \frac{4\alpha\lVert u\rVert K_{A,Q}
+          \lVert\varepsilon\rVert_\infty}{a}
+    (1-\alpha a)^{(n-j-1)/2},
+  \qquad 1\leq j\leq n-1.
+\]
+Note the prefactor $\alpha^2$ collapsing to $\alpha/a$: the
+$1/(\alpha a)$ blow-up in $H_j^{(n)}$ is absorbed only by one factor of
+$\alpha$. Squaring and summing over $j$:
+\[
+  \begin{aligned}
+    \sum_{j=1}^n\lVert g_j^u\rVert_\infty^2
+      &=\sum_{j=1}^{n-1}\lVert g_j^u\rVert_\infty^2 \\
+      &\leq\frac{16\alpha^2\lVert u\rVert^2K_{A,Q}^2
+                    \lVert\varepsilon\rVert_\infty^2}{a^2}
+        \sum_{j=1}^{n-1}(1-\alpha a)^{n-j-1} \\
+%     &\leq\frac{16\alpha^2\lVert u\rVert^2K_{A,Q}^2
+%                   \lVert\varepsilon\rVert_\infty^2}{a^2}\frac{1}{\alpha a} \\
+      &\leq\frac{16\alpha\lVert u\rVert^2K_{A,Q}^2
+                    \lVert\varepsilon\rVert_\infty^2}{a^3}.
+  \end{aligned}
+\]
+Plugging this into the Markov concentration input
+\eqref{eq:zeroth-markov-conc} and defining
+\[
+  K_{\mathrm{RR},0}
+    :=32K_{A,Q}\lVert\varepsilon\rVert_\infty
+      \frac{\sqrt{t_{\mathrm{mix}}}}{a^{3/2}},
+\]
+gives
+\[
+  \sqrt{p\,t_{\mathrm{mix}}
+    \sum_{j=1}^n\lVert g_j^u\rVert_\infty^2}
+    \leq\sqrt{p}\,\lVert u\rVert K_{\mathrm{RR},0}\sqrt{\alpha}.
+\]
+Applying \eqref{eq:zeroth-markov-conc} with
+$X=u^\top\Delta J_n^{(0,\alpha)}$ gives, for any $p\geq2$,
+\[
+  \mathbb{E}^{1/p}\!\left[
+    \lvert u^\top\Delta J_n^{(0,\alpha)}\rvert^p
+  \right]
+  \leq C_{\mathrm{MC}}\sqrt{p}\,\lVert u\rVert
+    K_{\mathrm{RR},0}\sqrt{\alpha},
+\]
+or equivalently
+\[
+  \frac{1}{\sqrt{\alpha}}
+  \left\lVert u^\top\Delta J_n^{(0,\alpha)}\right\rVert_{L^p}
+  \leq C_{\mathrm{MC}}\sqrt{p}\,\lVert u\rVert K_{\mathrm{RR},0}.
+\]
+Thus every fixed scalar projection of the terminal-iterate zeroth-order RR
+difference is $O(\sqrt{\alpha})$ in $L^p$, uniformly in $n$. A
+Euclidean-norm bound can be recovered in fixed dimension by applying the
+scalar estimate to a coordinate basis, but no dimension-free vector
+concentration is claimed here.

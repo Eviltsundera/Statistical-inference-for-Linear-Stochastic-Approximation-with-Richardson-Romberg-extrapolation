@@ -1,0 +1,123 @@
+
+\section{Closed Forms and Burned-in Weight Bounds}
+
+Write $B_{w} := I - w \overline{A}$ for $w \in \left\{ \alpha, 2 \alpha \right\}$ and recall
+$m = n - n_{0}$. The burned-in weights have two closed forms. If
+$l \ge n_{0}$, then
+\begin{equation}
+Q_{l; n_{0}, n}^{(w)}
+  = w \sum_{k = l}^{n - 1} B_{w}^{k - l}
+  = \overline{A}^{-1} \left( I - B_{w}^{n - l} \right).
+\label{eq:burn-Q-post-form}
+\end{equation}
+If $l < n_{0}$, then
+\begin{equation}
+Q_{l; n_{0}, n}^{(w)}
+  = w \sum_{k = n_{0}}^{n - 1} B_{w}^{k - l}
+  = \overline{A}^{-1} \left( B_{w}^{n_{0} - l} - B_{w}^{n - l} \right).
+\label{eq:burn-Q-pre-form}
+\end{equation}
+Only the post-burn-in weights are compared with $\overline{A}^{-1}$.
+% The pre-burn-in weights are exponentially small as one moves backward from
+% $n_{0}$. Empty sums below are interpreted as zero.
+
+\begin{lemma}\label{lem:burn-rr-weight-bounds}
+  \textbf{(Burned-in RR weight bounds.)}
+  Assume $0 < \alpha$, $2 \alpha \le \alpha_{\infty}$, and the Lyapunov contraction
+  \eqref{eq:contraction}. Let
+  \[
+\rho_{\alpha} := \sqrt{1 - \alpha a},
+  \quad
+  C_{Q} := \kappa_{Q}^{1 / 2} \lVert \overline{A}^{-1} \rVert,
+  \quad
+  \tilde{C}_{A} := \kappa_{Q} \lVert \overline{A} \rVert.
+\]
+
+  \textbf{(i) Post-burn-in comparison.} If $l \ge n_{0}$ and $k := n - l$, then
+  \begin{equation}
+\lVert Q_{l; n_{0}, n}^{\mathrm{RR}} - \overline{A}^{-1} \rVert
+    \le 3 C_{Q} \rho_{\alpha}^{k}.
+\label{eq:burn-post-weight-error}
+\end{equation}
+
+  \textbf{(ii) Pre-burn-in energy.} If $1 \le l < n_{0}$ and $r := n_{0} - l$, then
+  \begin{equation}
+\lVert Q_{l; n_{0}, n}^{\mathrm{RR}} \rVert
+    \le 6 C_{Q} \rho_{\alpha}^{r}.
+\label{eq:burn-pre-weight-size}
+\end{equation}
+
+  Consequently, there are constants $C_{\mathrm{burn,E}}$ and $C_{\mathrm{burn,V}}$,
+  depending only on $\kappa_{Q}$, $\lVert \overline{A}^{-1} \rVert$, and
+  $\lVert \overline{A} \rVert$, such that, uniformly in $n$ and $n_{0}$,
+  \begin{equation}
+\sum_{l = 1}^{n_{0} - 1} \lVert Q_{l; n_{0}, n}^{\mathrm{RR}} \rVert^{2}
+  + \sum_{l = \max\left\{1, n_{0}\right\}}^{n - 1}
+      \lVert Q_{l; n_{0}, n}^{\mathrm{RR}} - \overline{A}^{-1} \rVert^{2}
+    \le \frac{C_{\mathrm{burn,E}}}{\alpha a},
+\label{eq:burn-weight-energy}
+\end{equation}
+  and
+  \begin{equation}
+\sum_{l = 1}^{n - 2}
+    \lVert Q_{l + 1; n_{0}, n}^{\mathrm{RR}} - Q_{l; n_{0}, n}^{\mathrm{RR}} \rVert
+    \le \frac{C_{\mathrm{burn,V}}}{a^{2}}.
+\label{eq:burn-weight-variation}
+\end{equation}
+\end{lemma}
+
+\begin{proof} For $l \ge n_{0}$, \eqref{eq:burn-Q-post-form} gives
+\[
+Q_{l; n_{0}, n}^{\mathrm{RR}} - \overline{A}^{-1}
+  = -\overline{A}^{-1} \left( 2 B_{\alpha}^{k} - B_{2 \alpha}^{k} \right).
+\]
+The same contraction argument as in the full-window estimate gives
+\eqref{eq:burn-post-weight-error}.
+
+For $l < n_{0}$, set $r := n_{0} - l$. By \eqref{eq:burn-Q-pre-form},
+\[
+Q_{l; n_{0}, n}^{\mathrm{RR}}
+  = \overline{A}^{-1} \left( 2 \left( B_{\alpha}^{r} - B_{\alpha}^{r + m} \right)
+      - \left( B_{2 \alpha}^{r} - B_{2 \alpha}^{r + m} \right) \right).
+\]
+Taking norms and using $\lVert B_{2 \alpha}^{j} \rVert_{Q} \le \rho_{\alpha}^{j}$ gives
+\eqref{eq:burn-pre-weight-size}. Squaring \eqref{eq:burn-post-weight-error} and
+\eqref{eq:burn-pre-weight-size} and summing the resulting geometric series gives
+\eqref{eq:burn-weight-energy}.
+
+It remains to bound the total variation. In the post-burn-in region
+$l, l + 1 \ge n_{0}$, the full-window identity gives
+\[
+Q_{l + 1; n_{0}, n}^{\mathrm{RR}} - Q_{l; n_{0}, n}^{\mathrm{RR}}
+  = -2 \alpha \left( B_{\alpha}^{s} - B_{2 \alpha}^{s} \right),
+\quad s := n - l - 1.
+\]
+The elementary identity
+$X^{s} - Y^{s} = (X - Y) \sum_{i = 1}^{s} X^{i - 1} Y^{s - i}$ with
+$X = B_{\alpha}$ and $Y = B_{2 \alpha}$ yields, for $s \ge 1$,
+\begin{equation}
+\lVert B_{\alpha}^{s} - B_{2 \alpha}^{s} \rVert
+  \le \alpha \tilde{C}_{A} \, s \, \rho_{\alpha}^{s - 1}.
+\label{eq:burn-power-difference}
+\end{equation}
+% The left-factored form is legitimate because $B_{\alpha}$ and $B_{2 \alpha}$ are
+% polynomials in the same matrix $\overline{A}$, hence commute with each other
+% and with $\overline{A}$.
+The post-burn-in contribution is $O(a^{-2})$, as in the full-window proof.
+
+For $l, l + 1 < n_{0}$, put $s := n_{0} - l - 1$. The pre-burn-in closed form gives
+\[
+Q_{l + 1; n_{0}, n}^{\mathrm{RR}} - Q_{l; n_{0}, n}^{\mathrm{RR}}
+  = 2 \alpha \left( B_{\alpha}^{s} - B_{2 \alpha}^{s}
+      - B_{\alpha}^{s + m} + B_{2 \alpha}^{s + m} \right).
+\]
+Applying \eqref{eq:burn-power-difference} to the powers $s$ and $s + m$ and summing
+over $s \ge 1$ gives $O(a^{-2})$. If the boundary
+$l = n_{0} - 1$ exists, then
+\[
+Q_{n_{0}; n_{0}, n}^{\mathrm{RR}} - Q_{n_{0} - 1; n_{0}, n}^{\mathrm{RR}}
+  = 2 \alpha \left( B_{2 \alpha}^{m} - B_{\alpha}^{m} \right),
+\]
+and \eqref{eq:burn-power-difference} with $s = m$ bounds this term by the same
+$a^{-2}$ scale. Combining the pre-burn-in, boundary, and post-burn-in
+contributions proves \eqref{eq:burn-weight-variation}. \end{proof}

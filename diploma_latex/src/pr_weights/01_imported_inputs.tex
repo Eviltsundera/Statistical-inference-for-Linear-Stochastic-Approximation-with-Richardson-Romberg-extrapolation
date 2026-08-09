@@ -1,0 +1,57 @@
+
+\section{Stationary Small-Step Convention}\label{sec:stationary-small-step}
+
+We collect the stationary small-step restrictions used in this chapter. The
+individual ceilings are stated in Section~\ref{sec:external-inputs}.
+% The cited papers sometimes use the plus-form SA convention; throughout this
+% thesis we use
+% \(\theta_{k+1} = \theta_k - w(A(Z_{k+1}) \theta_k - b(Z_{k+1}))\), so their
+% stability assumptions are read after this sign conversion.
+
+For stationary depth-two arguments define
+\begin{equation}
+\begin{aligned}
+\alpha_*(q,t_{\text{mix}})
+  &\coloneqq \min\bigl\{
+    \alpha_{\text{L,P2}}(q,t_{\text{mix}}),
+    \alpha_{\text{L,C6}}(q,t_{\text{mix}}),
+    \alpha_{\text{L,P5}}(q,t_{\text{mix}}), \\
+  &\hspace{4.9em}
+    \alpha_{\text{L,P8}}(q,t_{\text{mix}}),
+    \alpha_{\text{L,P9}}(q,t_{\text{mix}}),
+    \alpha_{\text{L,inv}}(q,t_{\text{mix}})
+  \bigr\}.
+\end{aligned}
+\label{eq:levin-stationary-threshold}
+\end{equation}
+% The six ceilings correspond to Lemma~\ref{lem:levin-prop-2}, Lemma~\ref{lem:levin-cor-6},
+% Lemma~\ref{lem:levin-prop-5-component}, Lemma~\ref{lem:levin-prop-8}, Lemma~\ref{lem:levin-prop-9}, and
+% Lemma~\ref{lem:levin-invariant-depth-two-law}.
+
+For the shifted-to-unshifted first-order transfer we also use the local inverse
+ceiling
+\begin{equation}
+\begin{aligned}
+\alpha_{\text{inv}} \coloneqq \frac{1}{2 \lVert  \overline{A}  \rVert}.
+\end{aligned}
+\label{eq:alpha-inv}
+\end{equation}
+If \(w \le \alpha_{\text{inv}}\), the Neumann series yields
+\(\lVert  (I - w \overline{A})^{-1}  \rVert \le 2\).
+
+Define the stationary admissibility threshold
+\begin{equation}
+\begin{aligned}
+\alpha_{\text{stat}}(q)
+  \coloneqq \min (
+    \alpha_\infty,
+    \alpha_{\text{inv}},
+    \alpha_*(q, t_{\text{mix}})
+  ).
+\end{aligned}
+\label{eq:alpha-stationary-threshold}
+\end{equation}
+Throughout this chapter, the small-step condition is
+\(2 \alpha \le \alpha_{\text{stat}}(q)\).
+% The first condition makes both RR step sizes admissible for the Lyapunov,
+% inverse, and Levin stationary depth-two inputs.

@@ -1,0 +1,117 @@
+The proof combines existing non-asymptotic tools with RR-specific algebra and
+ the deterministic-start transfer developed here. The main proof blocks are:
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Main proof blocks.}
+\begin{tabular}{|p{0.19\textwidth}|p{0.36\textwidth}|p{0.34\textwidth}|}
+\hline
+\textbf{Block} & \textbf{Role in the proof} & \textbf{Status} \\
+\hline
+RR weight algebra &
+Controls the deterministic kernels $\mathcal{Q}_{l}^{\mathrm{RR}}$ and
+$Q_{l;n_{0},n}^{\mathrm{RR}}$ and their variation. &
+Derived in \cref{sec:zeroth_order_rr,sec:pr_weights}. \\
+\hline
+Poisson and martingale reduction &
+Turns the Markovian depth-zero weighted sum into a martingale plus a bounded
+Poisson remainder. &
+Adapted from the Samsonov et al. framework and reproved for RR weights. \\
+\hline
+Stationary misadjustment &
+Controls the non-martingale RR remainder
+$J^{(1)}+J^{(2)}+H^{(2)}$ under the stationary augmented chain. &
+Uses Levin et al. inputs; the stationary RR assembly is carried out here. \\
+\hline
+Burn-in transfer &
+Transfers the stationary theorem to finite starts by controlling the
+deterministic transient, random initial product, and startup discrepancy. &
+Developed in \cref{sec:burn_in_transfer}. \\
+\hline
+\end{tabular}
+\end{table}
+
+The theorem-level outputs should be read in the following order:
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Theorem-level outputs and labels.}
+\begin{tabular}{|p{0.25\textwidth}|p{0.23\textwidth}|p{0.41\textwidth}|}
+\hline
+\textbf{Output} & \textbf{Label} & \textbf{Object controlled} \\
+\hline
+Stationary augmented-chain assembly &
+\cref{thm:RR-BE} &
+$S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)$ with the finite-window variance
+$\sigma_{n}^{\mathrm{RR}}(u)$. \\
+\hline
+Stationary balanced triangular-array corollary &
+\cref{cor:RR-BE-working} &
+$S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)$ at $\alpha_n=cn^{-1/2}$, with either
+finite-window normalization. \\
+\hline
+Deterministic-start finite-window transfer &
+\cref{thm:burn-RR-BE-master} &
+$\Xi_{n,n_{0}}^{\mathrm{bRR}}(u)$ after burn-in, still normalized by
+$\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)$. \\
+\hline
+Deterministic-start balanced theorem &
+\cref{thm:burn-final-balanced,cor:burn-sqrt-n-transfer} &
+$\Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u)$ and then the final $\sqrt n$ statistic
+$\Xi_{n,n_{0}}^{\mathrm{n,RR}}(u)$. \\
+\hline
+\end{tabular}
+\end{table}
+
+The following notation is used throughout the later chapters:
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Notation used in the later chapters.}
+\begin{tabular}{|p{0.26\textwidth}|p{0.64\textwidth}|}
+\hline
+\textbf{Notation} & \textbf{Meaning} \\
+\hline
+$\alpha,2\alpha$ & The two constant step sizes used by the two-level RR estimator. \\
+\hline
+$n_0$ and $m=n-n_0$ & Burn-in length and effective averaging window. \\
+\hline
+$(Z_k)_{k\ge0}$ and $\xi$ & Base Markov chain and initial law
+$\xi=\mathcal{L}(Z_0)$. The recursion uses observations $Z_k$, $k\ge1$;
+stationary covariance formulas may use $Z_0$ by stationarity. \\
+\hline
+$\mathcal{F}_k$ & Natural filtration $\sigma(Z_0,\ldots,Z_k)$. Local displays
+that begin at $Z_1$ use the same filtration with the harmless extra variable
+$Z_0$. \\
+\hline
+$(Z_k^{\mathrm{stat}})_{k\in\mathbb Z}$ & Two-sided stationary copy of the
+base chain. Under the stationary augmented-chain convention the superscript is
+usually omitted. \\
+\hline
+$B_w=I-w\overline A$ & Deterministic linearized contraction at step size $w$. \\
+\hline
+$\mathcal{Q}_l^{\mathrm{RR}}$ & Full-window RR PR weight in the stationary
+$n_0=0$ chapter. \\
+\hline
+$Q_{l;n_0,n}^{\mathrm{RR}}$ or $Q_l^{\mathrm{bRR}}$ & Burned-in RR PR weight
+for the window $k=n_0,\ldots,n-1$. \\
+\hline
+$S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)$ & Stationary augmented-chain scalar statistic. \\
+\hline
+$T_{n,n_0}^{\mathrm{RR}}(u)$ & Finite-start burned-in scalar statistic with
+$\sqrt m$ normalization. \\
+\hline
+$\Xi_{n,n_0}^{\mathrm{bRR}}(u)$ & Finite-window normalized burned-in statistic. \\
+\hline
+$\sigma(u)^2=u^{\mathsf T}\Sigma_\infty u$ & Asymptotic scalar variance target. \\
+\hline
+$\operatorname{polylog}(n)$ & A generic fixed power of $\log n$, possibly
+changing from line to line. It never hides polynomial dependence on $n$ or any
+dependence on $\alpha$, $p$, or $q$ that is rate-relevant in the surrounding
+display. \\
+\hline
+\end{tabular}
+\end{table}

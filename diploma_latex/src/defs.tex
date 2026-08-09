@@ -1,0 +1,48 @@
+% Shared theorem environments and small notation helpers.
+% Package loading and page layout live in ../main.tex.
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{corollary}{Corollary}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[chapter]
+
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{assumption}{assumption}{assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+
+\providecommand{\RR}{\mathrm{RR}}
+\providecommand{\E}{\mathbb{E}}
+\providecommand{\Prob}{\mathbb{P}}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\Abar}{\overline{A}}
+\providecommand{\bbar}{\overline{b}}
+\providecommand{\eps}{\varepsilon}
+\providecommand{\Id}{I}
+\providecommand{\TV}{\mathrm{TV}}
+\providecommand{\Var}{\operatorname{Var}}
+\providecommand{\Cov}{\operatorname{Cov}}
+\providecommand{\tr}{\operatorname{tr}}
+\providecommand{\diag}{\operatorname{diag}}
+\providecommand{\norm}[1]{\left\lVert #1\right\rVert}
+\providecommand{\abs}[1]{\left\lvert #1\right\rvert}
+\providecommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+\providecommand{\ind}[1]{\mathbf{1}_{\{#1\}}}
+\providecommand{\transpose}{\mathsf{T}}
+\providecommand{\coloneqq}{\mathrel{\mathop:}=}
+

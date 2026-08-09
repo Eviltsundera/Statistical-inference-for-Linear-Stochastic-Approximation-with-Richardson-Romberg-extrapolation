@@ -1,0 +1,84 @@
+
+\section{A Depth-One RR Misadjustment Bound and Its Limitation}
+
+This subsection records why the depth-one route is insufficient. The final
+Berry--Esseen assembly uses the depth-two Levin transfer.
+
+A depth-one route would control
+\begin{equation}
+\begin{aligned}
+D_1^{\text{mis, RR}}
+  = \frac{\sqrt{n}}{n - n_0} \sum_{k=n_0}^{n-1}
+    (2 J_k^{(1, \alpha)} - J_k^{(1, 2 \alpha)}),
+\end{aligned}
+\end{equation}
+with centered part
+\begin{equation}
+\begin{aligned}
+D_{1, \text{c}}^{\text{mis, RR}}
+  \coloneqq D_1^{\text{mis, RR}} - \mathbb{E} D_1^{\text{mis, RR}}
+\end{aligned}
+\end{equation}
+
+Assume \(2 \alpha \le \alpha_\infty\) and \(2 \alpha \le \alpha_{\text{inv}}\).
+
+By Lemma~\ref{lem:levin-prop-2},
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_\pi \left[J_\infty^{(1, \alpha)}\right] = \alpha \Delta + O(\alpha^2),
+\end{aligned}
+\end{equation}
+and the linear term cancels in the RR combination. Hence
+\begin{equation}
+\begin{aligned}
+\lVert \mathbb{E} D_1^{\text{mis, RR}} \rVert \le C \sqrt{n} \, \alpha^2.
+\end{aligned}
+\end{equation}
+
+Define
+\begin{equation}
+\begin{aligned}
+\Phi(p, \alpha) \coloneqq p^{3 / 2} \, t_{\text{mix}}^{1 / 2} / a
+                + p^{1 / 2} \, t_{\text{mix}}^{3 / 2} \sqrt{\alpha / a}.
+\end{aligned}
+\end{equation}
+For \(w \in \left\{\alpha, 2 \alpha\right\}\), Lemma~\ref{lem:last-shifted-first-order} gives
+\begin{equation}
+\begin{aligned}
+\lVert u^\top (T_n^{(1, w)} - \mathbb{E} T_n^{(1, w)}) \rVert_{L_p}
+  \le C \lVert u \rVert \, \alpha \, \Phi(p, \alpha),
+\end{aligned}
+\end{equation}
+after increasing \(C\). Since
+\begin{equation}
+\begin{aligned}
+u^\top J_k^{(1, w)}
+  = ((I - w \overline{A})^{-\top} u)^\top T_k^{(1, w)}.
+\end{aligned}
+\end{equation}
+the inverse bound yields, uniformly in \(k\),
+\begin{equation}
+\begin{aligned}
+\lVert u^\top \left(2 J_k^{(1, \alpha)} - J_k^{(1, 2 \alpha)})
+     - \mathbb{E} (2 J_k^{(1, \alpha)} - J_k^{(1, 2 \alpha)}\right) \rVert_{L_p}
+  \le C \lVert u \rVert \, \alpha \, \Phi(p, \alpha),
+\end{aligned}
+\end{equation}
+and PR averaging gives
+\begin{equation}
+\begin{aligned}
+\lVert u^\top D_{1, \text{c}}^{\text{mis, RR}} \rVert_{L_p}
+  \le C \lVert u \rVert \, \sqrt{n} \, \alpha \, \Phi(p, \alpha)
+  = O(\sqrt{n} \, \alpha).
+\end{aligned}
+\end{equation}
+Together with the bias estimate,
+\begin{equation}
+\begin{aligned}
+\lVert u^\top D_1^{\text{mis, RR}} \rVert_{L_p}
+  \le C \lVert u \rVert \, \sqrt{n} \, \alpha \, \Phi(p, \alpha)
+    + C \lVert u \rVert \, \sqrt{n} \, \alpha^2.
+\end{aligned}
+\end{equation}
+At \(\alpha \asymp n^{-1 / 2}\) the centered term is \(O(1)\), so this route does
+not yield the target \(n^{-1 / 4}\) Berry--Esseen remainder.

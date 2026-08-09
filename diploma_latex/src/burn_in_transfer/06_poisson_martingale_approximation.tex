@@ -1,0 +1,63 @@
+
+\section{Burned-in Poisson Martingale Approximation}
+
+Let $\hat{\varepsilon} := \sum_{j = 0}^{\infty} \mathsf{Q}^{j} \varepsilon$ be the
+Poisson solution, so
+\[
+\hat{\varepsilon} - \mathsf{Q} \hat{\varepsilon} = \varepsilon,
+\quad
+\lVert \hat{\varepsilon} \rVert_{\infty}
+  \le 3 \, t_{\mathrm{mix}} \, \lVert \varepsilon \rVert_{\infty}.
+\]
+% The stationary Poisson identity applies because the coefficients
+% $Q_{l}^{\mathrm{bRR}}$ are deterministic.
+
+\begin{lemma}\label{lem:burn-poisson-decomp}
+  \textbf{(Burned-in Poisson martingale decomposition.)}
+  Assume \textbf{UGE 1} and $\pi(\varepsilon) = 0$. Define, for $2 \le l \le n - 1$,
+  \[
+\Delta M_{l}^{\mathrm{bRR}}
+    := Q_{l}^{\mathrm{bRR}} \,
+       \left( \hat{\varepsilon}(Z_{l}) - \mathsf{Q} \hat{\varepsilon}(Z_{l - 1}) \right) ,
+\]
+  and set $M_{n,n_{0}}^{\mathrm{bRR}} := \sum_{l = 2}^{n - 1} \Delta M_{l}^{\mathrm{bRR}}$.
+  Then $\left\{ \Delta M_{l}^{\mathrm{bRR}} \right\}_{l = 2}^{n - 1}$ is a sequence of
+  $\mathcal{F}_{l}$-martingale differences and
+  \begin{equation}
+W_{n,n_{0}}^{\mathrm{RR}}
+    = -\frac{1}{\sqrt{m}} M_{n,n_{0}}^{\mathrm{bRR}}
+      + D_{2,n,n_{0}}^{\mathrm{bRR}},
+\label{eq:burn-poisson-decomp}
+\end{equation}
+  where
+  \[
+D_{2,n,n_{0}}^{\mathrm{bRR}}
+    := -\frac{1}{\sqrt{m}} \left[ Q_{1}^{\mathrm{bRR}} \, \hat{\varepsilon}(Z_{1})
+        + \sum_{l = 1}^{n - 2}
+            \left( Q_{l + 1}^{\mathrm{bRR}} - Q_{l}^{\mathrm{bRR}} \right)
+            \, \mathsf{Q} \hat{\varepsilon}(Z_{l}) \right].
+\]
+  Moreover, with $C_{\mathrm{burn,Q}} := \lVert \overline{A}^{-1} \rVert + 6 C_{Q}$,
+  \begin{equation}
+\lVert D_{2,n,n_{0}}^{\mathrm{bRR}} \rVert_{\infty}
+    \le \frac{3 \, t_{\mathrm{mix}} \, \lVert \varepsilon \rVert_{\infty}}{\sqrt{m}}
+       \left( C_{\mathrm{burn,Q}} + \frac{C_{\mathrm{burn,V}}}{a^{2}} \right).
+\label{eq:burn-D2-bound}
+\end{equation}
+\end{lemma}
+
+% \begin{proof} The martingale-difference property follows from the Markov property:
+% $\mathbb{E}[\hat{\varepsilon}(Z_{l}) | \mathcal{F}_{l - 1}]
+%   = \mathsf{Q} \hat{\varepsilon}(Z_{l - 1})$.
+
+% Substitute the Poisson equation in \eqref{eq:burn-W-RR}. The $l = 1$ term is kept as a
+% left boundary term, and for $l \ge 2$ we add and subtract
+% $\mathsf{Q} \hat{\varepsilon}(Z_{l - 1})$. Abel summation of the telescope gives
+% exactly \eqref{eq:burn-poisson-decomp}. The right boundary vanishes because
+% $Q_{n - 1; n_{0}, n}^{\mathrm{RR}} = 2 \alpha I - 2 \alpha I = 0$.
+
+% For the sup-norm bound, use
+% $\lVert \mathsf{Q} \hat{\varepsilon} \rVert_{\infty} \le \lVert \hat{\varepsilon} \rVert_{\infty}$,
+% the uniform weight bound $\lVert Q_{l}^{\mathrm{bRR}} \rVert \le C_{\mathrm{burn,Q}}$ from
+% \eqref{eq:burn-post-weight-error} and \eqref{eq:burn-pre-weight-size}, and the total-variation
+% estimate \eqref{eq:burn-weight-variation}. \end{proof}

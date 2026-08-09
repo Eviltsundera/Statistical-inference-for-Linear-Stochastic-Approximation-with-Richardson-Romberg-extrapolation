@@ -1,0 +1,197 @@
+
+\section{Poisson Martingale Approximation}
+
+We convert \(W^{\text{RR}}\) into a martingale plus an Abel remainder via the
+Poisson equation.
+% The variance comparison of the previous section identifies the limiting
+% covariance of \(W^{\text{RR}}\), but it does not by itself produce a martingale. The
+% deterministic kernel bounds of Sections 4.3--4.4 enter once and for all in
+% the boundary/Abel control of the remainder.
+
+\textbf{Poisson kernel.} Let \(\mathsf{Q}\) be the one-step transition kernel:
+\begin{equation}
+\begin{aligned}
+(\mathsf{Q} f)(z) = \mathbb{E} \left[f(Z_{k + 1}) | Z_k = z\right].
+\end{aligned}
+\end{equation}
+Under UGE 1,
+\begin{equation}
+\begin{aligned}
+\lVert  \mathsf{Q}^k \varepsilon  \rVert_\infty \le 2 \lVert  \varepsilon  \rVert_\infty (1 / 4)^{\left\lfloor k / t_{\text{mix}} \right\rfloor}
+\end{aligned}
+\end{equation}
+(valid for centered \(\varepsilon\), \(\pi(\varepsilon) = 0\)) makes the Poisson
+series
+\begin{equation}
+\begin{aligned}
+\widehat{\varepsilon} \coloneqq \sum_{k = 0}^\infty \mathsf{Q}^k \varepsilon
+\end{aligned}
+\end{equation}
+absolutely convergent in sup-norm:
+\begin{equation}
+\begin{aligned}
+\lVert  \widehat{\varepsilon}  \rVert_\infty
+  \le 2 \lVert  \varepsilon  \rVert_\infty \sum_{k = 0}^\infty (1 / 4)^{\left\lfloor k / t_{\text{mix}} \right\rfloor}
+  \le 3 \, t_{\text{mix}} \, \lVert  \varepsilon  \rVert_\infty,
+\quad
+\lVert  \mathsf{Q} \widehat{\varepsilon}  \rVert_\infty
+  \le \lVert  \widehat{\varepsilon}  \rVert_\infty,
+\end{aligned}
+\end{equation}
+and \(\widehat{\varepsilon}\) solves
+% The second inequality uses that \(\mathsf{Q}\) is a Markov kernel and contracts
+% the sup-norm.
+\begin{equation}
+\begin{aligned}
+\widehat{\varepsilon} - \mathsf{Q} \widehat{\varepsilon} = \varepsilon.
+\end{aligned}
+\label{eq:poisson-eq}
+\end{equation}
+
+\textbf{Conditional centering.} Let \(\mathcal{F}_l \coloneqq \sigma(Z_0, \dots, Z_l)\). For \(l \ge 2\),
+\begin{equation}
+\begin{aligned}
+\varepsilon(Z_l)
+  = m_l + t_l,
+\quad l \ge 2,
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+m_l \coloneqq \widehat{\varepsilon}(Z_l) - \mathsf{Q} \widehat{\varepsilon}(Z_{l - 1}),
+\quad
+t_l \coloneqq \mathsf{Q} \widehat{\varepsilon}(Z_{l - 1}) - \mathsf{Q} \widehat{\varepsilon}(Z_l),
+\quad l \ge 2,
+\end{aligned}
+\end{equation}
+and \(m_l\) is centered conditionally on \(\mathcal{F}_{l - 1}\).
+% The Markov property gives
+% \(\mathbb{E}[\widehat{\varepsilon}(Z_l)\mid\mathcal{F}_{l-1}]
+% =\mathsf{Q}\widehat{\varepsilon}(Z_{l-1})\).
+% The \(l = 1\) term is kept as the left Abel boundary rather than included in
+% \(M_n^{\text{RR}}\). Abel summation then leaves the discrete derivative
+% \(\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}\), bounded in Section 4.4.
+
+\begin{lemma}\label{lem:poisson-martingale-decomp}
+  \textbf{(Stationary Poisson martingale decomposition.)}
+  Assume \textbf{UGE 1} and \(\pi(\varepsilon) = 0\). Set
+\begin{equation}
+\begin{aligned}
+  \Delta M_l^{\text{RR}}
+    \coloneqq \mathcal{Q}_l^{\text{RR}} \, (\widehat{\varepsilon}(Z_l) - \mathsf{Q} \widehat{\varepsilon}(Z_{l - 1})),
+  \quad 2 \le l \le n - 1,
+\end{aligned}
+\end{equation}
+  and let \(M_n^{\text{RR}} \coloneqq \sum_{l = 2}^{n - 1} \Delta M_l^{\text{RR}}\). Then
+  \(\left\{\Delta M_l^{\text{RR}}\right\}_{l = 2}^{n - 1}\) is a sequence of \(\mathcal{F}_l\)-martingale
+  differences, and
+\begin{equation}
+\begin{aligned}
+  W^{\text{RR}}
+    = -\frac{1}{\sqrt{n}} M_n^{\text{RR}} + D_{2, n}^{\text{RR}},
+\end{aligned}
+\label{eq:poisson-decomp}
+\end{equation}
+  with the \textbf{Abel remainder}
+\begin{equation}
+\begin{aligned}
+  D_{2, n}^{\text{RR}}
+    \coloneqq -\frac{1}{\sqrt{n}} \left[
+        \mathcal{Q}_1^{\text{RR}} \, \widehat{\varepsilon}(Z_1)
+        + \sum_{l = 1}^{n - 2}
+            (\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}) \, \mathsf{Q} \widehat{\varepsilon}(Z_l)
+      \right].
+\end{aligned}
+\end{equation}
+  Moreover, with
+% The right boundary
+% \(\mathcal{Q}_{n - 1}^{\text{RR}} \, \mathsf{Q} \widehat{\varepsilon}(Z_{n - 1})\)
+% vanishes identically because \(\mathcal{Q}_{n - 1}^{\text{RR}} = 0\).
+  \(C_{\mathcal{Q}} \coloneqq \lVert  \overline{A}^{-1}  \rVert + 3 C_Q\) a uniform bound on
+  \(\lVert  \mathcal{Q}_l^{\text{RR}}  \rVert\), and \(C_2\) the constant from the Corollary of
+  Section 4.4,
+\begin{equation}
+\begin{aligned}
+  \lVert  D_{2, n}^{\text{RR}}  \rVert_\infty
+    \le \frac{3 \, t_{\text{mix}} \, \lVert  \varepsilon  \rVert_\infty}{\sqrt{n}}
+       \left(C_{\mathcal{Q}} + \frac{C_2}{a^2}\right).
+\end{aligned}
+\label{eq:D2-bound}
+\end{equation}
+  Consequently, for every \(p \ge 1\),
+\begin{equation}
+\begin{aligned}
+  \lVert  D_{2, n}^{\text{RR}}  \rVert_{L_p}
+    \le \frac{C \, t_{\text{mix}} \, \lVert  \varepsilon  \rVert_\infty}{a^2 \, \sqrt{n}},
+\end{aligned}
+\end{equation}
+  with a constant \(C\) depending only on \(\lVert  \overline{A}^{-1}  \rVert\), \(\kappa_Q\),
+  and \(\lVert  \overline{A}  \rVert\).
+\end{lemma}
+
+\textit{Proof.} The increments are martingale differences by the Markov property.
+% Here \(\mathcal{Q}_l^{\text{RR}}\) is deterministic and
+% \(\mathbb{E}[\widehat{\varepsilon}(Z_l)\mid\mathcal{F}_{l-1}]
+% =\mathsf{Q}\widehat{\varepsilon}(Z_{l-1})\).
+
+Substitute \eqref{eq:poisson-eq} into \eqref{eq:W-RR}:
+\begin{equation}
+\begin{aligned}
+W^{\text{RR}}
+  = -\frac{1}{\sqrt{n}} \sum_{l = 1}^{n - 1}
+    \mathcal{Q}_l^{\text{RR}} \, (\widehat{\varepsilon}(Z_l) - \mathsf{Q} \widehat{\varepsilon}(Z_l)).
+\end{aligned}
+\end{equation}
+Peel off \(l = 1\):
+\begin{equation}
+\begin{aligned}
+W^{\text{RR}}
+  = -\frac{1}{\sqrt{n}} \mathcal{Q}_1^{\text{RR}} \, \widehat{\varepsilon}(Z_1)
+    + \frac{1}{\sqrt{n}} \mathcal{Q}_1^{\text{RR}} \, \mathsf{Q} \widehat{\varepsilon}(Z_1)
+    - \frac{1}{\sqrt{n}} M_n^{\text{RR}}
+    - \frac{1}{\sqrt{n}} \sum_{l = 2}^{n - 1}
+      \mathcal{Q}_l^{\text{RR}} \, (\mathsf{Q} \widehat{\varepsilon}(Z_{l - 1}) - \mathsf{Q} \widehat{\varepsilon}(Z_l)).
+\end{aligned}
+\end{equation}
+Set \(g_l \coloneqq \mathsf{Q} \widehat{\varepsilon}(Z_l)\). Abel summation gives
+\begin{equation}
+\begin{aligned}
+\sum_{l = 2}^{n - 1} \mathcal{Q}_l^{\text{RR}} (g_{l - 1} - g_l)
+  = \mathcal{Q}_2^{\text{RR}} \, g_1
+    - \mathcal{Q}_{n - 1}^{\text{RR}} \, g_{n - 1}
+    + \sum_{l = 2}^{n - 2}
+      (\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}) \, g_l.
+\end{aligned}
+\end{equation}
+The boundary terms combine as
+\begin{equation}
+\begin{aligned}
+&-\mathcal{Q}_1^{\text{RR}} \, \widehat{\varepsilon}(Z_1)
++ \mathcal{Q}_1^{\text{RR}} \, g_1
+- \mathcal{Q}_2^{\text{RR}} \, g_1
++ \mathcal{Q}_{n - 1}^{\text{RR}} \, g_{n - 1}
+- \sum_{l = 2}^{n - 2}
+    (\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}) \, g_l \\
+&\quad= -\mathcal{Q}_1^{\text{RR}} \, \widehat{\varepsilon}(Z_1)
+       - \sum_{l = 1}^{n - 2}
+          (\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}) \, g_l
+       + \mathcal{Q}_{n - 1}^{\text{RR}} \, g_{n - 1}.
+\end{aligned}
+\end{equation}
+The rightmost boundary vanishes because
+\(\mathcal{Q}_{n - 1}^{\text{RR}} = 2 \alpha I - 2 \alpha I = 0\). This gives the stated
+formula.
+% This uses \(Q_{n - 1}^{(\alpha)} = \alpha I\) and
+% \(Q_{n - 1}^{(2 \alpha)} = 2 \alpha I\); the sign is absorbed into
+% \(D_{2, n}^{\text{RR}}\).
+
+For \eqref{eq:D2-bound}, use the sup-norm Poisson bound, the uniform weight bound, and
+the summed-total-variation bound:
+\begin{equation}
+\begin{aligned}
+\lVert  \sqrt{n} \, D_{2, n}^{\text{RR}}  \rVert
+  \le 3 t_{\text{mix}} \lVert  \varepsilon  \rVert_\infty (C_{\mathcal{Q}} + C_2 / a^2).
+\end{aligned}
+\end{equation}
+The \(L_p\) bound is immediate from the deterministic sup-norm bound. \(\square\)

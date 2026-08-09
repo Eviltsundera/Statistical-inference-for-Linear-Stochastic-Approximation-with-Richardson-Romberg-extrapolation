@@ -1,0 +1,105 @@
+
+\section{Burned-in Predictable Variance Comparison}
+
+For the martingale in \cref{lem:burn-poisson-decomp} define
+\begin{equation}
+\mathcal{V}_{\varepsilon}(z)
+  := \mathsf{Q}(\hat{\varepsilon} \hat{\varepsilon}^{\mathsf{T}})(z)
+   - (\mathsf{Q} \hat{\varepsilon})(z)
+     \, (\mathsf{Q} \hat{\varepsilon})(z)^{\mathsf{T}}.
+\label{eq:burn-bar-eps-def}
+\end{equation}
+% This is the same matrix-valued conditional covariance function as in the
+% stationary chapter; it is not the vector noise $\varepsilon$.
+By the Poisson covariance identity \cref{lem:poisson-covariance-identity},
+$\pi(\mathcal{V}_{\varepsilon}) = \Sigma$ and
+\begin{equation}
+\lVert \mathcal{V}_{\varepsilon} \rVert_{\infty}
+  \le 18 \, t_{\mathrm{mix}}^{2} \, \lVert \varepsilon \rVert_{\infty}^{2}.
+\label{eq:burn-bar-eps-sup}
+\end{equation}
+The predictable quadratic variation is
+\begin{equation}
+\langle M^{\mathrm{bRR}} \rangle_{n,n_{0}}
+  := \sum_{l = 2}^{n - 1}
+      \mathbb{E}[\Delta M_{l}^{\mathrm{bRR}} \, (\Delta M_{l}^{\mathrm{bRR}})^{\mathsf{T}} | \mathcal{F}_{l - 1}]
+  = \sum_{l = 2}^{n - 1}
+      Q_{l}^{\mathrm{bRR}} \, \mathcal{V}_{\varepsilon}(Z_{l - 1}) \, (Q_{l}^{\mathrm{bRR}})^{\mathsf{T}}.
+\label{eq:burn-bracket}
+\end{equation}
+
+\begin{lemma}\label{lem:burn-bracket-conc}
+  \textbf{(Burned-in predictable-variation concentration.)}
+  Assume \textbf{UGE 1}, $\pi(\varepsilon) = 0$, and
+  $\lVert \varepsilon \rVert_{\infty} < \infty$. There exists a universal constant
+  $C_{4} > 0$ such that, for every $u \in \mathbb{R}^{d}$, every $p \ge 2$, every initial
+  distribution $\xi$, every $n \ge 2$, and every $0 \le n_{0} < n$,
+  \begin{equation}
+\mathbb{E}_{\xi}^{1 / p} \left[ | u^{\mathsf{T}} \langle M^{\mathrm{bRR}} \rangle_{n,n_{0}} u
+      - m \, \sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u) |^{p} \right]
+    \le C_{4} \, C_{\mathrm{burn,Q}}^{2} \, \lVert u \rVert^{2}
+       \, \lVert \varepsilon \rVert_{\infty}^{2} \, t_{\mathrm{mix}}^{5 / 2}
+       \, \sqrt{p \, n}.
+\label{eq:burn-bracket-conc}
+\end{equation}
+\end{lemma}
+
+\begin{proof} Set
+\[
+h_{l}(z) := u^{\mathsf{T}} Q_{l}^{\mathrm{bRR}} \, \mathcal{V}_{\varepsilon}(z)
+  \, (Q_{l}^{\mathrm{bRR}})^{\mathsf{T}} u,
+\quad
+g_{l}(z) := h_{l}(z) - \pi(h_{l}).
+\]
+By \eqref{eq:burn-bar-eps-sup} and $\lVert Q_{l}^{\mathrm{bRR}} \rVert \le C_{\mathrm{burn,Q}}$,
+\[
+\lVert g_{l} \rVert_{\infty}
+  \le 36 \, C_{\mathrm{burn,Q}}^{2} \, \lVert u \rVert^{2}
+     \, t_{\mathrm{mix}}^{2} \, \lVert \varepsilon \rVert_{\infty}^{2}.
+\]
+Moreover, \eqref{eq:burn-bracket} and \eqref{eq:burn-variance-proxy} imply
+\[
+u^{\mathsf{T}} \langle M^{\mathrm{bRR}} \rangle_{n,n_{0}} u
+  - m \, \sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u)
+  = \sum_{l = 2}^{n - 1} g_{l}(Z_{l - 1}).
+\]
+Apply \eqref{eq:external-markov-conc} to the time-inhomogeneous centered functions
+$g_{l}$ with
+\[
+c_{l} := 36 \, C_{\mathrm{burn,Q}}^{2} \, \lVert u \rVert^{2}
+  \, t_{\mathrm{mix}}^{2} \, \lVert \varepsilon \rVert_{\infty}^{2},
+\]
+it gives
+\[
+\lVert \sum_{l = 2}^{n - 1} g_{l}(Z_{l - 1}) \rVert_{L_{p}(\xi)}
+  \le C_{\mathrm{MC}} \sqrt{p \, t_{\mathrm{mix}} \, \sum_{l = 2}^{n - 1} c_{l}^{2}}
+  \le C \, C_{\mathrm{burn,Q}}^{2} \, \lVert u \rVert^{2}
+     \, \lVert \varepsilon \rVert_{\infty}^{2} \, t_{\mathrm{mix}}^{5 / 2}
+     \, \sqrt{p \, n},
+\]
+which is \eqref{eq:burn-bracket-conc} after increasing $C_{4}$. \end{proof}
+
+\begin{corollary}\label{cor:burn-bracket-asymp}
+  \textbf{(Burned-in asymptotic-variance bracket comparison.)}
+  Under the assumptions of \cref{lem:burn-bracket-conc},
+  \begin{equation}
+\mathbb{E}_{\xi}^{1 / p} \left[ | u^{\mathsf{T}} \langle M^{\mathrm{bRR}} \rangle_{n,n_{0}} u
+      - m \, \sigma^{2}(u) |^{p} \right]
+    \le C_{4} \, C_{\mathrm{burn,Q}}^{2} \, \lVert u \rVert^{2}
+       \, \lVert \varepsilon \rVert_{\infty}^{2} \, t_{\mathrm{mix}}^{5 / 2}
+       \, \sqrt{p \, n}
+       + \frac{C_{\mathrm{burn,3}} \lVert u \rVert^{2}}{\alpha a}.
+\label{eq:burn-bracket-asymp}
+\end{equation}
+\end{corollary}
+
+\begin{proof} Use the triangle inequality and \eqref{eq:burn-scalar-variance-comparison}:
+\[
+m \, |\sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u) - \sigma^{2}(u)|
+  \le \frac{C_{\mathrm{burn,3}} \lVert u \rVert^{2}}{\alpha a}.
+\]
+% The concentration sum still runs over the ambient indices $2, \ldots, n - 1$,
+% including pre-burn-in weights, which is why the display keeps
+% $\sqrt{p \, n}$. In the final theorem this is converted to the effective
+% window scale using $m \ge n / 2$.
+\end{proof}

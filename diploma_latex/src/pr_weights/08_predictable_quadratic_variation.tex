@@ -1,0 +1,220 @@
+
+\section{Predictable Quadratic Variation Concentration}
+
+We control the predictable quadratic variation of \(M_n^{\text{RR}}\) by applying
+\eqref{eq:external-markov-conc} to a centered quadratic functional of the chain.
+% This is the RR analogue of Lemmas 22--23 of Samsonov et al. (2025).
+
+\textbf{Predictable quadratic variation.} The increments
+\begin{equation}
+\begin{aligned}
+\Delta M_l^{\text{RR}} = \mathcal{Q}_l^{\text{RR}} \, (\widehat{\varepsilon}(Z_l) - \mathsf{Q} \widehat{\varepsilon}(Z_{l - 1}))
+\end{aligned}
+\end{equation}
+are \(\mathcal{F}_l\)-martingale differences. The Markov property gives
+\begin{equation}
+\begin{aligned}
+\mathbb{E}[\widehat{\varepsilon}(Z_l) | \mathcal{F}_{l - 1}] = \mathsf{Q} \widehat{\varepsilon}(Z_{l - 1})
+\end{aligned}
+\end{equation}
+% Direct computation:
+\begin{equation}
+\begin{aligned}
+\mathbb{E}[\Delta M_l^{\text{RR}} \, (\Delta M_l^{\text{RR}})^\top \, | \, \mathcal{F}_{l - 1}]
+% &= \mathcal{Q}_l^{\text{RR}}
+%    \mathbb{E}[\widehat{\varepsilon}(Z_l)\widehat{\varepsilon}(Z_l)^\top
+%      \mid\mathcal{F}_{l-1}](\mathcal{Q}_l^{\text{RR}})^\top \\
+% &\quad-\mathcal{Q}_l^{\text{RR}}\mathsf{Q}\widehat{\varepsilon}(Z_{l-1})
+%    (\mathsf{Q}\widehat{\varepsilon})(Z_{l-1})^\top
+%    (\mathcal{Q}_l^{\text{RR}})^\top \\
+  &= \mathcal{Q}_l^{\text{RR}} \, \mathcal{V}_{\varepsilon}(Z_{l - 1}) \, (\mathcal{Q}_l^{\text{RR}})^\top,
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+\mathcal{V}_{\varepsilon}(z)
+  \coloneqq \mathsf{Q}(\widehat{\varepsilon} \widehat{\varepsilon}^\top)(z)
+   - (\mathsf{Q} \widehat{\varepsilon})(z) \, (\mathsf{Q} \widehat{\varepsilon})(z)^\top.
+\end{aligned}
+\label{eq:bar-eps-def}
+\end{equation}
+% The cross-terms cancel by the Markov property. This is a matrix-valued
+% conditional covariance of the Poisson martingale increment; the vector noise
+% remains denoted by \(\varepsilon\).
+
+\begin{lemma}\label{lem:poisson-covariance-identity}
+  \textbf{(Poisson covariance identity and absolute convergence.)}
+  Assume \textbf{UGE 1}, \(\pi(\varepsilon) = 0\), and
+  \(\lVert \varepsilon \rVert_\infty < \infty\). Then \(\Sigma_{\varepsilon}^{(\text{M})}\) is absolutely convergent in operator
+  norm, and
+\begin{equation}
+\begin{aligned}
+\pi(\mathcal{V}_{\varepsilon}) = \Sigma_{\varepsilon}^{(\text{M})} =: \Sigma.
+\end{aligned}
+\label{eq:poisson-cov-identity}
+\end{equation}
+\end{lemma}
+
+\textit{Proof.} Boundedness and UGE give absolute convergence. For \(j \ge 1\),
+\begin{equation}
+\begin{aligned}
+\lVert \mathbb{E}_\pi [\varepsilon(Z_0) \varepsilon(Z_j)^\top] \rVert
+  = \lVert \pi(\varepsilon \, (\mathsf{Q}^j \varepsilon)^\top) \rVert
+  \le \lVert \varepsilon \rVert_\infty \lVert \mathsf{Q}^j \varepsilon \rVert_\infty
+  \le 2 \lVert \varepsilon \rVert_\infty^2 (1 / 4)^{\left\lfloor j / t_{\text{mix}} \right\rfloor},
+\end{aligned}
+\label{eq:SigmaM-abs-one-sided}
+\end{equation}
+and similarly for the transposed covariance. Set \(h \coloneqq \widehat{\varepsilon}\) and \(r \coloneqq \mathsf{Q} h = h - \varepsilon\). Since
+\(\pi \mathsf{Q} = \pi\),
+\begin{equation}
+\begin{aligned}
+\pi(\mathcal{V}_{\varepsilon})
+  &= \pi(h h^\top) - \pi(r r^\top)
+  &= \pi(\varepsilon \varepsilon^\top)
+     + \pi(\varepsilon r^\top) + \pi(r \varepsilon^\top).
+\end{aligned}
+\end{equation}
+The Poisson series gives \(r = \sum_{j \ge 1} \mathsf{Q}^j \varepsilon\) in sup-norm:
+\begin{equation}
+\begin{aligned}
+\pi(\varepsilon r^\top)
+  &= \sum_{j \ge 1}
+     \mathbb{E}_\pi [\varepsilon(Z_0) \varepsilon(Z_j)^\top], \\
+\pi(r \varepsilon^\top)
+  &= \sum_{j \ge 1}
+     \mathbb{E}_\pi [\varepsilon(Z_j) \varepsilon(Z_0)^\top].
+\end{aligned}
+\end{equation}
+Substitution proves \eqref{eq:poisson-cov-identity}. \(\square\)
+% This is the Poisson-solution covariance identity used by Samsonov et al.
+% (2025, Eq. (10)) and by the Markov-chain CLT formulation of
+% Douc--Moulines--Priouret--Soulier (2018, Theorem 21.2.5).
+
+Thus
+\begin{equation}
+\begin{aligned}
+\langle M^{\text{RR}} \rangle_n
+  &\coloneqq \sum_{l = 2}^{n - 1}
+      \mathbb{E}[\Delta M_l^{\text{RR}} \, (\Delta M_l^{\text{RR}})^\top | \mathcal{F}_{l - 1}]
+  &= \sum_{l = 2}^{n - 1}
+      \mathcal{Q}_l^{\text{RR}} \, \mathcal{V}_{\varepsilon}(Z_{l - 1})
+      \, (\mathcal{Q}_l^{\text{RR}})^\top.
+\end{aligned}
+\label{eq:M-RR-bracket}
+\end{equation}
+By Lemma~\ref{lem:poisson-covariance-identity}, \(\pi(\mathcal{V}_{\varepsilon}) = \Sigma\).
+
+\textbf{Sup-norm bound on \(\mathcal{V}_{\varepsilon}\).} Since
+\begin{equation}
+\begin{aligned}
+\lVert  \widehat{\varepsilon}  \rVert_\infty \le 3 \, t_{\text{mix}} \, \lVert  \varepsilon  \rVert_\infty
+\end{aligned}
+\end{equation}
+and \(\mathsf{Q}\) is a Markov kernel,
+\begin{equation}
+\begin{aligned}
+\lVert  \mathcal{V}_{\varepsilon}  \rVert_\infty
+  &\le \lVert  \mathsf{Q}(\widehat{\varepsilon} \widehat{\varepsilon}^\top)  \rVert_\infty
+   + \lVert  (\mathsf{Q} \widehat{\varepsilon})(\mathsf{Q} \widehat{\varepsilon})^\top  \rVert_\infty \\
+  &\le 2 \, \lVert  \widehat{\varepsilon}  \rVert_\infty^2
+   \le 18 \, t_{\text{mix}}^2 \, \lVert  \varepsilon  \rVert_\infty^2.
+\end{aligned}
+\label{eq:bar-eps-sup}
+\end{equation}
+
+\begin{lemma}\label{lem:M-RR-bracket-conc}
+  \textbf{(Stationary predictable-variation concentration.)}
+  Assume \textbf{UGE 1} and \(\pi(\varepsilon) = 0\), with \(\lVert  \varepsilon  \rVert_\infty < \infty\).
+  Let \(C_{\mathcal{Q}}\) be the uniform bound on \(\lVert  \mathcal{Q}_l^{\text{RR}}  \rVert\) from the
+  previous lemma. There exists a universal constant \(C_4 > 0\) such that, for
+  every \(u \in \mathbb{R}^d\), every \(p \ge 2\), every initial distribution \(\xi\), and every
+  \(n \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \mathbb{E}_\xi^{1 / p} \left[
+    | u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma_n^{2, \text{RR}}(u) |^p
+  \right]
+    \le C_4 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, \lVert  \varepsilon  \rVert_\infty^2
+       \, t_{\text{mix}}^{5 / 2} \, \sqrt{p \, n}.
+\end{aligned}
+\label{eq:M-RR-conc}
+\end{equation}
+\end{lemma}
+
+\textit{Proof.} Write \(h_l(z) \coloneqq u^\top \mathcal{Q}_l^{\text{RR}} \, \mathcal{V}_{\varepsilon}(z) \, (\mathcal{Q}_l^{\text{RR}})^\top u\)
+and \(g_l(z) \coloneqq h_l(z) - \pi(h_l)\). Then
+\begin{equation}
+\begin{aligned}
+|h_l(z)|
+  \le C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, \lVert  \mathcal{V}_{\varepsilon}  \rVert_\infty
+  \le 18 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, t_{\text{mix}}^2 \, \lVert  \varepsilon  \rVert_\infty^2,
+\quad
+\lVert  g_l  \rVert_\infty \le 2 \, |h_l(z)|
+  \le 36 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, t_{\text{mix}}^2 \, \lVert  \varepsilon  \rVert_\infty^2.
+\end{aligned}
+\end{equation}
+By \eqref{eq:M-RR-bracket},
+\(n \, \sigma_n^{2, \text{RR}}(u) = \sum_{l = 2}^{n - 1} \pi(h_l)\),
+\begin{equation}
+\begin{aligned}
+u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma_n^{2, \text{RR}}(u)
+  = \sum_{l = 2}^{n - 1} g_l(Z_{l - 1}).
+\end{aligned}
+\label{eq:M-RR-conc-decomp}
+\end{equation}
+
+Set \(\widetilde{g}_i \coloneqq g_{i + 1}\). Then \(\pi(\widetilde{g}_i) = 0\) and
+\(\lVert  \widetilde{g}_i  \rVert_\infty \le c \coloneqq 36 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, t_{\text{mix}}^2 \, \lVert  \varepsilon  \rVert_\infty^2\).
+Apply \eqref{eq:external-markov-conc} with \(c_i = c\):
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_\xi^{1 / p} \left[
+  \left(|\sum_{l = 2}^{n - 1} g_l(Z_{l - 1})|\right)^p
+\right]
+  \le C_{\text{MC}} \sqrt{p \, t_{\text{mix}} \, (n - 2) c^2}.
+\end{aligned}
+\end{equation}
+Substitution gives
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_\xi^{1 / p} \left[
+  \left(|\sum_{l = 2}^{n - 1} g_l(Z_{l - 1})|\right)^p
+\right]
+  \le C_{\text{MC}} \cdot 36 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2
+       \, \lVert  \varepsilon  \rVert_\infty^2 \, t_{\text{mix}}^{5 / 2}
+       \, \sqrt{p \, n}.
+\end{aligned}
+\end{equation}
+Absorb the universal prefactor into \(C_4\). \(\square\)
+
+\begin{corollary}\label{cor:M-RR-bracket-asymp}
+  \textbf{(Stationary asymptotic-variance bracket comparison.)}
+  Under the assumptions of the previous lemma, for every \(u \in \mathbb{R}^d\), every
+  \(p \ge 2\), and every \(n \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \mathbb{E}_\xi^{1 / p} \left[
+    | u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma^2(u) |^p
+  \right]
+    \le C_4 \, C_{\mathcal{Q}}^2 \, \lVert  u  \rVert^2 \, \lVert  \varepsilon  \rVert_\infty^2
+       \, t_{\text{mix}}^{5 / 2} \, \sqrt{p \, n}
+       + \frac{C_3 \, \lVert  u  \rVert^2}{\alpha \, a},
+\end{aligned}
+\label{eq:M-RR-conc-sigma}
+\end{equation}
+  with \(C_3\) the variance-comparison constant of Section 4.5.
+\end{corollary}
+
+% \textit{Proof.} Use the triangle inequality:
+% \begin{equation}
+% \begin{aligned}
+% | u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma^2(u) |
+%   \le | u^\top \langle M^{\text{RR}} \rangle_n u - n \, \sigma_n^{2, \text{RR}}(u) |
+%    + n \, | \sigma_n^{2, \text{RR}}(u) - \sigma^2(u) |.
+% \end{aligned}
+% \end{equation}
+% The first piece is bounded by \eqref{eq:M-RR-conc}; the second by
+% Lemma~\ref{lem:RR-variance-comparison}.
+% \(\square\)

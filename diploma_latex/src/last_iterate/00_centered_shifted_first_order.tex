@@ -1,0 +1,358 @@
+
+\section{Centered Bound for the Shifted First-Order Perturbation}
+
+% This chapter is partly preliminary. The last-iterate RR discussion at the end
+% is motivational and is not used in the final Berry--Esseen assembly; the
+% downstream input retained by Chapter 4 is the centered shifted
+% first-order bound proved below. The proof uses the deterministic-product
+% perturbation expansion from Samsonov et al. (2025, Proposition 9), specialized
+% to the constant-stepsize setting, and isolates the future-centered bilinear
+% concentration input used in that argument.
+
+Let
+\begin{equation}
+\begin{aligned}
+B = I - \alpha \overline{A}.
+\end{aligned}
+\end{equation}
+Assume throughout that \(0 < \alpha \le \alpha_\infty\). Then
+\begin{equation}
+\begin{aligned}
+\lVert B^m \rVert_Q \le (1 - \alpha a)^{m / 2},
+\quad m \ge 0.
+\end{aligned}
+\end{equation}
+Set also
+\begin{equation}
+\begin{aligned}
+\alpha_{\text{inv}} \coloneqq \frac{1}{2 \lVert  \overline{A}  \rVert}.
+\end{aligned}
+\end{equation}
+If \(w \le \alpha_{\text{inv}}\), the Neumann series gives
+\(\lVert  (I - w \overline{A})^{-1}  \rVert \le 2\).
+In Richardson--Romberg applications the single-stepsize estimates are applied
+at \(w \in \left\{\alpha, 2 \alpha\right\}\), so the local assumptions are
+\(2 \alpha \le \alpha_\infty\) and \(2 \alpha \le \alpha_{\text{inv}}\).
+Constants denoted by \(C\) may depend on fixed problem parameters, but not on
+\(\alpha\), \(n\), \(p\), or \(q\).
+
+The deterministic-product components are defined by
+\begin{equation}
+\begin{aligned}
+J_n^{(0, \alpha)}
+  = B J_{n-1}^{(0, \alpha)} - \alpha \varepsilon(Z_n),
+\quad
+J_0^{(0, \alpha)} = 0,
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+J_n^{(1, \alpha)}
+  = B J_{n-1}^{(1, \alpha)}
+    - \alpha \widetilde{A}(Z_n) J_{n-1}^{(0, \alpha)},
+\quad
+J_0^{(1, \alpha)} = 0.
+\end{aligned}
+\end{equation}
+Hence
+\begin{equation}
+\begin{aligned}
+J_n^{(0, \alpha)}
+  = - \alpha \sum_{k=1}^n B^{n-k} \varepsilon(Z_k),
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+J_n^{(1, \alpha)}
+&= - \alpha \sum_{j=1}^n
+      B^{n-j} \widetilde{A}(Z_j) J_{j-1}^{(0, \alpha)} \\
+% &= \alpha^2 \sum_{1 \leq k < j \leq n}
+%      B^{n-j}\widetilde{A}(Z_j)B^{j-1-k}\varepsilon(Z_k) \\
+&= \alpha^2 \sum_{k=1}^{n-1} \sum_{r=1}^{n-k}
+      B^{n-k-r} \widetilde{A}(Z_{k+r}) B^{r-1} \varepsilon(Z_k).
+\end{aligned}
+\end{equation}
+% The sign in the second line is positive because
+% \(J_{j-1}^{(0, \alpha)}\) already contains the minus sign.
+
+Use the shifted version
+\begin{equation}
+\begin{aligned}
+S_n
+  = \sum_{t=0}^{n-1}
+      B^{n-t} \widetilde{A}(Z_{t+1}) J_t^{(0, \alpha)}.
+\end{aligned}
+\end{equation}
+Then
+\begin{equation}
+\begin{aligned}
+S_n
+  = \sum_{j=1}^n B^{n-j+1} \widetilde{A}(Z_j) J_{j-1}^{(0, \alpha)}
+  = - \frac{1}{\alpha} \, B \, J_n^{(1, \alpha)}.
+\end{aligned}
+\end{equation}
+Thus the corresponding shifted first-order contribution is
+\begin{equation}
+\begin{aligned}
+T_n^{(1, \alpha)} = - \alpha S_n = B \, J_n^{(1, \alpha)},
+\end{aligned}
+\end{equation}
+so passing from \(T_n^{(1, \alpha)}\) back to \(J_n^{(1, \alpha)}\) uses the local
+bound on \(B^{-1}\).
+
+\begin{lemma}\label{lem:future-centered-bilinear-input}
+  \textbf{(Samsonov et al., 2025,
+  Appendix D.2, Proposition 9)}
+  Assume UGE 1 and stationarity. Let \(\mathcal{F}_k = \sigma(Z_0, \dots, Z_k)\).
+  For \(1 \le k \le n - 1\) and \(1 \le l \le n - k\), let
+  \(g_{k,l} : \mathcal{Z} \to \mathbb{R}^d\) be deterministic functions satisfying
+  \(\pi(g_{k,l}) = 0\) and \(\lVert g_{k,l} \rVert_\infty \le \beta_{k,l}\). Let
+  \(\xi_k\) be \(\mathcal{F}_k\)-measurable vectors with
+  \(\sup_k \lVert \xi_k \rVert_\infty \le M_\xi\). Then, for every \(p \ge 2\),
+\begin{equation}
+\begin{aligned}
+  &\lVert  \sum_{k=1}^{n-1} \left\{
+      \sum_{l=1}^{n-k} g_{k,l}(Z_{k+l})^\top \xi_k
+      - \mathbb{E} \left[
+          \sum_{l=1}^{n-k} g_{k,l}(Z_{k+l})^\top \xi_k
+          \, | \, \mathcal{F}_k
+        \right]
+    \right\}  \rVert_{L_p}
+  &\quad \le C p^{3 / 2} t_{\text{mix}}^{1 / 2} M_\xi
+     \left(\sum_{k=1}^{n-1} \sum_{l=1}^{n-k} \beta_{k,l}^2\right)^{1 / 2}.
+\end{aligned}
+\end{equation}
+% This is the scalar, constant-stepsize form extracted from Samsonov et al.
+% (2025, Appendix D.2, Proposition 9). The centering is conditional with
+% respect to \(\mathcal{F}_k\).
+\end{lemma}
+
+\begin{lemma}\label{lem:last-shifted-first-order}
+  \textbf{(Centered shifted first-order bound.)}
+  Assume the Markov chain is started from stationarity, that is, the law of
+  \(Z_1\) is \(\pi\), and \(\pi(\widetilde{A}) = 0\). For every deterministic direction
+  \(u \in \mathbb{R}^d\) and every \(p \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \lVert u^\top (S_n - \mathbb{E}S_n) \rVert_{L_p}
+    \le C \lVert u \rVert \, \lVert \varepsilon \rVert_\infty
+      (p^{3 / 2} t_{\text{mix}}^{1 / 2} \frac{1}{a}
+        + p^{1 / 2} t_{\text{mix}}^{3 / 2} \sqrt{\frac{\alpha}{a}}).
+\end{aligned}
+\end{equation}
+% Consequently,
+% \begin{equation}
+% \begin{aligned}
+% \lVert u^\top (T_n^{(1, \alpha)} - \mathbb{E}T_n^{(1, \alpha)}) \rVert_{L_p}
+%   \le C \alpha \lVert u \rVert \, \lVert \varepsilon \rVert_\infty
+%     (p^{3 / 2} t_{\text{mix}}^{1 / 2} \frac{1}{a}
+%       + p^{1 / 2} t_{\text{mix}}^{3 / 2} \sqrt{\frac{\alpha}{a}}).
+% \end{aligned}
+% \end{equation}
+\end{lemma}
+
+\textit{Proof.} Since \(J_0^{(0, \alpha)} = 0\), the term \(t = 0\) in \(S_n\) vanishes.
+Substituting the explicit formula for \(J_t^{(0, \alpha)}\) gives
+\begin{equation}
+\begin{aligned}
+S_n
+&= - \alpha \sum_{t=1}^{n-1} \sum_{k=1}^t
+    B^{n-t} \widetilde{A}(Z_{t+1}) B^{t-k} \varepsilon(Z_k)
+&= - \alpha \sum_{k=1}^{n-1}
+    H_{k+1}^{(w)} \varepsilon(Z_k),
+\end{aligned}
+\end{equation}
+where, after the change of summation index \(l = t - k + 1\),
+\begin{equation}
+\begin{aligned}
+H_{k+1}^{(w)}
+  = \sum_{l=1}^{n-k}
+      B^{n-k-l+1} \widetilde{A}(Z_{k+l}) B^{l-1}.
+\end{aligned}
+\end{equation}
+% The kernel is future-dependent relative to \(\varepsilon(Z_k)\).
+
+Define
+\begin{equation}
+\begin{aligned}
+\mu_k^{(w)} = \mathbb{E}_\pi \left[H_{k+1}^{(w)} \varepsilon(Z_k)\right].
+\end{aligned}
+\end{equation}
+Then
+\begin{equation}
+\begin{aligned}
+S_n - \mathbb{E}S_n
+  = - \alpha \sum_{k=1}^{n-1}
+      \left\{H_{k+1}^{(w)} \varepsilon(Z_k) - \mu_k^{(w)}\right\}.
+\end{aligned}
+\end{equation}
+
+Let \(\mathcal{F}_k = \sigma(Z_0, \dots, Z_k)\). The Markov property gives
+\begin{equation}
+\begin{aligned}
+\mathbb{E}[H_{k+1}^{(w)} \varepsilon(Z_k) | \mathcal{F}_k]
+  = v_k^{(w, \epsilon)}(Z_k),
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+v_k^{(w)}(z)
+  = \sum_{l=1}^{n-k}
+      B^{n-k-l+1} (\mathsf{Q}^l \widetilde{A})(z) B^{l-1},
+\quad
+v_k^{(w, \epsilon)}(z)
+  = v_k^{(w)}(z) \varepsilon(z).
+\end{aligned}
+\end{equation}
+Here \(\mathsf{Q}\) is the Markov transition kernel, so
+\begin{equation}
+\begin{aligned}
+(\mathsf{Q}^l \widetilde{A})(z)
+  = \int \widetilde{A}(u) \, \mathsf{Q}^l (z, \, d u)
+  = \mathbb{E} \left[\widetilde{A}(Z_{k+l}) | Z_k = z\right].
+\end{aligned}
+\end{equation}
+
+Under stationarity,
+\(\mu_k^{(w)} = \pi(v_k^{(w, \epsilon)})\). Therefore
+\begin{equation}
+\begin{aligned}
+S_n - \mathbb{E}S_n = - \alpha (U_M + U_R),
+\end{aligned}
+\end{equation}
+with
+\begin{equation}
+\begin{aligned}
+U_M
+  = \sum_{k=1}^{n-1}
+      \left\{H_{k+1}^{(w)} \varepsilon(Z_k)
+       - v_k^{(w, \epsilon)}(Z_k)\right\}
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+U_R
+  = \sum_{k=1}^{n-1}
+      \left\{v_k^{(w, \epsilon)}(Z_k)
+       - \pi(v_k^{(w, \epsilon)})\right\}.
+\end{aligned}
+\end{equation}
+% We bound \(U_R\) and \(U_M\) separately.
+
+Fix a deterministic direction \(u\), \(\lVert u \rVert = 1\); the general statement
+follows by multiplying by \(\lVert u \rVert\).
+
+For \(U_R\), since \(\pi(\widetilde{A}) = 0\), UGE gives
+\begin{equation}
+\begin{aligned}
+\lVert (\mathsf{Q}^l \widetilde{A})(z) \rVert
+  = \left(\lVert  \int \widetilde{A}(y) \left\{\mathsf{Q}^l (z, \, d y) - \pi(d y)\right\}  \rVert\right)
+  \le 2 C_A \Delta(\mathsf{Q}^l)
+  \le 2 C_A (1 / 4)^{\left\lfloor l / t_{\text{mix}} \right\rfloor}.
+\end{aligned}
+\end{equation}
+Hence
+\begin{equation}
+\begin{aligned}
+\lVert v_k^{(w)} \rVert_\infty
+&\le C \sum_{l=1}^{n-k}
+    (1 - \alpha a)^{(n-k-l+1) / 2}
+    \Delta(\mathsf{Q}^l)
+    (1 - \alpha a)^{(l-1) / 2} 
+% &\le C(1-\alpha a)^{(n-k)/2}
+%     \sum_{l=1}^{\infty}(1/4)^{\left\lfloor l/t_{\mathrm{mix}}\right\rfloor} \\
+&\le C t_{\text{mix}} (1 - \alpha a)^{(n-k) / 2}.
+\end{aligned}
+\end{equation}
+Thus
+\begin{equation}
+\begin{aligned}
+\lVert v_k^{(w, \epsilon)} \rVert_\infty
+  \le C t_{\text{mix}} \lVert \varepsilon \rVert_\infty
+      (1 - \alpha a)^{(n-k) / 2}.
+\end{aligned}
+\end{equation}
+Applying Markov concentration to the centered functions
+\(v_k^{(w, \epsilon)} - \pi(v_k^{(w, \epsilon)})\) gives
+\begin{equation}
+\begin{aligned}
+\lVert u^\top U_R \rVert_{L_p}
+&\le C p^{1 / 2} t_{\text{mix}}^{1 / 2}
+    \left(\sum_{k=1}^{n-1} \lVert v_k^{(w, \epsilon)} \rVert_\infty^2\right)^{1 / 2}
+% &\le C p^{1/2}t_{\mathrm{mix}}^{3/2}\lVert\varepsilon\rVert_\infty
+%     \left(\sum_{k=1}^{n-1}(1-\alpha a)^{n-k}\right)^{1/2} \\
+&\le C p^{1 / 2} t_{\text{mix}}^{3 / 2}
+    \lVert \varepsilon \rVert_\infty \frac{1}{\sqrt{\alpha a}}.
+\end{aligned}
+\end{equation}
+
+For \(U_M\), unfold the projected matrix kernel through
+\((H_{k+1}^{(w)})^\top u\):
+\begin{equation}
+\begin{aligned}
+(H_{k+1}^{(w)})^\top u
+  = \sum_{l=1}^{n-k} g_{k,l}(Z_{k+l}),
+\quad
+g_{k,l}(z)
+  = (B^{l-1})^\top \, \widetilde{A}(z)^\top \, (B^{n-k-l+1})^\top u.
+\end{aligned}
+\end{equation}
+Each \(g_{k,l}\) is centered under \(\pi\), and
+\begin{equation}
+\begin{aligned}
+\lVert g_{k,l} \rVert_\infty
+  \le C (1 - \alpha a)^{(n-k) / 2},
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\sum_{l=1}^{n-k} \lVert g_{k,l} \rVert_\infty^2
+  \le C (n-k)(1 - \alpha a)^{n-k}.
+\end{aligned}
+\end{equation}
+% Unlike \(U_R\), the conditional-centering estimate keeps the factor \(n-k\).
+
+The conditional expectation in the future-centered estimate is exactly
+\begin{equation}
+\begin{aligned}
+\mathbb{E} \left[
+  \sum_{l=1}^{n-k} g_{k,l}(Z_{k+l})^\top \varepsilon(Z_k)
+  \, | \, \mathcal{F}_k
+\right]
+  = u^\top v_k^{(w, \epsilon)}(Z_k).
+\end{aligned}
+\end{equation}
+Apply that estimate with
+\(\xi_k = \varepsilon(Z_k)\) and
+\(\beta_{k,l} = C (1 - \alpha a)^{(n-k) / 2}\):
+\begin{equation}
+\begin{aligned}
+\lVert u^\top U_M \rVert_{L_p}
+&\le C p^{3 / 2} t_{\text{mix}}^{1 / 2} \lVert \varepsilon \rVert_\infty
+    \left(\sum_{k=1}^{n-1} \sum_{l=1}^{n-k}
+      (1 - \alpha a)^{n-k}\right)^{1 / 2}
+% &= C p^{3/2}t_{\mathrm{mix}}^{1/2}\lVert\varepsilon\rVert_\infty
+%     \left(\sum_{k=1}^{n-1}(n-k)(1-\alpha a)^{n-k}\right)^{1/2} \\
+&\le C p^{3 / 2} t_{\text{mix}}^{1 / 2}
+    \lVert \varepsilon \rVert_\infty \frac{1}{\alpha a}.
+\end{aligned}
+\end{equation}
+% The additional factor compared with \(U_R\) comes from the conditional
+% centering estimate.
+
+% Finally, since \(S_n - \mathbb{E}S_n = -\alpha (U_M + U_R)\),
+\begin{equation}
+\begin{aligned}
+\lVert u^\top (S_n - \mathbb{E}S_n) \rVert_{L_p}
+&\le \alpha \, (\lVert u^\top U_M \rVert_{L_p} + \lVert u^\top U_R \rVert_{L_p})
+&\le C \lVert \varepsilon \rVert_\infty
+  \left(p^{3 / 2} t_{\text{mix}}^{1 / 2} \frac{1}{a}
+    + p^{1 / 2} t_{\text{mix}}^{3 / 2} \sqrt{\frac{\alpha}{a}}\right).
+\end{aligned}
+\end{equation}
+% Restoring \(\lVert u \rVert\) and using \(T_n^{(1, \alpha)} = -\alpha S_n\) proves the
+% second display. \hfill \(\square\)

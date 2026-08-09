@@ -1,0 +1,130 @@
+
+\section{Variance Comparison}
+
+Use the deterministic variance proxy
+\begin{equation}
+\begin{aligned}
+\Sigma_n^{\text{RR}} \coloneqq \frac{1}{n} \sum_{l = 2}^{n - 1}
+  \mathcal{Q}_l^{\text{RR}} \, \Sigma_{\varepsilon}^{(\text{M})} \, (\mathcal{Q}_l^{\text{RR}})^\top,
+\quad
+\sigma_n^{2, \text{RR}}(u) \coloneqq u^\top \Sigma_n^{\text{RR}} u,
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+\Sigma_{\varepsilon}^{(\text{M})}
+  = \mathbb{E}_\pi [\varepsilon(Z_0) \varepsilon(Z_0)^\top]
+    + \sum_{j \ge 1} \left(
+        \mathbb{E}_\pi [\varepsilon(Z_0) \varepsilon(Z_j)^\top]
+        + \mathbb{E}_\pi [\varepsilon(Z_j) \varepsilon(Z_0)^\top]
+      \right).
+\end{aligned}
+\end{equation}
+The asymptotic covariance is
+\begin{equation}
+\begin{aligned}
+\Sigma_\infty = \overline{A}^{-1} \Sigma_{\varepsilon}^{(\text{M})} \overline{A}^{-\top},
+\quad
+\sigma^2(u) = u^\top \Sigma_\infty u.
+\end{aligned}
+\end{equation}
+% After the Poisson decomposition the \(l = 1\) noise sample is absorbed into the
+% Poisson boundary remainder, while the martingale increments are indexed by
+% \(l \in \left\{2, \dots, n - 1\right\}\). The deterministic variance proxy uses the same index
+% set.
+
+\begin{lemma}\label{lem:RR-variance-comparison}
+  \textbf{(Stationary finite-window variance comparison.)}
+  Let \(0 < \alpha\) and \(2 \alpha \le \alpha_\infty\),
+  set \(\Sigma \coloneqq \Sigma_{\varepsilon}^{(\text{M})}\),
+  and assume \(\lVert  \Sigma  \rVert < \infty\). Then
+\begin{equation}
+\begin{aligned}
+  \lVert  \Sigma_n^{\text{RR}} - \Sigma_\infty  \rVert
+    \le \frac{C_3}{n \, \alpha a},
+\end{aligned}
+\end{equation}
+  with
+\begin{equation}
+\begin{aligned}
+  C_3
+    &= 12 \, C_Q \, \lVert \overline{A}^{-1} \rVert \, \lVert \Sigma \rVert
+       + 9 \, C_Q^2 \, \lVert \Sigma \rVert
+       + 2 \, \lVert \Sigma_\infty \rVert .
+\end{aligned}
+\end{equation}
+  Consequently, for every \(u \in \mathbb{R}^d\),
+\begin{equation}
+\begin{aligned}
+  | \sigma_n^{2, \text{RR}}(u) - \sigma^2(u) |
+    \le \frac{C_3 \, \lVert  u  \rVert^2}{n \, \alpha a}.
+\end{aligned}
+\end{equation}
+% At the working scale \(\alpha = c \, n^{- 1 / 2}\) this is \(O(n^{- 1 / 2})\).
+\end{lemma}
+
+\textit{Proof.} Write \(\Delta_l \coloneqq \mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1}\) and expand
+\begin{equation}
+\begin{aligned}
+\mathcal{Q}_l^{\text{RR}} \, \Sigma \, (\mathcal{Q}_l^{\text{RR}})^\top - \Sigma_\infty
+  = R_{1,l} + R_{2,l},
+\end{aligned}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+R_{1,l}
+  \coloneqq \Delta_l \Sigma \overline{A}^{-\top}
+     + \overline{A}^{-1} \Sigma \Delta_l^\top,
+\quad
+R_{2,l} \coloneqq \Delta_l \Sigma \Delta_l^\top.
+\end{aligned}
+\end{equation}
+The pointwise bounds are
+\begin{equation}
+\begin{aligned}
+\lVert  R_{1, l}  \rVert \le 2 \, \lVert  \overline{A}^{-1}  \rVert \, \lVert  \Sigma  \rVert \, \lVert  \Delta_l  \rVert,
+\quad
+\lVert  R_{2, l}  \rVert \le \lVert  \Sigma  \rVert \, \lVert  \Delta_l  \rVert^2.
+\end{aligned}
+\end{equation}
+The linear part satisfies
+% Use part (i) of the previous lemma and
+% \(\sum_{k \ge 1} (1 - \alpha a)^{k/2}
+% \le 1/(1-\sqrt{1-\alpha a}) \le 2/(\alpha a)\).
+\begin{equation}
+\begin{aligned}
+\sum_{l = 1}^{n - 1} \lVert  \Delta_l  \rVert
+  \le 3 C_Q \sum_{k = 1}^{n - 1} (1 - \alpha a)^{k / 2}
+  \le \frac{6 C_Q}{\alpha a}.
+\end{aligned}
+\end{equation}
+The quadratic part satisfies
+\begin{equation}
+\begin{aligned}
+\sum_{l = 1}^{n - 1} \lVert  \Delta_l  \rVert^2 \le \frac{9 C_Q^2}{\alpha a}.
+\end{aligned}
+\end{equation}
+Combining, including the missing two boundary terms in the \(l = 2\) to \(n - 1\)
+sum,
+% Since the sum starts at \(l = 2\), replacing every weight by
+% \(\overline{A}^{-1}\) gives \(((n - 2) / n) \Sigma_\infty\), not
+% \(\Sigma_\infty\). Hence there is an additional deterministic finite-sum
+% boundary term \(2 \Sigma_\infty / n\).
+\begin{equation}
+\begin{aligned}
+\lVert  \Sigma_n^{\text{RR}} - \Sigma_\infty  \rVert
+  &\le \frac{2 \lVert  \Sigma_\infty  \rVert}{n}
+      + \frac{1}{n} \sum_{l = 2}^{n - 1} (\lVert  R_{1, l}  \rVert + \lVert  R_{2, l}  \rVert) \\
+  &\le \frac{1}{n} (2 \, \lVert  \overline{A}^{-1}  \rVert \, \lVert  \Sigma  \rVert \cdot \frac{6 C_Q}{\alpha a}
+                + \lVert  \Sigma  \rVert \cdot \frac{9 C_Q^2}{\alpha a}
+                + 2 \, \lVert  \Sigma_\infty  \rVert / (\alpha a))
+  = \frac{C_3}{n \, \alpha a}
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\square
+\end{aligned}
+\end{equation}

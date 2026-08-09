@@ -1,0 +1,63 @@
+
+\section{Closed-Form Identities}
+
+Throughout this chapter write
+\begin{equation}
+\begin{aligned}
+B_\alpha \coloneqq I - \alpha \overline{A},
+\quad
+B_{2 \alpha} \coloneqq I - 2 \alpha \overline{A},
+\quad
+k \coloneqq n - l.
+\end{aligned}
+\end{equation}
+Assume \(0 < \alpha\) and \(2 \alpha \le \alpha_\infty\).
+% Then the Lyapunov contractions
+% \(\lVert  B_\alpha^m  \rVert_Q^2 \le (1 - \alpha a)^m\) and
+% \(\lVert  B_{2 \alpha}^m  \rVert_Q^2 \le (1 - 2 \alpha a)^m\) hold; we also use
+% \(1 - 2 \alpha a \le 1 - \alpha a\).
+
+The geometric-series identity gives
+\begin{equation}
+\begin{aligned}
+Q_l^{(\alpha)}
+  = \alpha \sum_{j = 0}^{n - l - 1} B_\alpha^j
+  = \alpha \, (\alpha \overline{A})^{-1} \, (I - B_\alpha^{n - l})
+  = \overline{A}^{-1} (I - B_\alpha^{n - l}).
+\end{aligned}
+\end{equation}
+Hence
+\begin{equation}
+\begin{aligned}
+Q_l^{(\alpha)} - \overline{A}^{-1} = - \overline{A}^{-1} B_\alpha^{n - l},
+\quad
+Q_{l + 1}^{(\alpha)} - Q_l^{(\alpha)} = - \alpha B_\alpha^{n - l - 1}.
+\end{aligned}
+\end{equation}
+% The first is the asymptotic-weight error and decays geometrically in \(k\).
+% The second is the discrete derivative used in Abel summation; note the
+% explicit factor \(\alpha\) in front.
+
+Applying the identities at \(\alpha\) and \(2 \alpha\) gives
+\begin{equation}
+\begin{aligned}
+\mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1}
+  = - \overline{A}^{-1} \, (2 B_\alpha^k - B_{2 \alpha}^k),
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}
+  = - 2 \alpha \, (B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}).
+\end{aligned}
+\end{equation}
+Only the discrete derivative gains an additional local factor of \(\alpha\).
+% Structural note. The asymptotic-weight error \(2 B_\alpha^k - B_{2 \alpha}^k\)
+% remains at the single-trajectory rate \((1 - \alpha a)^{k / 2}\): the
+% triangle inequality does not see RR cancellation. The discrete derivative
+% \(B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}\) is a true difference of contractions at
+% the same exponent. The identity
+% \(X^m - Y^m = (X - Y) \sum_{i = 1}^m X^{i - 1} Y^{m - i}\), with
+% \(X = B_\alpha\), \(Y = B_{2 \alpha}\), extracts one extra factor of \(\alpha\). The
+% left-factored form is valid because the matrices are polynomials in
+% \(\overline{A}\) and commute.

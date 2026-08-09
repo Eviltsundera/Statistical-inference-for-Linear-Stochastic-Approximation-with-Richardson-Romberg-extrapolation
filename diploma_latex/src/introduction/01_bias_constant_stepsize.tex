@@ -1,0 +1,36 @@
+\section{Bias of constant step-size iterates}
+
+The use of a constant step size $\alpha>0$ offers several practical
+advantages: it enables geometrically fast forgetting of the initial condition
+(Dieuleveut, Durmus, and Bach, 2020) and simplifies hyperparameter tuning
+compared to diminishing step-size schedules. However, unlike the classical
+regime $\alpha_k\to0$ with $\sum_k\alpha_k=\infty$ and
+$\sum_k\alpha_k^2<\infty$, a constant step size produces iterates that
+converge only \emph{in distribution} to a stationary measure $\Pi_\alpha$,
+rather than almost surely to $\theta^*$. The stationary expectation
+$\mathbb{E}[\theta_\infty^{(\alpha)}]$ is generally \emph{biased} with respect
+to $\theta^*$, and this bias cannot be eliminated by Polyak--Ruppert averaging
+alone.
+
+As shown in Levin, Naumov, and Samsonov (2025), the stationary bias has a
+leading linear term in $\alpha$:
+\begin{equation}
+  \lim_{n\to\infty}\mathbb{E}[\theta_n^{(\alpha)}]
+  = \theta^*+\alpha\Delta+O(\alpha^{3/2}),
+  \label{eq:bias-expansion}
+\end{equation}
+where
+\[
+  \Delta
+  = \overline{A}^{-1}\sum_{k=1}^{\infty}
+    \mathbb{E}\!\left[
+      \bigl\{\mathsf{Q}^k\widetilde{A}(Z_\infty)\bigr\}
+      \varepsilon(Z_\infty)
+    \right]
+\]
+depends on the correlation structure of the Markov chain, and
+$\widetilde{A}(z)=A(z)-\overline{A}$ is the centered matrix-valued function.
+Under stronger expansion assumptions, the power-series approach of Huo, Chen,
+and Xie (2024) gives higher-order bias expansions in integer powers of
+$\alpha$; in the Levin decomposition, the first misadjustment bias component
+itself has an $O(\alpha^2)$ remainder after the leading $\alpha\Delta$ term.

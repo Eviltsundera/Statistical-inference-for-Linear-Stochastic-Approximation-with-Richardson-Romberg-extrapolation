@@ -1,0 +1,92 @@
+
+\section{Burned-in Martingale Berry--Esseen}
+
+The depth-zero martingale in \cref{lem:burn-poisson-decomp} is normalized at the
+effective sample size $m = n - n_{0}$.
+% We assume $m \ge n / 2$ and impose the mixing-scale burn-in lower bounds
+% with logarithmic factors, so the inhomogeneous concentration term obtained
+% from $\sqrt{p \, t_{\mathrm{mix}} \, \sum c_{i}^{2}}$ and then written as
+% $C(u) \sqrt{p \, n}$ can be transferred to the $m$ scale.
+
+Fix $u \in \mathbb{R}^{d}$ and put
+$X_{l}^{\mathrm{bRR}} := u^{\mathsf{T}} \Delta M_{l}^{\mathrm{bRR}}$ for $2 \le l \le n - 1$. Then
+\begin{equation}
+|X_{l}^{\mathrm{bRR}}| \le \kappa_{\mathrm{burn}}(u),
+\quad
+\kappa_{\mathrm{burn}}(u)
+  := 6 \, t_{\mathrm{mix}} \, C_{\mathrm{burn,Q}} \, \lVert \varepsilon \rVert_{\infty}
+     \, \lVert u \rVert.
+\label{eq:burn-M-incr}
+\end{equation}
+% This is the same bounded-increment estimate as in the stationary chapter,
+% with $C_{\mathrm{burn,Q}}$ replacing the full-window weight bound.
+Set
+\[
+s_{n,n_{0}}^{2}(u) := m \, \sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u).
+\]
+Under \eqref{eq:burn-variance-lb-condition},
+$s_{n,n_{0}}^{2}(u) \ge m \sigma^{2}(u) / 2$. Also,
+$m \ge n / 2$ and the uniform bound $\lVert Q_{l}^{\mathrm{bRR}} \rVert \le C_{\mathrm{burn,Q}}$
+imply the deterministic upper bound
+\begin{equation}
+s_{n,n_{0}}^{2}(u)
+  \le 2 m \, C_{\mathrm{burn,Q}}^{2} \,
+     \lVert \Sigma_{\varepsilon}^{(\mathrm{M})} \rVert \, \lVert u \rVert^{2}.
+\label{eq:burn-s-upper}
+\end{equation}
+
+\begin{theorem}\label{thm:burn-M-BE}
+  \textbf{(Burned-in martingale Berry--Esseen bound.)}
+  Assume \textbf{UGE 1}, $\pi(\varepsilon) = 0$,
+  $\lVert \varepsilon \rVert_{\infty} < \infty$, $\sigma^{2}(u) > 0$,
+  $0 < \alpha$, $2 \alpha \le \alpha_{\infty}$, $m \ge n / 2$, and the
+  burned-in variance lower-bound condition \eqref{eq:burn-variance-lb-condition}.
+  There exist constants $C_{\mathrm{bK,1}}(u), C_{\mathrm{bK,2}}(u) > 0$, depending only on
+  $\lVert u \rVert$, $\sigma(u)$, $C_{\mathrm{burn,Q}}$, $t_{\mathrm{mix}}$,
+  $\lVert \varepsilon \rVert_{\infty}$, $\lVert \Sigma_{\varepsilon}^{(\mathrm{M})} \rVert$, and the
+  universal constants in \cref{lem:external-martingale-be}, such that for every
+  $n \ge 3$,
+  \begin{equation}
+d_{K} \left( \frac{u^{\mathsf{T}} M_{n,n_{0}}^{\mathrm{bRR}}}{\sqrt{m} \, \sigma_{n,n_{0}}^{\mathrm{bRR}}(u)},
+    \mathcal{N}(0, 1) \right)
+    \le \frac{C_{\mathrm{bK,1}}(u) \, \log^{3 / 4} n}{m^{1 / 4}}
+     + \frac{C_{\mathrm{bK,2}}(u) \, \log n}{\sqrt{m}}.
+\label{eq:burn-M-BE}
+\end{equation}
+\end{theorem}
+
+\begin{proof} Apply \cref{lem:external-martingale-be} to the martingale differences
+$X_{l}^{\mathrm{bRR}}$. The bounded-increment input is
+\eqref{eq:burn-M-incr}, and the target variance is $s_{n,n_{0}}^{2}(u)$. The first and
+third terms of \cref{lem:external-martingale-be} are bounded exactly as before, with
+$n$ replaced by $m$ in the denominator and the harmless factor
+$n / m \le 2$ absorbed into the constants. Explicitly, from
+$s_{n,n_{0}}^{2}(u) \ge m \sigma^{2}(u) / 2$ and $m \ge n / 2$,
+\begin{equation}
+\frac{(2 n + 1) \log\left(2 n + 1\right)}{s_{n,n_{0}}^{3}(u)}
+  \le C(u) \frac{\log n}{\sqrt{m}}.
+\label{eq:burn-martingale-be-first-nm}
+\end{equation}
+The bounded-increment Lindeberg term is controlled in the same way, using
+\eqref{eq:burn-s-upper} and $s_{n,n_{0}}^{2}(u) \ge m \sigma^{2}(u) / 2$. For the
+conditional-variance term use
+\cref{lem:burn-bracket-conc}:
+\[
+\mathbb{E}^{1 / p} \left[ | u^{\mathsf{T}} \langle M^{\mathrm{bRR}} \rangle_{n,n_{0}} u
+    - s_{n,n_{0}}^{2}(u) |^{p} \right]
+  \le C \, \sqrt{p \, n}.
+\]
+% Here the constant contains the explicit bracket coefficient
+% $C_{\mathrm{burn,Q}}^{2} \lVert u \rVert^{2} \lVert \varepsilon \rVert_{\infty}^{2} t_{\mathrm{mix}}^{5 / 2}$
+% from \cref{lem:burn-bracket-conc}; the underlying concentration input is
+% \eqref{eq:external-markov-conc}.
+Together with $m \ge n / 2$, \eqref{eq:burn-variance-lb-condition}, and
+\eqref{eq:burn-s-upper}, this gives
+\[
+\mathrm{Term II}
+  \le C(u) \, p^{(3 p + 1) / (2 (2 p + 1))}
+     \, m^{-p / (2 (2 p + 1))}.
+\]
+Taking $p = \left\lceil \log n \right\rceil$ gives the displayed
+$\log^{3 / 4}(n) m^{-1 / 4}$ bound. The bounded-increment terms give
+the second displayed term. \end{proof}

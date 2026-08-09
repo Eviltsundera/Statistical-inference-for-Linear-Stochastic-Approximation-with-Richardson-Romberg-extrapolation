@@ -1,0 +1,222 @@
+
+\section{Direct Imported Working Forms}\label{sec:external-direct-inputs}
+
+This appendix records the external statements in the exact working forms used
+in the thesis. Items explicitly marked as direct citations are imported from
+the cited papers after translating to the sign convention of this thesis.
+Items marked as local extensions are proved in the main text and should not be
+read as separate external theorems.
+
+\begin{lemma}\label{lem:external-markov-concentration}
+  \textbf{(Direct citation: Levin et al. (2025, Lemma 11) -- Markov concentration.)}
+  Under \textbf{UGE 1}, there is a universal constant $C_{\mathrm{MC}}$ such that, for any
+  bounded measurable functions $g_{i}$ with $\pi(g_{i}) = 0$ and
+  $\lVert g_{i} \rVert_{\infty} \le c_{i}$, every initial distribution $\xi$, and every
+  $p \ge 2$,
+  \begin{equation}
+\lVert \sum_{i=1}^{N} g_{i}(Z_{i}) \rVert_{L_{p}(\xi)}
+    \le C_{\mathrm{MC}} \sqrt{p \, t_{\mathrm{mix}} \, \sum_{i=1}^{N} c_{i}^{2}}.
+\label{eq:external-markov-conc}
+\end{equation}
+  This is the scalar time-inhomogeneous consequence used in the
+  predictable-variation estimates and in the preliminary last-iterate bounds.
+\end{lemma}
+
+\begin{lemma}\label{lem:external-martingale-be}
+  \textbf{(Direct citation: Samsonov et al. (2025, Lemma 21) -- martingale
+  Berry--Esseen.)}
+  Let $(X_{l}, \mathcal{F}_{l})_{l = 1}^{N}$ be scalar martingale differences such that
+  $|X_{l}| \le \kappa$ almost surely. Define
+  $S_{N} := \sum_{l = 1}^{N} X_{l}$ and
+  $V_{N}^{2} := \sum_{l = 1}^{N} \mathbb{E}[X_{l}^{2} | \mathcal{F}_{l - 1}]$.
+  Then, for every deterministic scale $v_{N}^{2} > 0$ and every $p \ge 1$,
+  \begin{equation}
+\begin{aligned}
+d_{K} \left( S_{N} / v_{N}, \mathcal{N}(0, 1) \right)
+    &\le L_{B}(\kappa) \frac{(2 N + 1) \log\left(2 N + 1\right)}{v_{N}^{3}}
+      + C_{1} \sqrt{p} v_{N}^{- 2 p / (2 p + 1)}
+         (\mathbb{E}|V_{N}^{2} - v_{N}^{2}|^{p})^{1 / (2 p + 1)} \\
+    &\quad + C_{2} p v_{N}^{- 2 p / (2 p + 1)}
+         \kappa^{2 p / (2 p + 1)}.
+\end{aligned}
+\label{eq:external-martingale-be}
+\end{equation}
+  Here $L_{B}(\kappa) < \infty$ and $C_{1}, C_{2}$ are the constants in that
+  martingale theorem.
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-prop-2}
+  \textbf{(Direct citation: Levin et al. (2025, Proposition 2) -- stationary bias of
+  $J^{(1)}$.)}
+  Under stationarity for the augmented chain
+  $(Z_{t + 1}, J_{t}^{(0, w)}, J_{t}^{(1, w)})$ and for
+  $w \le \alpha_{\mathrm{L,P2}}(q,t_{\mathrm{mix}})$,
+  \[
+\mathbb{E}_{\pi} [J_{\infty}^{(1, w)}] = w \, \Delta + R(w),
+  \quad
+  \lVert R(w) \rVert
+    \le 12 \, \lVert \overline{A}^{-1} \rVert \, C_{A}^{2} \, t_{\mathrm{mix}}^{2} \, w^{2}
+       \, \lVert \varepsilon \rVert_{\infty},
+\]
+  with
+  \[
+\Delta := \overline{A}^{-1} \sum_{k \ge 1}
+    \mathbb{E}_{\pi} [(\mathsf{Q}^{k} \tilde{A})(Z_{0}) \, \varepsilon(Z_{0})].
+\]
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-cor-6}
+  \textbf{(Direct citation: Levin et al. (2025, Corollary 6) -- centered bilinear
+  $L_{p}$ bound.)}
+  Define
+  \[
+\overline{\psi}_{w} (j, z)
+    := \tilde{A}(z) j
+      - \mathbb{E}_{\Pi_{J^{(0)}, w}} [\tilde{A}(Z_{1}) \, J_{0}^{(0, w)}].
+\]
+  For $w \le \alpha_{\mathrm{L,C6}}(q,t_{\mathrm{mix}})$, every initial distribution, every
+  $r \ge 1$, and every $p \ge 2$,
+  \[
+\left( \lVert \sum_{t = 0}^{r - 1} \overline{\psi}_{w} (J_{t}^{(0, w)}, Z_{t + 1}) \rVert \right)_{L_{p}}
+    \le c_{W, 1} \, p^{3 / 2} \sqrt{w r}
+       + c_{W, 2} \, p^{3} \, w^{-1 / 2}
+         \, \log^{1 / 2}(1 / (w a)),
+\]
+  with $c_{W, 1}, c_{W, 2}$ depending only on
+  $C_{A}, \kappa_{Q}, t_{\mathrm{mix}}, \lVert \varepsilon \rVert_{\infty}$. The logarithmic factor
+  is the one displayed in Levin et al. (2025, Corollary 6, Eq. (67)); it is
+  absorbed into $\mathrm{polylog}(n)$ in the working-scale corollaries.
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-prop-8}
+  \textbf{(Direct citation: Levin et al. (2025, Proposition 8) -- depth-two
+  $J^{(2)}$ moment bound.)}
+  For every $q \ge 2$ and every $p$ satisfying $2 \le p \le q / 2$, if
+  $w \le \alpha_{\mathrm{L,P8}}(q,t_{\mathrm{mix}})$, then
+  \[
+\lVert J_{n}^{(2, w)} \rVert_{L_{p}}
+    \le D_{J} \, t_{\mathrm{mix}}^{5 / 2} \, p^{7 / 2} \, w^{3 / 2}
+       \, \log^{3 / 2}(1 / (w a)),
+\]
+  uniformly in $n$, with $D_{J}$ depending only on
+  $C_{A}, \kappa_{Q}, \lVert \overline{A}^{-1} \rVert, \lVert \varepsilon \rVert_{\infty}$.
+\end{lemma}
+
+\begin{lemma}\label{lem:product-stability-input}
+  \textbf{(Direct citation/extraction: Durmus et al. (2025, Proposition 7) --
+  random-product stability.)}
+  Under the stability and bounded-noise assumptions of the depth-two setup,
+  there are product-stability ceilings $\alpha_{\mathrm{prod}}(r)$, $r \ge 2$, and
+  constants $C_{\mathrm{prod}} < \infty$, $c_{\mathrm{prod}} > 0$, independent of
+  $p,w,s,k$, such that, for $p \ge 2$, $w \le \alpha_{\mathrm{prod}}(p)$, every
+  $0 \le s \le k$, and every deterministic vector $v$,
+  \begin{equation}
+\mathbb{E}^{\frac{1}{p}} \left[ \lVert \Gamma_{s + 1:k}^{(w)} v \rVert^{p} | Z_{s} \right]
+    \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right) \lVert v \rVert.
+\label{eq:product-stability-input}
+\end{equation}
+  This is the constant-step deterministic-vector form used in Levin et al.
+  (2025, Appendix D.1, Proposition 9); the displayed exponent is weaker than
+  the source bound and is sufficient for the burn-in transfer.
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-prop-9}
+  \textbf{(Direct citation: Levin et al. (2025, Proposition 9) -- one-trajectory
+  $H^{(2)}$ moment bound.)}
+  For every $q \ge 2$ and every $p$ satisfying $2 \le p \le q / 2$, if
+  $w \le \alpha_{\mathrm{L,P9}}(q,t_{\mathrm{mix}})$, then
+  \[
+\lVert H_{n}^{(2, w)} \rVert_{L_{p}}
+    \le D_{H} \, d^{1 / q} \, t_{\mathrm{mix}}^{5 / 2} \, p^{7 / 2}
+       \, w^{3 / 2} \, \log^{3 / 2}(1 / (w a)),
+\]
+  uniformly in $n$, with $D_{H}$ depending only on
+  $C_{A}, \kappa_{Q}, \lVert \overline{A}^{-1} \rVert, \lVert \varepsilon \rVert_{\infty}$.
+  The proof uses the representation
+  \begin{equation}
+H_{k}^{(2,w)}
+    = - w \sum_{l = 1}^{k} \Gamma_{l + 1:k}^{(w)}
+          \tilde{A}(Z_{l}) J_{l - 1}^{(2,w)}.
+\label{eq:levin-H2-representation}
+\end{equation}
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-prop-5-component}
+  \textbf{(Direct citation/extraction: Levin et al. (2025, Appendix B.2,
+  Proposition 5) -- depth-two startup contraction for the $J$ coordinates.)}
+  For
+  \[
+Y_{k}^{(w)} := (Z_{k + 1}, J_{k}^{(0,w)}, J_{k}^{(1,w)}, J_{k}^{(2,w)})
+\]
+  and $y = (z, j_{0}, j_{1}, j_{2})$,
+  $y' = (z', j'_{0}, j'_{1}, j'_{2})$, define the depth-two augmented-chain cost
+  from Levin et al. (2025, Appendix B.2, Eq. (49)):
+  \begin{equation}
+\begin{aligned}
+c_{J,2}^{(w)}(y,y')
+    &:= \lVert j_{0} - j'_{0} \rVert + \lVert j_{1} - j'_{1} \rVert + \lVert j_{2} - j'_{2} \rVert \\
+    &\quad + \left( \lVert j_{0} \rVert + \lVert j'_{0} \rVert + \lVert j_{1} \rVert + \lVert j'_{1} \rVert
+          + \lVert j_{2} \rVert + \lVert j'_{2} \rVert + \sqrt{w a} \lVert \varepsilon \rVert_{\infty} \right)
+          \, 1_{z \ne z'}.
+\end{aligned}
+\label{eq:levin-depth-two-cost}
+\end{equation}
+  Under the Proposition-5 step-size restriction
+  $w \le \alpha_{\mathrm{L,P5}}(p,t_{\mathrm{mix}})$, two copies of $Y_{k}^{(w)}$ started from
+  deterministic states $y,y'$ can be coupled so that, for
+  $\ell = 0,1,2$,
+  \begin{equation}
+\lVert J_{k}^{(\ell,w)}(y) - J_{k}^{(\ell,w)}(y') \rVert_{L_{p}}
+    \le C_{W} \, p^{7 / 2} \, t_{\mathrm{mix}}^{5 / 2}
+       \, \log^{3 / 2}(1 / (w a))
+       \, \exp\left(-w a k / (12 p)\right)
+       \, c_{J,2}^{(w)}(y,y').
+\label{eq:levin-depth-two-component-contraction}
+\end{equation}
+  The displayed componentwise estimate is the coordinate projection of the
+  Wasserstein contraction, with constants as in Levin et al. (2025, Eq. (55)).
+\end{lemma}
+
+\begin{lemma}\label{lem:levin-invariant-depth-two-law}
+  \textbf{(Direct citation: Levin et al. (2025, Corollary 4) -- invariant depth-two
+  $J$ law.)}
+  Under the same stationary depth-two ceilings as above, the Markov chain
+  $Y_{k}^{(w)}$ admits a unique invariant law $\Pi_{J,2,w}$. Its stationary
+  version has finite moments at the orders used in
+  \cref{lem:levin-prop-8}, and the contraction in
+  \cref{lem:levin-prop-5-component} gives convergence to this law from every
+  deterministic initial augmented state.
+\end{lemma}
+
+\section{Local Extensions Used in This Thesis}\label{sec:external-local-extensions}
+
+The burn-in transfer also uses one product-stability input and two local
+consequences:
+
+\begin{itemize}
+\item \cref{lem:burn-product-stability} derives the conditional/adapted-vector
+version needed in this thesis from the deterministic-vector estimate
+\cref{lem:product-stability-input}. Its conditional display
+\eqref{eq:burn-product-stability-conditional} is the only product-stability form
+used at random coupling times; \eqref{eq:burn-product-stability-strong} gives
+the deterministic-time corollary used for finite-past and initial-product
+estimates.
+\end{itemize}
+
+The following statements are local extensions or assemblies, not direct
+citations from Levin et al. or Samsonov et al.:
+
+\begin{itemize}
+\item \cref{lem:finite-past-full-augmented-state} constructs the stationary full
+depth-two augmented state including $H^{(2)}$ by a finite-past limit. It uses
+\cref{lem:levin-invariant-depth-two-law,lem:levin-prop-5-component,lem:levin-prop-9}.
+\item \cref{lem:burn-random-time-product} proves conditional product stability
+at a random coupling time from the deterministic product-stability working form
+\cref{lem:burn-product-stability} and the coupling-time tail.
+\item \cref{lem:burn-full-startup} proves the full-state startup contraction for
+$J^{(1)}+J^{(2)}+H^{(2)}$ by combining the $J$ contraction
+\cref{lem:levin-prop-5-component} with the local random-time product estimate.
+\end{itemize}
+
+Whenever the main proof invokes these local statements, the invoked result is
+the local lemma named above, not an unquoted external proposition.

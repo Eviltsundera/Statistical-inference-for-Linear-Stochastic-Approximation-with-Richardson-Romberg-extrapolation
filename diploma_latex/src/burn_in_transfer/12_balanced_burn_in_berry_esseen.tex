@@ -1,0 +1,231 @@
+
+\section{Balanced Burn-in Berry--Esseen Bound}
+
+The final inference statement uses $\sigma(u)$ instead of
+$\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)$.
+% The following lemma is the burned-in analogue of \cref{cor:RR-BE-sigma}.
+
+\begin{lemma}\label{lem:burn-normalization-transfer}
+  \textbf{(Burned-in normalization transfer.)}
+  Assume $\sigma^{2}(u) > 0$ and the burned-in variance lower-bound condition
+  \eqref{eq:burn-variance-lb-condition}. Put
+  \[
+r_{n,n_{0}}(u)
+    := \frac{\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)}{\sigma(u)}.
+\]
+  Then
+  \[
+\frac{1}{\sqrt{2}} \le r_{n,n_{0}}(u) \le \sqrt{3 / 2},
+\]
+  and, for any real random variable $W$,
+  \begin{equation}
+d_{K} \left( r_{n,n_{0}}(u) W, \mathcal{N}(0, 1) \right)
+    \le d_{K} \left( W, \mathcal{N}(0, 1) \right)
+     + \frac{C_{\mathrm{norm}} C_{\mathrm{burn,3}} \lVert u \rVert^{2}}{m \, \alpha \, a \, \sigma^{2}(u)},
+\label{eq:burn-normalization-transfer}
+\end{equation}
+  where $C_{\mathrm{norm}}$ is a universal constant.
+\end{lemma}
+
+\begin{proof} The variance lower-bound condition and
+\eqref{eq:burn-scalar-variance-comparison} give
+\[
+|\sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u) - \sigma^{2}(u)| \le \sigma^{2}(u) / 2.
+\]
+Hence $r_{n,n_{0}}(u) \in [1 / \sqrt{2}, \sqrt{3 / 2}]$. For $r$ in this
+compact interval,
+\[
+\sup_{x} | \Phi(x / r) - \Phi(x) | \le C_{\mathrm{norm}} \, |r - 1|,
+\]
+because $\sup_{x} |x \phi(x)| < \infty$. Therefore
+\[
+d_{K} (r W, \mathcal{N}(0, 1))
+  \le d_{K} (W, \mathcal{N}(0, 1)) + C_{\mathrm{norm}} \, |r - 1|.
+\]
+Finally,
+\[
+|r_{n,n_{0}}(u) - 1|
+  = \frac{|\sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u) - \sigma^{2}(u)|}{\sigma(u) \, (\sigma_{n,n_{0}}^{\mathrm{bRR}}(u) + \sigma(u))}
+  \le \frac{C_{\mathrm{burn,3}} \lVert u \rVert^{2}}{m \, \alpha \, a \, \sigma^{2}(u)},
+\]
+using \eqref{eq:burn-scalar-variance-comparison} and
+$\sigma_{n,n_{0}}^{\mathrm{bRR}}(u) + \sigma(u) \ge \sigma(u)$. \end{proof}
+
+\begin{theorem}\label{thm:burn-final-balanced}
+  \textbf{(Balanced-scale deterministic-start burned-in PR-averaged RR Berry--Esseen bound.)}
+  Assume Assumptions 1--3 from \cref{sec:assumptions}. Assume also the Lyapunov
+  contraction \eqref{eq:contraction} for the two step sizes used below and the
+  external inputs and local extensions summarized in \cref{sec:external-inputs}.
+  Fix $c > 0$ and set
+  \[
+\alpha := c \, n^{-1 / 2},
+  \quad
+  m := n - n_{0},
+  \quad
+  p := \max\left\{2, \left\lceil \log n \right\rceil\right\},
+  \quad
+  q := \max\left\{4 p, \left\lceil \log\left(e \, d\right) \right\rceil, 2\right\}.
+\]
+  Then $p \ge 2$, $q \ge 2$, and $p \le q / 4$.
+  Use the deterministic-start admissibility threshold
+  $\alpha_{\mathrm{burn}}(p,q)$ defined in \eqref{eq:alpha-admissibility-thresholds}.
+  Suppose $(n,n_{0},p,q,\alpha,u)$ is in the admissible burn-in regime
+  \eqref{eq:admissible-burn-regime}.
+  Assume also that the burn-in satisfies the explicit mixing-scale conditions
+  with logarithmic factors
+  \begin{equation}
+n_{0} \ge \frac{2}{\alpha a} \log n,
+  \quad
+  n_{0} \ge \frac{p}{c_{\mathrm{init}} \alpha a} \log n,
+  \quad
+  n_{0} \ge \frac{p}{c_{\mathrm{st}} \alpha a} \log n.
+\label{eq:burn-final-log-conditions}
+\end{equation}
+  Then there exists a finite constant $C_{\mathrm{burn,final}}(u,c,\theta_{0})$,
+  depending only on $u$, $c$, $\lVert \theta_{0} - \theta^{*} \rVert$, and the problem and
+  universal constants in the preceding bounds, but not on $\xi$, such that
+  \begin{equation}
+d_{K} \left( \Xi_{n,n_{0}}^{\mathrm{bRR}}(u), \mathcal{N}(0, 1) \right)
+    \le \frac{C_{\mathrm{burn,final}}(u,c,\theta_{0}) \, \mathrm{polylog}(n)}{n^{1 / 4}},
+\label{eq:burn-final-finite-window}
+\end{equation}
+  and
+  \begin{equation}
+d_{K} \left( \Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u), \mathcal{N}(0, 1) \right)
+    \le \frac{C_{\mathrm{burn,final}}(u,c,\theta_{0}) \, \mathrm{polylog}(n)}{n^{1 / 4}}.
+\label{eq:burn-final-asymptotic}
+\end{equation}
+\end{theorem}
+
+\begin{proof} Apply \cref{thm:burn-RR-BE-master}. Since $m \ge n / 2$, the martingale
+terms satisfy
+\[
+\frac{\log^{3 / 4} n}{m^{1 / 4}}
+  + \frac{\log n}{\sqrt{m}}
+  \le C \, \frac{\mathrm{polylog}(n)}{n^{1 / 4}}.
+\]
+The composite remainder in \cref{lem:burn-R-bound} is controlled by
+\cref{cor:burn-log-transient}, \cref{cor:burn-log-initial-product}, \eqref{eq:burn-D2-bound}, and
+\cref{cor:burn-misadjustment-rate}. In particular,
+\[
+\lVert R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}} \rVert_{L_{p}}
+  \le C \, \mathrm{polylog}(n) \, n^{-1 / 4}.
+\]
+Together with $\sigma_{n,n_{0}}^{\mathrm{bRR}}(u) \ge \sigma(u) / \sqrt{2}$, the
+smoothing remainder is $O(\mathrm{polylog}(n) n^{-1 / 4})$, and
+\eqref{eq:burn-final-finite-window} follows.
+% The first condition in \eqref{eq:burn-final-log-conditions} is
+% \eqref{eq:burn-log-condition} with $\beta = 1$, the second is
+% \eqref{eq:burn-log-init-condition} with $\beta = 1$, and the third is
+% \eqref{eq:burn-log-startup-condition} with $\beta = 1$. The Poisson Abel remainder is
+% $O(m^{-1 / 2})$, and the smoothing tail $e / n$ is lower order.
+
+For the asymptotic normalization, write
+\[
+\Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u)
+  = r_{n,n_{0}}(u) \, \Xi_{n,n_{0}}^{\mathrm{bRR}}(u).
+\]
+By \cref{lem:burn-normalization-transfer}, the additional cost is at most
+\[
+\frac{C \, \lVert u \rVert^{2}}{m \, \alpha \, a \, \sigma^{2}(u)}
+  = O(n^{-1 / 2}),
+\]
+which is absorbed into the balanced finite-window rate.
+% Here $m \ge n / 2$ and $\alpha = c n^{-1 / 2}$.
+\end{proof}
+
+The remaining non-elementary large-$n$ requirement is
+\begin{equation}
+2 c n^{-1 / 2}
+  \le \alpha_{\mathrm{burn}}(p,q),
+\label{eq:burn-final-levin-eventual}
+\end{equation}
+with $p,q$ as in the theorem.
+% The admissible burn-in regime \eqref{eq:admissible-burn-regime} collects the
+% finite-$n$ admissibility requirements. The inequality
+% $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$ enforces the Lyapunov small-step ceiling, the
+% local inverse ceiling, the Levin depth-two admissibility threshold, the
+% random-product stability estimate \cref{lem:burn-product-stability}, and the
+% full-state startup contraction \cref{lem:burn-full-startup}. Since
+% $\alpha = c n^{-1 / 2}$ and $m \ge n / 2$, the elementary step-size
+% constraints and \eqref{eq:burn-variance-lb-condition} hold automatically for all
+% sufficiently large $n$.
+% Under this Levin/startup admissibility condition, the large-$n$ reading of the
+% theorem keeps only $m \ge n / 2$ and the burn-in lower bounds in
+% \eqref{eq:burn-final-log-conditions}.
+
+\begin{corollary}\label{cor:burn-sqrt-n-transfer}
+  \textbf{($\sqrt{n}$-normalization for the burned-in RR statistic.)}
+  Under the assumptions of \cref{thm:burn-final-balanced} and the admissible
+  burn-in regime \eqref{eq:admissible-burn-regime}, in particular
+  $m = n - n_{0} \ge n / 2$, $p \le q / 4$, $\sigma^{2}(u) > 0$,
+  $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$, and the burned-in variance lower bound
+  \eqref{eq:burn-variance-lb-condition}, define the final scalar statistic
+  \[
+T_{n,n_{0}}^{\mathrm{RR,n}}(u)
+    := \sqrt{n} \, u^{\mathsf{T}} \left( \overline{\theta}_{n,n_{0}}^{(\mathrm{RR}, \alpha)} - \theta^{*} \right)
+    = \sqrt{n / m} \, T_{n,n_{0}}^{\mathrm{RR}}(u),
+\]
+  and its asymptotic normalization
+  \[
+\Xi_{n,n_{0}}^{\mathrm{n,RR}}(u)
+    := \frac{T_{n,n_{0}}^{\mathrm{RR,n}}(u)}{\sigma(u)}.
+\]
+  For the Berry--Esseen moment choice $p = \max\left\{2, \left\lceil \log n \right\rceil\right\}$ in
+  \cref{thm:burn-final-balanced}, the lower burn-in conditions
+  \eqref{eq:burn-final-log-conditions} are implied by
+  \[
+n_{0} \ge C_{-} \, (\alpha a)^{-1} \log^{2} n
+\]
+  with any fixed $C_{-}$ large enough.
+  % At the balanced scale $\alpha = c n^{-1 / 2}$ this is
+  % $n_{0} = O(n^{1 / 2} \log^{2} n)$, not a purely logarithmic burn-in in $n$.
+  If, in addition, the burn-in window stays in the same mixing-scale window
+  with logarithmic-square factor,
+  \begin{equation}
+C_{-} \, (\alpha a)^{-1} \log^{2} n
+    \le n_{0}
+    \le C_{0} \, (\alpha a)^{-1} \log^{2} n
+\label{eq:burn-log-window}
+\end{equation}
+  for some finite $C_{0}$ and such a fixed $C_{-}$, then there exists a finite constant
+  \[
+    C_{\mathrm{burn,n}}(u,c,\theta_0,C_0,C_-),
+  \]
+  independent of $\xi$, such that
+  \begin{equation}
+d_{K} \left( \Xi_{n,n_{0}}^{\mathrm{n,RR}}(u), \mathcal{N}(0, 1) \right)
+    \le \frac{C_{\mathrm{burn,n}}(u,c,\theta_{0},C_{0},C_{-}) \, \mathrm{polylog}(n)}{n^{1 / 4}}.
+\label{eq:burn-sqrt-n-final}
+\end{equation}
+\end{corollary}
+
+\begin{proof} Put $s_{n,n_{0}} := \sqrt{n / m}$. Since
+\eqref{eq:admissible-burn-regime} gives $m \ge n / 2$,
+\[
+0 \le s_{n,n_{0}} - 1
+  = \frac{n_{0}}{m \, (s_{n,n_{0}} + 1)}
+  \le \frac{2 n_{0}}{n}.
+\]
+For every real random variable $W$ and every $s \in [1, \sqrt{2}]$,
+\[
+d_{K} \left( s W, \mathcal{N}(0, 1) \right)
+  \le d_{K} \left( W, \mathcal{N}(0, 1) \right) + C \, |s - 1|,
+\]
+by the same scaling argument as in \cref{lem:burn-normalization-transfer}. Applying
+this with $W = \Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u)$ and using
+\cref{thm:burn-final-balanced} gives the already proved
+$\mathrm{polylog}(n) n^{-1 / 4}$ term. The upper burn-in bound
+in \eqref{eq:burn-log-window} and $\alpha = c n^{-1 / 2}$ give
+\[
+|s_{n,n_{0}} - 1|
+  \le \frac{2 C_{0}}{c a} \frac{\log^{2} n}{n^{1 / 2}},
+\]
+which is lower order and is absorbed into the same balanced-scale rate.
+\end{proof}
+
+% The lower side of \eqref{eq:burn-log-window} is the logarithmic-square mixing-scale
+% burn-in needed by the current $L_{p}$ startup contraction; the upper side keeps
+% the $\sqrt{n / m}$ rescaling lower order. At
+% $\alpha = c n^{-1 / 2}$ this window has order
+% $n^{1 / 2} \log^{2} n$.

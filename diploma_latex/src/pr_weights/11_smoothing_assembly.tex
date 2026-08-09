@@ -1,0 +1,332 @@
+
+\section{Smoothing Assembly}
+
+We now assemble the stationary martingale bound and the composite remainder via
+the Bobkov--Götze smoothing inequality.
+% Inputs: the Poisson decomposition, bracket concentration, martingale
+% Berry--Esseen bound, and Levin depth-two misadjustment estimate. Together
+% they yield a Kolmogorov bound for the stationary \(n_0 = 0\) augmented-chain RR
+% statistic.
+
+\textbf{Stationary assembled statistic.} Define
+\begin{equation}
+\begin{aligned}
+S_{n, \text{stat}}^{\text{RR}}(u)
+  \coloneqq -\frac{u^\top M_n^{\text{RR}}}{\sqrt{n}} + u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}},
+\end{aligned}
+\label{eq:full-decomp}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\mathcal{R}_{n, \text{stat}}^{\text{RR}}
+  \coloneqq D_{2, n}^{\text{RR}} + R_n^{\text{mis, RR}},
+\end{aligned}
+\end{equation}
+where both terms are read under the stationary augmented-chain convention.
+Dividing by \(\sigma_n^{\text{RR}}(u)\),
+% The deterministic-start transient and random initial-product discrepancy are
+% not part of this stationary result; they are handled in the burn-in transfer
+% theorem.
+\begin{equation}
+\begin{aligned}
+\frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma_n^{\text{RR}}(u)}
+  = X_n + Y_n,
+\end{aligned}
+\label{eq:XY-split}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+X_n \coloneqq -\frac{u^\top M_n^{\text{RR}}}{\sqrt{n} \, \sigma_n^{\text{RR}}(u)},
+\quad
+Y_n \coloneqq \frac{u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}}}{\sigma_n^{\text{RR}}(u)}.
+\end{aligned}
+\end{equation}
+The martingale bound applies to \(X_n\) with direction \(-u\).
+% The bounded-increment constant and predictable variance are unchanged:
+% \(\varkappa(-u) = \varkappa(u)\) and
+% \(\sigma_n^{2, \text{RR}}(-u) = \sigma_n^{2, \text{RR}}(u)\).
+
+\textbf{Smoothing inequality.} For any \(t > 0\),
+\begin{equation}
+\begin{aligned}
+d_K (X + Y, \mathcal{N}(0, 1))
+  \le d_K (X, \mathcal{N}(0, 1))
+   + \mathbb{P}(|Y| > t)
+   + \frac{t}{\sqrt{2 \pi}},
+\end{aligned}
+\label{eq:smoothing}
+\end{equation}
+Markov's inequality with \(t = e \, \lVert Y \rVert_{L_p}\) gives
+\begin{equation}
+\begin{aligned}
+d_K (X + Y, \mathcal{N}(0, 1))
+  \le d_K (X, \mathcal{N}(0, 1))
+   + \frac{e \, \lVert  Y  \rVert_{L_p}}{\sqrt{2 \pi}}
+   + e^{-p},
+\end{aligned}
+\label{eq:smoothing-Lp}
+\end{equation}
+% The third term uses the Lipschitz constant of the standard normal cdf. The
+% trailing \(e^{-p}\) is \(O(1 / n)\) when \(p \ge \log n\).
+
+\textbf{\(L_p\)-bound on the composite remainder.} The two stationary remainder pieces
+contribute additively.
+% The finite-start deterministic transient is deliberately excluded: setting
+% \(\theta_0 = \theta^*\) removes only that deterministic term, not the startup
+% discrepancy between zero-start perturbation variables and the stationary
+% augmented chain.
+
+\begin{lemma}\label{lem:R-bound}
+  \textbf{(Stationary composite remainder bound.)}
+  Assume the hypotheses and step-size restrictions of the stationary
+  PR-averaged RR misadjustment bound above. Then for every \(u \in \mathbb{R}^d\),
+  every \(p \ge 2\), and every \(q \ge 2\) satisfying \(p \le q / 2\) and
+  \(2 \alpha \le \alpha_{\text{stat}}(q)\),
+\begin{equation}
+\begin{aligned}
+  \lVert  u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}}  \rVert_{L_p}
+    &\le \frac{C_{\text{D2}} \, \lVert  u  \rVert}{\sqrt{n}}
+     + \lVert  u  \rVert \, C_{\text{mis}} \, \Biggl(
+        \sqrt{n} \, \alpha^2
+        + (1 + d^{1 / q}) \, p^{7 / 2} \, t_{\text{mix}}^{5 / 2}
+            \, \sqrt{n} \, \alpha^{3 / 2} \, \log^{3 / 2}(1 / (\alpha a))
+      \\
+        & \quad \quad \quad \quad
+        + p^{3 / 2} \, \sqrt{\alpha}
+        + p^3 \, (\alpha n)^{-1 / 2} \, \log^{1 / 2}(1 / (\alpha a))
+        + \Phi_+(p, \alpha) \, n^{-1 / 2}
+      \Biggr),
+\end{aligned}
+\end{equation}
+  with constants
+\begin{equation}
+\begin{aligned}
+  C_{\text{D2}} \coloneqq 3 \, t_{\text{mix}} \, \lVert  \varepsilon  \rVert_\infty
+              \, (C_{\mathcal{Q}} + C_2 / a^2),
+\end{aligned}
+\end{equation}
+  and \(C_{\text{mis}}\) the constant in the misadjustment theorem.
+\end{lemma}
+
+\textit{Proof.} Combine the sup-norm bound for \(D_{2,n}^{\text{RR}}\) with
+Theorem~\ref{thm:misadjustment}. \(\square\)
+
+\begin{theorem}\label{thm:RR-BE}
+  \textbf{(Stationary augmented-chain Berry--Esseen assembly for the RR comparison statistic.)}
+  Assume \textbf{UGE 1}, \(\pi(\widetilde{A}) = 0\), \(\pi(\varepsilon) = 0\),
+  \(\lVert  \varepsilon  \rVert_\infty < \infty\), \(\sigma^2(u) > 0\),
+  \(0 < \alpha\), and the stationary augmented-chain
+  convention above. Use the external inputs summarized in
+  Section~\ref{sec:external-inputs}. Set
+  \(p = \max(2, \left\lceil \log n \right\rceil)\) and \(q = \max(2 p, \left\lceil \log(e \, d) \right\rceil, 2)\).
+  Then \(p \ge 2\), \(q \ge 2\), and \(p \le q / 2\). If \(n \ge 3\) satisfies the
+  small-step and variance lower-bound conditions
+\begin{equation}
+\begin{aligned}
+  2 \alpha \le \alpha_{\text{stat}}(q),
+  \quad
+  n \, \alpha \, a \ge \frac{2 \, C_3 \, \lVert  u  \rVert^2}{\sigma^2(u)},
+\end{aligned}
+\label{eq:RR-BE-master-conditions}
+\end{equation}
+  where the second inequality is \eqref{eq:variance-lb-condition}, then
+\begin{equation}
+\begin{aligned}
+  d_K \left(
+    \frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma_n^{\text{RR}}(u)},
+    \mathcal{N}(0, 1)
+  \right)
+    &\le \frac{C_{K, 1}(u) \, \log^{3 / 4} n}{n^{1 / 4}}
+     + \frac{C_{K, 2}(u) \, \log n}{\sqrt{n}} \\
+    &\quad + \frac{e \, \lVert  u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}}  \rVert_{L_p}}{\sqrt{2 \pi} \, \sigma_n^{\text{RR}}(u)}
+     + \frac{e}{n},
+\end{aligned}
+\label{eq:RR-BE-master}
+\end{equation}
+  with \(\lVert  u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}}  \rVert_{L_p}\) bounded by the preceding
+  lemma, and \(C_{K, 1}(u), C_{K, 2}(u)\) the constants of the martingale
+  Berry--Esseen theorem.
+\end{theorem}
+
+\textit{Proof.} Apply \eqref{eq:smoothing-Lp} with \(X = X_n\) and \(Y = Y_n\). The martingale
+terms come from Theorem~\ref{thm:M-RR-BE}, and the remainder term is
+\[
+\frac{e\lVert Y_n\rVert_{L_p}}{\sqrt{2\pi}}
+  =
+\frac{e\lVert u^\top\mathcal{R}_{n,\mathrm{stat}}^{\mathrm{RR}}\rVert_{L_p}}
+     {\sqrt{2\pi}\,\sigma_n^{\mathrm{RR}}(u)}.
+\]
+Since \(p\ge\log n\),
+\(e^{-p} \le n^{-1}\). \(\square\)
+
+% \begin{corollary}\label{cor:RR-BE-admissible-alpha}
+% \textbf{(Stationary triangular-array admissible-step CLT.)}
+% Assume the stationary augmented-chain hypotheses of Theorem~\ref{thm:RR-BE}, including
+% \(\sigma^2(u) > 0\). Let \(\alpha = \alpha_n\) be a step-size sequence and set
+% \(p_n \coloneqq \max(2, \left\lceil \log n \right\rceil)\), \(q_n \coloneqq \max(2 p_n, \left\lceil \log(e \, d) \right\rceil, 2)\),
+% and \(\Lambda_n \coloneqq \log(1 / (\alpha_n a))\). Then \(p_n \le q_n / 2\).
+% Assume that, for all sufficiently large \(n\),
+% \begin{equation}
+% \begin{aligned}
+%   2 \alpha_n \le \alpha_{\text{stat}}(q_n),
+%   \quad
+%   n \, \alpha_n \, a \ge \frac{2 \, C_3 \, \lVert  u  \rVert^2}{\sigma^2(u)}.
+% \end{aligned}
+% \end{equation}
+% If
+% \begin{equation}
+% \begin{aligned}
+%   p_n^3 (n \alpha_n)^{-1 / 2} \Lambda_n^{1 / p_n} \to 0,
+%   \quad
+%   p_n^{7 / 2} \sqrt{n} \, \alpha_n^{3 / 2} \Lambda_n^{3 / 2} \to 0,
+% \end{aligned}
+% \label{eq:alpha-window}
+% \end{equation}
+% then
+% \begin{equation}
+% \begin{aligned}
+%   d_K \left(
+%     \frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma_n^{\text{RR}}(u)},
+%     \mathcal{N}(0, 1)
+%   \right) \to 0.
+% \end{aligned}
+% \end{equation}
+% In particular, for a power scale \(\alpha_n = c \, n^{-\gamma}\), up to
+% logarithmic factors, the admissible window is
+% \begin{equation}
+% \begin{aligned}
+% \frac{1}{3} < \gamma < 1.
+% \end{aligned}
+% \end{equation}
+% \end{corollary}
+
+% \textit{Proof.} Apply Theorem~\ref{thm:RR-BE} and Lemma~\ref{lem:R-bound} with
+% \(p = p_n\), \(q = q_n\), and \(\alpha = \alpha_n\). The displayed conditions are the
+% remaining nontrivial remainder constraints. For \(\alpha_n = c n^{-\gamma}\) they
+% reduce, modulo logarithms, to
+% \(n^{-(1 - \gamma) / 2} \to 0\) and
+% \(n^{1 / 2 - 3 \gamma / 2} \to 0\), i.e. \(\gamma < 1\) and
+% \(\gamma > 1 / 3\). \(\square\)
+
+\begin{corollary}\label{cor:RR-BE-working}
+  \textbf{(Stationary balanced-scale augmented-chain Berry--Esseen bound.)}
+  At the balanced scale \(\alpha = c \, n^{-1 / 2}\) with \(c > 0\), put
+  \(p = \max(2, \left\lceil \log n \right\rceil)\) and \(q = \max(2 p, \left\lceil \log(e \, d) \right\rceil, 2)\).
+  Then \(p \le q / 2\). Assume the stationary augmented-chain hypotheses of
+  Theorem~\ref{thm:RR-BE}, including \(\sigma^2(u) > 0\). If \(n \ge 3\) satisfies
+\begin{equation}
+\begin{aligned}
+  2 \alpha \le \alpha_{\text{stat}}(q),
+  \quad
+  n \, \alpha \, a \ge \frac{2 \, C_3 \, \lVert  u  \rVert^2}{\sigma^2(u)},
+\end{aligned}
+\end{equation}
+  the bound
+  \eqref{eq:RR-BE-master} reduces to
+\begin{equation}
+\begin{aligned}
+  d_K \left(
+    \frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma_n^{\text{RR}}(u)},
+    \mathcal{N}(0, 1)
+  \right)
+    \le \frac{C(u) \, \text{polylog}(n)}{n^{1 / 4}},
+\end{aligned}
+\end{equation}
+  where \(C(u)\) depends on \(\lVert  u  \rVert\), \(\sigma(u)\), \(C_{\mathcal{Q}}\),
+  \(\lVert  \overline{A}  \rVert\), \(\lVert  \overline{A}^{-1}  \rVert\), \(\kappa_Q\), \(C_A\),
+  \(\lVert  \varepsilon  \rVert_\infty\), \(\lVert  \Sigma_{\varepsilon}^{(\text{M})}  \rVert\),
+  \(t_{\text{mix}}\), \(a\), \(\alpha_\infty\), \(c\), and the universal constants of
+  the smoothing inequality, Lemma~\ref{lem:external-martingale-be}, and
+  \eqref{eq:external-markov-conc}.
+\end{corollary}
+
+% \textit{Proof.} At \(\alpha = c \, n^{-1 / 2}\),
+% \(C_{\text{D2}} \lVert  u  \rVert / \sqrt{n} = O(n^{-1 / 2})\);
+% \(\sqrt{n} \alpha^2 = c^2 \, n^{-1 / 2}\);
+% \(p^{7/2}\sqrt{n}\,\alpha^{3/2}\log^{3/2}(1/(\alpha a))
+% =O(\operatorname{polylog}(n)n^{-1/4})\);
+% \(p^{3 / 2} \sqrt{\alpha} = O(\text{polylog}(n) n^{-1 / 4})\);
+% \(p^3(\alpha n)^{-1/2}\log^{1/2}(1/(\alpha a))
+% =O(\operatorname{polylog}(n)n^{-1/4})\); and
+% \(\Phi_+(p, \alpha) n^{-1 / 2} = O(\text{polylog}(n) n^{-1 / 2})\).
+% After division by \(\sigma_n^{\text{RR}}(u) \ge \sigma(u) / \sqrt{2}\), all remainder
+% terms are dominated by \(\text{polylog}(n) n^{-1 / 4}\). Combine with the
+% martingale Berry--Esseen term.
+% \(\square\)
+
+% \begin{corollary}\label{cor:RR-BE-sigma}
+% \textbf{(Stationary asymptotic-normalization version.)}
+% Assume the stationary augmented-chain hypotheses of Theorem~\ref{thm:RR-BE} for the same
+% \(n,p,q,\alpha,u\). In particular, assume \(p \le q / 2\), \(\sigma^2(u) > 0\),
+% and
+% \begin{equation}
+% \begin{aligned}
+%   2 \alpha \le \alpha_{\text{stat}}(q),
+%   \quad
+%   n \, \alpha \, a \ge \frac{2 \, C_3 \, \lVert  u  \rVert^2}{\sigma^2(u)}.
+% \end{aligned}
+% \end{equation}
+% Then the same finite-\(n\) bound with asymptotic normalization contains one
+% additional variance-comparison term:
+% \begin{equation}
+% \begin{aligned}
+%   d_K \left(
+%     \frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma(u)},
+%     \mathcal{N}(0, 1)
+%   \right)
+%     &\le \frac{C_{K, 1}(u) \, \log^{3 / 4} n}{n^{1 / 4}}
+%      + \frac{C_{K, 2}(u) \, \log n}{\sqrt{n}} \\
+%     &\quad + \frac{e \, \lVert  u^\top \mathcal{R}_{n, \text{stat}}^{\text{RR}}  \rVert_{L_p}}{\sqrt{2 \pi} \, \sigma_n^{\text{RR}}(u)}
+%      + \frac{e}{n}
+%      + \frac{C \, \lVert  u  \rVert^2}{n \, \alpha \, a \, \sigma^2(u)}.
+% \end{aligned}
+% \label{eq:RR-BE-sigma-master}
+% \end{equation}
+% Consequently, under the balanced-scale hypotheses above,
+% \begin{equation}
+% \begin{aligned}
+%   d_K \left(
+%     \frac{S_{n, \text{stat}}^{\text{RR}}(u)}{\sigma(u)},
+%     \mathcal{N}(0, 1)
+%   \right)
+%     \le \frac{C'(u) \, \text{polylog}(n)}{n^{1 / 4}}.
+% \end{aligned}
+% \end{equation}
+% \end{corollary}
+
+% \textit{Proof.} Set \(r \coloneqq \sigma_n^{\text{RR}}(u) / \sigma(u)\) and write
+% \(W \coloneqq S_{n, \text{stat}}^{\text{RR}}(u) / \sigma_n^{\text{RR}}(u)\), so
+% \(W r = S_{n, \text{stat}}^{\text{RR}}(u) / \sigma(u)\). Under
+% the variance lower-bound condition \eqref{eq:variance-lb-condition}, \(r \in [1 / \sqrt{2}, \, r_{\max}]\) for some
+% finite \(r_{\max}\) (from the trivial upper bound
+% \(\sigma_n^{2, \text{RR}}(u) \le C_{\mathcal{Q}}^2 \, \lVert  \Sigma  \rVert \, \lVert  u  \rVert^2\)).
+% For \(r\) in this compact interval,
+% \begin{equation}
+% \begin{aligned}
+% \sup_x | \Phi(x / r) - \Phi(x) | \le C_\Phi \, |r - 1|,
+% \quad
+% C_\Phi \coloneqq \sqrt{2} / \sqrt{\pi e},
+% \end{aligned}
+% \end{equation}
+% Hence
+% The displayed Lipschitz constant follows from
+% \(\sup_x |x \, \phi(x)| = 1 / \sqrt{2 \pi e}\).
+% \begin{equation}
+% \begin{aligned}
+% d_K (W r, \mathcal{N}(0, 1))
+%   \le d_K (W, \mathcal{N}(0, 1)) + C_\Phi \, |r - 1|.
+% \end{aligned}
+% \end{equation}
+% The variance comparison of Section 4.5 gives
+% \begin{equation}
+% \begin{aligned}
+% |r - 1|
+%   = \frac{|\sigma_n^{2, \text{RR}}(u) - \sigma^2(u)|}{\sigma(u) \, (\sigma_n^{\text{RR}}(u) + \sigma(u))}
+%   \le \frac{C_3 \, \lVert  u  \rVert^2}{n \, \alpha \, a \, \sigma^2(u)},
+% \end{aligned}
+% \end{equation}
+% using \(\sigma_n^{\text{RR}}(u) + \sigma(u) \ge \sigma(u)\). At
+% \(\alpha = c n^{-1 / 2}\) the final term is \(O(n^{-1 / 2})\). \(\square\)
+
+% This is an \(n_0 = 0\) stationary augmented-chain statement; deterministic starts
+% are transferred in the burn-in chapter.

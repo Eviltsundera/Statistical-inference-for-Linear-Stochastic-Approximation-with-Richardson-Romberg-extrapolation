@@ -1,0 +1,33 @@
+
+\section{Summed Bounds and Comparison with the Single-Step Case}
+
+\begin{corollary}\label{cor:RR-weight-summed}
+  \textbf{(Summed RR weight bounds.)}
+  Under the assumptions of the previous lemma, uniformly in \(n \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \sum_{l = 1}^{n - 1} \lVert  \mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1}  \rVert^2
+    \le \frac{C_1}{\alpha a},
+  \quad
+  \sum_{l = 1}^{n - 2} \lVert  \mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}  \rVert
+    \le \frac{C_2}{a^2},
+\end{aligned}
+\end{equation}
+  with \(C_1 = 9 C_Q^2\) and \(C_2 = 32 \widetilde{C}_A\).
+\end{corollary}
+
+% \textit{Proof.} Apply the pointwise bounds and the geometric sums
+% \(\sum_{k \ge 1} (1 - \alpha a)^k \le 1 / (\alpha a)\) and
+% \begin{equation}
+% \begin{aligned}
+% \sum_{k \ge 2} (k - 1) \, (1 - \alpha a)^{(k - 2) / 2}
+%   = \sum_{m \ge 0} (m + 1) (1 - \alpha a)^{m / 2}
+%   \le \frac{1}{(1 - \sqrt{1 - \alpha a})^2}
+%   \le \frac{4}{(\alpha a)^2},
+% \end{aligned}
+% \end{equation}
+% Multiplying by \(2 \widetilde{C}_A \alpha^2\) gives the claim.
+% The last displayed step uses
+% \(1 - \sqrt{1 - \alpha a} \ge \alpha a / 2\) for \(\alpha a \le 1 / 2\).
+% \(\square\)
+\clearpage

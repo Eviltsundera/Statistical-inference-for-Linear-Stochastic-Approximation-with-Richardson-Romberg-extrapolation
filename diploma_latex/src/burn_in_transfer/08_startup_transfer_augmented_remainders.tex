@@ -1,0 +1,404 @@
+
+\section{Startup Transfer for Augmented-Chain Remainders}
+
+The remaining startup discrepancy is the difference between the finite-start
+and stationary augmented-chain remainders.
+% The finite-start perturbation variables $J^{(\ell,w)}$ and $H^{(2,w)}$ start
+% from zero, whereas the stationary theorem uses the invariant law of the
+% augmented chain. This discrepancy is summed over the post-burn-in window.
+
+For $w \in \left\{ \alpha, 2 \alpha \right\}$ write
+\[
+Y_{k}^{(w)} := (Z_{k + 1}, J_{k}^{(0,w)}, J_{k}^{(1,w)}, J_{k}^{(2,w)}).
+\]
+For every admissible $w \in \left\{ \alpha, 2 \alpha \right\}$, let
+\[
+(Z_{k + 1}, J_{k}^{(0,w)}, J_{k}^{(1,w)}, J_{k}^{(2,w)}, H_{k}^{(2,w)})_{k \in \mathbb{Z}}
+\]
+be the stationary copy from \cref{lem:finite-past-full-augmented-state}.
+% The direct $J$-coordinate contraction, its cost \eqref{eq:levin-depth-two-cost}, and
+% the invariant $J$ law are recorded in \cref{lem:levin-prop-5-component} and
+% \cref{lem:levin-invariant-depth-two-law}. The $H^{(2,w)}$ one-trajectory bound and
+% representation \eqref{eq:levin-H2-representation} are recorded in \cref{lem:levin-prop-9}.
+% The $H^{(2,w)}$ coordinate is obtained as an $L_{p}$ limit of finite-past
+% truncations, and the limiting coordinate inherits \cref{lem:levin-prop-9}.
+
+\begin{lemma}\label{lem:burn-random-time-product}
+  \textbf{(Conditional product stability at a coupling time.)}
+  On a coupling space with joint filtration $(\mathcal{G}_{s})_{s \ge 0}$, let $T$ be
+  the integer-valued exact-coupling stopping time of two base chains. Assume,
+  uniformly over the initial states used below,
+  \begin{equation}
+\mathbb{P}(T > r) \le C_{T} \exp\left(-c_{T} r\right),
+  \quad r \ge 0.
+\label{eq:coupling-time-tail}
+\end{equation}
+  Products are taken along the post-coupling chain, with
+  $\Gamma_{k + 1:k}^{(w)} = I$. Then, for every $p \ge 2$, $k \ge 0$, and
+  $w \in \left\{ \alpha, 2 \alpha \right\}$ for which \cref{lem:burn-product-stability} applies and
+  $w a \le 1$:
+  % In the applications below this small-step condition follows from
+  % $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$. The constants depend only on the
+  % product-stability constants and on $C_{T},c_{T}$ (and on $c_{0}$ in part (ii)),
+  % but not on $k,p,w,B$.
+
+  \textbf{(i) Random restart.} If $(V_{s})_{s \ge 0}$ is $\mathcal{G}_{s}$-adapted and
+  $\sup_{s} \lVert V_{s} \rVert_{L_{2p}} \le B$, then
+  \begin{equation}
+\lVert \Gamma_{T + 1:k}^{(w)} V_{T} 1_{T \le k} \rVert_{L_{p}}
+    \le C \frac{p}{w a} B
+       \exp\left(- \frac{c w a k}{p}\right).
+\label{eq:burn-random-time-product}
+\end{equation}
+
+  \textbf{(ii) Stable convolution.} If $c_{0} > 0$, $(U_{l})_{l \ge 0}$ is
+  $\mathcal{G}_{l}$-adapted, and, for all $l$,
+  \[
+\lVert U_{l} \rVert_{L_{2p}}
+    \le B \exp\left(- \frac{c_{0} w a l}{p}\right),
+\]
+  then
+  \begin{equation}
+w \sum_{l = 1}^{k}
+    \lVert \Gamma_{l + 1:k}^{(w)} U_{l} \rVert_{L_{p}}
+    \le C \frac{p}{a} B
+       \exp\left(- \frac{c w a k}{p}\right).
+\label{eq:burn-stable-convolution}
+\end{equation}
+\end{lemma}
+
+\begin{proof} For $s \le k$ and $\mathcal{G}_{s}$-measurable $W_{s}$,
+\begin{equation}
+\mathbb{E} \left[ \lVert \Gamma_{s + 1:k}^{(w)} W_{s} \rVert^{p} | \mathcal{G}_{s} \right]^{\frac{1}{p}}
+  \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right)
+     \lVert W_{s} \rVert.
+\label{eq:conditional-product-pointwise}
+\end{equation}
+and therefore
+\begin{equation}
+\lVert \Gamma_{s + 1:k}^{(w)} W_{s} \rVert_{L_{p}}
+  \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right)
+     \lVert W_{s} \rVert_{L_{p}}.
+\label{eq:conditional-product-stability}
+\end{equation}
+For $V_{s} 1_{T = s}$, which is $\mathcal{G}_{s}$-measurable,
+$\Gamma_{T + 1:k}^{(w)} V_{T} 1_{T \le k}
+  = \sum_{s = 0}^{k} \Gamma_{s + 1:k}^{(w)} V_{s} 1_{T = s}$,
+\[
+\lVert \Gamma_{T + 1:k}^{(w)} V_{T} 1_{T \le k} \rVert_{L_{p}}
+  \le C \sum_{s = 0}^{k}
+    \exp\left(- \frac{c w a (k - s)}{p}\right)
+    \lVert V_{s} 1_{T = s} \rVert_{L_{p}}.
+\]
+\[
+\lVert V_{s} 1_{T = s} \rVert_{L_{p}}
+  \le \lVert V_{s} \rVert_{L_{2p}} \mathbb{P}(T = s)^{1 / (2p)}
+  \le B \, \mathbb{P}(T = s)^{1 / (2p)}.
+\]
+\[
+\mathbb{P}(T = s)^{1 / (2p)}
+  \le C \exp\left(- \frac{c_{T} s}{4 p}\right).
+\]
+\[
+\sum_{s = 0}^{k}
+  \exp\left(- \frac{c w a (k - s)}{p}\right)
+  \exp\left(- \frac{c_{T} w a s}{4 p}\right)
+  \le C \frac{p}{w a}
+     \exp\left(- \frac{c' w a k}{p}\right).
+\]
+This proves \eqref{eq:burn-random-time-product}.
+
+For (ii), \eqref{eq:conditional-product-stability} gives
+\[
+\lVert \Gamma_{l + 1:k}^{(w)} U_{l} \rVert_{L_{p}}
+  \le C \exp\left(- \frac{c w a (k - l)}{p}\right)
+     \lVert U_{l} \rVert_{L_{p}}
+  \le C \exp\left(- \frac{c w a (k - l)}{p}\right)
+     B \exp\left(- \frac{c_{0} w a l}{p}\right).
+\]
+\[
+w \sum_{l = 1}^{k}
+  \lVert \Gamma_{l + 1:k}^{(w)} U_{l} \rVert_{L_{p}}
+  \le C w B \sum_{l = 1}^{k}
+     \exp\left(- \frac{c w a (k - l)}{p}\right)
+     \exp\left(- \frac{c_{0} w a l}{p}\right).
+\]
+The last sum is bounded by
+\[
+C \frac{p}{w a} \exp\left(- \frac{c' w a k}{p}\right),
+\]
+hence
+\eqref{eq:burn-stable-convolution}. \end{proof}
+
+% The following lemma records the resulting full-state contraction.
+% This is a local technical extension of \cref{lem:levin-prop-5-component}: the
+% $J^{(0)}$, $J^{(1)}$, and $J^{(2)}$ coordinates use the $J$
+% contraction, while the $H^{(2)}$ coordinate is controlled by applying the
+% local random-product stability estimate \cref{lem:burn-random-time-product} to the
+% difference of two representations \eqref{eq:levin-H2-representation}.
+
+% The product part of $\alpha_{\mathrm{burn}}(p,q)$ is used below through
+% $\alpha_{\mathrm{st}}(p)$; the Levin depth-two ceilings enter through
+% $\alpha_{\mathrm{stat}}(q)$.
+For $w \in \left\{ \alpha, 2 \alpha \right\}$ write
+\[
+R_{k, \operatorname{fin}}^{(w)}
+  := J_{k, \operatorname{fin}}^{(1,w)}
+     + J_{k, \operatorname{fin}}^{(2,w)}
+     + H_{k, \operatorname{fin}}^{(2,w)}
+\]
+and
+\[
+R_{k, \operatorname{aug}}^{(w)}
+  := J_{k, \operatorname{aug}}^{(1,w)}
+     + J_{k, \operatorname{aug}}^{(2,w)}
+     + H_{k, \operatorname{aug}}^{(2,w)}.
+\]
+Here the augmented copy is initialized from the invariant law of
+\[
+  (Z_{k+1},J_k^{(0,w)},J_k^{(1,w)},J_k^{(2,w)},H_k^{(2,w)}).
+\]
+
+\begin{lemma}\label{lem:burn-full-startup}
+  \textbf{(Full-state startup contraction for the depth-two augmented remainder.)}
+  Assume \textbf{UGE 1}, $\pi(\varepsilon)=0$, $\lVert \varepsilon \rVert_{\infty} < \infty$,
+  and $0 < \alpha$. There exist constants
+  $c_{\mathrm{st}} > 0$ and $C_{\mathrm{st}} < \infty$, depending only on the problem
+  constants and on the constants in \eqref{eq:levin-depth-two-component-contraction}
+  and \cref{lem:levin-prop-9}, such that for every $p \ge 2$, every
+  $q \ge 2$ satisfying $p \le q / 4$ and
+  $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$, every initial distribution $\xi$ of the
+  base chain with finite-start perturbation coordinates initialized at zero,
+  every $w \in \left\{ \alpha, 2 \alpha \right\}$, and every $k \ge 0$, the finite-start and
+  stationary augmented remainders can be coupled so that
+  \begin{equation}
+\lVert R_{k, \operatorname{fin}}^{(w)} - R_{k, \operatorname{aug}}^{(w)} \rVert_{L_{p}}
+    \le A_{\mathrm{st}}(p,q,w) \exp\left(-c_{\mathrm{st}} w a k / p\right),
+\label{eq:burn-startup-pointwise}
+\end{equation}
+  where
+  \[
+A_{\mathrm{st}}(p,q,w)
+    := C_{\mathrm{st}} (1 + d^{1 / q})
+       \left( p^{7} + \frac{p^{8}}{a} \right)
+       t_{\mathrm{mix}}^{5} \sqrt{w / a}
+       \log^{3}(1 / (w a)).
+\]
+\end{lemma}
+
+\begin{proof} Couple the finite-start copy to the invariant full augmented chain of
+\cref{lem:finite-past-full-augmented-state}. Let
+\[
+\Delta J_{k}^{(\ell,w)}
+  := J_{k, \operatorname{fin}}^{(\ell,w)} - J_{k, \operatorname{aug}}^{(\ell,w)},
+\quad
+\Delta H_{k}^{(2,w)}
+  := H_{k, \operatorname{fin}}^{(2,w)} - H_{k, \operatorname{aug}}^{(2,w)}.
+\]
+Let $T$ be the exact-coupling time from \cref{lem:levin-prop-5-component}. UGE gives
+$\mathbb{P}(T > r) \le C_{T} \exp\left(-c_{T} r\right)$, uniformly in $\xi$.
+% All constants below are uniform over the initial law because
+% \eqref{eq:levin-depth-two-component-contraction} and \cref{lem:burn-product-stability} are
+% uniform over the current base state.
+
+\textbf{The $J^{(1)} + J^{(2)}$ part.} By \cref{lem:levin-prop-5-component} and
+\eqref{eq:levin-depth-two-cost}, for $\ell \in \left\{ 0,1,2 \right\}$,
+\begin{equation}
+\lVert J_{k, \operatorname{fin}}^{(\ell,w)} - J_{k, \operatorname{aug}}^{(\ell,w)} \rVert_{L_{p}}
+  \le C p^{7 / 2} t_{\mathrm{mix}}^{5 / 2}
+     \log^{3 / 2}(1 / (w a))
+     e^{-c w a k / p}
+     \mathbb{E}^{1 / p} [c_{J,2}^{(w)}(Y_{0}^{\mathrm{fin}},Y_{0}^{\mathrm{aug}})^{p}].
+\label{eq:burn-J-startup-proof}
+\end{equation}
+The finite-start $J$ coordinates are zero, and the stationary copy satisfies
+\begin{equation}
+\mathbb{E}^{1 / p} [c_{J,2}^{(w)}(Y_{0}^{\mathrm{fin}},Y_{0}^{\mathrm{aug}})^{p}]
+  \le C (1 + d^{1 / q}) p^{7 / 2} t_{\mathrm{mix}}^{5 / 2}
+     \sqrt{w / a} \log^{3 / 2}(1 / (w a)).
+\label{eq:burn-initial-cost-proof}
+\end{equation}
+% This uses \cref{lem:finite-past-full-augmented-state}, the elementary stationary
+% bounds for $J^{(0,w)}$ and $J^{(1,w)}$, and \cref{lem:levin-prop-8} for
+% $J^{(2,w)}$.
+% Here the factor $1 + d^{1 / q}$ also covers the indicator term in
+% \eqref{eq:levin-depth-two-cost}, and the estimate is uniform over the initial law
+% $\xi$ because only the stationary copy contributes to the initial cost.
+Put
+\begin{equation}
+A_{\mathrm{J}}(p,q,w)
+  := C (1 + d^{1 / q}) p^{7} t_{\mathrm{mix}}^{5} \sqrt{w / a}
+     \log^{3}(1 / (w a)).
+\label{eq:burn-startup-J-scale}
+\end{equation}
+\begin{equation}
+\lVert \Delta J_{k}^{(1,w)} \rVert_{L_{p}} + \lVert \Delta J_{k}^{(2,w)} \rVert_{L_{p}}
+  \le A_{\mathrm{J}}(p,q,w) \exp\left(-c w a k / p\right).
+\label{eq:burn-J12-startup-bound}
+\end{equation}
+% The $p^{7}$ summand in $A_{\mathrm{st}}$ is exactly this pure $J$-coordinate scale.
+
+\textbf{The $H^{(2)}$ part.} By \cref{lem:levin-prop-9} and Fatou,
+\begin{equation}
+\lVert H_{s}^{(2,w)} \rVert_{L_{2p}}
+  \le B_{H}(p,q,w)
+  := C (1 + d^{1 / q}) p^{7 / 2} t_{\mathrm{mix}}^{5 / 2}
+        w^{3 / 2} \log^{3 / 2}(1 / (w a)),
+\label{eq:burn-H2-one-trajectory-scale}
+\end{equation}
+% The proof uses $L_{2p}$ estimates; this is why the statement assumes
+% $p \le q / 4$.
+\begin{equation}
+\begin{aligned}
+&B_{H}(p,q,w) \le C A_{\mathrm{J}}(p,q,w), \\
+&\frac{p}{w a} B_{H}(p,q,w)
+  \le C \frac{p}{a} A_{\mathrm{J}}(2p,q,w), \\
+&\frac{p}{a} A_{\mathrm{J}}(2p,q,w)
+  \le C (1 + d^{1 / q}) \frac{p^{8}}{a}
+     t_{\mathrm{mix}}^{5} \sqrt{w / a} \log^{3}(1 / (w a)).
+\end{aligned}
+\label{eq:burn-startup-scale-audit}
+\end{equation}
+% Thus $A_{\mathrm{st}}$ is the sum of the pure $J$ scale $A_{\mathrm{J}}$ and the
+% $H^{(2)}$ restart/convolution scale $(p / a) A_{\mathrm{J}}(2p,q,w)$.
+
+On $\left\{ T \le k \right\}$, \eqref{eq:levin-H2-representation} gives
+\[
+H_{k}^{(2,w)}
+  = \Gamma_{T + 1:k}^{(w)} H_{T}^{(2,w)}
+    - w \sum_{l = T + 1}^{k} \Gamma_{l + 1:k}^{(w)}
+        \tilde{A}(Z_{l}) J_{l - 1}^{(2,w)},
+\]
+\begin{equation}
+\Delta H_{k}^{(2,w)}
+  = \Gamma_{T + 1:k}^{(w)} \Delta H_{T}^{(2,w)}
+    - w \sum_{l = T + 1}^{k} \Gamma_{l + 1:k}^{(w)}
+        \tilde{A}(Z_{l}) \Delta J_{l - 1}^{(2,w)},
+\label{eq:burn-H2-coupled-diff}
+\end{equation}
+
+\[
+\lVert \Delta H_{k}^{(2,w)} 1_{T > k} \rVert_{L_{p}}
+  \le \left( \lVert H_{k, \operatorname{fin}}^{(2,w)} \rVert_{L_{2p}}
+       + \lVert H_{k, \operatorname{aug}}^{(2,w)} \rVert_{L_{2p}} \right) \, \mathbb{P}(T > k)^{1 / (2p)}.
+\]
+\begin{equation}
+\lVert \Delta H_{k}^{(2,w)} 1_{T > k} \rVert_{L_{p}}
+  \le C B_{H}(p,q,w)
+       e^{-c k / p}.
+\label{eq:burn-H2-bad-event}
+\end{equation}
+
+Set $V_{s} := \Delta H_{s}^{(2,w)}$. Then
+\[
+\sup_{s} \lVert V_{s} \rVert_{L_{2p}}
+  \le \lVert H_{s, \operatorname{fin}}^{(2,w)} \rVert_{L_{2p}}
+     + \lVert H_{s, \operatorname{aug}}^{(2,w)} \rVert_{L_{2p}}
+  \le C B_{H}(p,q,w).
+\]
+By \eqref{eq:burn-random-time-product},
+\begin{equation}
+\lVert \Gamma_{T + 1:k}^{(w)} \Delta H_{T}^{(2,w)} 1_{T \le k} \rVert_{L_{p}}
+  \le C \frac{p}{w a} B_{H}(p,q,w) e^{-c w a k / p}
+  % \le C \frac{p}{a} A_{\mathrm{J}}(2p,q,w) e^{-c w a k / p}
+  \le C A_{\mathrm{st}}(p,q,w) e^{-c w a k / p}.
+\label{eq:burn-H2-initial-term}
+\end{equation}
+For $U_{l} := \tilde{A}(Z_{l}) \Delta J_{l - 1}^{(2,w)}$,
+\[
+\lVert U_{l} \rVert_{L_{2p}}
+  \le C A_{\mathrm{J}}(2p,q,w) \exp\left(-c w a l / p\right),
+\]
+% This is \eqref{eq:burn-J-startup-proof} at moment order $2p$; replacing $l - 1$ by
+% $l$ changes only the constant.
+\begin{equation}
+\begin{aligned}
+& w \sum_{l = 1}^{k}
+  \lVert \Gamma_{l + 1:k}^{(w)} \tilde{A}(Z_{l})
+     \Delta J_{l - 1}^{(2,w)} \rVert_{L_{p}}
+% &\quad \le C \frac{p}{a} A_{\mathrm{J}}(2p,q,w) e^{-c w a k / p}
+&\quad \le C A_{\mathrm{st}}(p,q,w) e^{-c w a k / p}.
+\end{aligned}
+\label{eq:burn-H2-convolution-term}
+\end{equation}
+% The last line is the only place where the $p^{8} / a$ summand in
+% $A_{\mathrm{st}}$ is needed.
+\begin{equation}
+\lVert \Delta H_{k}^{(2,w)} \rVert_{L_{p}}
+  \le C A_{\mathrm{st}}(p,q,w) e^{-c w a k / p}.
+\label{eq:burn-H2-startup-bound}
+\end{equation}
+\[
+R_{k, \operatorname{fin}}^{(w)} - R_{k, \operatorname{aug}}^{(w)}
+  = \Delta J_{k}^{(1,w)} + \Delta J_{k}^{(2,w)} + \Delta H_{k}^{(2,w)}.
+\]
+Together with \eqref{eq:burn-J12-startup-bound} this proves
+\eqref{eq:burn-startup-pointwise}. \end{proof}
+% The displayed $A_{\mathrm{st}}$ is the only allowed dependence on $p,q,w$; all other
+% factors are fixed problem constants, uniformly over $\xi$.
+
+Define the RR startup discrepancy accumulated over the burned-in window by
+\begin{equation}
+\mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}}
+  := \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+    \left[ 2 \left( R_{k, \operatorname{fin}}^{(\alpha)}
+             - R_{k, \operatorname{aug}}^{(\alpha)} \right)
+      - \left( R_{k, \operatorname{fin}}^{(2 \alpha)}
+             - R_{k, \operatorname{aug}}^{(2 \alpha)} \right) \right].
+\label{eq:burn-startup-discrepancy}
+\end{equation}
+
+\begin{lemma}\label{lem:burn-startup-transfer}
+  \textbf{(Accumulated startup transfer.)}
+  Under \cref{lem:burn-full-startup}, if
+  $0 < \alpha$, then
+  for every $p \ge 2$ and every $q \ge 2$ satisfying $p \le q / 4$ and
+  $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$,
+  \begin{equation}
+\lVert \mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}} \rVert_{L_{p}}
+    \le \frac{C_{\mathrm{start,RR}} p \, A_{\mathrm{st}}(p,q,\alpha)}{\alpha a \sqrt{m}}
+       \exp\left(-c_{\mathrm{st}} \alpha a n_{0} / p\right).
+\label{eq:burn-startup-transfer}
+\end{equation}
+\end{lemma}
+
+\begin{proof} By \eqref{eq:burn-startup-pointwise} at $w = \alpha, 2 \alpha$,
+\[
+\lVert \mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}} \rVert_{L_{p}}
+  \le \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+    \left( 2 A_{\mathrm{st}}(p,q,\alpha) e^{-c_{\mathrm{st}} \alpha a k / p}
+      + A_{\mathrm{st}}(p,q,2 \alpha) e^{-2 c_{\mathrm{st}} \alpha a k / p} \right).
+\]
+\[
+A_{\mathrm{st}}(p,q,2 \alpha) \le C A_{\mathrm{st}}(p,q,\alpha),
+\quad
+1 - \exp\left(-c_{\mathrm{st}} \alpha a / p\right) \ge C^{-1} \alpha a / p.
+\]
+The geometric sum gives \eqref{eq:burn-startup-transfer}. \end{proof}
+
+\begin{corollary}\label{cor:burn-log-startup}
+  \textbf{(Mixing-scale burn-in removes the startup discrepancy.)}
+  If, for some $\beta > 0$,
+  \begin{equation}
+n_{0} \ge \frac{\beta p}{c_{\mathrm{st}} \alpha a} \log n,
+\label{eq:burn-log-startup-condition}
+\end{equation}
+  then
+  \begin{equation}
+\lVert \mathcal{U}_{n,n_{0}}^{\mathrm{start,RR}} \rVert_{L_{p}}
+    \le \frac{C_{\mathrm{start,RR}} p \, A_{\mathrm{st}}(p,q,\alpha)}{\alpha a \sqrt{m}} n^{-\beta}.
+\label{eq:burn-log-startup-bound}
+\end{equation}
+  At the balanced scale $\alpha = c n^{-1 / 2}$, with
+  $m \ge n / 2$ and $p, q$ logarithmic in $n$, this is
+  $\mathrm{polylog}(n) \, n^{-1 / 4 - \beta}$.
+  % Thus the Berry--Esseen choice $p \asymp \log n$ requires a mixing-scale
+  % burn-in with logarithmic-square factor, $n_{0}$ of order
+  % $(\alpha a)^{-1} \log^{2} n$, under this $L_{p}$ contraction.
+\end{corollary}
+
+% \begin{proof} Substitute \eqref{eq:burn-log-startup-condition} into
+% \eqref{eq:burn-startup-transfer}. For the balanced scale,
+% $A_{\mathrm{st}}(p,q,\alpha) = \mathrm{polylog}(n) \, \alpha^{1 / 2}$, hence
+% $A_{\mathrm{st}}(p,q,\alpha) / (\alpha \sqrt{m})
+% = O(\mathrm{polylog}(n) n^{-1 / 4})$. \end{proof}

@@ -1,0 +1,93 @@
+
+\section{Pointwise Bounds for the RR Weights}
+
+\begin{lemma}\label{lem:RR-weight-pointwise}
+  \textbf{(Pointwise RR weight bounds.)}
+  Let \(0 < \alpha\) and \(2 \alpha \le \alpha_\infty\), set \(C_Q \coloneqq \kappa_Q^{1 / 2} \lVert  \overline{A}^{-1}  \rVert\) and \(\widetilde{C}_A \coloneqq \kappa_Q \lVert  \overline{A}  \rVert\), and write \(k = n - l\).
+
+  \textbf{(i)} For every \(1 \le l \le n - 1\),
+\begin{equation}
+\begin{aligned}
+\lVert  \mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1}  \rVert \le 3 C_Q (1 - \alpha a)^{k / 2}.
+\end{aligned}
+\end{equation}
+
+  \textbf{(ii)} For every \(1 \le l \le n - 2\),
+\begin{equation}
+\begin{aligned}
+  \lVert  \mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}  \rVert
+    \le 2 \widetilde{C}_A \, \alpha^2 \, (k - 1) \, (1 - \alpha a)^{(k - 2) / 2}.
+\end{aligned}
+\end{equation}
+\end{lemma}
+
+\textit{Proof of (i).} From the RR identity, norm equivalence, and Lyapunov
+contraction,
+\begin{equation}
+\begin{aligned}
+\lVert  2 B_\alpha^k - B_{2 \alpha}^k  \rVert_Q
+  \le 2 \lVert  B_\alpha^k  \rVert_Q + \lVert  B_{2 \alpha}^k  \rVert_Q
+  \le 2 (1 - \alpha a)^{k / 2} + (1 - 2 \alpha a)^{k / 2}
+  \le 3 (1 - \alpha a)^{k / 2}.
+\end{aligned}
+\end{equation}
+Thus
+\begin{equation}
+\begin{aligned}
+\lVert  \mathcal{Q}_l^{\text{RR}} - \overline{A}^{-1}  \rVert
+  \le \kappa_Q^{1 / 2} \lVert  \overline{A}^{-1}  \rVert \cdot \lVert  2 B_\alpha^k - B_{2 \alpha}^k  \rVert_Q
+  \le 3 C_Q (1 - \alpha a)^{k / 2}.
+\end{aligned}
+\end{equation}
+
+\textit{Proof of (ii).} Use
+\begin{equation}
+\begin{aligned}
+X^m - Y^m = (X - Y) \sum_{i = 1}^m X^{i - 1} Y^{m - i}
+\end{aligned}
+\end{equation}
+with \(X = B_\alpha\), \(Y = B_{2 \alpha}\), and \(m = k - 1\):
+% The matrices commute because they are polynomials in \(\overline{A}\), so the
+% factor \(\alpha \overline{A}\) may be placed on the left.
+\begin{equation}
+\begin{aligned}
+B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}
+  = \alpha \overline{A} \sum_{i = 1}^{k - 1}
+    B_\alpha^{i - 1} \, B_{2 \alpha}^{k - 1 - i}.
+\end{aligned}
+\end{equation}
+Each summand satisfies
+\begin{equation}
+\begin{aligned}
+\lVert  B_\alpha^{i - 1} \, B_{2 \alpha}^{k - 1 - i}  \rVert
+  &\le \kappa_Q^{1 / 2} \, (1 - \alpha a)^{(i - 1) / 2} (1 - 2 \alpha a)^{(k - 1 - i) / 2} 
+  &\le \kappa_Q^{1 / 2} \, (1 - \alpha a)^{(k - 2) / 2},
+\end{aligned}
+\end{equation}
+Summing over \(i\) gives
+% In the last displayed line we used \(1 - 2 \alpha a \le 1 - \alpha a\).
+\begin{equation}
+\begin{aligned}
+\lVert  B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}  \rVert
+  \le \alpha \kappa_Q \lVert  \overline{A}  \rVert (k - 1) (1 - \alpha a)^{(k - 2) / 2}.
+\end{aligned}
+\end{equation}
+By the discrete-difference identity from the previous section,
+\begin{equation}
+\begin{aligned}
+\mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}
+  = - 2 \alpha \, (B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}).
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\lVert  \mathcal{Q}_{l + 1}^{\text{RR}} - \mathcal{Q}_l^{\text{RR}}  \rVert
+  &\le 2 \alpha \, \lVert  B_\alpha^{k - 1} - B_{2 \alpha}^{k - 1}  \rVert 
+% &\le 2\kappa_Q\lVert\overline{A}\rVert\alpha^2(k-1)
+%      (1-\alpha a)^{(k-2)/2}
+  &\le 2 \widetilde{C}_A \, \alpha^2 \, (k - 1)
+      \, (1 - \alpha a)^{(k - 2) / 2},
+\end{aligned}
+\end{equation}
+which is the claimed bound. \(\square\)

@@ -1,0 +1,118 @@
+\section{Problem statement and goals}
+
+The high-order moment bounds for the PR-averaged RR iterate
+$\overline{\theta}_n^{(\alpha,\mathrm{RR})}$ established in Levin et
+al.\ (2025) show that the leading error term scales as
+$\sqrt{\operatorname{Tr}\Sigma_\varepsilon^{(\mathrm{M})}}\,n^{-1/2}$,
+where $\Sigma_\varepsilon^{(\mathrm{M})}$ is the Markovian noise covariance
+recorded in Section~\ref{sec:key-quantities}. This is the usual parametric
+$n^{-1/2}$ benchmark for averaged LSA; this thesis does not prove a separate
+H\'ajek--Le Cam or minimax lower bound. Berry--Esseen type bounds and bootstrap
+inference procedures for the \emph{standard} Polyak--Ruppert average
+$\overline{\theta}_n$ (without extrapolation) under Markovian noise have been
+obtained in Samsonov, Sheshukova, Moulines, and Naumov (2025).
+
+These results do not directly give the distributional approximation needed for
+the PR-averaged Richardson--Romberg statistic under Markovian noise. Two
+distinctions are essential here. First, the stationary theorem is proved for an
+augmented-chain scalar statistic, where the martingale noise, Poisson boundary
+term, and Richardson--Romberg misadjustment are controlled separately. Second,
+the deterministic-start estimator requires an additional burn-in transfer,
+because the deterministic transient and startup remainders are absent from the
+stationary augmented-chain theorem.
+
+The main goal of this work is therefore to build a non-asymptotic
+distributional approximation for scalar projections of the PR-averaged
+Richardson--Romberg statistic. The stationary result should be read as an
+$n_0=0$ augmented-chain theorem, not as a fixed-$\alpha$ central limit theorem
+centered exactly at $\theta^*$. Its final deterministic-start consequence is
+obtained at the balanced triangular-array scale $\alpha_n=cn^{-1/2}$, where
+the residual RR terms are absorbed into explicit remainders and the covariance
+target is $\Sigma_\infty$.
+
+Concretely, we establish:
+
+\begin{itemize}
+  \item A stationary full-window augmented-chain Berry--Esseen assembly for
+  scalar RR statistics, including the martingale approximation,
+  predictable-variance comparison, Poisson remainder, and stationary RR
+  misadjustment. The controlled comparison statistic is
+  \[
+    S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)
+      =-\frac{u^\top M_n^{\mathrm{RR}}}{\sqrt{n}}
+       +u^\top\mathcal{R}_{n,\mathrm{stat}}^{\mathrm{RR}},
+    \qquad
+    \mathcal{R}_{n,\mathrm{stat}}^{\mathrm{RR}}
+      =D_{2,n}^{\mathrm{RR}}+R_n^{\mathrm{mis,RR}}.
+  \]
+  Its finite-window variance proxy is
+  \[
+    \sigma_n^{2,\mathrm{RR}}(u)
+      =u^\top\left(
+        \frac{1}{n}\sum_{l=2}^{n-1}
+          \mathcal{Q}_l^{\mathrm{RR}}
+          \Sigma_\varepsilon^{(\mathrm{M})}
+          (\mathcal{Q}_l^{\mathrm{RR}})^\top
+      \right)u,
+  \]
+  and the theorem has the schematic form
+  \[
+    d_{\mathrm K}\!\left(
+      \frac{S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)}
+           {\sigma_n^{\mathrm{RR}}(u)},
+      \mathcal{N}(0,1)
+    \right)
+      \leq \frac{\operatorname{polylog}(n)}{n^{1/4}}
+      +\frac{
+        \lVert u^\top\mathcal{R}_{n,\mathrm{stat}}^{\mathrm{RR}}\rVert_{L^p}
+      }{\sigma_n^{\mathrm{RR}}(u)}.
+  \]
+  In the balanced triangular-array specialization $\alpha_n=cn^{-1/2}$,
+  the same stationary theorem identifies
+  \[
+    \Sigma_\infty
+      =\overline{A}^{-1}\Sigma_\varepsilon^{(\mathrm{M})}
+       \overline{A}^{-\top},
+    \qquad
+    \sigma^2(u)=u^\top\Sigma_\infty u,
+  \]
+  as the covariance target and gives, for every fixed non-degenerate direction
+  $u$, the stationary $n_0=0$ CLT interpretation
+  \[
+    d_{\mathrm K}\!\left(
+      \frac{S_{n,\mathrm{stat}}^{\mathrm{RR}}(u)}{\sigma(u)},
+      \mathcal{N}(0,1)
+    \right)
+      \leq C(u,c)\frac{\operatorname{polylog}(n)}{n^{1/4}}.
+  \]
+
+  \item A deterministic-start transfer theorem under mixing-scale burn-in
+  conditions with logarithmic factors, yielding the corresponding
+  balanced-scale bound for the main burned-in statistic. Writing $m=n-n_0$
+  and
+  \[
+    \overline{\theta}_{n,n_0}^{(\mathrm{RR},\alpha)}
+      =2\overline{\theta}_{n,n_0}^{(\alpha)}
+       -\overline{\theta}_{n,n_0}^{(2\alpha)},
+    \qquad
+    T_{n,n_0}^{\mathrm{RR}}(u)
+      =\sqrt{m}\,u^\top\left(
+        \overline{\theta}_{n,n_0}^{(\mathrm{RR},\alpha)}-\theta^*
+      \right),
+  \]
+  the transfer gives
+  \[
+    d_{\mathrm K}\!\left(
+      \frac{T_{n,n_0}^{\mathrm{RR}}(u)}{\sigma(u)},
+      \mathcal{N}(0,1)
+    \right)
+      \leq C(u,c,\theta_0)
+      \frac{\operatorname{polylog}(n)}{n^{1/4}}
+  \]
+  at $\alpha=cn^{-1/2}$ when
+  \[
+    n_0\asymp(\alpha a)^{-1}\log^2 n.
+  \]
+  Under the same burn-in window, the final $\sqrt{n}$ statistic satisfies the
+  same polynomial rate up to logarithmic factors.
+\end{itemize}

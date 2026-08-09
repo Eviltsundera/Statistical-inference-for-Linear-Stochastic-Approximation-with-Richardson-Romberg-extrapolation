@@ -1,0 +1,146 @@
+
+\section{Finite-Window Smoothing Assembly}
+
+The finite-start scalar statistic decomposes as
+\begin{equation}
+T_{n,n_{0}}^{\mathrm{RR}}(u)
+  = -\frac{u^{\mathsf{T}} M_{n,n_{0}}^{\mathrm{bRR}}}{\sqrt{m}}
+    + \mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u),
+\label{eq:burn-full-decomp}
+\end{equation}
+where the composite non-Gaussian remainder is
+\begin{equation}
+\mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u)
+  := D_{\operatorname{tr}, n, n_{0}}^{\mathrm{RR}}(u)
+     + \mathcal{I}_{n,n_{0}}^{\mathrm{init,RR}}(u)
+     + u^{\mathsf{T}} D_{2,n,n_{0}}^{\mathrm{bRR}}
+     + u^{\mathsf{T}} R_{n,n_{0}, \operatorname{fin}}^{\mathrm{mis,RR}}.
+\label{eq:burn-composite-remainder}
+\end{equation}
+% The terms are controlled by \cref{lem:burn-deterministic-transient},
+% \cref{lem:burn-random-initial-product}, \cref{lem:burn-poisson-decomp}, and
+% \cref{thm:burn-misadjustment}, respectively.
+
+% For reference, the finite-window assembly uses the following components.
+% This table is disabled in the Typst source and remains disabled here.
+\iffalse
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{|p{0.25\textwidth}|p{0.32\textwidth}|p{0.31\textwidth}|}
+\hline
+\textbf{Component} & \textbf{Input bound} & \textbf{Role in smoothing} \\
+\hline
+$D_{\operatorname{tr},n,n_0}^{\mathrm{RR}}(u)$ &
+\eqref{eq:burn-RR-transient-bound} &
+Deterministic transient from $\theta_0-\theta^*$. \\
+\hline
+$\mathcal I_{n,n_0}^{\mathrm{init,RR}}(u)$ &
+\eqref{eq:burn-random-init-bound} &
+Random initial-product discrepancy. \\
+\hline
+$u^{\mathsf T}D_{2,n,n_0}^{\mathrm{bRR}}$ &
+\eqref{eq:burn-D2-bound} &
+Poisson Abel boundary remainder. \\
+\hline
+$u^{\mathsf T}R_{n,n_0,\operatorname{fin}}^{\mathrm{mis,RR}}$ &
+\eqref{eq:burn-mis-bound} &
+Depth-two RR misadjustment plus startup transfer. \\
+\hline
+$u^{\mathsf T}M_{n,n_0}^{\mathrm{bRR}}$ &
+\cref{thm:burn-M-BE,cor:burn-bracket-asymp} &
+Leading martingale Berry--Esseen term. \\
+\hline
+\end{tabular}
+\end{table}
+\fi
+
+Let $\mathcal{B}_{\mathrm{mis}}(m,n_{0},p,q,\alpha)$ denote the right-hand side of
+\eqref{eq:burn-mis-bound}.
+
+\begin{lemma}\label{lem:burn-R-bound}
+  \textbf{(Burned-in composite remainder bound.)}
+  Assume the hypotheses of \cref{lem:burn-deterministic-transient},
+  \cref{lem:burn-random-initial-product}, \cref{lem:burn-poisson-decomp}, and
+  \cref{thm:burn-misadjustment}. Then, for every $p \ge 2$ and every $q \ge 2$
+  satisfying $p \le q / 4$ and $2 \alpha \le \alpha_{\mathrm{burn}}(p,q)$,
+  \begin{equation}
+\lVert \mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u) \rVert_{L_{p}}
+    \le \lVert u \rVert \, \left( \mathcal{B}_{\mathrm{start}}(m,n_{0},p,\alpha)
+      + \frac{C_{\mathrm{burn,D2}}}{\sqrt{m}}
+      + \mathcal{B}_{\mathrm{mis}}(m,n_{0},p,q,\alpha) \right),
+\label{eq:burn-R-bound}
+\end{equation}
+  where
+  \[
+\begin{aligned}
+\mathcal{B}_{\mathrm{start}}(m,n_{0},p,\alpha)
+    &:= \frac{\lVert \theta_{0} - \theta^{*} \rVert}{\alpha a \sqrt{m}} \, \left[ 5 \sqrt{\kappa_{Q}} \, (1 - \alpha a)^{n_{0} / 2}
+  + C_{\mathrm{init,RR}} \, p \, \exp\left(-c_{\mathrm{init}} \alpha a n_{0} / p\right) \right], \\
+  C_{\mathrm{burn,D2}}
+    &:= 3 \, t_{\mathrm{mix}} \, \lVert \varepsilon \rVert_{\infty}
+        \, \left( C_{\mathrm{burn,Q}} + \frac{C_{\mathrm{burn,V}}}{a^{2}} \right).
+\end{aligned}
+\]
+\end{lemma}
+
+\begin{proof} Apply the triangle inequality in \eqref{eq:burn-composite-remainder}. The
+deterministic part is \eqref{eq:burn-RR-transient-bound}. The random initial-product
+term is \eqref{eq:burn-random-init-bound}. The Poisson boundary term is bounded by
+\[
+\lVert u^{\mathsf{T}} D_{2,n,n_{0}}^{\mathrm{bRR}} \rVert_{L_{p}}
+  \le \lVert u \rVert \, \lVert D_{2,n,n_{0}}^{\mathrm{bRR}} \rVert_{\infty}
+  \le \frac{C_{\mathrm{burn,D2}} \lVert u \rVert}{\sqrt{m}}
+\]
+using \eqref{eq:burn-D2-bound}. The last term is exactly \eqref{eq:burn-mis-bound}. \end{proof}
+
+Dividing \eqref{eq:burn-full-decomp} by the finite-window normalization gives
+\begin{equation}
+\Xi_{n,n_{0}}^{\mathrm{bRR}}(u) = X_{n,n_{0}}^{\mathrm{bRR}} + Y_{n,n_{0}}^{\mathrm{bRR}},
+\label{eq:burn-XY-split}
+\end{equation}
+where
+\[
+X_{n,n_{0}}^{\mathrm{bRR}}
+  := -\frac{u^{\mathsf{T}} M_{n,n_{0}}^{\mathrm{bRR}}}{\sqrt{m} \, \sigma_{n,n_{0}}^{\mathrm{bRR}}(u)},
+\quad
+Y_{n,n_{0}}^{\mathrm{bRR}}
+  := \frac{\mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u)}{\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)}.
+\]
+
+\begin{theorem}\label{thm:burn-RR-BE-master}
+  \textbf{(Finite-window deterministic-start burned-in PR-averaged RR Berry--Esseen bound.)}
+  Assume the hypotheses of \cref{thm:burn-M-BE}, \cref{lem:burn-random-initial-product},
+  and \cref{thm:burn-misadjustment}. Let
+  $m := n - n_{0}$ and
+  $p = \max\left\{2, \left\lceil \log n \right\rceil\right\}$ and
+  $q = \max\left\{4 p, \left\lceil \log\left(e \, d\right) \right\rceil, 2\right\}$. Then $p \ge 2$, $q \ge 2$, and
+  $p \le q / 4$. If $(n,n_{0},p,q,\alpha,u)$ is in the admissible burn-in
+  regime \eqref{eq:admissible-burn-regime}, then
+  \begin{equation}
+\begin{aligned}
+d_{K} \left( \Xi_{n,n_{0}}^{\mathrm{bRR}}(u), \mathcal{N}(0, 1) \right)
+    &\le \frac{C_{\mathrm{bK,1}}(u) \, \log^{3 / 4} n}{m^{1 / 4}}
+     + \frac{C_{\mathrm{bK,2}}(u) \, \log n}{\sqrt{m}}
+    + \frac{e \,
+        \lVert \mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u) \rVert_{L_{p}}}{\sqrt{2 \pi} \, \sigma_{n,n_{0}}^{\mathrm{bRR}}(u)}
+     + \frac{e}{n},
+\end{aligned}
+\label{eq:burn-RR-BE-master}
+\end{equation}
+  with the composite remainder bounded by \cref{lem:burn-R-bound}. The bound is
+  uniform over $\xi = \mathcal{L}(Z_{0})$.
+\end{theorem}
+
+\begin{proof} Apply the smoothing inequality \eqref{eq:smoothing-Lp} to the split
+\eqref{eq:burn-XY-split}. The martingale Berry--Esseen term is \cref{thm:burn-M-BE}; the
+minus sign in $X_{n,n_{0}}^{\mathrm{bRR}}$ is handled by applying that theorem to the
+signed increments $-u^{\mathsf{T}} \Delta M_{l}^{\mathrm{bRR}}$. The bounded-increment constant
+and predictable quadratic variation are unchanged. Since
+$p = \max\left\{2, \left\lceil \log n \right\rceil\right\}$, the smoothing tail $e^{-p}$ is at most
+$e / n$. The $L_{p}$ norm of the perturbation is
+\[
+\lVert Y_{n,n_{0}}^{\mathrm{bRR}} \rVert_{L_{p}}
+  = \frac{\lVert \mathcal{R}_{n,n_{0}, \operatorname{fin}}^{\mathrm{bRR}}(u) \rVert_{L_{p}}}{\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)},
+\]
+which gives \eqref{eq:burn-RR-BE-master}. \end{proof}

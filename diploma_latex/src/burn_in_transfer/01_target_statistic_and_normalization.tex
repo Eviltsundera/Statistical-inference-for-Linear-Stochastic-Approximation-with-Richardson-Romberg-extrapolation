@@ -1,0 +1,60 @@
+
+\section{Target Statistic and Normalization}
+
+Let $\xi = \mathcal{L}(Z_{0})$ be the initial law of the base Markov chain, let
+$0 \le n_{0} < n$, and set $m := n - n_{0}$. The burned-in PR average is
+\[
+\overline{\theta}_{n,n_{0}}^{(\alpha)}
+  := \frac{1}{m} \sum_{k = n_{0}}^{n - 1} \theta_{k}^{(\alpha)},
+\]
+and the two-level RR average is
+\begin{equation}
+\overline{\theta}_{n,n_{0}}^{(\mathrm{RR}, \alpha)}
+  := 2 \overline{\theta}_{n,n_{0}}^{(\alpha)}
+     - \overline{\theta}_{n,n_{0}}^{(2 \alpha)}.
+\label{eq:burn-rr-average}
+\end{equation}
+Both stepsizes are run from the same deterministic initial point $\theta_{0}$ and
+on the same Markov trajectory.
+% This coupling is part of the RR statistic; if the two levels use different
+% paths, the deterministic-weight decomposition below is a different object.
+
+The finite-start burned-in vector statistic is
+\begin{equation}
+\mathcal{T}_{n,n_{0}}^{\mathrm{RR}}
+  := \sqrt{m} \, \left( \overline{\theta}_{n,n_{0}}^{(\mathrm{RR}, \alpha)} - \theta^{*} \right).
+\label{eq:burn-vector-target}
+\end{equation}
+Its scalar projection in direction $u \in \mathbb{R}^{d}$ is
+\begin{equation}
+T_{n,n_{0}}^{\mathrm{RR}}(u)
+  := u^{\mathsf{T}} \mathcal{T}_{n,n_{0}}^{\mathrm{RR}}
+  = \sqrt{m} \, u^{\mathsf{T}} \left( \overline{\theta}_{n,n_{0}}^{(\mathrm{RR}, \alpha)} - \theta^{*} \right).
+\label{eq:burn-target}
+\end{equation}
+% The stationary augmented-chain statistic from the previous chapter is used
+% only as a comparison object after the startup transfer.
+
+There are two normalizations. The finite-window normalization is
+\begin{equation}
+\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)
+  := \sqrt{\sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u)},
+\quad
+\Xi_{n,n_{0}}^{\mathrm{bRR}}(u)
+  := \frac{T_{n,n_{0}}^{\mathrm{RR}}(u)}{\sigma_{n,n_{0}}^{\mathrm{bRR}}(u)},
+\label{eq:burn-finite-normalization}
+\end{equation}
+where $\sigma_{n,n_{0}}^{2, \mathrm{bRR}}(u)$ is the deterministic variance proxy
+defined in \eqref{eq:burn-variance-proxy}. The asymptotic normalization is
+\begin{equation}
+\sigma(u) := \sqrt{u^{\mathsf{T}} \Sigma_{\infty} u},
+\quad
+\Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u)
+  := \frac{T_{n,n_{0}}^{\mathrm{RR}}(u)}{\sigma(u)}.
+\label{eq:burn-asymptotic-normalization}
+\end{equation}
+We first control $\Xi_{n,n_{0}}^{\mathrm{bRR}}(u)$ and then pass to
+$\Xi_{n,n_{0}}^{\mathrm{asy,RR}}(u)$.
+% A final corollary converts the $\sqrt{m}$ statistic to the final $\sqrt{n}$
+% statistic when the burn-in is at the mixing scale, of order $\alpha^{-1}$
+% times logarithmic factors.

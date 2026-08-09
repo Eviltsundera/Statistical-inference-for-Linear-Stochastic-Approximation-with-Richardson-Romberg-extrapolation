@@ -1,0 +1,242 @@
+
+\section{Deterministic Transient After Burn-in}
+
+For a generic step size $w \in \left\{ \alpha, 2 \alpha \right\}$ define the deterministic
+transient
+\begin{equation}
+D_{\operatorname{tr}, n, n_{0}}^{(w)}
+  := \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+      B_{w}^{k} (\theta_{0} - \theta^{*}),
+\quad
+B_{w} := I - w \overline{A}.
+\label{eq:burn-single-transient}
+\end{equation}
+The Richardson--Romberg transient entering \eqref{eq:burn-target} is
+\begin{equation}
+D_{\operatorname{tr}, n, n_{0}}^{\mathrm{RR}}(u)
+  := u^{\mathsf{T}} \left( 2 D_{\operatorname{tr}, n, n_{0}}^{(\alpha)}
+      - D_{\operatorname{tr}, n, n_{0}}^{(2 \alpha)} \right).
+\label{eq:burn-RR-transient}
+\end{equation}
+
+\begin{lemma}\label{lem:burn-deterministic-transient}
+  \textbf{(Burned-in deterministic transient.)}
+  Assume $0 < \alpha$, $2 \alpha \le \alpha_{\infty}$, and the Lyapunov contraction
+  \eqref{eq:contraction}. Then, for each $w \in \left\{ \alpha, 2 \alpha \right\}$,
+  \begin{equation}
+\lVert D_{\operatorname{tr}, n, n_{0}}^{(w)} \rVert
+    \le \frac{2 \sqrt{\kappa_{Q}}}{w a \sqrt{m}}
+       (1 - w a)^{n_{0} / 2} \lVert \theta_{0} - \theta^{*} \rVert.
+\label{eq:burn-single-transient-bound}
+\end{equation}
+  Consequently,
+  \begin{equation}
+| D_{\operatorname{tr}, n, n_{0}}^{\mathrm{RR}}(u) |
+    \le \frac{5 \sqrt{\kappa_{Q}} \lVert u \rVert \lVert \theta_{0} - \theta^{*} \rVert}{\alpha a \sqrt{m}}
+       (1 - \alpha a)^{n_{0} / 2}.
+\label{eq:burn-RR-transient-bound}
+\end{equation}
+\end{lemma}
+
+\begin{proof} Let $r_{w} := \sqrt{1 - w a}$. By \eqref{eq:contraction} and equivalence of the
+Euclidean and $Q$-norms,
+\[
+\lVert B_{w}^{k} (\theta_{0} - \theta^{*}) \rVert
+  \le \sqrt{\kappa_{Q}} r_{w}^{k} \lVert \theta_{0} - \theta^{*} \rVert.
+\]
+Therefore
+\[
+\lVert D_{\operatorname{tr}, n, n_{0}}^{(w)} \rVert
+  \le \frac{\sqrt{\kappa_{Q}} \lVert \theta_{0} - \theta^{*} \rVert}{\sqrt{m}}
+     \sum_{k = n_{0}}^{n - 1} r_{w}^{k}
+  \le \frac{\sqrt{\kappa_{Q}} \lVert \theta_{0} - \theta^{*} \rVert}{\sqrt{m}}
+     \frac{r_{w}^{n_{0}}}{1 - r_{w}}.
+\]
+Since $1 - \sqrt{1 - x} \ge x / 2$ for $0 \le x \le 1$, the last display gives
+\eqref{eq:burn-single-transient-bound}. Applying this estimate at $w = \alpha$ and
+$w = 2 \alpha$, using $1 - 2 \alpha a \le 1 - \alpha a$, and taking the
+triangle inequality in \eqref{eq:burn-RR-transient} gives
+\[
+| D_{\operatorname{tr}, n, n_{0}}^{\mathrm{RR}}(u) |
+  \le \lVert u \rVert \left( 2 \lVert D_{\operatorname{tr}, n, n_{0}}^{(\alpha)} \rVert
+       + \lVert D_{\operatorname{tr}, n, n_{0}}^{(2 \alpha)} \rVert \right)
+  \le \frac{5 \sqrt{\kappa_{Q}} \lVert u \rVert \lVert \theta_{0} - \theta^{*} \rVert}{\alpha a \sqrt{m}}
+       (1 - \alpha a)^{n_{0} / 2}.
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:burn-log-transient}
+  \textbf{(Mixing-scale burn-in removes the deterministic transient.)}
+  If, for some $\beta > 0$,
+  \begin{equation}
+n_{0} \ge \frac{2 \beta}{\alpha a} \log n,
+\label{eq:burn-log-condition}
+\end{equation}
+  then
+  \begin{equation}
+| D_{\operatorname{tr}, n, n_{0}}^{\mathrm{RR}}(u) |
+    \le \frac{5 \sqrt{\kappa_{Q}} \lVert u \rVert \lVert \theta_{0} - \theta^{*} \rVert}{\alpha a \sqrt{m}} n^{-\beta}.
+\label{eq:burn-log-transient-bound}
+\end{equation}
+  In particular, at the balanced scale $\alpha = c n^{-1 / 2}$ and
+  $m \ge n / 2$, this is $O(n^{-\beta})$.
+  % Taking $\beta = 1$ makes the deterministic transient negligible relative to
+  % the stationary $n^{-1 / 4}$ Berry--Esseen rate.
+\end{corollary}
+
+% \begin{proof} The elementary inequality
+% $(1 - \alpha a)^{n_{0} / 2} \le \exp\left(-\alpha a n_{0} / 2\right)$ and
+% \eqref{eq:burn-log-condition} imply
+% $(1 - \alpha a)^{n_{0} / 2} \le n^{-\beta}$. Substitute this into
+% \eqref{eq:burn-RR-transient-bound}. If $\alpha = c n^{-1 / 2}$ and $m \ge n / 2$,
+% then $(\alpha \sqrt{m})^{-1} \le \sqrt{2} / c$, so the displayed
+% $O(n^{-\beta})$ bound follows. \end{proof}
+
+The exact recursion also contains the random product
+$\Gamma_{1:k}^{(w)} := \prod_{j = 1}^{k} (I - w A(Z_{j}))$.
+% The deterministic transient is therefore not the full initial-condition
+% contribution: the difference between this product and $B_{w}^{k}$ is another
+% finite-start term. We record the product-stability input in the exact
+% deterministic and conditional forms needed later.
+
+\begin{lemma}\label{lem:burn-product-stability}
+  \textbf{(Product stability and its conditional form.)}
+  Assume \cref{lem:product-stability-input}. If $p \ge 2$,
+  $2 \alpha \le \alpha_{\mathrm{st}}(p)$, $w \in \left\{ \alpha, 2 \alpha \right\}$, and $0 \le s \le k$,
+  then for every deterministic vector $v$,
+  \begin{equation}
+\mathbb{E}^{\frac{1}{p}} \left[ \lVert \Gamma_{s + 1:k}^{(w)} v \rVert^{p} | Z_{s} \right]
+    \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right) \lVert v \rVert.
+\label{eq:burn-product-stability-deterministic}
+\end{equation}
+  The empty product is $\Gamma_{k + 1:k}^{(w)} = I$. Moreover, on any coupling
+  extension with a joint filtration $(\mathcal{G}_{r})$ such that the future product,
+  conditionally on $\mathcal{G}_{s}$, has the base-chain law started from $Z_{s}$, every
+  $\mathcal{G}_{s}$-measurable vector $W_{s}$ satisfies
+  \begin{equation}
+\mathbb{E}^{\frac{1}{p}} \left[ \lVert \Gamma_{s + 1:k}^{(w)} W_{s} \rVert^{p} | \mathcal{G}_{s} \right]
+    \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right) \lVert W_{s} \rVert.
+\label{eq:burn-product-stability-conditional}
+\end{equation}
+  Consequently,
+  \begin{equation}
+\lVert \Gamma_{s + 1:k}^{(w)} V_{s} \rVert_{L_{p}}
+    \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right)
+       \lVert V_{s} \rVert_{L_{p}}
+    \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right)
+       \lVert V_{s} \rVert_{L_{2p}}
+\label{eq:burn-product-stability-strong}
+\end{equation}
+\end{lemma}
+
+\begin{proof} Fix $s \le k$. The adapted-product assumption gives
+\[
+\mathcal{L} \left( \Gamma_{s + 1:k}^{(w)} | \mathcal{G}_{s} \right)
+  = \mathcal{L} \left( \Gamma_{s + 1:k}^{(w)} | Z_{s} \right).
+\]
+Set
+\[
+\Phi_{s}(v)
+  := \mathbb{E}^{\frac{1}{p}} \left[ \lVert \Gamma_{s + 1:k}^{(w)} v \rVert^{p} | Z_{s} \right].
+\]
+Hence, for $\mathcal{G}_{s}$-measurable $W_{s}$,
+\[
+\begin{aligned}
+&\mathbb{E}^{\frac{1}{p}} \left[ \lVert \Gamma_{s + 1:k}^{(w)} W_{s} \rVert^{p} | \mathcal{G}_{s} \right]
+&\quad = \Phi_{s}(W_{s})
+&\quad \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a (k - s)}{p}\right) \lVert W_{s} \rVert,
+\end{aligned}
+\]
+where the last step is \eqref{eq:burn-product-stability-deterministic}. This is
+\eqref{eq:burn-product-stability-conditional}; the case $s = k$ follows after taking
+$C_{\mathrm{prod}} \ge 1$.
+
+For $V_{s} \in L_{2p}$,
+\[
+\begin{aligned}
+\lVert \Gamma_{s + 1:k}^{(w)} V_{s} \rVert_{L_{p}}^{p}
+  &= \mathbb{E} \mathbb{E} \left[ \lVert \Gamma_{s + 1:k}^{(w)} V_{s} \rVert^{p} | \mathcal{G}_{s} \right]
+  &\le C_{\mathrm{prod}}^{p} \exp\left(-c_{\mathrm{prod}} w a (k - s)\right)
+      \mathbb{E}\lVert V_{s} \rVert^{p}.
+\end{aligned}
+\]
+Taking $p$-th roots and using $\lVert V_{s} \rVert_{L_{p}} \le \lVert V_{s} \rVert_{L_{2p}}$ gives
+\eqref{eq:burn-product-stability-strong}. The natural-filtration case corresponds to
+$\mathcal{G}_{s} = \sigma(\left\{ Z_{r} : r \le s \right\})$.
+\end{proof}
+
+Define the accumulated RR random initial-product discrepancy by
+\begin{equation}
+\mathcal{I}_{n,n_{0}}^{\mathrm{init,RR}}(u)
+  := \frac{1}{\sqrt{m}} \sum_{k = n_{0}}^{n - 1}
+      u^{\mathsf{T}} \left[ 2 \left( \Gamma_{1:k}^{(\alpha)} - B_{\alpha}^{k} \right)
+        - \left( \Gamma_{1:k}^{(2 \alpha)} - B_{2 \alpha}^{k} \right) \right] (\theta_{0} - \theta^{*}),
+\label{eq:burn-random-init-discrepancy}
+\end{equation}
+where the empty product at $k = 0$ is the identity.
+
+\begin{lemma}\label{lem:burn-random-initial-product}
+  \textbf{(Burned-in random initial-product transient.)}
+  Let $p \ge 2$. Assume $0 < \alpha$, $2 \alpha \le \alpha_{\mathrm{st}}(p)$,
+  $2 \alpha \le \alpha_{\infty}$, $\alpha a \le 1 / 4$, and the Lyapunov
+  contraction \eqref{eq:contraction}. Then
+  \begin{equation}
+\lVert \mathcal{I}_{n,n_{0}}^{\mathrm{init,RR}}(u) \rVert_{L_{p}}
+    \le \frac{C_{\mathrm{init,RR}} \lVert u \rVert \lVert \theta_{0} - \theta^{*} \rVert p}{\alpha a \sqrt{m}}
+       \exp\left(-c_{\mathrm{init}} \alpha a n_{0} / p\right),
+\label{eq:burn-random-init-bound}
+\end{equation}
+  where $C_{\mathrm{init,RR}} < \infty$ and $c_{\mathrm{init}} > 0$ depend only on
+  $C_{\mathrm{prod}}$, $c_{\mathrm{prod}}$, and the Lyapunov norm-equivalence constant.
+\end{lemma}
+
+\begin{proof} Let $e_{0} := \theta_{0} - \theta^{*}$. By \cref{lem:burn-product-stability} with
+$s = 0$ and $V_{0} = e_{0}$,
+\[
+\lVert \Gamma_{1:k}^{(w)} e_{0} \rVert_{L_{p}}
+  \le C_{\mathrm{prod}} \exp\left(- \frac{c_{\mathrm{prod}} w a k}{p}\right) \lVert e_{0} \rVert.
+\]
+The deterministic Lyapunov contraction gives
+\[
+\lVert B_{w}^{k} e_{0} \rVert
+  \le \sqrt{\kappa_{Q}} (1 - w a)^{k / 2} \lVert e_{0} \rVert
+  \le \sqrt{\kappa_{Q}} \exp\left(-w a k / (2 p)\right) \lVert e_{0} \rVert,
+\]
+since $p \ge 1$. Hence, after decreasing the exponential constant,
+\[
+\lVert \left( \Gamma_{1:k}^{(w)} - B_{w}^{k} \right) e_{0} \rVert_{L_{p}}
+  \le C \, \exp\left(-c_{\mathrm{init}} w a k / p\right) \lVert e_{0} \rVert.
+\]
+Apply this estimate at $w = \alpha$ and $w = 2 \alpha$, use the triangle
+inequality in \eqref{eq:burn-random-init-discrepancy}, and extend the geometric sum
+to infinity:
+\[
+\lVert \mathcal{I}_{n,n_{0}}^{\mathrm{init,RR}}(u) \rVert_{L_{p}}
+  \le \frac{C \lVert u \rVert \lVert e_{0} \rVert}{\sqrt{m}}
+     \sum_{k = n_{0}}^{\infty} \exp\left(-c_{\mathrm{init}} \alpha a k / p\right).
+\]
+Because $\alpha a \le 1 / 4$ and $p \ge 2$,
+$1 - \exp\left(-c_{\mathrm{init}} \alpha a / p\right) \ge C^{-1} \alpha a / p$, which gives
+\eqref{eq:burn-random-init-bound}. \end{proof}
+
+\begin{corollary}\label{cor:burn-log-initial-product}
+  \textbf{(Mixing-scale burn-in removes the random initial-product discrepancy.)}
+  If, for some $\beta > 0$,
+  \begin{equation}
+n_{0} \ge \frac{\beta p}{c_{\mathrm{init}} \alpha a} \log n,
+\label{eq:burn-log-init-condition}
+\end{equation}
+  then
+  \begin{equation}
+\lVert \mathcal{I}_{n,n_{0}}^{\mathrm{init,RR}}(u) \rVert_{L_{p}}
+    \le \frac{C_{\mathrm{init,RR}} \lVert u \rVert \lVert \theta_{0} - \theta^{*} \rVert p}{\alpha a \sqrt{m}} n^{-\beta}.
+\label{eq:burn-log-init-bound}
+\end{equation}
+  At the balanced scale $\alpha = c n^{-1 / 2}$, with
+  $m \ge n / 2$ and $p$ logarithmic in $n$, this is
+  $\mathrm{polylog}(n) \, n^{-\beta}$.
+\end{corollary}
+
+% \begin{proof} Substitute \eqref{eq:burn-log-init-condition} into
+% \eqref{eq:burn-random-init-bound}. At the balanced scale,
+% $(\alpha \sqrt{m})^{-1} = O(1)$, so the remaining factor is logarithmic. \end{proof}

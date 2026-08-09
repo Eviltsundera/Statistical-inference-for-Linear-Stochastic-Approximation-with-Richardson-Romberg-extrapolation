@@ -1,0 +1,617 @@
+
+\section{Depth-Two Misadjustment Bound}
+
+The remaining stationary non-martingale contribution is
+\begin{equation}
+\begin{aligned}
+R_n^{\text{mis, RR}} \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1}
+                    (2 R_k^{(\alpha)} - R_k^{(2 \alpha)}),
+\end{aligned}
+\label{eq:R-mis-def}
+\end{equation}
+where \(R_k^{(\alpha)} \coloneqq J_k^{(1, \alpha)} + H_k^{(1, \alpha)}\).
+% A direct kernel-difference route only gives
+% \(O(\sqrt{n} \, \alpha)\), which is too crude at
+% \(\alpha \asymp n^{-1 / 2}\). The depth-two route below uses
+% Lemma~\ref{lem:levin-prop-2}, Lemma~\ref{lem:levin-cor-6}, Lemma~\ref{lem:levin-prop-8}, and
+% Lemma~\ref{lem:levin-prop-9} to recover the target
+% \(n^{-1 / 4} \, \text{polylog}(n)\) rate.
+
+\textbf{Depth-two refinement.} For \(\ell \ge 1\) define
+\begin{equation}
+\begin{aligned}
+J_n^{(\ell, \alpha)} \coloneqq (I - \alpha \overline{A}) \, J_{n - 1}^{(\ell, \alpha)}
+                       - \alpha \widetilde{A}(Z_n) \, J_{n - 1}^{(\ell - 1, \alpha)},
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+H_n^{(\ell, \alpha)} \coloneqq (I - \alpha A(Z_n)) \, H_{n - 1}^{(\ell, \alpha)}
+                       - \alpha \widetilde{A}(Z_n) \, J_{n - 1}^{(\ell, \alpha)},
+\end{aligned}
+\end{equation}
+with \(J_0^{(\ell, \alpha)} = H_0^{(\ell, \alpha)} = 0\) and the \(\ell = 0\)
+processes as in Section~\ref{sec:last_iterate}. Then
+\begin{equation}
+\begin{aligned}
+H_n^{(\ell, \alpha)} = J_n^{(\ell + 1, \alpha)} + H_n^{(\ell + 1, \alpha)},
+\quad \ell \ge 0.
+\end{aligned}
+\label{eq:depth-recursion}
+\end{equation}
+Applying \eqref{eq:depth-recursion} with \(\ell = 1\) refines \(R_k^{(\alpha)}\) to
+\begin{equation}
+\begin{aligned}
+R_k^{(\alpha)} = J_k^{(1, \alpha)} + J_k^{(2, \alpha)} + H_k^{(2, \alpha)},
+\end{aligned}
+\end{equation}
+so
+\begin{equation}
+\begin{aligned}
+R_n^{\text{mis, RR}} = T_n^{(1)} + T_n^{(2)} + T_n^{(H)},
+\end{aligned}
+\label{eq:R-mis-split}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+T_n^{(j)} \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1}
+              \left(2 J_k^{(j, \alpha)} - J_k^{(j, 2 \alpha)}\right),
+\quad j \in \left\{1, 2\right\},
+\end{aligned}
+\end{equation}
+with \(T_n^{(H)}\) defined identically with \(H^{(2)}\) in place of \(J^{(j)}\).
+Each piece is bounded separately.
+% The direct Levin working forms used in this section are collected in
+% Section~\ref{sec:external-direct-inputs}.
+
+\textbf{Finite-past truncation.} Fix \(q \ge 2\), \(2 \le p \le q / 2\), and
+\(0 < w \le \alpha_{\text{stat}}(q)\). Let \((Z_t)_{t \in \mathbb{Z}}\) be a two-sided stationary
+version of the driving Markov chain, and write \(B_w \coloneqq I - w \overline{A}\).
+For \(m \ge 1\) start at time \(-m\) from zero,
+\begin{equation}
+\begin{aligned}
+J_{-m,m}^{(0,w)} = J_{-m,m}^{(1,w)} = J_{-m,m}^{(2,w)}
+  = H_{-m,m}^{(2,w)} = 0,
+\end{aligned}
+\end{equation}
+and evolve, for \(r = -m + 1, \dots, 0\),
+\begin{equation}
+\begin{aligned}
+J_{r,m}^{(0,w)}
+  = B_w J_{r - 1,m}^{(0,w)} - w \varepsilon(Z_r),
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+J_{r,m}^{(\ell,w)}
+  = B_w J_{r - 1,m}^{(\ell,w)}
+    - w \widetilde{A}(Z_r) J_{r - 1,m}^{(\ell - 1,w)},
+\quad \ell \in \left\{1, 2\right\},
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+H_{r,m}^{(2,w)}
+  = (I - w A(Z_r)) H_{r - 1,m}^{(2,w)}
+    - w \widetilde{A}(Z_r) J_{r - 1,m}^{(2,w)}.
+\end{aligned}
+\end{equation}
+\begin{lemma}\label{lem:finite-past-full-augmented-state}
+  \textbf{(Stationary full depth-two augmented state.)}
+  There exist constants \(C_{\text{fp}}, c_{\text{fp}} > 0\), depending only on the fixed
+  problem parameters allowed by the chapter convention, on \(C_W\), \(D_J\), \(D_H\)
+  from Lemma~\ref{lem:levin-prop-5-component}, Lemma~\ref{lem:levin-prop-8}, Lemma~\ref{lem:levin-prop-9}, and on
+  \(C_{\text{prod}}\), \(c_{\text{prod}}\) from Lemma~\ref{lem:burn-product-stability}, such that, with
+\begin{equation}
+\begin{aligned}
+  A_{\text{fp}}(p,q,w)
+    \coloneqq C_{\text{fp}} (1 + d^{1 / q}) p^8 t_{\text{mix}}^5
+       \frac{1}{a} \sqrt{w / a} \log^3(1 / (w a)),
+\end{aligned}
+\end{equation}
+  the terminal vector of the finite-past truncation above,
+\begin{equation}
+\begin{aligned}
+  (J_{0,m}^{(0,w)}, J_{0,m}^{(1,w)}, J_{0,m}^{(2,w)},
+   H_{0,m}^{(2,w)})
+\end{aligned}
+\end{equation}
+  is Cauchy in \(L_p\). More precisely, for \(m' \ge m \ge 1\),
+\begin{equation}
+\begin{aligned}
+  \lVert  H_{0,m'}^{(2,w)} - H_{0,m}^{(2,w)}  \rVert_{L_p}
+    \le A_{\text{fp}}(p,q,w) \exp(-c_{\text{fp}} w a m / p),
+\end{aligned}
+\label{eq:finite-past-H2-cauchy}
+\end{equation}
+  The \(J\) coordinates converge to the invariant law
+  \(\Pi_{J,2,w}\) of Lemma~\ref{lem:levin-invariant-depth-two-law}, and the \(L_p\) limit
+\begin{equation}
+\begin{aligned}
+H_0^{(2,w)} \coloneqq \lim_{m \to \infty} H_{0,m}^{(2,w)}
+\end{aligned}
+\end{equation}
+  satisfies the one-trajectory bound of Lemma~\ref{lem:levin-prop-9}.
+\end{lemma}
+
+\textit{Proof.} First control the \(J\)-coordinates. Compare the truncation started at
+\(-m'\) with the one started at \(-m\) by applying the component contraction
+\eqref{eq:levin-depth-two-component-contraction} after time \(-m\). The contraction
+constant is \(C_W\) and its exponential rate is \(1 / 12\). The initial
+depth-two cost at time \(-m\) is bounded by the elementary moment bounds for
+\(J^{(0,w)}\) and \(J^{(1,w)}\), together with Lemma~\ref{lem:levin-prop-8} for
+\(J^{(2,w)}\). Write
+\begin{equation}
+\begin{aligned}
+Y_{r,m}^{(w)} \coloneqq (Z_{r + 1}, J_{r,m}^{(0,w)}, J_{r,m}^{(1,w)}, J_{r,m}^{(2,w)}).
+\end{aligned}
+\end{equation}
+Thus there is a constant \(C_{\text{cost}}\), depending only on the
+fixed problem parameters and on \(D_J\), such that
+\begin{equation}
+\begin{aligned}
+\lVert  c_{J,2}^{(w)}(Y_{-m,m'}^{(w)}, Y_{-m,m}^{(w)})  \rVert_{L_p}
+  \le C_{\text{cost}} (1 + d^{1 / q}) p^{7 / 2} t_{\text{mix}}^{5 / 2}
+     \sqrt{w / a} \log^{3 / 2}(1 / (w a)).
+\end{aligned}
+\label{eq:finite-past-cost-bound}
+\end{equation}
+Consequently, for \(r \ge -m\) and \(\ell \in \left\{0,1,2\right\}\),
+\begin{equation}
+\begin{aligned}
+\lVert  J_{r,m'}^{(\ell,w)} - J_{r,m}^{(\ell,w)}  \rVert_{L_p}
+  \le A_J(p,q,w) \exp(-w a (r + m) / (12 p)),
+\end{aligned}
+\label{eq:finite-past-J-cauchy}
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+A_J(p,q,w)
+  \coloneqq C_W C_{\text{cost}} (1 + d^{1 / q}) p^7 t_{\text{mix}}^5
+     \sqrt{w / a} \log^3(1 / (w a)).
+\end{aligned}
+\label{eq:finite-past-AJ}
+\end{equation}
+
+Now subtract the two \(H^{(2,w)}\) finite-past recursions. With
+\(\Delta H_r \coloneqq H_{r,m'}^{(2,w)} - H_{r,m}^{(2,w)}\) and similarly for
+\(\Delta J_r^{(2,w)}\),
+\begin{equation}
+\begin{aligned}
+\Delta H_0
+  = \Gamma_{-m + 1:0}^{(w)} H_{-m,m'}^{(2,w)}
+    - w \sum_{l = -m + 1}^0 \Gamma_{l + 1:0}^{(w)}
+        \widetilde{A}(Z_l) \Delta J_{l - 1}^{(2,w)}.
+\end{aligned}
+\label{eq:finite-past-H2-difference}
+\end{equation}
+
+For the initial term, use the conditional product-stability estimate
+\eqref{eq:burn-product-stability-conditional} and Lemma~\ref{lem:levin-prop-9}:
+\begin{equation}
+\begin{aligned}
+\lVert  \Gamma_{-m + 1:0}^{(w)} H_{-m,m'}^{(2,w)}  \rVert_{L_p}
+  &\le C_{\text{prod}} \exp(-c_{\text{prod}} w a m / p)
+       \lVert  H_{-m,m'}^{(2,w)}  \rVert_{L_p} \\
+  &\le C_{\text{prod}} D_H d^{1 / q} t_{\text{mix}}^{5 / 2} p^{7 / 2}
+       w^{3 / 2} \log^{3 / 2}(1 / (w a))
+       \exp(-c_{\text{prod}} w a m / p).
+\end{aligned}
+\label{eq:finite-past-H-initial-term}
+\end{equation}
+
+For the convolution term, combine \eqref{eq:burn-product-stability-conditional},
+\(\lVert \widetilde{A}(z) \rVert \le C_A\), and \eqref{eq:finite-past-J-cauchy}:
+\begin{equation}
+\begin{aligned}
+&w \sum_{l = -m + 1}^0
+  \lVert  \Gamma_{l + 1:0}^{(w)} \widetilde{A}(Z_l) \Delta J_{l - 1}^{(2,w)}  \rVert_{L_p} \\
+&\quad \le w C_{\text{prod}} C_A A_J(p,q,w)
+   \sum_{l = -m + 1}^0
+      \exp(-c_{\text{prod}} w a (-l) / p)
+      \exp(-w a (l - 1 + m) / (12 p)).
+\end{aligned}
+\label{eq:finite-past-H-convolution-raw}
+\end{equation}
+The elementary convolution bound
+\begin{equation}
+\begin{aligned}
+\sum_{l = -m + 1}^0
+      \exp(-c_{\text{prod}} w a (-l) / p)
+      \exp(-w a (l - 1 + m) / (12 p))
+  \le C_{\text{conv}} \frac{p}{w a}
+     \exp(-c_{\text{conv}} w a m / p)
+\end{aligned}
+\label{eq:finite-past-exp-convolution}
+\end{equation}
+holds with \(C_{\text{conv}}, c_{\text{conv}} > 0\) depending only on \(c_{\text{prod}}\) and
+the numerical rate \(1 / 12\). Therefore the convolution term is bounded by
+\begin{equation}
+\begin{aligned}
+C_{\text{prod}} C_A C_{\text{conv}} \frac{p}{a} A_J(p,q,w)
+  \exp(-c_{\text{conv}} w a m / p).
+\end{aligned}
+\label{eq:finite-past-H-convolution-bound}
+\end{equation}
+
+Choose
+\begin{equation}
+\begin{aligned}
+c_{\text{fp}} \coloneqq \frac{1}{2} \min(c_{\text{prod}}, c_{\text{conv}})
+\end{aligned}
+\end{equation}
+and choose \(C_{\text{fp}}\) large enough to dominate the constants in
+\eqref{eq:finite-past-H-initial-term} and \eqref{eq:finite-past-H-convolution-bound} after
+substituting \eqref{eq:finite-past-AJ}. Since \(w \le \alpha_\infty\) implies
+\(w a \le 1 / 2\), the initial-term factor \(w^{3 / 2}\) is absorbed by
+\(a^{-1} \sqrt{w / a}\), and the powers
+\(p^{7 / 2} t_{\text{mix}}^{5 / 2} \log^{3 / 2}(1 / (w a))\) are
+absorbed by the displayed \(p^8 t_{\text{mix}}^5 \log^3(1 / (w a))\) in
+\(A_{\text{fp}}(p,q,w)\). This gives \eqref{eq:finite-past-H2-cauchy}.
+
+The \(J\)-bounds and \eqref{eq:finite-past-H2-cauchy} show that the full terminal vector
+is Cauchy in \(L_p\). Passing to the \(L_p\) limit gives the stationary full
+augmented-chain law.
+% The limits are measurable functions of the two-sided stationary driving
+% chain. Passing to the limit in the finite-past recursions is justified in
+% \(L_p\), stationarity follows from shift-covariance, and the limiting
+% \(H^{(2,w)}\) bound follows from Lemma~\ref{lem:levin-prop-9} and Fatou's lemma.
+\begin{equation}
+\begin{aligned}
+\square
+\end{aligned}
+\end{equation}
+
+Shifting the finite-past construction before taking the limit defines a
+two-sided stationary process
+\begin{equation}
+\begin{aligned}
+(Z_{k + 1}, J_k^{(0,w)}, J_k^{(1,w)}, J_k^{(2,w)}, H_k^{(2,w)})_{k \in \mathbb{Z}}.
+\end{aligned}
+\end{equation}
+It solves the full depth-two recursions, and its law is the stationary full
+augmented-chain law used below.
+
+\textbf{Joint RR stationary construction.} Apply
+Lemma~\ref{lem:finite-past-full-augmented-state} at \(w = \alpha\) and \(w = 2 \alpha\) on the
+same two-sided stationary base chain.
+The joint limit
+\begin{equation}
+\begin{aligned}
+\left(
+  Z_{k + 1},
+  J_k^{(0, \alpha)}, J_k^{(1, \alpha)}, J_k^{(2, \alpha)},
+  H_k^{(2, \alpha)},
+  J_k^{(0, 2 \alpha)}, J_k^{(1, 2 \alpha)}, J_k^{(2, 2 \alpha)},
+  H_k^{(2, 2 \alpha)}
+\right)_{k \in \mathbb{Z}}
+\end{aligned}
+\end{equation}
+is the stationary RR augmented state used below.
+% All RR differences below, such as
+% \(2 J_k^{(j, \alpha)} - J_k^{(j, 2 \alpha)}\) and
+% \(2 H_k^{(2, \alpha)} - H_k^{(2, 2 \alpha)}\), are read under this joint
+% construction.
+
+\textbf{Stationary augmented-chain convention.} The estimates below use the stationary
+versions constructed above. A zero-start full average is not obtained by a
+single terminal contraction: summing startup contractions yields
+\begin{equation}
+\begin{aligned}
+\frac{1}{\sqrt{n}} \sum_{k \ge 0} \rho_\alpha^k
+  \asymp \frac{1}{\sqrt{n} \, \alpha a}
+\end{aligned}
+\end{equation}
+when \(\rho_\alpha \approx \exp(-c \alpha a)\). This term is deferred to the burn-in
+chapter.
+% The one-step shift in
+% \((Z_{t + 1}, J_t^{(0, w)}, J_t^{(1, w)}, J_t^{(2, w)}, H_t^{(2, w)})\) is
+% intentional: \(J_t\) is the perturbation state after the observation
+% \(Z_{t + 1}\) has updated the recursion, while base-chain covariance formulas
+% may still use \(Z_0\) by stationarity. A practical arbitrary-start theorem
+% requires either burned-in weights \(Q_{l,n_0}^{(\alpha)}\) or a separate transfer
+% lemma with the accumulated startup dependence.
+
+For the shifted-to-unshifted first-order transfer we use the local inverse
+ceiling \(\alpha_{\text{inv}}\) defined in \eqref{eq:alpha-inv}.
+
+\begin{lemma}\label{lem:stationary-limit-J1}
+  \textbf{(Stationary-limit transfer for the centered first-order iterate.)}
+  Fix \(w \in (0, \alpha_\infty]\) and set \(B_w \coloneqq I - w \overline{A}\). Assume
+  the stationary augmented-chain convention above, \textbf{UGE 1},
+  \(\pi(\widetilde{A}) = 0\), and \(\lVert  \varepsilon  \rVert_\infty < \infty\). Let
+  \((J_t^{(0, w)}, J_t^{(1, w)})_{t \in \mathbb{Z}}\) be the stationary two-sided
+  solution of the first two perturbation recursions, and set
+  \(T_t^{(1, w)} \coloneqq B_w \, J_t^{(1, w)}\). Then, with
+\begin{equation}
+\begin{aligned}
+  \Phi_+(p, w) \coloneqq 1 + p^{3 / 2} \, t_{\text{mix}}^{1 / 2} / a
+               + p^{1 / 2} \, t_{\text{mix}}^{3 / 2} \sqrt{w / a},
+\end{aligned}
+\end{equation}
+  there exists a constant \(C_{\text{stat,1}}\), depending only on the constants in
+  the zero-start centered shifted first-order bound in Lemma~\ref{lem:last-shifted-first-order},
+  such that
+  for every \(p \ge 2\) and every \(t \in \mathbb{Z}\),
+\begin{equation}
+\begin{aligned}
+  \lVert  T_t^{(1, w)} - \mathbb{E}_\pi T_t^{(1, w)}  \rVert_{L_p}
+    \le C_{\text{stat,1}} \, w \, \Phi_+(p, w).
+\end{aligned}
+\end{equation}
+  Consequently, whenever \(w \le \alpha_{\text{inv}}\),
+\begin{equation}
+\begin{aligned}
+  \lVert  J_t^{(1, w)} - \mathbb{E}_\pi J_t^{(1, w)}  \rVert_{L_p}
+    \le 2 C_{\text{stat,1}} \, w \, \Phi_+(p, w).
+\end{aligned}
+\end{equation}
+\end{lemma}
+
+\textit{Proof.} Use finite-past zero-start versions
+\(J_{t, m}^{(0, w)}\) and \(J_{t, m}^{(1, w)}\). By stationarity and
+Lemma~\ref{lem:last-shifted-first-order},
+\begin{equation}
+\begin{aligned}
+\lVert  B_w J_{t, m}^{(1, w)} - \mathbb{E} B_w J_{t, m}^{(1, w)}  \rVert_{L_p}
+  \le C_{\text{stat,1}} \, w \, \Phi_+(p, w).
+\end{aligned}
+\end{equation}
+The deterministic-product expansions give
+\begin{equation}
+\begin{aligned}
+J_{t, m}^{(0, w)}
+  = -w \sum_{r = 0}^{m - 1} B_w^r \varepsilon(Z_{t - r}),
+\end{aligned}
+\end{equation}
+and the corresponding \(J_{t,m}^{(1,w)}\) series is Cauchy for fixed admissible
+\(w\). Passing to the limit gives the bound for \(T_t^{(1,w)}\). The bound for
+\(J_t^{(1,w)}\) follows from
+\begin{equation}
+\begin{aligned}
+J_t^{(1,w)} - \mathbb{E}_\pi J_t^{(1,w)}
+  = B_w^{-1}\bigl(T_t^{(1,w)} - \mathbb{E}_\pi T_t^{(1,w)}\bigr).
+\end{aligned}
+\end{equation}
+\(\square\)
+
+% The finite-past domination is fixed-\(w\); later estimates keep the displayed
+% \(w\)-dependence through \(\Phi_+(p,w)\) and use constants independent of \(n\).
+
+\textbf{Telescoping identity for \(J^{(1)}\).} Summing
+\begin{equation}
+\begin{aligned}
+J_k^{(1,\alpha)}
+  = (I-\alpha\overline{A})J_{k-1}^{(1,\alpha)}
+    -\alpha\widetilde{A}(Z_k)J_{k-1}^{(0,\alpha)}
+\end{aligned}
+\end{equation}
+from \(k = 1\) to \(n\) and rearranging gives, for an arbitrary initial value,
+\begin{equation}
+\begin{aligned}
+\overline{A} \sum_{k = 0}^{n - 1} J_k^{(1, \alpha)}
+  = -\sum_{k = 1}^n \widetilde{A}(Z_k) \, J_{k - 1}^{(0, \alpha)}
+    + \frac{1}{\alpha} \, \left(J_0^{(1, \alpha)} - J_n^{(1, \alpha)}\right).
+\end{aligned}
+\end{equation}
+In stationarity,
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_\pi\!\left[\widetilde{A}(Z_1)J_0^{(0,\alpha)}\right]
+  = -\overline{A}\,\mathbb{E}_\pi\!\left[J_\infty^{(1,\alpha)}\right].
+\end{aligned}
+\end{equation}
+% Under the stationary augmented-chain convention,
+% \((J_{k - 1}^{(0, w)}, Z_k)\) has the same law as
+% \((J_0^{(0, w)}, Z_1)\), so \(\overline{\psi}_w\) is centered for each summand.
+Subtracting \(n \, \mathbb{E}_\pi [J_\infty^{(1, \alpha)}]\) from both sides and
+applying \(\overline{A}^{-1}\) gives the \textbf{centered telescoping identity}
+\begin{equation}
+\begin{aligned}
+\sum_{k = 0}^{n - 1} \left(J_k^{(1, \alpha)} - \mathbb{E}_\pi [J_\infty^{(1, \alpha)}]\right)
+  = -\overline{A}^{-1} \sum_{k = 1}^n
+      \overline{\psi}_\alpha (J_{k - 1}^{(0, \alpha)}, Z_k)
+    + \frac{1}{\alpha} \, \overline{A}^{-1}
+      \left(J_0^{(1, \alpha)} - J_n^{(1, \alpha)}\right).
+\end{aligned}
+\label{eq:J1-telescope}
+\end{equation}
+% This identity links the PR-average of \(J^{(1)}\) to the centered bilinear sum
+% bounded in Lemma~\ref{lem:levin-cor-6}.
+
+\begin{lemma}\label{lem:T1-bound}
+  \textbf{(Stationary first-order misadjustment bound.)}
+  Assume the stationary augmented-chain convention above, \textbf{UGE 1},
+  \(\pi(\widetilde{A}) = 0\), \(\pi(\varepsilon) = 0\),
+  \(\lVert  \varepsilon  \rVert_\infty < \infty\), and
+  \(0 < \alpha\), \(2 \alpha \le \alpha_\infty\), and
+  \(2 \alpha \le \alpha_{\text{inv}}\). Set
+\begin{equation}
+\begin{aligned}
+  \Phi_+(p, \alpha) \coloneqq 1 + p^{3 / 2} \, t_{\text{mix}}^{1 / 2} / a
+                   + p^{1 / 2} \, t_{\text{mix}}^{3 / 2} \sqrt{\alpha / a}.
+\end{aligned}
+\end{equation}
+  There exists a constant \(C_{\text{mis,1}}\) depending on
+  \(\lVert\overline{A}\rVert\), \(\lVert\overline{A}^{-1}\rVert\),
+  \(\kappa_Q\), \(C_A\), \(\lVert\varepsilon\rVert_\infty\),
+  \(t_{\text{mix}}\), and the universals \(c_{W,1}\), \(c_{W,2}\)
+  of Lemma~\ref{lem:levin-cor-6}, and the constant of the centered bound in
+  Lemma~\ref{lem:last-shifted-first-order}, such that for every \(p \ge 2\) and every
+  \(n \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \lVert  T_n^{(1)}  \rVert_{L_p}
+    &\le C_{\text{mis,1}} \sqrt{n} \, \alpha^2
+     + C_{\text{mis,1}} \, p^{3 / 2} \sqrt{\alpha} \\
+    &\quad + C_{\text{mis,1}} \, p^3 \, (\alpha n)^{-1 / 2} \, \log^{1 / 2}(1 / (\alpha a))
+     + C_{\text{mis,1}} \, \Phi_+(p, \alpha) \, n^{-1 / 2}.
+\end{aligned}
+\end{equation}
+\end{lemma}
+
+\textit{Proof.} Decompose \(T_n^{(1)} = T_n^{\text{(1, b)}} + T_n^{\text{(1, c)}}\) via the
+bias-fluctuation split
+\begin{equation}
+\begin{aligned}
+T_n^{\text{(1, b)}} \coloneqq \sqrt{n} \, \left(
+                    2 \, \mathbb{E}_\pi [J_\infty^{(1, \alpha)}]
+                    - \mathbb{E}_\pi [J_\infty^{(1, 2 \alpha)}]
+                  \right),
+\end{aligned}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+T_n^{\text{(1, c)}} \coloneqq \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1} \sum_{w \in \left\{\alpha, 2 \alpha\right\}} c_w
+                   \left(J_k^{(1, w)} - \mathbb{E}_\pi [J_\infty^{(1, w)}]\right),
+\quad c_\alpha = 2, \, c_{2 \alpha} = -1.
+\end{aligned}
+\end{equation}
+% The bias is deterministic; the centered piece carries the \(L_p\) fluctuation.
+
+\textbf{Bias.} By Lemma~\ref{lem:levin-prop-2},
+\(\mathbb{E}_\pi [J_\infty^{(1, w)}] = w \, \Delta + R(w)\) with
+\(\lVert  R(w)  \rVert \le 12 \, \lVert  \overline{A}^{-1}  \rVert \, C_A^2 \, t_{\text{mix}}^2 \, w^2 \, \lVert  \varepsilon  \rVert_\infty\).
+The leading \(w \, \Delta\) cancels, leaving
+\begin{equation}
+\begin{aligned}
+\lVert  2 \, \mathbb{E}_\pi [J_\infty^{(1, \alpha)}] - \mathbb{E}_\pi [J_\infty^{(1, 2 \alpha)}]  \rVert
+  \le 2 \, \lVert  R(\alpha)  \rVert + \lVert  R(2 \alpha)  \rVert
+  \le 72 \, \lVert  \overline{A}^{-1}  \rVert \, C_A^2 \, t_{\text{mix}}^2 \, \alpha^2 \, \lVert  \varepsilon  \rVert_\infty.
+\end{aligned}
+\end{equation}
+Multiplying by \(\sqrt{n}\) gives the first term.
+
+\textbf{Centered.} Apply \eqref{eq:J1-telescope} at \(w \in \left\{\alpha, 2 \alpha\right\}\):
+\begin{equation}
+\begin{aligned}
+\lVert  T_n^{\text{(1, c)}}  \rVert_{L_p}
+  &\le \frac{1}{\sqrt{n}} \sum_{w \in \left\{\alpha, 2 \alpha\right\}} |c_w| \Biggl(
+       \lVert  \overline{A}^{-1}  \rVert \cdot
+       \lVert  \sum_{k = 1}^n \overline{\psi}_w (J_{k - 1}^{(0, w)}, Z_k)  \rVert_{L_p} \\
+    &\quad \quad \quad \quad
+       + \frac{1}{w} \, \lVert  \overline{A}^{-1}  \rVert \cdot
+         \lVert  J_0^{(1, w)} - J_n^{(1, w)}  \rVert_{L_p}
+     \Biggr).
+\end{aligned}
+\end{equation}
+For the bilinear sum,
+\begin{equation}
+\begin{aligned}
+\lVert  \sum_{k = 1}^n \overline{\psi}_w  \rVert_{L_p}
+  \le c_{W, 1} \, p^{3 / 2} \sqrt{w n}
+   + c_{W, 2} \, p^3 \, w^{-1 / 2} \, \log^{1 / 2}(1 / (w a)),
+\end{aligned}
+\end{equation}
+so
+\begin{equation}
+\begin{aligned}
+\frac{1}{\sqrt{n}} \lVert  \sum \overline{\psi}_w  \rVert_{L_p}
+  \le \sqrt{2} c_{W, 1} \, p^{3 / 2} \sqrt{\alpha}
+   + \sqrt{2} c_{W, 2} \, p^3 \, (\alpha n)^{-1 / 2} \, \log^{1 / 2}(1 / (\alpha a)).
+\end{aligned}
+\end{equation}
+For the boundary term, Lemma~\ref{lem:stationary-limit-J1} gives
+\begin{equation}
+\begin{aligned}
+\lVert  J_n^{(1, w)} - \mathbb{E} J_n^{(1, w)}  \rVert_{L_p} \le C w \, \Phi_+(p, w),
+\end{aligned}
+\end{equation}
+and Lemma~\ref{lem:levin-prop-2} gives \(\lVert  \mathbb{E} J_n^{(1, w)}  \rVert \le C w\), hence
+\begin{equation}
+\begin{aligned}
+\lVert  J_n^{(1, w)}  \rVert_{L_p} \le C w \, \Phi_+(p, w).
+\end{aligned}
+\end{equation}
+The same bound holds for \(J_0^{(1, w)}\), so
+\begin{equation}
+\begin{aligned}
+w^{-1}\lVert J_0^{(1,w)}-J_n^{(1,w)}\rVert_{L_p}
+  \le C\Phi_+(p,w) \le \sqrt{2}\,C\Phi_+(p,\alpha)
+\end{aligned}
+\end{equation}
+after absorbing
+the factor \(2\) into \(C\).
+Dividing by \(\sqrt{n}\) gives the last term. \(\square\)
+
+\begin{lemma}\label{lem:T2H-bound}
+  \textbf{(Stationary second-order and depth-two remainder bound.)}
+  Under the assumptions of the previous lemma, for every \(p \ge 2\) and every
+  \(q \ge 2\) satisfying \(p \le q / 2\) and
+  \(2 \alpha \le \alpha_{\text{stat}}(q)\),
+\begin{equation}
+\begin{aligned}
+  \lVert  T_n^{(2)}  \rVert_{L_p} + \lVert  T_n^{(H)}  \rVert_{L_p}
+    \le C_{\text{mis,2}} \, (1 + d^{1 / q}) \, p^{7 / 2} \, t_{\text{mix}}^{5 / 2}
+       \, \sqrt{n} \, \alpha^{3 / 2} \, \log^{3 / 2}(1 / (\alpha a)),
+\end{aligned}
+\end{equation}
+  with \(C_{\text{mis,2}} \coloneqq 6 \, \sqrt{2}^3 \, (D_J + D_H)\).
+\end{lemma}
+
+\textit{Proof.} By the triangle inequality and Lemma~\ref{lem:levin-prop-8},
+\begin{equation}
+\begin{aligned}
+\lVert  T_n^{(2)}  \rVert_{L_p}
+  &\le \frac{1}{\sqrt{n}} \sum_{k = 0}^{n - 1} \sum_{w \in \left\{\alpha, 2 \alpha\right\}} |c_w| \, \lVert  J_k^{(2, w)}  \rVert_{L_p} \\
+  &\le 3 \, \sqrt{n} \, \sup_{w \in \left\{\alpha, 2 \alpha\right\}} \lVert  J_k^{(2, w)}  \rVert_{L_p} \\
+  &\le 3 \, D_J \, (2 \alpha)^{3 / 2}
+      \, t_{\text{mix}}^{5 / 2} \, p^{7 / 2} \, \sqrt{n}
+      \, \log^{3 / 2}(1 / (\alpha a)),
+\end{aligned}
+\end{equation}
+The same argument with Lemma~\ref{lem:levin-prop-9} controls \(T_n^{(H)}\). \(\square\)
+% Here \(|c_\alpha| + |c_{2 \alpha}| = 3\) absorbs the RR combination and
+% \((2 \alpha)^{3 / 2}\) is the worse bound at the larger step.
+
+\begin{theorem}\label{thm:misadjustment}
+  \textbf{(Stationary PR-averaged RR misadjustment bound.)}
+  Assume \textbf{UGE 1}, \(\pi(\widetilde{A}) = 0\), \(\pi(\varepsilon) = 0\),
+  \(\lVert  \varepsilon  \rVert_\infty < \infty\), \(0 < \alpha\), and
+  the stationary augmented-chain convention above. There exists a constant \(C\)
+  depending on the universal and problem constants of the previous two lemmas
+  such that for every
+  \(p \ge 2\), every \(q \ge 2\) satisfying
+  \(p \le q / 2\) and \(2 \alpha \le \alpha_{\text{stat}}(q)\), and every \(n \ge 2\),
+\begin{equation}
+\begin{aligned}
+  \lVert  R_n^{\text{mis, RR}}  \rVert_{L_p}
+    &\le C \sqrt{n} \, \alpha^2
+     + C \, (1 + d^{1 / q}) \, p^{7 / 2} \, t_{\text{mix}}^{5 / 2}
+         \, \sqrt{n} \, \alpha^{3 / 2} \, \log^{3 / 2}(1 / (\alpha a)) \\
+    &\quad + C \, p^{3 / 2} \sqrt{\alpha}
+     + C \, p^3 \, (\alpha n)^{-1 / 2} \, \log^{1 / 2}(1 / (\alpha a))
+     + C \, \Phi_+(p, \alpha) \, n^{-1 / 2}.
+\end{aligned}
+\end{equation}
+\end{theorem}
+
+\textit{Proof.} From \eqref{eq:R-mis-split},
+\(\lVert  R_n^{\text{mis, RR}}  \rVert_{L_p} \le \lVert  T_n^{(1)}  \rVert_{L_p} + \lVert  T_n^{(2)}  \rVert_{L_p} + \lVert  T_n^{(H)}  \rVert_{L_p}\).
+The result follows from Lemma~\ref{lem:T1-bound} and Lemma~\ref{lem:T2H-bound}. \(\square\)
+
+\begin{corollary}\label{cor:misadjustment-rate}
+  \textbf{(Stationary balanced-scale misadjustment rate.)}
+  At the working scale \(\alpha = c \, n^{-1 / 2}\), with
+  \(p = \max(2, \left\lceil \log n \right\rceil)\) and \(q = \max(2 p, \left\lceil \log(e \, d) \right\rceil, 2)\), and for \(n\)
+  large enough that \(2 \alpha \le \alpha_{\text{stat}}(q)\),
+\begin{equation}
+\begin{aligned}
+\lVert  R_n^{\text{mis, RR}}  \rVert_{L_p} \le C \, \text{polylog}(n) \, n^{-1 / 4},
+\end{aligned}
+\end{equation}
+  of the same polynomial order as the leading martingale Berry--Esseen rate,
+  up to logarithmic factors.
+\end{corollary}
+
+\textit{Proof.} At \(\alpha = c \, n^{-1 / 2}\): \(\sqrt{n} \alpha^2 = c^2 \, n^{-1 / 2}\),
+\(\sqrt{n} \alpha^{3 / 2} = c^{3 / 2} \, n^{-1 / 4}\),
+\(\sqrt{\alpha} = c^{1 / 2} \, n^{-1 / 4}\),
+\((\alpha n)^{-1 / 2} = c^{-1 / 2} \, n^{-1 / 4}\), and
+\(\Phi_+(p, \alpha) \, n^{-1 / 2} = O(p^{3 / 2} \, n^{-1 / 2})\).
+With \(p \asymp \log n\) and \(q \ge \log(e d)\), the displayed bound is
+\(\text{polylog}(n) \, n^{-1 / 4}\). \(\square\)
+
+This is a stationary \(n_0 = 0\) augmented-chain bound; the deterministic-start
+version is handled in the burn-in transfer chapter.

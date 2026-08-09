@@ -1,0 +1,31 @@
+
+\section{Burned-in Deterministic Weights}
+
+With the $\sqrt{m}$ normalization, the depth-zero linearized term has the
+weights
+\begin{equation}
+Q_{l; n_{0}, n}^{(\alpha)}
+  := \alpha \sum_{k = \max\left\{n_{0}, l\right\}}^{n - 1} B_{\alpha}^{k - l},
+\quad
+1 \le l \le n - 1,
+\label{eq:burn-Q-alpha}
+\end{equation}
+and $Q_{l; n_{0}, n}^{(\alpha)} = 0$ for $l \ge n$. The RR weight is
+\begin{equation}
+Q_{l; n_{0}, n}^{\mathrm{RR}}
+  := 2 Q_{l; n_{0}, n}^{(\alpha)}
+     - Q_{l; n_{0}, n}^{(2 \alpha)}.
+\label{eq:burn-Q-RR}
+\end{equation}
+The leading burned-in sum is
+\begin{equation}
+W_{n,n_{0}}^{\mathrm{RR}}
+  := -\frac{1}{\sqrt{m}} \sum_{l = 1}^{n - 1}
+      Q_{l; n_{0}, n}^{\mathrm{RR}} \varepsilon(Z_{l}).
+\label{eq:burn-W-RR}
+\end{equation}
+
+% For $l \ge n_{0}$ these weights are full-window weights with horizon $n-l$. For
+% $l < n_{0}$, the lower summation limit is $n_{0}$ rather than $l$, so the weight
+% comparison, Poisson decomposition, and variance proxy must be restated for
+% $Q_{l; n_{0}, n}^{\mathrm{RR}}$.
