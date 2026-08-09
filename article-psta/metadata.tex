@@ -17,28 +17,32 @@
 % \CRediT{1,2,3,4,5,6,8,9,10,11}{100\%}
 
 \begin{abstract}
-Мы рассматриваем статистический вывод для линейной стохастической
-аппроксимации с постоянным шагом и марковским шумом. Усреднение
-Поляка--Рупперта снижает дисперсию, но сохраняет стационарное смещение
-порядка шага. Для коррекции центра доверительного
-интервала две рекурсии с шагами $\alpha$ и $2\alpha$ запускаются на одной
-траектории марковской цепи, после чего их средние объединяются по формуле
-Ричардсона--Ромберга. Показано, что при известном разложении стационарного
-смещения остаток комбинации имеет порядок $\alpha^{3/2}$. Для ведущего
-линейного члена получена явная формула весов и доказана конечновыборочная
-оценка ковариационной прокси порядка $1/(n\alpha a)$.
-Тем самым RR уменьшает смещение, а общая траектория сохраняет ковариационную
-цель первого порядка. В стационарном режиме при $\alpha=c/\sqrt n$ ошибка
-ковариационного приближения имеет порядок $n^{-1/2}$, а нормированное
-остаточное смещение --- порядок $n^{-1/4}$. В экспериментах на конечных
-марковских цепях экстраполяция уменьшает сдвиг нормированной статистики и
-возвращает покрытие скалярных 95\%-х интервалов к уровню 94--95\% без
-заметного увеличения ширины. Отдельная проверка показывает, что на длинных
-траекториях практическая оценка долгосрочной дисперсии методом перекрывающихся
-блочных средних близка к оракульной.
+Рассматривается статистический вывод для линейной стохастической аппроксимации
+с постоянным шагом и марковским шумом. Усреднение Поляка--Рупперта снижает
+дисперсию, но сохраняет смещение порядка шага. Для коррекции центра две
+рекурсии с шагами $\alpha$ и $2\alpha$ запускаются на одной траектории и
+объединяются экстраполяцией Ричардсона--Ромберга. Основной результат ---
+неасимптотическая гауссовская аппроксимация скалярных проекций RR-среднего
+после разогрева. При равномерной геометрической эргодичности, ляпуновской
+устойчивости, ограниченном шуме и моментной устойчивости случайных матричных
+произведений рассмотрен допустимый режим, в котором выполнены зависящие от
+порядка момента пороги малости шага. Тогда выбор $\alpha=c/\sqrt n$ и разогрев
+порядка $(\alpha a)^{-1}\log^2n$ дают оценку расстояния Колмогорова до
+стандартного нормального закона
+$C_{\mathrm{mix}}(t_{\mathrm{mix}})
+\operatorname{polylog}(n)n^{-1/4}$. Доказательство выделяет ведущий
+пуассоновский мартингал, сравнивает ковариационную прокси с асимптотической
+долгосрочной ковариацией и соединяет опубликованные $L_p$-оценки отдельных
+компонент с локальной леммой переноса после разогрева и сглаживающим
+неравенством. В экспериментах на конечных марковских
+цепях RR устраняет видимый сдвиг нормированной статистики и возвращает
+покрытие скалярных 95\%-х интервалов к уровню 94--95\% без заметного
+увеличения ширины. На длинных траекториях оценка долгосрочной дисперсии методом
+перекрывающихся блочных средних близка к оракульной.
 \end{abstract}
 \keywords{линейная стохастическая аппроксимация,
 марковский шум, экстраполяция Ричардсона--Ромберга,
+гауссовская аппроксимация, оценка Берри--Эссеена,
 доверительные интервалы, долгосрочная ковариация}
 
 \English
@@ -55,27 +59,27 @@ in Linear Stochastic Approximation}
 \begin{abstract}
 We study statistical inference for constant-stepsize linear stochastic
 approximation driven by Markovian observations. Polyak--Ruppert averaging
-reduces random fluctuations but does not remove the stationary bias, whose
-leading term is proportional to the stepsize. To correct the center of a
-confidence interval, we run two recursions with stepsizes $\alpha$ and
-$2\alpha$ on the same Markov-chain trajectory and combine their averages by
-Richardson--Romberg extrapolation. The known stationary-bias expansion implies
-an $O(\alpha^{3/2})$ residual bias. For the leading linear term, we derive an
-explicit deterministic weight representation and prove that its finite-window
-covariance proxy has error $O((n\alpha a)^{-1})$.
-Thus, extrapolation reduces the bias, while sharing the trajectory preserves
-the first-order covariance target. In the stationary regime and with
-$\alpha=c/\sqrt n$, the covariance-proxy error is $O(n^{-1/2})$, whereas the
-normalized residual bias is
-$O(n^{-1/4})$. In finite-state experiments, extrapolation removes the visible
-shift of the normalized statistic and brings scalar 95\% confidence-interval
-coverage to 94--95\% without a material increase in width. At long horizons,
-overlapping batch means closely reproduce the oracle long-run variance. The
-results support a simple interpretation: stepsize extrapolation corrects the
-interval center, while long-run variance estimation controls its scale.
+reduces random fluctuations but retains a stepsize-dependent bias. To correct
+the center, we run two recursions with stepsizes $\alpha$ and $2\alpha$ on the
+same trajectory and combine their averages by Richardson--Romberg
+extrapolation. Our main result is a non-asymptotic Gaussian approximation for
+scalar projections of the burned-in RR average. Under uniform geometric
+ergodicity, Lyapunov stability, bounded noise, and moment stability of the
+random matrix products, consider the admissible regime in which the
+moment-dependent stepsize ceilings hold. Then choosing $\alpha=c/\sqrt n$ and
+a burn-in of order $(\alpha a)^{-1}\log^2n$ yields a Kolmogorov-distance
+bound of order $C_{\mathrm{mix}}(t_{\mathrm{mix}})
+\operatorname{polylog}(n)n^{-1/4}$. The proof isolates a leading
+Poisson-equation martingale, compares its covariance proxy with the
+asymptotic long-run covariance, and combines published componentwise $L_p$
+bounds with a burn-in transfer lemma and a smoothing inequality. In finite-state
+experiments, extrapolation removes the visible shift of the normalized
+statistic and brings scalar 95\% confidence-interval coverage to 94--95\%
+without a material increase in width. At long horizons, overlapping batch
+means closely reproduce the oracle long-run variance.
 \end{abstract}
 \keywords{linear stochastic approximation, Markovian noise,
-Richardson--Romberg extrapolation, confidence intervals,
-long-run covariance}
+Richardson--Romberg extrapolation, Gaussian approximation,
+Berry--Esseen bound, confidence intervals, long-run covariance}
 
 \Russian
