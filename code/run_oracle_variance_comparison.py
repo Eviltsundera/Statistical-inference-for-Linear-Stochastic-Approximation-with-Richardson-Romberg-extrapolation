@@ -32,6 +32,7 @@ from lsa_inference.lsa_problem import (
 from lsa_inference.lsa_engine import prepare_arrays, run_rr_full
 from lsa_inference.inference import (
     batch_mean_ci,
+    nobm_ci,
     obm_ci,
     obm_rr_ci,
     oracle_ci,
@@ -41,7 +42,10 @@ from lsa_inference.inference import (
 
 METHOD_LABELS = {
     'RR_BATCH': 'RR + batch means',
+    'RR_HUO_25': 'RR + Huo BM (n0=n/4)',
+    'RR_HUO_50': 'RR + Huo BM (n0=n/2)',
     'RR_ORACLE': 'RR + oracle variance',
+    'RR_NOBM': 'RR + NOBM',
     'RR_OBM': 'RR + OBM',
     'RR_OBM_RR': 'RR + OBM-RR',
     'RR_MSB': 'RR + MSB',
@@ -104,8 +108,23 @@ def _worker(args):
     method_results['RR_BATCH'] = batch_mean_ci(
         rr_bm, n_batch, theta_star, direction=direction,
     )
+    # Huo et al. 2023: same batches, but the first n0 iterates of every
+    # batch are discarded; the center is the average of the K batch means.
+    # run_rr_full consumes no RNG, so the extra calls keep the stream intact.
+    for key, frac in (('RR_HUO_25', 0.25), ('RR_HUO_50', 0.5)):
+        n0 = int(round(frac * n_batch))
+        _, _, huo_bm, _, _, _, _ = run_rr_full(
+            A_arr, b_arr, trajs, list(rr_alphas), K, burn_in,
+            direction=direction, n0=n0,
+        )
+        method_results[key] = batch_mean_ci(
+            huo_bm, n_batch, theta_star, n0=n0, direction=direction,
+        )
     method_results['RR_ORACLE'] = oracle_ci(
         rr_theta_bar, theta_star, sigma_true, n_eff, direction=direction,
+    )
+    method_results['RR_NOBM'] = nobm_ci(
+        rr_proj, rr_theta_bar, b_n, theta_star, direction=direction,
     )
     method_results['RR_OBM'] = obm_ci(
         rr_proj, rr_theta_bar, b_n, theta_star, direction=direction,
@@ -188,8 +207,8 @@ def run_experiment(n_problems, n_traj, T_values, n_states, d, seed=42,
     print(f"Oracle variance comparison: {n_problems} problems x {n_traj} traj, "
           f"T={T_values}, d={d}, |X|={n_states}, workers={n_workers}")
     print(f"  RR alphas: {rr_alphas}")
-    print(f"  Variance estimators: oracle, OBM, OBM-RR, MSB; "
-          f"n_bootstrap={n_bootstrap}")
+    print(f"  Variance estimators: oracle, Huo BM (n0=n/4, n/2), NOBM, OBM, "
+          f"OBM-RR, MSB; n_bootstrap={n_bootstrap}")
     print(f"  Problem gen: eig=[{eig_min},{eig_max}], noise={noise_target}")
     print(f"  Direction: {dir_desc}")
     print(flush=True)

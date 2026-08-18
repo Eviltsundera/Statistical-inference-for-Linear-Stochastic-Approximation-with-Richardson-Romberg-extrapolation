@@ -156,6 +156,59 @@ def obm_ci(proj, theta_bar, b_n, theta_star, q=0.05, direction=None):
     return l2_errors, ci_widths, coverages
 
 
+def nobm_ci(proj, theta_bar, b_n, theta_star, q=0.05, direction=None):
+    """Construct CI using non-overlapping batch means with block size b_n.
+
+    Same block size as ``obm_ci``, but the windows do not overlap: the
+    first K = floor(T / b_n) disjoint blocks are used and the tail is
+    dropped.  Classical estimator (Flegal & Jones 2010):
+
+        sigma^2_NBM = b_n / (K - 1) * sum_j (bm_j - mean_j bm_j)^2.
+
+    Args:
+        proj: (n_traj, T) projection of iterates onto `direction`.
+        theta_bar: (n_traj, d) average (all coordinates, for L2 error).
+        b_n: Block size.
+        theta_star: (d,) true solution.
+        q: CI error level.
+        direction: (d,) unit vector (must match the direction used for proj).
+            If None, defaults to e_0.
+
+    Returns:
+        l2_errors, ci_widths, coverages: each (n_traj,).
+    """
+    n_traj, T = proj.shape
+    d = theta_bar.shape[1]
+    z = stats.norm.ppf(1 - q / 2)
+
+    if direction is None:
+        direction = np.eye(d)[0]
+
+    l2_errors = np.linalg.norm(theta_bar - theta_star, axis=1)
+    bar_proj = theta_bar @ direction
+    star_proj = theta_star @ direction
+
+    K = T // b_n
+    starts = np.arange(0, K * b_n, b_n)
+    bm = np.add.reduceat(proj[:, :K * b_n], starts, axis=1) / b_n
+    diffs = bm - np.mean(bm, axis=1, keepdims=True)
+    sigma_hat_sq = b_n / (K - 1) * np.sum(diffs ** 2, axis=1)
+
+    se = np.sqrt(sigma_hat_sq / T)
+    ci_widths = 2 * z * se
+
+    lo = bar_proj - z * se
+    hi = bar_proj + z * se
+    coverages = ((lo <= star_proj) & (star_proj <= hi)).astype(float)
+
+    has_nan = np.any(np.isnan(theta_bar), axis=1)
+    l2_errors[has_nan] = np.nan
+    ci_widths[has_nan] = np.nan
+    coverages[has_nan] = 0.0
+
+    return l2_errors, ci_widths, coverages
+
+
 def obm_rr_ci(proj, theta_bar, b_n, theta_star, lam=2, q=0.05, direction=None):
     """Construct CI using RR-corrected OBM variance estimator.
 

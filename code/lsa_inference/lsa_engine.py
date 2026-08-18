@@ -293,11 +293,14 @@ def run_lsa_const_full(A_arr, b_arr, trajs, alpha, K, burn_in=100,
     return proj, theta_bar, _clamp_batch_means(batch_means), n
 
 
-def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, direction=None):
+def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, direction=None,
+                n0=0):
     """Run RR extrapolation, return projections along direction + batch means.
 
     Args:
         direction: (d,) unit vector for projection. If None, defaults to e_0.
+        n0: Intra-batch discard (Huo et al. 2023), passed to
+            run_lsa_const_full.
 
     Returns:
         rr_proj: (n_traj, T_post) RR-combined projection.
@@ -315,7 +318,8 @@ def run_rr_full(A_arr, b_arr, trajs, alphas, K, burn_in=100, direction=None):
     n = None
     for alpha in alphas:
         proj, theta_bar, bm, n_m = run_lsa_const_full(
-            A_arr, b_arr, trajs, alpha, K, burn_in, direction=direction
+            A_arr, b_arr, trajs, alpha, K, burn_in, n0=n0,
+            direction=direction
         )
         per_alpha_proj.append(proj)
         per_alpha_bm.append(bm)
