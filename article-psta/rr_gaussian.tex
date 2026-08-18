@@ -1,640 +1,364 @@
-\section{Гауссовская аппроксимация RR+PR}\label{sec:theory}
+\section{Гауссовская аппроксимация для усреднения Поляка-Рупперта с экстраполяцией Ричардсона-Ромберга}\label{sec:theory}
 
-Для достаточно малого $w$ совместная цепь
-$(\theta_k^{(w)},Z_{k+1})$ имеет единственный инвариантный закон
-\cite[Theorem~1]{Levin2026}. Обозначим через $\theta_\infty^{(w)}$
-его $\theta$-координату. Из разложения
+В этой секции запись $x\lesssim_{\log{n}}y$ означает, что
+$x\leq C(\log n)^q y$ для некоторых не зависящих от $n$ и $\alpha$
+констант $C,q\geq0$. Иными словами, такое неравенство выполнено с точностью
+до постоянного и логарифмического множителей; $C$ может зависеть от
+фиксированных параметров задачи.
+
+\subsection*{Контроль остаточного члена в разложении ошибки для итераций Ричардсона--Ромберга}
+
+Для начального распределения $\xi$ цепи $(Z_k)_{k\geq0}$ обозначим через
+$\PE_\xi$ соответствующее математическое ожидание, то есть $Z_0\sim\xi$.
+
+\begingroup
+\emergencystretch=2em
+Для $p\geq2$ через $\alpha_p^{\rm L}$ обозначим верхнюю границу шага из
+\cite[Теорема~2]{Levin2026}. Разложения (26)--(27), оценка (25) и её точная версия (87) в приложении этой
+работы дают представление
+\par
+\endgroup
+\begin{equation}\label{eq:levin-decomposition}
+ \bA\bigl(\btheta_n^{(\alpha,\RR)}-\thetalim\bigr)
+ =-\frac2n\sum_{k=n/2}^{n-1}\funcnoise{Z_{k+1}}
+   +\scrE_{n,p,\alpha}^{\RR},
+\end{equation}
+где при $\alpha\leq\alpha_p^{\rm L}$ для любого начального распределения
+$\xi$,
+\begin{equation}\label{eq:levin-remainder}
+ \left\{\PE_\xi\left[
+  \norm{\scrE_{n,p,\alpha}^{\RR}}^p
+ \right]\right\}^{1/p}
+ \leq C_{\rm L}(\taumix,d)\,r_{n,p,\alpha},
+\end{equation}
+и, с $L_\alpha=\log(1/(\alpha a))$,
+\begin{align}\label{eq:levin-rate}
+ r_{n,p,\alpha}
+ &=p\log(2p)n^{-3/4}
+ +p^3(\alpha n)^{-1/2}L_\alpha^{1/2}n^{-1/2}\notag\\
+ &\quad+p^{3/2}\alpha^{1/2}n^{-1/2}
+ +p^{7/2}\alpha^{3/2}L_\alpha^{3/2}\notag\\
+ &\quad
+ +p^{7/2}n^{-1}\alpha^{1/2}L_\alpha^{3/2}\notag\\
+ &\quad
+ +\frac{\norm{\thetainit-\thetalim}}{\alpha n}
+   \exp\!\left(-\frac{\alpha an}{24}\right).
+\end{align}
+Здесь и далее константы могут зависеть от фиксированных параметров задачи,
+но не от $n$, $p$ и $\alpha$. Формула \eqref{eq:levin-remainder} ---
+единственная необходимая далее оценка момента высокого порядка.
+
+\subsection*{Основной результат}
+
+Для $u\in\sphere^{d-1}$ обозначим нормированную ошибку через
 \[
-\E\theta_\infty^{(w)}
-=\theta^\star+w\Delta+O(w^{3/2})
+ T_{n,\alpha}^{\RR}(u)
+ :=\frac{\sqrt{n/2}\,u^\transpose
+ (\btheta_n^{(\alpha,\RR)}-\thetalim)}{\sigma(u)}.
 \]
-следует, что комбинация \eqref{eq:rr} сокращает член $w\Delta$
-\cite[Corollary~1]{Levin2026}. Для распределительного результата одного
-сокращения ожиданий недостаточно: требуется отделить ведущую марковскую сумму
-от нелинейного остатка и сравнить её дисперсию с \eqref{eq:sigmainfty}.
-
-\subsection{Веса и детерминированная ковариационная прокси}
-
-Положим $B_w=I-w\Abar$. Вклад шума, возникшего в момент $l$, в среднее по
-окну $k=n_0,\ldots,n-1$ имеет детерминированный вес
-\begin{equation}\label{eq:burned-weight}
-Q_{l;n_0,n}^{(w)}
-=\begin{cases}
-\Abar^{-1}(B_w^{\,n_0-l}-B_w^{\,n-l}),&1\leq l<n_0,\\[2mm]
-\Abar^{-1}(I-B_w^{\,n-l}),&n_0\leq l\leq n-1.
-\end{cases}
-\end{equation}
-RR-вес равен
+Наша цель --- получить неасимптотическую оценку расстояния
 \[
-Q_l^{\RR}=2Q_{l;n_0,n}^{(\alpha)}
--Q_{l;n_0,n}^{(2\alpha)}.
+ \dK\bigl(T_{n,\alpha}^{\RR}(u),\gauss(0,1)\bigr).
 \]
-Из \eqref{eq:contraction} и геометрических сумм следуют фиксированные
-константы\linebreak $C_Q,C_V<\infty$, не зависящие от $n$, $n_0$ и $\alpha$, для которых
-\begin{equation}\label{eq:weight-controls}
-\max_{1\leq l<n}\norm{Q_l^{\RR}}\leq C_Q,\qquad
-\sum_{l=1}^{n-2}\norm{Q_{l+1}^{\RR}-Q_l^{\RR}}
-\leq C_V/a^2.
-\end{equation}
-Поэтому ведущая, линейная по $\eps$ часть нормированной ошибки имеет вид
-\begin{equation}\label{eq:leading-weighted-sum}
-W_{n,n_0}^{\RR}
-=-\frac1{\sqrt m}\sum_{l=1}^{n-1}Q_l^{\RR}\eps(Z_l).
-\end{equation}
-Сумма содержит и индексы до $n_0$: соответствующие веса экспоненциально
-затухают, но не равны нулю. Множитель $1/m$ в следующей ковариационной прокси
-появляется из нормировки $1/\sqrt m$ в
-\eqref{eq:leading-weighted-sum}, то есть из длины окна PR-усреднения, а не из
-числа индексов в шумовой сумме.
 
-\begin{lemma}[Сравнение ковариационной прокси]
-\label{lem:variance}
-Пусть выполнено \eqref{eq:contraction}, $0<\alpha$,
-$2\alpha\leq\alpha_\infty$ и $\norm{\SigmaM}<\infty$. Определим
-\begin{equation}\label{eq:sigma-proxy}
-\Sigma_{n,n_0}^{\mathrm{bRR}}
-=\frac1m\sum_{l=2}^{n-1}
-Q_l^{\RR}\SigmaM(Q_l^{\RR})^\top,\qquad
-\sigma_{n,n_0}^2(u)
-=u^\top\Sigma_{n,n_0}^{\mathrm{bRR}}u.
+Сначала поясним схему доказательства. Положим $m=n/2$ и
+\[
+ v:=\bA^{-\transpose}u,
+ \qquad g(z):=v^\transpose\funcnoise{z}.
+\]
+Поскольку $v^\transpose\bA=u^\transpose$, разложение
+\eqref{eq:levin-decomposition} представляет нормированную ошибку в виде
+\begin{equation}
+  \label{eq:T_RR}
+ T_{n,\alpha}^{\RR}(u)
+ =-\frac1{\sqrt m\,\sigma(u)}
+   \sum_{k=m}^{n-1}g(Z_{k+1})
+ +\frac{\sqrt m}{\sigma(u)}
+   v^\transpose\scrE_{n,p,\alpha}^{\RR}.
 \end{equation}
-Положим $\sigma_{n,n_0}(u)=\sqrt{\sigma_{n,n_0}^2(u)}$.
-Тогда существует фиксированная константа $C_{\rm var}<\infty$ такая, что
-\begin{equation}\label{eq:variance-bound}
-\norm{\Sigma_{n,n_0}^{\mathrm{bRR}}-\Sigma_\infty}
-\leq\frac{C_{\rm var}}{m\alpha a},\qquad
-|\sigma_{n,n_0}^2(u)-\sigma^2(u)|
-\leq\frac{C_{\rm var}\norm u^2}{m\alpha a}.
+Первое слагаемое является ведущей линейной частью, а второе --- остатком,
+для которого доступна оценка момента высокого порядка
+\eqref{eq:levin-remainder}.
+
+Ведущую сумму, в свою очередь, можно разложить с помощью уравнения Пуассона.
+Пусть $\widehat g$ --- ограниченное решение
+$\widehat g-\MKQ\widehat g=g$. Тогда
+\begin{equation}
+  \label{eq:poisson}
+ \sum_{k=m}^{n-1}g(Z_{k+1})
+ =\sum_{k=m}^{n-1}
+   \{\widehat g(Z_{k+1})-\MKQ\widehat g(Z_k)\}
+ +\MKQ\widehat g(Z_m)-\MKQ\widehat g(Z_n).
 \end{equation}
-Константа зависит только от $Q,\Abar$ и $\norm{\SigmaM}$.
+Сумма в правой части состоит из мартингальных разностей; её нормальная
+аппроксимация устанавливается в Лемме~\ref{lem:martingale-gaussian}. Крайние
+члены пуассоновского разложения объединяются с
+$\scrE_{n,p,\alpha}^{\RR}$ в остаточную случайную величину. Её момент
+контролируется с помощью \eqref{eq:levin-remainder} и ограниченности
+$\widehat g$. Для их объединения используем неравенство
+\cite[(11)]{Samsonov2025}: для любых вещественных случайных величин $X$, $Y$
+и любого $p\geq1$
+\begin{equation}\label{eq:smoothing-inequality}
+ \dK\!\left(X+Y,\gauss(0,1)\right)
+ \leq \dK\!\left(X,\gauss(0,1)\right)
+ +2\left\{\PE\left[\abs{Y}^p\right]\right\}^{1/(p+1)}.
+\end{equation}
+Таким образом, достаточно отдельно оценить расстояние Колмогорова для
+мартингальной части и моменты остаточной случайной величины.
+
+Чтобы компактно записать зависимость от шага, положим
+\begin{align}\label{eq:alpha-n-rate}
+ r_{n,\alpha}
+ &: =n^{-1/4}
+ +\frac{L_\alpha^{1/2}}{\sqrt{\alpha n}}
+ +\sqrt\alpha
+ +\sqrt n\,\alpha^{3/2}L_\alpha^{3/2}\notag\\
+ &\quad
+ +\frac{\sqrt\alpha\,L_\alpha^{3/2}}{\sqrt n}
+ +\frac1{\alpha\sqrt n}\exp(-c_{\rm tr}\alpha n),
+\end{align}
+где $c_{\rm tr}>0$ зависит только от фиксированных параметров устойчивости.
+Кроме того, обозначим
+\[
+ \alpha_n^{\rm L}:=
+ \alpha_{\max\{2,\ceil{\log n}\}}^{\rm L}.
+\]
+
+\begin{lemma}[Мартингальная аппроксимация]
+\label{lem:martingale-gaussian}
+Пусть выполнены условия 1--3, $\noisecovmarkov\succ0$, $n$ чётно,
+$n\geq2\taumix$ и $u\in\sphere^{d-1}$. Определим
+\begin{equation}\label{eq:martingale-part}
+ X_n(u):=-\frac1{\sqrt{n/2}\,\sigma(u)}
+ \sum_{k=n/2}^{n-1}
+ \{\widehat g(Z_{k+1})-\MKQ\widehat g(Z_k)\}.
+\end{equation}
+Тогда существуют не зависящие от $n$, $p$ и $u$ константы $C_1,C_2$ такие,
+что для
+\begin{align}\label{eq:BM-definition}
+ \mathcal B_{\rm M}(n,p)
+ &:=\frac{C_1\,
+ p^{(3p+1)/(2(2p+1))}}
+ {(n/2)^{p/(2(2p+1))}}\notag\\
+ &\quad+C_2\left\{
+ \frac{\log n}{\sqrt{n/2}}
+ +\frac{p}{(n/2)^{p/(2p+1)}}\right\}
+\end{align}
+выполнено неравенство
+\begin{equation}\label{eq:additive-gaussian}
+ \dK\!\left(X_n(u),\gauss(0,1)\right)
+ \leq\mathcal B_{\rm M}(n,p).
+\end{equation}
 \end{lemma}
 
 \begin{proof}
-Пусть $\rho_\alpha=(1-\alpha a)^{1/2}$. Из
-\eqref{eq:burned-weight} и \eqref{eq:contraction} получаем
+Из \eqref{eq:sigmainfty} и \eqref{eq:directional-variance} следует
+\begin{equation}\label{eq:projected-variance}
+ \sigma^2(u)=v^\transpose\noisecovmarkov v.
+\end{equation}
+Таким образом, $\sigma(u)>0$, а предельная дисперсия $g(Z_k)$ равна
+$\sigma^2(u)$. Кроме того,
+\begin{equation}\label{eq:direction-uniform-bounds}
+ \frac{\norm{v}}{\sigma(u)}\leq\Const{\varepsilon},
+ \qquad
+ \frac{\norm{g}[\infty]}{\sigma(u)}
+ \leq \Const{\varepsilon}\supconsteps.
+\end{equation}
+Условие равномерной геометрической эргодичности обеспечивает оценку
 \[
-\norm{Q_l^{\RR}-\Abar^{-1}}
-\lesssim\rho_\alpha^{\,n-l}\quad(l\geq n_0),\qquad
-\norm{Q_l^{\RR}}
-\lesssim\rho_\alpha^{\,n_0-l}\quad(l<n_0).
+ \norm{\widehat g}[\infty]
+ \lesssim\taumix\norm{g}[\infty].
 \]
-Геометрические суммы первых и вторых степеней этих оценок имеют порядок
-$(\alpha a)^{-1}$. В части после разогрева раскрываем
-\[
-Q_l^{\RR}\SigmaM(Q_l^{\RR})^\top-\Sigma_\infty
-\]
-по степеням $Q_l^{\RR}-\Abar^{-1}$; предшествующую часть оцениваем по энергии
-$\sum_{l<n_0}\norm{Q_l^{\RR}}^2$. Не более двух граничных позиций дают
-$O(m^{-1})$, которое поглощается правой частью
-\eqref{eq:variance-bound}. После деления на $m$ получаем первое неравенство,
-а второе следует из $|u^\top Hu|\leq\norm H\norm u^2$.
-\end{proof}
 
-\subsection{Мартингал и моментная оценка остатка}
-
-Пусть $\mathsf P$ --- переходное ядро цепи. Уравнение Пуассона имеет
-ограниченное решение
+Положим $m=n/2$ и для $j=0,\ldots,m-1$ обозначим
 \[
-\widehat\eps=\sum_{j\geq0}\mathsf P^j\eps,\qquad
-\widehat\eps-\mathsf P\widehat\eps=\eps,\qquad
-\norm{\widehat\eps}_\infty\lesssim\tmix\norm\eps_\infty .
+ D_{j+1}:=\widehat g(Z_{m+j+1})-\MKQ\widehat g(Z_{m+j}),
+ \qquad
+ M_m:=\sum_{j=0}^{m-1}D_{j+1}.
 \]
+Относительно фильтрации
+$\filtr_{m+j}=\sigma(Z_0,\ldots,Z_{m+j})$ величины $D_{j+1}$ являются
+мартингальными разностями. Если
+\[
+ h(z):=\MKQ(\widehat g^2)(z)
+       -\{\MKQ\widehat g(z)\}^2,
+\]
+то
+\[
+ \PE_\xi[D_{j+1}^2\mid\filtr_{m+j}]=h(Z_{m+j}),
+ \qquad
+ \langle M\rangle_m=\sum_{j=0}^{m-1}h(Z_{m+j}).
+\]
+При стационарном начальном распределении из уравнения Пуассона следует
+тождество
+\[
+ \PE_\pi[h(Z)]
+ =\PE_\pi\!\left[
+   \{\widehat g(Z_1)-\MKQ\widehat g(Z_0)\}^2
+  \right]
+ =\sigma^2(u).
+\]
+Следовательно, $m\sigma^2(u)$ является детерминированным центром
+квадратической характеристики $M_m$.
+
+Начальным распределением сдвинутой цепи $(Z_{m+j})_{j\geq0}$ служит закон
+$Z_m$ при $Z_0\sim\xi$. Оценка из \cite[Лемма~22]{Samsonov2025} равномерна
+по начальному распределению, поэтому её применение к сдвинутой
+цепи даёт
+\begin{equation}\label{eq:quadratic-characteristic-moment}
+ \left\{\PE_\xi\left[
+  \abs{\langle M\rangle_m-m\sigma^2(u)}^p
+ \right]\right\}^{1/p}
+ \leq 13^2\norm{g}[\infty]^2p^{1/2}\taumix^{5/2}\sqrt m.
+\end{equation}
 Кроме того,
 \[
-\mathcal V_\eps(z)=\mathsf P(\widehat\eps\widehat\eps^\top)(z)
--(\mathsf P\widehat\eps)(z)(\mathsf P\widehat\eps)(z)^\top,
-\qquad \E_\pi\mathcal V_\eps(Z)=\SigmaM.
+ \abs{D_{j+1}}\leq2\norm{\widehat g}[\infty]
+ \lesssim\taumix\norm{g}[\infty].
 \]
-Для $2\leq l\leq n-1$ положим
+Применим \cite[Лемма~21]{Samsonov2025} с
+$s_m^2=m\sigma^2(u)$. Поскольку
 \[
-\Delta M_l^{\mathrm{bRR}}
-=Q_l^{\RR}\{\widehat\eps(Z_l)
--\mathsf P\widehat\eps(Z_{l-1})\},\qquad
-M_{n,n_0}^{\mathrm{bRR}}
-=\sum_{l=2}^{n-1}\Delta M_l^{\mathrm{bRR}} .
+ X_n(u)=-\frac{M_m}{\sqrt m\,\sigma(u)},
 \]
-Это мартингальные разности. Суммирование Абеля даёт
-\begin{equation}\label{eq:poisson-decomp}
-W_{n,n_0}^{\RR}
-=-\frac{M_{n,n_0}^{\mathrm{bRR}}}{\sqrt m}+D_{2,n,n_0},
-\qquad
-\norm{D_{2,n,n_0}}_\infty\lesssim\frac{\tmix}{\sqrt m}.
-\end{equation}
-Здесь
-\[
-D_{2,n,n_0}=-\frac1{\sqrt m}\left\{
-Q_1^{\RR}\widehat\eps(Z_1)
-+\sum_{l=1}^{n-2}(Q_{l+1}^{\RR}-Q_l^{\RR})
-\mathsf P\widehat\eps(Z_l)\right\};
-\]
-его оценка следует из \eqref{eq:weight-controls}.
-Здесь и далее $\lesssim$ не скрывает зависимости от
-$\tmix,n,p,\alpha$; фиксированные величины
-$C_A,\kappa_Q,a,\norm{\Abar^{-1}}$ и $\norm\eps_\infty$ считаются
-константами задачи.
+подстановка \eqref{eq:quadratic-characteristic-moment} и оценки приращений в
+эту Лемму вместе с \eqref{eq:direction-uniform-bounds} даёт
+\eqref{eq:additive-gaussian}.
+\end{proof}
 
-Предсказуемая квадратичная вариация этого мартингала равна
-\begin{equation}\label{eq:bracket}
-\langle M\rangle_{n,n_0}
-:=\sum_{l=2}^{n-1}\E[\Delta M_l^{\mathrm{bRR}}
-(\Delta M_l^{\mathrm{bRR}})^\top\mid\mathcal F_{l-1}]
-=\sum_{l=2}^{n-1}Q_l^{\RR}\mathcal V_\eps(Z_{l-1})(Q_l^{\RR})^\top.
+\begin{lemma}[Остаточный член]
+\label{lem:rr-remainder}
+Пусть выполнены условия Леммы~\ref{lem:martingale-gaussian}. Пусть также
+$p\geq2$ и $0<\alpha\leq\alpha_p^{\rm L}$. Тогда существует не зависящая
+от $n$, $p$, $\alpha$ и $u$ константа $C_{\rm P}>0$ такая, что для
+\begin{equation}\label{eq:RR-normalized-remainder}
+ \mathcal R_{n,p,\alpha}
+ :=C_{\rm P}\,
+ \frac{\Const{\varepsilon}\taumix\supconsteps}
+ {\sqrt{n/2}}
+ +\Const{\varepsilon}C_{\rm L}(\taumix,d)
+  \sqrt{n/2}\,r_{n,p,\alpha}
 \end{equation}
-
-\begin{lemma}[Концентрация случайной скобки]\label{lem:bracket}
-При условиях леммы~\ref{lem:variance} и условиях 1, 3 для всех $p\geq2$,
-всех $u$ и любого начального распределения цепи
-\begin{equation}\label{eq:bracket-bound}
-\norm{u^\top\langle M\rangle_{n,n_0}u
--m\sigma_{n,n_0}^2(u)}_{L_p}
-\lesssim C_Q^2\norm u^2\norm\eps_\infty^2
-\tmix^{5/2}\sqrt{pn}.
+выполнено неравенство
+\begin{equation}\label{eq:intermediate-gaussian}
+ \dK\!\left(T_{n,\alpha}^{\RR}(u),\gauss(0,1)\right)
+ \leq \mathcal B_{\rm M}(n,p)
+ +2\mathcal R_{n,p,\alpha}^{p/(p+1)} \eqsp,
 \end{equation}
-Здесь и в дальнейшем $\lesssim$ не скрывает зависимости от
-$\tmix,n,p,\alpha$.
+где $\mathcal B_{\rm M}(n, p)$ определен в \eqref{eq:BM-definition}.
 \end{lemma}
 
 \begin{proof}
-Для $2\leq l<n$ положим
-\[
-g_l(z)=u^\top Q_l^{\RR}
-\{\mathcal V_\eps(z)-\SigmaM\}(Q_l^{\RR})^\top u.
-\]
-Из пуассоновского представления
-$\norm{\mathcal V_\eps}_\infty
-\lesssim\tmix^2\norm\eps_\infty^2$, поэтому
-$\norm{g_l}_\infty\lesssim
-C_Q^2\norm u^2\tmix^2\norm\eps_\infty^2$ и $\E_\pi g_l=0$.
-Левая часть \eqref{eq:bracket-bound} есть норма
-$\sum_{l=2}^{n-1}g_l(Z_{l-1})$. Неоднородное марковское неравенство
-\cite[Lemma~11]{Levin2026} даёт дополнительный множитель
-$\sqrt{p\tmix n}$ и завершает доказательство.
-\end{proof}
-
-\begingroup
-\emergencystretch=2em
-Для точной формулировки обозначим через
-$\alpha_{\mathrm{P2}},\alpha_{\mathrm{C6}},
- \alpha_{\mathrm{P8}},\alpha_{\mathrm{P9}},\alpha_{\mathrm{C4}}$
-пороги из Proposition~2, Corollary~6, Propositions~8--9 и Corollary~4
-расширенной версии \cite{Levin2026} при используемых ниже порядках, а через
-$\alpha_{\mathrm{P5}}(r,\tmix)$ --- порог Proposition~5 для момента порядка
-$r$. Положим
-\endgroup
-\[
-\begin{aligned}
-\alpha_*(p,q,\tmix)=\min\{&\alpha_{\mathrm{P2}},\alpha_{\mathrm{C6}},
- \alpha_{\mathrm{P5}}(p,\tmix),\alpha_{\mathrm{P5}}(2p,\tmix),\\[-1mm]
- &\alpha_{\mathrm{P8}},\alpha_{\mathrm{P9}},\alpha_{\mathrm{C4}}\}.
-\end{aligned}
-\]
-\begin{equation}\label{eq:alpha-adm}
-\begin{aligned}
-\alpha_{\mathrm{adm}}(p,q,\tmix)
- &=\min\Biggl\{\alpha_\infty,\frac1{2\norm{\Abar}},
- \alpha_*(p,q,\tmix),\alpha_{\rm prod}(p),\\[-1mm]
- &\hspace{25mm}\alpha_{\rm prod}(2p),\frac1{2a},
- \frac1{2a\tmix}\Biggr\}.
-\end{aligned}
-\end{equation}
-Аргументы остальных исходных порогов выбираются ровно при тех порядках
-моментов, при которых они используются, и опущены только для читаемости.
-
-Для $w\in\{\alpha,2\alpha\}$ определим компоненты разложения второго порядка.
-Положим $J_0^{(\ell,w)}=0$ и $H_0^{(2,w)}=0$, а также
-\begin{align*}
-J_k^{(0,w)}&=B_wJ_{k-1}^{(0,w)}-w\eps(Z_k),\\
-J_k^{(\ell,w)}&=B_wJ_{k-1}^{(\ell,w)}
--w\widetilde A(Z_k)J_{k-1}^{(\ell-1,w)},\quad \ell=1,2,\\
-H_k^{(2,w)}&=(I-wA(Z_k))H_{k-1}^{(2,w)}
--w\widetilde A(Z_k)J_{k-1}^{(2,w)}.
-\end{align*}
-Тогда повторная подстановка в \eqref{eq:lsa} даёт точное равенство
-\begin{equation}\label{eq:depth-two}
-\begin{aligned}
-\theta_k^{(w)}-\theta^\star
- &=\Gamma_{1:k}^{(w)}(\theta_0-\theta^\star)+J_k^{(0,w)}
-   +R_{k,\rm fin}^{(w)},\\
-R_{k,\rm fin}^{(w)}
- &=J_k^{(1,w)}+J_k^{(2,w)}+H_k^{(2,w)}.
-\end{aligned}
-\end{equation}
-
-Нам понадобится один локальный переход от стационарных оценок компонент к
-детерминированному старту.
-
-\begin{lemma}[Перенос после разогрева]\label{lem:startup}
-Пусть $p\geq2$, $q\geq4p$ и
-$2\alpha\leq\alpha_{\mathrm{adm}}(p,q,\tmix)$. Для каждой ветви существует
-стационарная двусторонняя версия $R_{k,\rm stat}^{(w)}$ и сопряжение с
-конечной версией из \eqref{eq:depth-two}, равномерное по закону $Z_0$, такие,
-что
-\begin{equation}\label{eq:startup-pointwise}
-\norm{R_{k,\rm fin}^{(w)}-R_{k,\rm stat}^{(w)}}_{L_p}
-\leq A_{\rm st}(p,q,w)
-\exp\!\left(-\frac{c_{\rm st}wak}{p}\right),
-\end{equation}
-где $c_{\rm st}>0$ фиксирована и
-\begin{equation}\label{eq:Ast}
-A_{\rm st}(p,q,w)=C_{\rm st}(1+d^{1/q})(p^7+p^8/a)
-\tmix^5\sqrt{w/a}\,\log^3\!\frac1{wa}.
-\end{equation}
-Следовательно,
-\begin{equation}\label{eq:startup-window}
-\begin{aligned}
-&\left\|\frac1{\sqrt m}\sum_{k=n_0}^{n-1}
- \begin{aligned}
- \bigl\{&2(R_{k,\rm fin}^{(\alpha)}-R_{k,\rm stat}^{(\alpha)})\\[-1mm]
- &{}-(R_{k,\rm fin}^{(2\alpha)}-R_{k,\rm stat}^{(2\alpha)})\bigr\}
- \end{aligned}\right\|_{L_p}\\
-&\qquad\lesssim\frac{pA_{\rm st}(p,q,\alpha)}{\alpha a\sqrt m}
- \exp\!\left(-\frac{c_{\rm st}\alpha an_0}{p}\right).
-\end{aligned}
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-Построим стационарную координату $H^{(2,w)}$. На одной двусторонней
-стационарной цепи запустим все $J$- и $H$-координаты из нуля в момент $-N$.
-Corollary~4 из \cite{Levin2026} даёт инвариантный закон $J$-координат.
-Сравнивая запуски из моментов $-N'$ и $-N$, $N'\geq N$, используем после
-$-N$ общую траекторию цепи, то есть сопряжение с $T=0$. Покомпонентный расчёт
-из доказательства Proposition~5 применим к этому синхронному сопряжению;
-начальная стоимость в нём оценивается Lemmas~4, 8 и Proposition~8 при порядках
-$p$ и $2p$. Условие $q\geq4p$ обеспечивает допустимость последнего порядка.
-В результате, для $-N\leq r\leq0$ и $\ell=0,1,2$,
-\[
-\norm{\Delta J_r^{(\ell,w)}}_{L_p}
-\leq A_J(p,q,w)
-\exp\!\left\{-\frac{wa(r+N)}{12p}\right\},
-\]
-где
-\[
-A_J(p,q,w)\lesssim(1+d^{1/q})p^7\tmix^5
-\sqrt{w/a}\,\log^3\!\frac1{wa}.
-\]
-Вычитая две конечнопрошлые $H$-рекурсии, получаем
-\[
-\Delta H_0
-=\Gamma_{-N+1:0}^{(w)}H_{-N,N'}^{(2,w)}
--w\sum_{l=-N+1}^{0}\Gamma_{l+1:0}^{(w)}
-\widetilde A(Z_l)\Delta J_{l-1}^{(2,w)}.
-\]
-Условие~4, Proposition~9 из \cite{Levin2026} и геометрическая свёртка дают
-\[
-\norm{\Delta H_0}_{L_p}
-\lesssim\left\{B_H(p,q,w)+\frac paA_J(p,q,w)\right\}e^{-cwaN/p},
-\]
-где
-\[
-B_H(p,q,w)\lesssim(1+d^{1/q})p^{7/2}\tmix^{5/2}
- w^{3/2}\log^{3/2}\!\frac1{wa}.
-\]
-Следовательно, $H_{0,N}^{(2,w)}$ фундаментальна в $L_p$.
-Сдвиг конструкции определяет двустороннюю стационарную координату, а оценка
-$B_H$ переходит к пределу по лемме Фату. Обе RR-ветви строятся на одной
-двусторонней цепи.
-
-Теперь зададим одно сопряжение конечной и стационарной версий, пригодное для
-всех оставшихся оценок. Положим $b=\lceil\tmix\rceil$. В моменты, кратные
-$b$, максимально сопрягаем конечные точки двух $\mathsf P^b$-блоков;
-условные распределения путей внутри блока существуют, поскольку пространство
-польское. После первого совпадения используем общие переходы. Получаем липкое
-блочно-коадаптированное сопряжение; момент встречи $T$ является stopping time
-блочной фильтрации и
-\[
-\Pr(T>r)\leq C\exp(-cr/\tmix).
-\]
-Доказательство Proposition~5 использует для $J$-координат только это свойство,
-совпадение траекторий после $T$ и равномерные моменты. Повторяя в треугольных
-рекурсиях его покомпонентную подстановку и оценку события $\{T>k\}$ по
-Гёльдеру, при порядках $p$ и $2p$ получаем для того же сопряжения
-\begin{equation}\label{eq:J-same-coupling}
-\sum_{\ell=0}^2
-\norm{\Delta J_k^{(\ell,w)}}_{L_{2p}}
-\leq A_J(2p,q,w)\exp(-cwak/p).
-\end{equation}
-Таким образом, здесь не переносится абстрактная Wasserstein-оценка на другое
-сопряжение: её покомпонентный расчёт повторён для выбранного блочного
-сопряжения.
-
-\begingroup
-\emergencystretch=2em
-После $T$ общая будущая цепь условно по $\mathcal G_T$ имеет исходное ядро.
-Поэтому условие~4 распространяется с детерминированных на
-$\mathcal G_s$-измеримые векторы поточечным условливанием. В
-\eqref{eq:alpha-adm} обеспечено $wa\tmix\leq1/2$. Если
-$\sup_s\norm{V_s}_{L_{2p}}\leq B$, то
-\par
-\endgroup
-\[
-\norm{V_s\mathbf1_{\{T=s\}}}_{L_p}
-\leq B\Pr(T=s)^{1/(2p)}
-\leq CB e^{-cs/(p\tmix)}
-\leq CB e^{-c'was/p}.
-\]
-Следовательно,
-\begin{align*}
-\norm{\Gamma_{T+1:k}^{(w)}V_T\mathbf1_{\{T\leq k\}}}_{L_p}
-&\leq C\sum_{s=0}^k e^{-cwa(k-s)/p}
- \norm{V_s\mathbf1_{\{T=s\}}}_{L_p}\\[-1mm]
-&\leq C\frac p{wa}B\,e^{-c'wak/p}.
-\end{align*}
-А для адаптированных $U_l$, удовлетворяющих
-$\norm{U_l}_{L_{2p}}\leq B e^{-c_0wal/p}$, та же условная оценка даёт
-\[
-w\sum_{l=1}^k
-\norm{\Gamma_{l+1:k}^{(w)}U_l\mathbf1_{\{T<l\}}}_{L_p}
-\leq C\frac paB e^{-c'wak/p}.
-\]
-
-На событии $\{T\leq k\}$ имеем
-\[
-\Delta H_k^{(2,w)}
-=\Gamma_{T+1:k}^{(w)}\Delta H_T^{(2,w)}
--w\sum_{l=T+1}^k\Gamma_{l+1:k}^{(w)}
- \widetilde A(Z_l)\Delta J_{l-1}^{(2,w)}.
-\]
-Первый член контролируется случайным рестартом с $B=B_H(2p,q,w)$. Во втором
-берём
-$U_l=\mathbf1_{\{T<l\}}\widetilde A(Z_l)\Delta J_{l-1}^{(2,w)}$ и применяем
-\eqref{eq:J-same-coupling} и устойчивую свёртку. На дополнении по Гёльдеру
-\[
-\norm{\Delta H_k^{(2,w)}\mathbf1_{\{T>k\}}}_{L_p}
-\leq C B_H(2p,q,w)e^{-ck/(p\tmix)}
-\leq C B_H(2p,q,w)e^{-cwak/p}.
-\]
-Собирая три координаты и используя определения $A_J,B_H$, получаем
-\eqref{eq:startup-pointwise} с \eqref{eq:Ast}. Суммирование по окну и
-$1-e^{-c\alpha a/p}\gtrsim\alpha a/p$ дают
-\eqref{eq:startup-window}.
-\end{proof}
-
-Из \eqref{eq:depth-two}, перестановки сумм в $J^{(0,w)}$ и
-\eqref{eq:poisson-decomp} получаем точное разложение
-\begin{equation}\label{eq:full-decomp}
-\sqrt m\,u^\top
-(\bar\theta_{n,n_0}^{\RR,\alpha}-\theta^\star)
-=-\frac{u^\top M_{n,n_0}^{\mathrm{bRR}}}{\sqrt m}
-+\mathcal R_{n,n_0}^{\RR}(u),
+Из \eqref{eq:T_RR} и \eqref{eq:poisson} следует разложение
+\begin{equation}\label{eq:normalized-split}
+ T_{n,\alpha}^{\RR}(u)
+ =X_n(u)+Y_{n,p,\alpha}(u),
 \end{equation}
 где
-\begin{align}\label{eq:composite-remainder}
-\mathcal R_{n,n_0}^{\RR}(u)
-&=\frac1{\sqrt m}\sum_{k=n_0}^{n-1}u^\top
-\{2\Gamma_{1:k}^{(\alpha)}-\Gamma_{1:k}^{(2\alpha)}\}
-(\theta_0-\theta^\star)+u^\top D_{2,n,n_0}\notag\\
-&\quad+\frac1{\sqrt m}\sum_{k=n_0}^{n-1}u^\top
-\{2R_{k,\rm fin}^{(\alpha)}-R_{k,\rm fin}^{(2\alpha)}\}.
+\begin{align}\label{eq:normalized-error-part}
+ Y_{n,p,\alpha}(u)
+ :=-\frac{\MKQ\widehat g(Z_{n/2})-\MKQ\widehat g(Z_n)}
+ {\sqrt{n/2}\,\sigma(u)}\notag +\frac{\sqrt{n/2}}{\sigma(u)}
+ v^\transpose\scrE_{n,p,\alpha}^{\RR}.
 \end{align}
-
-
-\begin{lemma}[Момент остатка]\label{lem:remainder}
-Пусть $p\geq2$ и $q\geq4p$. Предположим, что
-$2\alpha\leq\alpha_{\mathrm{adm}}(p,q,\tmix)$. Обозначим
+Оценки \eqref{eq:levin-remainder} и \eqref{eq:direction-uniform-bounds},
+а также ограниченность решения уравнения Пуассона дают
 \[
-L_\alpha=\log\frac1{\alpha a}.
+ \left\{\PE_\xi[\abs{Y_{n,p,\alpha}(u)}^p]\right\}^{1/p}
+ \leq\mathcal R_{n,p,\alpha}
 \]
-Тогда
-\begin{equation}\label{eq:remainder-bound}
-\norm{\mathcal R_{n,n_0}^{\RR}(u)}_{L_p}
-\lesssim\norm u\,\mathcal B_R(m,n_0,p,q,\alpha),
-\end{equation}
-где
-\begin{align}
-\mathcal B_R
-&=
-\frac{\norm{\theta_0-\theta^\star}}{\alpha a\sqrt m}
-\left\{(1-\alpha a)^{n_0/2}
-+p\exp\!\left(-\frac{c_0\alpha a n_0}{p}\right)\right\}
-+\frac{\tmix}{\sqrt m} \notag\\
-&\quad+\tmix^2\sqrt m\,\alpha^2
-+(1+d^{1/q})p^{7/2}\tmix^{5/2}
-\sqrt m\,\alpha^{3/2}L_\alpha^{3/2}
-+\tmix p^{3/2}\sqrt\alpha \notag\\
-&\quad+\frac{\tmix^{3/2}p^3L_\alpha^{1/2}}{\sqrt{\alpha m}}
-+\frac{p^2\tmix^{3/2}aL_\alpha^{1/2}}{\sqrt m}
-+\frac{pA_{\mathrm{st}}(p,q,\alpha)}
-{\alpha a\sqrt m}
-\exp\!\left(-\frac{c_{\rm st}\alpha a n_0}{p}\right).
-\label{eq:BR}
-\end{align}
-Постоянные $c_0,c_{\rm st}>0$ не зависят от
-$\tmix,n,p,\alpha$.
-\end{lemma}
-
-\begin{proof}
-В \eqref{eq:composite-remainder} начальный продукт раскладываем как
-$\Gamma_{1:k}^{(w)}=B_w^k+(\Gamma_{1:k}^{(w)}-B_w^k)$.
-Геометрическая сумма детерминированной части даёт первое слагаемое в скобках
-\eqref{eq:BR}, а \eqref{eq:product-stability} --- второе.
-Пуассоновская граница контролируется величиной $\tmix/\sqrt m$.
-
-Для стационарной версии третьего члена
-\eqref{eq:composite-remainder} сначала рассматриваем $J^{(1,w)}$.
-Обозначим через $\Pi_{J,w}$ совместный стационарный закон соответствующих
-$J$-координат и цепи и положим
-\[
-\overline\psi_w(j,z)=\widetilde A(z)j
--\E_{\Pi_{J,w}}[\widetilde A(Z_1)J_0^{(0,w)}].
-\]
-Суммирование рекурсии по стационарному окну длины $m$ даёт
+для любого начального распределения $\xi$. Применяя
+\eqref{eq:smoothing-inequality} к $X=X_n(u)$ и
+$Y=Y_{n,p,\alpha}(u)$, и используя Лемму~\ref{lem:martingale-gaussian}, получаем
 \begin{align*}
-\sum_{k=0}^{m-1}\{J_k^{(1,w)}-\E_{\Pi_{J,w}}J_0^{(1,w)}\}
-&=-\Abar^{-1}\sum_{k=1}^{m}
-\overline\psi_w(J_{k-1}^{(0,w)},Z_k)\\[1mm]
-&\quad+\frac1w\Abar^{-1}\{J_0^{(1,w)}-J_m^{(1,w)}\}.
+ \dK\!\left(T_{n,\alpha}^{\RR}(u),\gauss(0,1)\right)
+ &\leq\dK\!\left(X_n(u),\gauss(0,1)\right)
+   +2\bigl\{\PE_\xi[\abs{Y_{n,p,\alpha}(u)}^p]\bigr\}^{1/(p+1)}\\
+ &\leq\mathcal B_{\rm M}(n,p)
+   +2\bigl\{\mathcal R_{n,p,\alpha}\bigr\}^{p/(p+1)}.
 \end{align*}
-Proposition~2 из \cite{Levin2026} сокращает линейную по шагу часть средних
-двух ветвей и оставляет $\tmix^2\sqrt m\,\alpha^2$.
-Corollary~6 контролирует первую сумму в последнем тождестве и даёт
-\[
-\tmix p^{3/2}\sqrt\alpha
-+\frac{\tmix^{3/2}p^3L_\alpha^{1/2}}{\sqrt{\alpha m}}.
-\]
-Для границы используем равномерную оценку
-\[
-\norm{J_k^{(1,w)}}_{L_p}
-\lesssim p^2\tmix^{3/2}wa\,\log^{1/2}\!\frac1{wa}.
-\]
-\begingroup
-\emergencystretch=3em
-Она является упрощённой формой \cite[Lemma~8]{Levin2026} и восходит к
-\cite[Proposition~10]{Durmus2025}. Лемма сформулирована для конечного запуска
-из нуля; к стационарному закону переходим конечнопрошлым построением и леммой
-Фату. После деления на $w\sqrt m$ эта оценка даёт шестое слагаемое
-\eqref{eq:BR}. Propositions~8--9 из \cite{Levin2026} и неравенство Минковского
-дают член второго порядка в \eqref{eq:BR}. Наконец, лемма~\ref{lem:startup}
-переносит стационарную оценку на конечный старт. Это доказывает
-\eqref{eq:remainder-bound}; из опубликованных работ импортируются оценки
-отдельных компонент, а перенос после разогрева доказан локально.
-\par
-\endgroup
+Это доказывает \eqref{eq:intermediate-gaussian}.
 \end{proof}
 
-\subsection{Основной результат}
-
-Нам понадобится следующее элементарное неравенство.
-
-\begin{lemma}[Сглаживание]\label{lem:smoothing}
-Для любых вещественных случайных величин $X,Y$ и $p\geq1$
-\begin{equation}\label{eq:smoothing}
-\dK(X+Y,\mathcal N(0,1))
-\leq \dK(X,\mathcal N(0,1))
-+\frac{e}{\sqrt{2\pi}}\norm Y_{L_p}+e^{-p}.
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-Для $t>0$ включение
-$\{X+Y\leq x,\ |Y|\leq t\}\subseteq\{X\leq x+t\}$,
-оценка $\sup_x|\Phi(x+t)-\Phi(x)|\leq t/\sqrt{2\pi}$ и неравенство
-Маркова дают добавку $t/\sqrt{2\pi}+\E|Y|^p/t^p$.
-Берём $t=e\norm Y_{L_p}$ и симметрично оцениваем второй хвост.
-\end{proof}
-
-Для краткости обозначим
-\begin{equation}\label{eq:BM}
-\begin{aligned}
-\mathcal B_M(m,n,p;u)
- &=C_1(u,\tmix)
- p^{\frac{3p+1}{2(2p+1)}}m^{-\frac{p}{2(2p+1)}}\\
- &\quad+C_2(u,\tmix)\left\{
- \frac{\log(2n)}{\sqrt m}+p\,m^{-\frac{p}{2p+1}}\right\}.
-\end{aligned}
-\end{equation}
-
-\begin{lemma}[Мартингальная аппроксимация]\label{lem:martingale-be}
-Пусть $m\geq n/2$, $p\geq2$, $\sigma^2(u)>0$ и
-\begin{equation}\label{eq:variance-lower}
-m\alpha a\geq
-\frac{2C_{\rm var}\norm u^2}{\sigma^2(u)}.
-\end{equation}
-Тогда
-\[
-\dK\!\left(
-\frac{u^\top M_{n,n_0}^{\mathrm{bRR}}}
-{\sqrt m\,\sigma_{n,n_0}(u)},\mathcal N(0,1)\right)
-\lesssim\mathcal B_M(m,n,p;u).
-\]
-\end{lemma}
-
-\begin{proof}
-Приращения ограничены величиной
-$\kappa(u,\tmix)\lesssim C_Q\norm u\,\tmix\norm\eps_\infty$.
-Из \eqref{eq:variance-bound} и \eqref{eq:variance-lower} следует
-$m\sigma_{n,n_0}^2(u)\geq m\sigma^2(u)/2$.
-Применяем общую мартингальную оценку Берри--Эссеена
-\cite[Lemma~21]{Samsonov2025} с детерминированным масштабом
-$\sqrt m\,\sigma_{n,n_0}(u)$ и используем
-лемму~\ref{lem:bracket}. Её три слагаемых имеют соответственно порядки
-\[
-\frac{\log(2n)}{\sqrt m},\qquad
-p^{\frac{3p+1}{2(2p+1)}}m^{-\frac{p}{2(2p+1)}},\qquad
-p m^{-\frac{p}{2p+1}},
-\]
-что даёт \eqref{eq:BM}.
-\end{proof}
-
-\begin{theorem}[Гауссовская аппроксимация для RR+PR]
+\begin{theorem}[Гауссовская аппроксимация]
 \label{thm:gaussian}
-Пусть выполнены условия 1--4 и $m\geq n/2$. Предположим, что
-$\sigma^2(u)>0$ и $q\geq4p\geq8$,
-$2\alpha\leq\alpha_{\mathrm{adm}}(p,q,\tmix)$ и \eqref{eq:variance-lower}.
-Тогда
-\begin{align}
-&\dK\!\left(
-\frac{\sqrt n\,u^\top
-(\bar\theta_{n,n_0}^{\RR,\alpha}-\theta^\star)}
-{\sigma(u)},\mathcal N(0,1)\right) \notag\\
-&\qquad\lesssim
-\mathcal B_M(m,n,p;u)
-+\frac{\norm u}{\sigma(u)}
-\mathcal B_R(m,n_0,p,q,\alpha)
-+e^{-p}
-+\frac{C_{\rm var}\norm u^2}{m\alpha a\,\sigma^2(u)}
-+\frac{n_0}{n}.
-\label{eq:master-BE}
-\end{align}
-Оценка равномерна по начальному распределению $Z_0$; скрытая константа не
-зависит от $\tmix,n,p,\alpha$.
-Для статистики с естественной оконной нормировкой $\sqrt m$ та же правая
-часть справедлива без последнего слагаемого $n_0/n$.
+Пусть выполнены условия 1--3 и $n$ чётно. Предположим также, что
+$\noisecovmarkov\succ0$, и зафиксируем $u\in\sphere^{d-1}$.
+Если $n$ достаточно велико и $0<\alpha\leq\alpha_n^{\rm L}$,
+то
+\begin{equation}\label{eq:main-gaussian}
+ \dK\!\left(
+  \frac{\sqrt{n/2}\,u^\transpose
+   (\btheta_n^{(\alpha,\RR)}-\thetalim)}{\sigma(u)},
+  \gauss(0,1)\right)
+ \lesssim_{\log{n}} C_{\rm G}(d)\,r_{n,\alpha}.
+\end{equation}
+Здесь $C_{\rm G}(d)\geq1$ не зависит от $n$, $\alpha$ и $u$.
+Оценка равномерна по $u\in\sphere^{d-1}$ и начальному распределению $\xi$.
 \end{theorem}
 
 \begin{proof}
-Разделив \eqref{eq:full-decomp} на
-$\sigma_{n,n_0}(u)$, получаем $X+Y$, где
+Положим
 \[
-X=-\frac{u^\top M_{n,n_0}^{\mathrm{bRR}}}
-{\sqrt m\,\sigma_{n,n_0}(u)},\qquad
-Y=\frac{\mathcal R_{n,n_0}^{\RR}(u)}
-{\sigma_{n,n_0}(u)} .
+ p=p_n:=\max\{2,\ceil{\log n}\}.
 \]
-Лемма~\ref{lem:martingale-be}, применённая к приращениям с обратным знаком,
-даёт
+По определению
+$\alpha_n^{\rm L}=\alpha_p^{\rm L}$. Введём используемый только в доказательстве
+нормированный масштаб остаточного члена
+\begin{equation}\label{eq:rho-rate}
+ \rho_{n,p,\alpha}:=\sqrt{n/2}\,r_{n,p,\alpha}.
+\end{equation}
+Из \eqref{eq:levin-rate} следует
+\begin{align}\label{eq:rho-rate-expanded}
+ \rho_{n,p,\alpha}
+ &\lesssim p\log(2p)n^{-1/4}
+ +\frac{p^3L_\alpha^{1/2}}{\sqrt{\alpha n}}
+ +p^{3/2}\sqrt\alpha
+ +p^{7/2}\sqrt n\,\alpha^{3/2}L_\alpha^{3/2}\notag\\
+ &\quad
+ +p^{7/2}n^{-1/2}\alpha^{1/2}L_\alpha^{3/2}
+ +\frac{\norm{\thetainit-\thetalim}}{\alpha\sqrt n}
+   \exp\!\left(-\frac{\alpha an}{24}\right).
+\end{align}
+Следовательно,
+\begin{equation}\label{eq:rho-log-bound}
+ \rho_{n,p,\alpha}
+ \lesssim_{\log{n}}r_{n,\alpha} \eqsp,
+\end{equation}
+где $r_{n,\alpha}$ определяется в \eqref{eq:alpha-n-rate}.
+
+Применим Лемму~\ref{lem:rr-remainder} при $p=p_n$. Поскольку
+$p\geq\log n$,
+из \eqref{eq:BM-definition}, \eqref{eq:rho-log-bound} и
+\eqref{eq:RR-normalized-remainder} следуют оценки
+\begin{equation}\label{eq:log-moment-rates}
+ \mathcal B_{\rm M}(n,p)
+ \lesssim_{\log{n}} C_{\rm G}(d)n^{-1/4},
+ \qquad
+ \mathcal R_{n,p,\alpha}
+ \lesssim_{\log{n}} C_{\rm G}(d)\,r_{n,\alpha}.
+\end{equation}
+Степень $p/(p+1)$ в \eqref{eq:intermediate-gaussian} также можно убрать из
+окончательной формулировки. Если
+$\mathcal R_{n,p,\alpha}\geq n^{-1/4}$, то
 \[
-\dK(X,\mathcal N(0,1))\lesssim\mathcal B_M.
+ \mathcal R_{n,p,\alpha}^{p/(p+1)}
+ \leq e^{1/4}\mathcal R_{n,p,\alpha};
 \]
-По лемме~\ref{lem:smoothing} и
-\eqref{eq:remainder-bound} добавка от $Y$ не превосходит второго и третьего
-членов \eqref{eq:master-BE}. Условие на $m\alpha a$ и
-лемма~\ref{lem:variance} дают
-$\sigma_{n,n_0}(u)\geq\sigma(u)/\sqrt2$ и позволяют заменить
-$\sigma_{n,n_0}(u)$ на $\sigma(u)$ с ценой четвёртого члена. Наконец,
-переход от $\sqrt m$ к $\sqrt n$ умножает статистику на
-$\sqrt{n/m}$; поскольку $m\geq n/2$,
-$|\sqrt{n/m}-1|\lesssim n_0/n$. Стандартное сравнение
-$\Phi(x/s)$ и $\Phi(x)$ завершает доказательство.
+если же $\mathcal R_{n,p,\alpha}<n^{-1/4}$, то
+\[
+ \mathcal R_{n,p,\alpha}^{p/(p+1)}
+ \leq n^{-p/(4(p+1))}
+ \leq e^{1/4}n^{-1/4}.
+\]
+Подстановка этих двух оценок в \eqref{eq:intermediate-gaussian} даёт
+\eqref{eq:main-gaussian}.
 \end{proof}
 
-\begin{corollary}[Сбалансированный режим]\label{cor:balanced}
-Пусть выполнены условия 1--4 и фиксировано направление $u$ с
-$\sigma^2(u)>0$.
-Пусть $\alpha=c/\sqrt n$,
-$p=\max\{2,\lceil\log n\rceil\}$,
-$q=\max\{4p,\lceil\log(ed)\rceil\}$. Пусть $0<C_-\leq C_0$, причём
-$C_-$ достаточно велика в зависимости от $c_0$ и $c_{\rm st}$.
-Предположим, что
-\begin{equation}\label{eq:burn-window}
-C_-\frac{\log^2n}{\alpha a}
-\leq n_0\leq
-C_0\frac{\log^2n}{\alpha a},\qquad m\geq n/2.
-\end{equation}
-Если $n$ достаточно велико и
-$2\alpha\leq\alpha_{\mathrm{adm}}(p,q,\tmix)$, то
-\begin{equation}\label{eq:balanced-BE}
-\begin{aligned}
-&\dK\!\left(
- \frac{\sqrt n\,u^\top
- (\bar\theta_{n,n_0}^{\RR,\alpha}-\theta^\star)}
- {\sigma(u)},\mathcal N(0,1)\right)\\
-&\qquad\leq C(u,c,\theta_0,C_0,C_-)\,
- \frac{C_{\mathrm{mix}}(\tmix)\operatorname{polylog}(n)}
- {n^{1/4}} .
-\end{aligned}
-\end{equation}
-Здесь $C_{\mathrm{mix}}(\tmix)<\infty$ собирает зависимость констант
-мартингальной оценки и моментных неравенств от времени смешивания; её
-полиномиальность не предполагается.
-\end{corollary}
-
-\begin{proof}
-Подставим $\alpha,p,q$ в
-\eqref{eq:BM}--\eqref{eq:master-BE}. Для достаточно большого $n$ имеем
-$m\alpha a\asymp\sqrt n$, поэтому условие~\eqref{eq:variance-lower}
-выполнено автоматически. Условие~\eqref{eq:burn-window} делает оба переходных
-экспоненциальных члена не выше полилогарифмического множителя при
-$n^{-1/4}$. Остальные слагаемые имеют порядок не больше
-$C_{\mathrm{mix}}(\tmix)\operatorname{polylog}(n)n^{-1/4}$;
-цены замены дисперсии и нормировки равны соответственно $O(n^{-1/2})$ и
-$O(n^{-1/2}\log^2n)$.
-\end{proof}
-
-\begin{remark}[Почему нужна общая траектория]\label{rem:shared}
-Внутри PR-окна веса обеих ветвей близки к $\Abar^{-1}$. На общей траектории
-один и тот же шум входит с коэффициентом $2-1=1$, поэтому сохраняется
-$\Sigma_\infty$. Для независимых траекторий ведущие ковариации сложились бы
-как $2^2\Sigma_\infty+(-1)^2\Sigma_\infty=5\Sigma_\infty$.
-\end{remark}
-
+Формула \eqref{eq:main-gaussian} позволяет выбирать шаг, не фиксируя его
+заранее. При $\alpha=c/\sqrt n$ с фиксированным $c>0$ получаем
+$\dK\lesssim_{\log{n}}C_{\rm G}(d)n^{-1/4}$, а переходный член
+экспоненциально мал. Общая формула \eqref{eq:alpha-n-rate} показывает цену
+слишком малого шага через $(\alpha n)^{-1/2}L_\alpha^{1/2}$ и переходный
+член, а слишком большого --- через $\sqrt\alpha$ и
+$\sqrt n\,\alpha^{3/2}L_\alpha^{3/2}$.
