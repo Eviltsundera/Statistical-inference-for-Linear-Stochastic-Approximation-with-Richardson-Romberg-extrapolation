@@ -10,36 +10,20 @@
 - Разложение смещения и точная атрибуция Levin et al.:
   `diploma_typst/src/introduction/01_bias_constant_stepsize.typ` и
   `diploma_typst/src/appendix/external_inputs.typ`.
-- PR/RR-веса после разогрева и их оценки:
-  `diploma_typst/src/burn_in_transfer/02_burned_in_deterministic_weights.typ`
-  и `03_closed_forms_and_weight_bounds.typ`.
-- Сравнение детерминированной ковариационной прокси:
-  `diploma_typst/src/burn_in_transfer/05_variance_proxy.typ`.
-- Пуассоновское разложение и мартингальная аппроксимация:
+- Разогрев $n_0=n/2$, разложение RR-среднего и $L_p$-оценка остатка:
+  Theorem 2, equations (25)--(27), точная оценка (87) и Appendix D.1
+  расширенной версии Levin et al.
+- Пуассоновское разложение ведущей аддитивной суммы и мартингальная
+  Berry--Esseen-сборка адаптированы из
   `diploma_typst/src/burn_in_transfer/06_poisson_martingale_approximation.typ`
   и `10_martingale_berry_esseen.typ`.
-- Master smoothing assembly и balanced-scale theorem:
-  `diploma_typst/src/burn_in_transfer/11_finite_window_smoothing_assembly.typ`
-  и `12_balanced_burn_in_berry_esseen.typ`.
-- Прямые внешние moment inputs:
-  `diploma_typst/src/appendix/external_inputs.typ`.
 
-В `rr_gaussian.tex` атрибуция разделена следующим образом:
-
-- стационарные оценки отдельных компонент берутся из Proposition 2,
-  Corollary 6, Propositions 8–9 и Lemma 8 расширенной версии Levin et al.;
-  Lemma 8 используется для граничных значений `J^(1)` через конечнопрошлый
-  предел и лемму Фату;
-- концентрация случайной предсказуемой скобки выводится локально из
-  неоднородного марковского moment inequality, Lemma 11 Levin et al.;
-- инвариантный закон `J`-координат берётся из Corollary 4 Levin et al., а
-  стационарная `H^(2)`-координата строится локально конечнопрошлым пределом;
-  перенос на произвольный старт доказывается на едином блочном sticky-coupling,
-  используя покомпонентный расчёт Proposition 5 Levin et al. и условную
-  устойчивость случайных произведений из Proposition 7 Durmus et al.;
-- распределительный шаг использует общую мартингальную Berry–Esseen-оценку,
-  Lemma 21 Samsonov et al.;
-- Gaussian approximation последней итерации в статью не включена.
+В `rr_gaussian.tex` импортируемая $L_p$-оценка отделена от локального
+распределительного шага. Концентрация случайной предсказуемой скобки опирается
+на Lemma 11 Levin et al., а Berry--Esseen-переход --- на Lemma 21 Samsonov et
+al. Перенос с мартингальной части на полный RR-объект использует inequality
+(11) Samsonov et al. Gaussian approximation последней итерации в статью не
+включена.
 
 ## Эксперименты
 

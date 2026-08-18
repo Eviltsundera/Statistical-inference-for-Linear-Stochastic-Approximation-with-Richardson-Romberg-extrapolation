@@ -22,8 +22,8 @@ OUTPUT = Path(__file__).with_name("rr_main_experiment.pdf")
 
 METHODS = ("single_2alpha", "single_alpha", "RR")
 LABELS = {
-    "single_2alpha": r"ветвь $2\alpha_n$",
-    "single_alpha": r"ветвь $\alpha_n$",
+    "single_2alpha": r"PR, $2\alpha_n$",
+    "single_alpha": r"PR, $\alpha_n$",
     "RR": "RR",
 }
 COLORS = {
@@ -50,7 +50,6 @@ def read_summary() -> dict[str, list[dict[str, float]]]:
                 {
                     "n": float(row["n"]),
                     "ks": float(row["ks_D"]),
-                    "dkw": float(row["dkw_eps_95"]),
                 }
             )
     for method in METHODS:
@@ -137,14 +136,14 @@ def main() -> None:
             linewidth=1.45,
             label=LABELS[method],
         )
-    rr_rows = summary["RR"]
-    dkw = float(rr_rows[0]["dkw"])
+    n_trajectories = len(samples["RR"])
+    mc_threshold = np.sqrt(np.log(2.0 / 0.05) / (2.0 * n_trajectories))
     ax_ks.axhline(
-        dkw,
+        mc_threshold,
         color="#222222",
         linewidth=1.0,
         linestyle=(0, (7, 2)),
-        label="порог DKW (95%)",
+        label="выборочная погрешность (95%)",
     )
     ax_ks.set_xscale("log")
     ax_ks.set_yscale("log")
